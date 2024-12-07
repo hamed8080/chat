@@ -7,7 +7,7 @@
 import Foundation
 
 /// Start or stop a bot request.
-public struct StartStopBotRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct StartStopBotRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     /// The name of the bot.
     public let botName: String
     /// The id of the thread you want to stop this bot.

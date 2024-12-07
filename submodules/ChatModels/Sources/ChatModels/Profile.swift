@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Profile: Codable, Hashable {
+public struct Profile: Codable, Hashable, Sendable {
     public var bio: String?
     public var metadata: String?
 

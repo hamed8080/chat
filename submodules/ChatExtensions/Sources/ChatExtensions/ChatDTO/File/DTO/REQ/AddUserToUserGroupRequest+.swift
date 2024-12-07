@@ -8,7 +8,7 @@ import Foundation
 import ChatDTO
 import ChatCore
 
-extension AddUserToUserGroupRequest: ChatSendable, SubjectProtocol {
+extension AddUserToUserGroupRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {
     public var content: String? { nil }
     public var chatTypeCodeIndex: Index { typeCodeIndex }
     public var subjectId: Int { conversationId }

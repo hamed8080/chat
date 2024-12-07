@@ -9,7 +9,7 @@ import ChatCore
 import Foundation
 import ChatModels
 
-extension ReplyPrivatelyRequest: Queueable, PlainTextSendable, ReplyProtocol, MessageTypeProtocol, MetadataProtocol, SystemtMetadataProtocol, SubjectProtocol {
+extension ReplyPrivatelyRequest: @retroactive Queueable, @retroactive PlainTextSendable, @retroactive ReplyProtocol, @retroactive MessageTypeProtocol, @retroactive MetadataProtocol, @retroactive SystemtMetadataProtocol, @retroactive SubjectProtocol {
 }
 
 public extension ReplyPrivatelyRequest {

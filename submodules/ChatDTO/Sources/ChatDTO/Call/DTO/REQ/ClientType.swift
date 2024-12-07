@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum ClientType: Int, Codable {
+public enum ClientType: Int, Codable, Sendable {
     case web = 1
     case android = 2
     case desktop = 3

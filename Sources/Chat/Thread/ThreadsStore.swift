@@ -23,6 +23,7 @@ internal struct ThreadsRequestWrapper {
     let originalRequest: ThreadsRequest
 }
 
+@ChatGlobalActor
 internal final class ThreadsStore: ThreadStoreProtocol {
     var conversations = ContiguousArray<InMemoryConversation>()
     var serverSortedPins: [Int] = []
@@ -201,7 +202,9 @@ internal final class ThreadsStore: ThreadStoreProtocol {
             let threads = threads.map { $0.codable() }
             let hasNext = totalCount >= request.count
             let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
+            }
         }
         chat.prepareToSendAsync(req: request, type: .getThreads)
     }

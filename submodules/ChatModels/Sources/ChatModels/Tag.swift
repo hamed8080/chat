@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Tag: Codable, Hashable, Identifiable {
+public struct Tag: Codable, Hashable, Identifiable, Sendable {
     public var id: Int
     public var name: String
     public var active: Bool

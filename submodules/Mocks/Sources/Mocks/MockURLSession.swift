@@ -17,7 +17,15 @@ public extension HTTPURLResponse {
     }
 }
 
-open class MockURLSession: URLSessionProtocol {
+open class MockURLSession: URLSessionProtocol, @unchecked Sendable {
+    public func data(_ request: URLRequest) async throws -> (Data, URLResponse) {
+        throw URLError(.badURL)
+    }
+    
+    public func upload(_ request: URLRequest, _ data: Data) async throws -> (Data, URLResponse) {
+        throw URLError(.badURL)
+    }
+    
     public var configuration: URLSessionConfiguration = URLSessionConfiguration.default
     public var delegate: URLSessionDelegate?
     public var delegateQueue: OperationQueue = .main
@@ -57,16 +65,16 @@ open class MockURLSession: URLSessionProtocol {
 
     public func callDownloadResponse(lenght: Int = 2048) {
         let response = HTTPURLResponse(url: URL(string: "www.test.com")!, mimeType: nil, expectedContentLength: lenght, textEncodingName: nil)
-        (delegate as! URLSessionDataDelegate).urlSession?(URLSession.shared, dataTask: URLSessionDataTask(), didReceive: response) { response in }
+        (delegate as! URLSessionDataDelegate).urlSession?(URLSession.shared, dataTask: dummyTask, didReceive: response) { response in }
     }
 
     public func callDownloadData(lenght: Int = 500) {
         let data = makeData(lenght: lenght)
-        (delegate as! URLSessionDataDelegate).urlSession?(URLSession.shared, dataTask: URLSessionDataTask(), didReceive: data)
+        (delegate as! URLSessionDataDelegate).urlSession?(URLSession.shared, dataTask: dummyTask, didReceive: data)
     }
 
     public func callURLSession() {
-        (delegate as! URLSessionTaskDelegate).urlSession?(URLSession.shared, task: URLSessionTask(), didCompleteWithError: nil)
+        (delegate as! URLSessionTaskDelegate).urlSession?(URLSession.shared, task: dummyTask, didCompleteWithError: nil)
     }
 
     private func makeData(lenght: Int = 500) -> Data {
@@ -78,10 +86,16 @@ open class MockURLSession: URLSessionProtocol {
     }
 
     public func callDownloadDataCompleted() {
-        (delegate as! URLSessionDataDelegate).urlSession?(URLSession.shared, task: URLSessionTask(), didCompleteWithError: nil)
+        (delegate as! URLSessionDataDelegate).urlSession?(URLSession.shared, task: dummyTask, didCompleteWithError: nil)
     }
 
     public func callUploadProgress() {
-        (delegate as! URLSessionTaskDelegate).urlSession?(URLSession.shared, task: URLSessionTask(), didSendBodyData: 1024, totalBytesSent: 1024, totalBytesExpectedToSend: 2048)
+        (delegate as! URLSessionTaskDelegate).urlSession?(URLSession.shared, task: dummyTask, didSendBodyData: 1024, totalBytesSent: 1024, totalBytesExpectedToSend: 2048)
+    }
+    
+    private var dummyTask: URLSessionDataTask {
+        let dummyReq = URLRequest(url: URL(string: "www.test.com")!)
+        let task = URLSession.shared.dataTask(with: dummyReq)
+        return task
     }
 }

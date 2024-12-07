@@ -9,7 +9,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public enum AssistantEventTypes {
+public enum AssistantEventTypes: Sendable {
     case assistants(ChatResponse<[Assistant]>)
     case blockedList(ChatResponse<[Assistant]>)
     case register(ChatResponse<[Assistant]>)

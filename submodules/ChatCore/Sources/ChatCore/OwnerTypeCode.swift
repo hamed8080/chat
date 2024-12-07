@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct OwnerTypeCode: Codable {
+public struct OwnerTypeCode: Codable, Sendable {
     public var typeCode: String
     public var ownerId: Int?
 

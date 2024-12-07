@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension StartCallRequest: ChatSendable {}
+extension StartCallRequest: @retroactive ChatSendable {}
 
 public extension StartCallRequest {
     var content: String? { jsonString }

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct LoggerConfig: Codable {
+public struct LoggerConfig: Codable, Sendable {
     public private(set) var prefix: String
     public private(set) var logServerURL: String?
     public private(set) var logServerMethod: String = "POST"

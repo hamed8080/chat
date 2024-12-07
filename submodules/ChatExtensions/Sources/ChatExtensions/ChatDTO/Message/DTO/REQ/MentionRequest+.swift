@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension MentionRequest: ChatSendable, SubjectProtocol {}
+extension MentionRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension MentionRequest {
     var content: String? { jsonString }

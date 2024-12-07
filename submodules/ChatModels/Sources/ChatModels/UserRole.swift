@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UserRole: Codable, Hashable, Identifiable {
+public struct UserRole: Codable, Hashable, Identifiable, Sendable {
     public var threadId: Int?
     public var roles: [Roles]?
     public var id: Int?

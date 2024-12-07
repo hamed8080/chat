@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension DeleteReactionRequest: ChatSendable, SubjectProtocol {}
+extension DeleteReactionRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension DeleteReactionRequest {
     var subjectId: Int { conversationId }

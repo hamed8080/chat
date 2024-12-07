@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension MessageSeenRequest: PlainTextSendable {}
+extension MessageSeenRequest: @retroactive PlainTextSendable {}
 
 public extension MessageSeenRequest {
     var content: String? { "\(messageId)" }

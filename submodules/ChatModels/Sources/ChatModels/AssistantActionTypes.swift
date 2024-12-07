@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum AssistantActionTypes: Int, Codable, Identifiable, CaseIterable {
+public enum AssistantActionTypes: Int, Codable, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case register = 1
     case activate = 2

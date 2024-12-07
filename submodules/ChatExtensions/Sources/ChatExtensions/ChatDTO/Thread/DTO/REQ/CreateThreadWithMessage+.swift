@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension CreateThreadWithMessage: ChatSendable {}
+extension CreateThreadWithMessage: @retroactive ChatSendable {}
 
 public extension CreateThreadWithMessage {
     var content: String? { jsonString }

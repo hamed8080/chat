@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct QueueOfForwardMessages: Codable, Hashable, Identifiable {
+public struct QueueOfForwardMessages: Codable, Hashable, Identifiable, Sendable {
     public var id: String? { uniqueIds?.joined(separator: ",") }
     public var fromThreadId: Int?
     public var messageIds: [Int]?

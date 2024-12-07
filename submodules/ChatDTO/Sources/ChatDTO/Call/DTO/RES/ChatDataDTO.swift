@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ChatDataDTO: Codable {
+public struct ChatDataDTO: Codable, Sendable {
     public let screenShare: String
     public let turnAddress: String
     public let brokerAddressWeb: String

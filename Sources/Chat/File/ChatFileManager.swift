@@ -19,6 +19,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
     typealias SessionAndTask = (session: URLSession, task: URLSessionDataTaskProtocol?)
+    private var fm: CacheFileManagerProtocol? { chat.cacheFileManager }
 
     // Keep track of requests, to do internal actions such as adding the user to the user group if needed.
     private var requests: [String: DownloadManagerParameters] = [:]
@@ -49,15 +50,23 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 
     private func upload(_ req: UploadManagerParameters, _ data: Data, _ progressCompletion: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
         let uploadProgress: UploadProgressType = { [weak self] progress in
-            self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress)))
-            progressCompletion?(progress)
+            Task {
+                await self?.onUploadProgress(progress, req, progressCompletion)
+            }
         }
         let delegate = ProgressImplementation(uniqueId: req.uniqueId, uploadProgress: uploadProgress)
         let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
         let task = UploadManager().upload(req, data, session) { [weak self] respData, response, error in
-            self?.onUploadCompleted(req, respData, error, data, completion)
+            Task {
+                await self?.onUploadCompleted(req, respData, error, data, completion)
+            }
         }
         addTask(uniqueId: req.uniqueId, session: session, task: task)
+    }
+    
+    private func onUploadProgress(_ progress: UploadFileProgress?, _ req: UploadManagerParameters, _ progressCompletion: UploadProgressType? = nil) {
+        delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress)))
+        progressCompletion?(progress)
     }
 
     func uploadHasError(_ data: Data?, _ error: Error?) -> ChatError? {
@@ -103,7 +112,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
             url = URL(string: "\(config.fileServer)\(Routes.files.rawValue)/\(hashCode)")!
         }
         guard let url = url else { return }
-        chat.cacheFileManager?.saveFile(url: url, data: fileData) {_ in}
+        fm?.saveFile(url: url, data: fileData) {_ in}
     }
 
     func manageUpload(uniqueId: String, action: DownloaUploadAction) {
@@ -135,12 +144,12 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     }
 
     public func get(_ request: ImageRequest) {
-        let params = DownloadManagerParameters(request, chat.config, chat.cacheFileManager)
+        let params = DownloadManagerParameters(request, chat.config, fm)
         download(params)
     }
 
     public func get(_ request: FileRequest) {
-        let params = DownloadManagerParameters(request, chat.config, chat.cacheFileManager)
+        let params = DownloadManagerParameters(request, chat.config, fm)
         download(params)
     }
 
@@ -148,10 +157,14 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         if params.forceToDownload {
             log("Start downloading with params:\n\(params.debugDescription)")
             let delegate = ProgressImplementation(uniqueId: params.uniqueId, uploadProgress: nil) { [weak self] progress in
-                self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
+                Task {
+                    let progressEvent = ChatEventType.download(.progress(uniqueId: params.uniqueId, progress: progress))
+                    await self?.onDownloadProgressCompletion(progressEvent)
+                }
             } downloadCompletion: { [weak self] data, response, error in
-                self?.log("Download completed with response:\(String(describing: response)) error:\(String(describing: error)) params:\n\(params.debugDescription)")
-                self?.onDownload(params: params, data: data, response: response, error: error)
+                Task {
+                    await self?.onDownloadCompletion(data, response, error, params)
+                }
             }
             let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
             let task = DownloadManager.download(params, session)
@@ -160,6 +173,15 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
             log("Start fetching from cache with params:\n\(params.debugDescription)")
             fetchFromCache(params)
         }
+    }
+    
+    private func onDownloadProgressCompletion(_ event: ChatEventType) {
+        delegate?.chatEvent(event: event)
+    }
+    
+    private func onDownloadCompletion(_ data: Data?, _ response: URLResponse?, _ error: Error?, _ params: DownloadManagerParameters) async {
+        log("Download completed with response:\(String(describing: response)) error:\(String(describing: error)) params:\n\(params.debugDescription)")
+        await onDownload(params: params, data: data, response: response, error: error)
     }
 
 
@@ -170,41 +192,37 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     }
 
     private func fetchFromCache(_ params: DownloadManagerParameters) {
-        if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
-            cache?.file?.first(hashCode: hashCode) { [weak self] _ in
-                self?.chat.cacheFileManager?.getData(url: params.url) { [weak self] data in
-                    self?.log("On cache file for non-group with params:\n\(params.debugDescription)")
-                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true, typeCode: nil)
-                    self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
-                }
-
-                self?.chat.cacheFileManager?.getDataInGroup(url: params.url) { [weak self] data in
-                    self?.log("On cache file for group with params:\n\(params.debugDescription)")
-                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true, typeCode: nil)
-                    self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
+        if let filePath = fm?.filePath(url: params.url), let hashCode = params.hashCode {
+            Task {
+                guard let _ = await cache?.file?.first(hashCode: hashCode) else { return }
+                let data = await fm?.getData(url: params.url)
+                let dataInGroup = await fm?.getDataInGroup(url: params.url)
+                if let resultData = data ?? dataInGroup {
+                    let response = ChatResponse(uniqueId: params.uniqueId, result: resultData, cache: true, typeCode: nil)
+                    delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
                 }
             }
         }
     }
 
-    func onDownload(params: DownloadManagerParameters, data: Data?, response: URLResponse?, error _: Error?) {
+    func onDownload(params: DownloadManagerParameters, data: Data?, response: URLResponse?, error _: Error?) async {
         guard let response = response as? HTTPURLResponse,
-              let headers = response.allHeaderFields as? [String: Any]
+              let headers = response.allHeaderFields as? [String: Sendable]
         else { return }
         let statusCode = response.statusCode
         if let errorResponse = handleDownloadError(statusCode, params, data, headers) {
             delegate?.chatEvent(event: .system(.error(errorResponse)))
             removeTask(params.uniqueId)
         } else if let data = data {
-            let response = ChatResponse(uniqueId: params.uniqueId, result: data, typeCode: nil)
             if !params.thumbnail {
                 let file = File(hashCode: params.hashCode ?? "", headers: headers)
                 cache?.file?.insert(models: [file])
-                chat.cacheFileManager?.saveFile(url: params.url, data: data) { [weak self] filePath in
-                    self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
-                }
+                guard let filePath = await fm?.saveFile(url: params.url, data: data) else { return }
+                let response = ChatResponse(uniqueId: params.uniqueId, result: data, typeCode: nil)
+                delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
             } else {
                 /// Is thumbnail and it does not need to save on the disk.
+                let response = ChatResponse(uniqueId: params.uniqueId, result: data, typeCode: nil)
                 delegate?.chatEvent(event: .download(params.isImage ? .image(response, nil) : .file(response, nil)))
             }
             removeTask(params.uniqueId)
@@ -213,74 +231,66 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 
     /// Delete a file in cache. with exact file url on the disk.
     func deleteCacheFile(_ url: URL) {
-        chat.cacheFileManager?.deleteFile(at: url)
+        fm?.deleteFile(at: url)
     }
 
     /// Return true if the file exist inside the sandbox of the ChatSDK application host.
     func isFileExist(_ url: URL) -> Bool {
-        chat.cacheFileManager?.isFileExist(url: url) ?? false
+        fm?.isFileExist(url: url) ?? false
     }
 
     /// Return the url of the file if it exists inside the sandbox of the ChatSDK application host.
     func filePath(_ url: URL) -> URL? {
-        chat.cacheFileManager?.filePath(url: url)
+        fm?.filePath(url: url)
     }
 
     /// Return the true of the file if it exists inside the share group.
     func isFileExistInGroup(_ url: URL) -> Bool {
-        chat.cacheFileManager?.isFileExistInGroup(url: url) ?? false
+        fm?.isFileExistInGroup(url: url) ?? false
     }
 
     /// Return the url of the file if it exists inside the share group.
     func filePathInGroup(_ url: URL) -> URL? {
-        chat.cacheFileManager?.filePathInGroup(url: url)
+        fm?.filePathInGroup(url: url)
     }
 
     /// Get data of a cache. file in the correspondent URL.
-    func getData(_ url: URL, completion: @escaping (Data?) -> Void) {
-        chat.cacheFileManager?.getData(url: url) { data in
+    func getData(_ url: URL, completion: @escaping @Sendable (Data?) -> Void) {
+        fm?.getData(url: url) { data in
             completion(data)
         }
     }
 
     /// Get data of a cache. file in the correspondent URL inside a shared group.
-    func getDataInGroup(_ url: URL, completion: @escaping (Data?) -> Void) {
-        chat.cacheFileManager?.getDataInGroup(url: url) { data in
+    func getDataInGroup(_ url: URL, completion: @escaping @Sendable (Data?) -> Void) {
+        fm?.getDataInGroup(url: url) { data in
             completion(data)
         }
     }
 
     /// Save a file inside the sandbox of the Chat SDK.
-    func saveFile(url: URL, data: Data, completion: @escaping (URL?) -> Void) {
-        chat.cacheFileManager?.saveFile(url: url, data: data, saveCompeletion: completion)
+    func saveFile(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void) {
+        fm?.saveFile(url: url, data: data, saveCompeletion: completion)
     }
 
     /// Save a file inside a shared group.
-    func saveFileInGroup(url: URL, data: Data, completion: @escaping (URL?) -> Void) {
-        chat.cacheFileManager?.saveFileInGroup(url: url, data: data, saveCompeletion: completion)
+    func saveFileInGroup(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void) {
+        fm?.saveFileInGroup(url: url, data: data, saveCompeletion: completion)
     }
 
     private func removeTask(_ uniqueId: String) {
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            if let sessionandTask = tasks[uniqueId] {
-                sessionandTask.session.invalidateAndCancel()
-                tasks.removeValue(forKey: uniqueId)
-            }
+        if let sessionandTask = tasks[uniqueId] {
+            sessionandTask.session.invalidateAndCancel()
+            tasks.removeValue(forKey: uniqueId)
         }
     }
 
     private func addTask(uniqueId: String, session: URLSession, task: URLSessionDataTaskProtocol?) {
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            tasks[uniqueId] = (session, task)
-        }
+        tasks[uniqueId] = (session, task)
     }
-
+    
     private func getTask(uniqueId: String) -> SessionAndTask? {
-        queue.sync {
-            return tasks[uniqueId]
-        }
+        return tasks[uniqueId]
     }
 
     internal func handleUserGroupAccessError(_ params: DownloadManagerParameters) {
@@ -293,11 +303,14 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 
         /// Timer to cancel download and raise an error.
         Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { [weak self] _ in
-            guard let self = self else { return }
-            _ = queue.sync {
-                self.requests.removeValue(forKey: req.uniqueId)
+            Task {
+                await self?.onTimerUserGroup(uniqueId: req.uniqueId)
             }
         }
+    }
+    
+    private func onTimerUserGroup(uniqueId: String) {
+        requests.removeValue(forKey: uniqueId)
     }
 
     internal func onAddUserToUserGroup(_ asyncMessage: AsyncMessage) {
@@ -318,7 +331,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 
 // MARK: handle Errors
 extension ChatFileManager {
-    private func handleDownloadError(_ statusCode: Int, _ params: DownloadManagerParameters, _ data: Data?, _ headers: [String: Any]) -> ChatResponse<Any>? {
+    private func handleDownloadError(_ statusCode: Int, _ params: DownloadManagerParameters, _ data: Data?, _ headers: [String: Sendable]) -> ChatResponse<Sendable>? {
         let typeCode = chat.config.typeCodes[params.typeCodeIndex].typeCode
         if statusCode >= 200, statusCode <= 300 {
             if let chatError = chatError(params.uniqueId, data, typeCode) {
@@ -337,30 +350,30 @@ extension ChatFileManager {
         }
     }
 
-    private func unhandledError(_ params: DownloadManagerParameters, _ headers: [String: Any], _ typeCode: String) -> ChatResponse<Any>? {
+    private func unhandledError(_ params: DownloadManagerParameters, _ headers: [String: Sendable], _ typeCode: String) -> ChatResponse<Sendable>? {
         let message = (headers["errorMessage"] as? String) ?? ""
         let code = (headers["errorCode"] as? Int) ?? 999
         let error = ChatError(message: message, code: code, hasError: true, content: nil)
-        return ChatResponse(uniqueId: params.uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+        return ChatResponse(uniqueId: params.uniqueId, error: error, typeCode: typeCode)
     }
 
-    private func checkForAccessError(_ params: DownloadManagerParameters, _ typeCode: String) -> ChatResponse<Any>? {
+    private func checkForAccessError(_ params: DownloadManagerParameters, _ typeCode: String) -> ChatResponse<Sendable>? {
         let error = ChatError(type: .notAddedInUserGroup, code: 403)
         handleUserGroupAccessError(params)
-        return ChatResponse(uniqueId: params.uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+        return ChatResponse(uniqueId: params.uniqueId, error: error, typeCode: typeCode)
     }
 
-    private func chatError(_ uniqueId: String, _ data: Data?, _ typeCode: String) -> ChatResponse<Any>? {
+    private func chatError(_ uniqueId: String, _ data: Data?, _ typeCode: String) -> ChatResponse<Sendable>? {
         if let data = data, let error = try? JSONDecoder.instance.decode(ChatError.self, from: data), error.hasError == true {
-            return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+            return ChatResponse(uniqueId: uniqueId, error: error, typeCode: typeCode)
         }
         return nil
     }
 
-    private func podspaceError(_ uniqueId: String?, _ data: Data?, _ typeCode: String) -> ChatResponse<Any>? {
+    private func podspaceError(_ uniqueId: String?, _ data: Data?, _ typeCode: String) -> ChatResponse<Sendable>? {
         if let data = data, let podspaceError = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
             let error = ChatError(message: podspaceError.message, code: podspaceError.errorType?.rawValue, hasError: true)
-            return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+            return ChatResponse(uniqueId: uniqueId, error: error, typeCode: typeCode)
         }
         return nil
     }

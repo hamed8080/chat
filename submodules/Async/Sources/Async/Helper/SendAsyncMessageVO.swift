@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct SendAsyncMessageVO: Codable {
+public struct SendAsyncMessageVO: Codable, Sendable {
     public init(content: String, ttl: Int, peerName: String, priority: Int = 1, uniqueId: String? = nil) {
         self.content = content
         self.ttl = ttl

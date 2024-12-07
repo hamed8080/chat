@@ -8,7 +8,7 @@ import Foundation
 import ChatDTO
 import ChatCore
 
-extension AddBotCommandRequest: ChatSendable {
+extension AddBotCommandRequest: @retroactive ChatSendable {
 }
 
 public extension AddBotCommandRequest {

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct BlockRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct BlockRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let contactId: Int?
     public let threadId: Int?
     public let userId: Int?

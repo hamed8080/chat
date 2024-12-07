@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct CancelCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct CancelCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let call: Call
     public let uniqueId: String
     public var typeCodeIndex: Index

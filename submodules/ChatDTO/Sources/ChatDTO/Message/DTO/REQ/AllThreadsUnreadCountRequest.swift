@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct AllThreadsUnreadCountRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AllThreadsUnreadCountRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     let mute: Bool
     public let uniqueId: String
     public var typeCodeIndex: Index

@@ -8,7 +8,7 @@ import Foundation
 import ChatCore
 import ChatDTO
 
-extension StartStopBotRequest: ChatSendable, SubjectProtocol {}
+extension StartStopBotRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension StartStopBotRequest {
     var subjectId: Int { threadId }

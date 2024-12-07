@@ -8,7 +8,7 @@ import Foundation
 import ChatDTO
 import ChatCore
 
-extension UnBlockRequest: ChatSendable {}
+extension UnBlockRequest: @retroactive ChatSendable {}
 
 public extension UnBlockRequest {
     var content: String? { jsonString }

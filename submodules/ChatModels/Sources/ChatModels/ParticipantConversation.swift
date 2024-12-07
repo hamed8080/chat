@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ParticipantConversation: Codable, Hashable {
+public struct ParticipantConversation: Codable, Hashable, Sendable {
     public var description: String?
     public var group: Bool?
     public var id: Int?

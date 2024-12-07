@@ -8,7 +8,7 @@ import Foundation
 import ChatDTO
 import ChatCore
 
-extension CreateBotRequest: PlainTextSendable {}
+extension CreateBotRequest: @retroactive PlainTextSendable {}
 
 public extension CreateBotRequest {
     var content: String? { botName }

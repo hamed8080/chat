@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct ThreadsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ThreadsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var count: Int
     public var offset: Int
     public var name: String?

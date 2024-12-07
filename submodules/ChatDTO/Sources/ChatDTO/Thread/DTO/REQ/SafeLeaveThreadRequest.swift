@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct SafeLeaveThreadRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct SafeLeaveThreadRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let threadId: Int
     public let clearHistory: Bool?
     public let uniqueId: String

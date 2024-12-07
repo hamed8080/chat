@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct File: Codable, Identifiable, Hashable {
+public struct File: Codable, Identifiable, Hashable, Sendable {
     public var id: String? { hashCode }
     public var hashCode: String?
     public var name: String?

@@ -8,7 +8,7 @@ import Foundation
 import ChatDTO
 import ChatCore
 
-extension RemoveBotCommandRequest: ChatSendable {}
+extension RemoveBotCommandRequest: @retroactive ChatSendable {}
 
 public extension RemoveBotCommandRequest {
     var content: String? { jsonString }

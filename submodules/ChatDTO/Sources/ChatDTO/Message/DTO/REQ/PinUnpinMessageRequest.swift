@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct PinUnpinMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct PinUnpinMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let messageId: Int
     public let notifyAll: Bool
     public let uniqueId: String

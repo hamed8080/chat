@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum ServerErrorType: Int, CaseIterable {
+public enum ServerErrorType: Int, CaseIterable, Sendable {
     case unknownError = 999
     case notLogined = 2
     case invalidToken = 21

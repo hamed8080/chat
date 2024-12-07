@@ -7,7 +7,7 @@
 import CoreData
 import Foundation
 
-public enum LogEmitter: Int, CaseIterable, Codable, Identifiable {
+public enum LogEmitter: Int, CaseIterable, Codable, Identifiable, Sendable {
     public var id: Self { self }
     case internalLog = 0
     case sent = 1

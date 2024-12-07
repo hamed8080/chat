@@ -8,7 +8,7 @@ import Async
 import Foundation
 import Logger
 
-public struct ChatConfig: Codable {
+public struct ChatConfig: Codable, Sendable {
     public var asyncConfig: AsyncConfig
     public private(set) var callConfig: CallConfig
     public private(set) var ssoHost: String
@@ -197,7 +197,7 @@ public struct ChatConfig: Codable {
     }
 }
 
-public final class ChatConfigBuilder {
+public final class ChatConfigBuilder: @unchecked Sendable {
     private(set) var asyncConfig: AsyncConfig
     private(set) var callConfig: CallConfig = CallConfigBuilder().build()
     private(set) var ssoHost: String = ""

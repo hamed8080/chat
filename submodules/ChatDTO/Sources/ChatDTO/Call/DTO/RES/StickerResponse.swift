@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct StickerResponse: Decodable {
+public struct StickerResponse: Decodable, Sendable {
     public var callId: Int?
     public let sticker: CallSticker
     public let participant: Participant

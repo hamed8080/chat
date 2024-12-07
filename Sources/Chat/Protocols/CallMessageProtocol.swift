@@ -8,6 +8,7 @@ import Async
 import Foundation
 
 /// For sending any call messages to ChatCall SDK.
-public protocol CallMessageProtocol {
+@ChatGlobalActor
+public protocol CallMessageProtocol: AnyObject {
     func onCallMessageDelegate(asyncMessage: AsyncMessage, chat: ChatImplementation)
 }

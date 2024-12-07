@@ -10,7 +10,7 @@ import ChatDTO
 import ChatCore
 import ChatCache
 
-extension ContactsRequest: ChatSendable {}
+extension ContactsRequest: @retroactive ChatSendable {}
 
 public extension ContactsRequest {    
     var content: String? { jsonString }
@@ -36,6 +36,6 @@ public extension ContactsRequest {
     }
 }
 
-extension ContactsRequest: Paginateable {
+extension ContactsRequest: @retroactive Paginateable {
     public var count: Int { size }
 }

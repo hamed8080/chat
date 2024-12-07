@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct JoinPublicThreadRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct JoinPublicThreadRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var threadName: String
     public let uniqueId: String
     public var typeCodeIndex: Index

@@ -7,7 +7,7 @@
 import Foundation
 
 /// Whenever an event occurs in the server or you want to send a message, a type of message will tell you what's happening right now.
-public enum AsyncMessageTypes: Int, Codable, Identifiable, CaseIterable {
+public enum AsyncMessageTypes: Int, Codable, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     /// Ping every 20 seonds to keep socket alive.
     case ping = 0

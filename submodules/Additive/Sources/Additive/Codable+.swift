@@ -32,6 +32,14 @@ public extension Encodable {
         }
         return dictionary
     }
+    
+    func asSendableDictionary() throws -> [String: Sendable] {
+        let data = try JSONEncoder.instance.encode(self)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Sendable] else {
+            throw NSError(domain: "failed to make json object", code: -1, userInfo: nil)
+        }
+        return dictionary
+    }
 
     func asDictionaryNuallable() throws -> [String: Any?] {
         let data = try JSONEncoder.instance.encode(self)

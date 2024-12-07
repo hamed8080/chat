@@ -7,12 +7,12 @@
 import Foundation
 import CoreData
 
-public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
+public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecked Sendable {
     public typealias Entity = T
     public var container: PersistentManagerProtocol
     public let logger: CacheLogDelegate
-    public var viewContext: NSManagedObjectContextProtocol { container.viewContext(name: "Main")! }
-    public var bgContext: NSManagedObjectContextProtocol { container.newBgTask(name: "BGTask")! }
+    public var viewContext: CacheManagedContext { container.viewContext(name: "Main")! }
+    public var bgContext: CacheManagedContext { container.newBgTask(name: "BGTask")! }
     private let mainQueue = DispatchQueue.main
 
     required public init(container: PersistentManagerProtocol, logger: CacheLogDelegate) {
@@ -20,7 +20,7 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
         self.logger = logger
     }
 
-    public func insert(model: Entity.Model, context: NSManagedObjectContextProtocol) {
+    public func insert(model: Entity.Model, context: CacheManagedContext) {
         let entity = Entity.insertEntity(context)
         entity.update(model)
     }
@@ -37,31 +37,31 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
         NSPredicate(format: "\(Entity.idName) == \(Entity.queryIdSpecifier)", id as! CVarArg)
     }
 
-    public func first(with id: Entity.Id, context: NSManagedObjectContextProtocol, completion: @escaping (Entity?) -> Void) {
+    public func first(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void) {
         let req = Entity.fetchRequest()
         req.predicate = self.idPredicate(id: id)
         req.fetchLimit = 1
-        let entity = try? context.fetch(req).first
+        let entity = try? context.context.fetch(req).first
         completion(entity)
     }
 
-    public func firstOnMain(with id: Entity.Id, context: NSManagedObjectContextProtocol, completion: @escaping (Entity?) -> Void) {
+    public func firstOnMain(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void) {
         mainQueue.async { [weak self] in
             guard let self = self else { return }
             let req = Entity.fetchRequest()
             req.predicate = self.idPredicate(id: id)
             req.fetchLimit = 1
-            let entity = try? context.fetch(req).first
+            let entity = try? context.context.fetch(req).first
             completion(entity)
         }
     }
 
-    public func find(predicate: NSPredicate, completion: @escaping ([Entity]) -> Void) {
+    public func find(predicate: SendableNSPredicate, completion: @escaping @Sendable ([Entity]) -> Void) {
         mainQueue.async { [weak self] in
             guard let self = self else { return }
             viewContext.perform {
                 let req = Entity.fetchRequest()
-                req.predicate = predicate
+                req.predicate = predicate.predicate
                 let entities = try self.viewContext.fetch(req)
                 completion(entities)
             }
@@ -82,7 +82,7 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
         }
     }
 
-    public func save(context: NSManagedObjectContextProtocol) {
+    public func save(context: CacheManagedContext) {
         if context.hasChanges == true {
             do {
                 try context.save()
@@ -107,11 +107,11 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
     public func mergeChanges(key: String, _ objectIDs: [NSManagedObjectID]) {
         NSManagedObjectContext.mergeChanges(
             fromRemoteContextSave: [key: objectIDs],
-            into: [viewContext as! NSManagedObjectContext]
+            into: [viewContext.context as! NSManagedObjectContext]
         )
     }
 
-    public func insertObjects(_ makeEntities: @escaping ((NSManagedObjectContextProtocol) throws -> Void)) {
+    public func insertObjects(_ makeEntities: @escaping @Sendable (CacheManagedContext) throws -> Void) {
         let context = bgContext
         context.perform { [weak self] in
             try makeEntities(context)
@@ -142,13 +142,13 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
         }
     }
 
-    public func fetchWithOffset(count: Int = 25, offset: Int = 0, predicate: NSPredicate? = nil, sortDescriptor: [NSSortDescriptor]? = nil, _ completion: @escaping ([Entity], Int) -> Void) {
+    public func fetchWithOffset(count: Int = 25, offset: Int = 0, predicate: SendableNSPredicate? = nil, sortDescriptor: [SendableNSSortDescriptor]? = nil, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
         mainQueue.async { [weak self] in
             guard let self = self else { return }
             viewContext.perform {
                 let req = NSFetchRequest<Entity>(entityName: Entity.name)
-                req.sortDescriptors = sortDescriptor
-                req.predicate = predicate
+                req.sortDescriptors = sortDescriptor?.compactMap {$0.sort}
+                req.predicate = predicate?.predicate
                 let totalCount = (try? self.viewContext.count(for: req)) ?? 0
                 req.fetchLimit = count
                 req.fetchOffset = offset
@@ -158,7 +158,7 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
         }
     }
 
-    public func all(_ completion: @escaping ([Entity]) -> Void) {
+    public func all(_ completion: @escaping @Sendable ([Entity]) -> Void) {
         mainQueue.async { [weak self] in
             guard let self = self else { return }
             viewContext.perform {
@@ -169,7 +169,7 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
         }
     }
 
-    public func fetchWithObjectIds(ids: [NSManagedObjectID], _ completion: @escaping ([Entity]) -> Void) {
+    public func fetchWithObjectIds(ids: [NSManagedObjectID], _ completion: @escaping @Sendable ([Entity]) -> Void) {
         mainQueue.async { [weak self] in
             guard let self = self else { return }
             viewContext.perform {
@@ -182,11 +182,11 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
         }
     }
 
-    public func findOrCreate(_ id: Entity.Id, _ context: NSManagedObjectContextProtocol) -> Entity {
+    public func findOrCreate(_ id: Entity.Id, _ context: CacheManagedContext) -> Entity {
         let req = T.fetchRequest()
         req.predicate = self.idPredicate(id: id)
         req.fetchLimit = 1
-        let entity = try? context.fetch(req).first
+        let entity = try? context.context.fetch(req).first
         return entity ?? T.insertEntity(context)
     }
 

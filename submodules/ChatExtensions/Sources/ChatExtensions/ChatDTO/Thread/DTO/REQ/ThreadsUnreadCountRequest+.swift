@@ -9,7 +9,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension ThreadsUnreadCountRequest: ChatSendable {}
+extension ThreadsUnreadCountRequest: @retroactive ChatSendable {}
 
 public extension ThreadsUnreadCountRequest {
     var content: String? { threadIds.jsonString }

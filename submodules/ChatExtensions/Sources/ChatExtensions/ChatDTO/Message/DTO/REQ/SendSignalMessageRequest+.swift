@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension SendSignalMessageRequest: ChatSendable, SubjectProtocol {}
+extension SendSignalMessageRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension SendSignalMessageRequest {
     var subjectId: Int { threadId }

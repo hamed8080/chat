@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct LocationMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct LocationMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let mapCenter: Coordinate
     public let mapHeight: Int
     public let mapType: String

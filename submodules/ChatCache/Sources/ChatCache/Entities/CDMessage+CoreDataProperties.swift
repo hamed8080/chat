@@ -13,7 +13,7 @@ public extension CDMessage {
     typealias Model = Message
     typealias Id = NSNumber
     static let name = "CDMessage"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 
@@ -70,12 +70,12 @@ public extension CDMessage {
         replyInfo = model.replyInfo?.toClass ?? replyInfo
         forwardInfo = model.forwardInfo?.toClass ?? forwardInfo
 
-        if let participant = model.participant, let threadId = threadId, let context = managedObjectContext {
+        if let participant = model.participant, let threadId = threadId, let context = managedObjectContext?.sendable {
             setParticipant(participant, threadId.intValue, context)
         }
     }
 
-    func setParticipant(_ participant: Participant, _ threadId: Int, _ context: NSManagedObjectContext) {
+    func setParticipant(_ participant: Participant, _ threadId: Int, _ context: CacheManagedContext) {
         if let participantId = participant.id {
             self.participant = CDParticipant.findOrCreate(threadId: threadId, participantId: participantId, context: context)
             self.participant?.conversation = CDConversation.findOrCreate(threadId: threadId, context: context)

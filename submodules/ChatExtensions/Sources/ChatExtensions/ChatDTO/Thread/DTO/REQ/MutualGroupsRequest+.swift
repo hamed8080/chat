@@ -8,10 +8,10 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension MutualGroupsRequest: ChatSendable {}
+extension MutualGroupsRequest: @retroactive ChatSendable {}
 
 public extension MutualGroupsRequest {
     var content: String? { jsonString }
     var chatTypeCodeIndex: Index { typeCodeIndex }
 }
-extension MutualGroupsRequest: Paginateable{}
+extension MutualGroupsRequest: @retroactive Paginateable{}

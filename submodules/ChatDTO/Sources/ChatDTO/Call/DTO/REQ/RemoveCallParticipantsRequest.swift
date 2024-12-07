@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct RemoveCallParticipantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct RemoveCallParticipantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let callId: Int
     public var userIds: [Int]
     public let uniqueId: String

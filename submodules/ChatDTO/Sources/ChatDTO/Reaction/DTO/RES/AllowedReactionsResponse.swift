@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct AllowedReactionsResponse: Decodable {
+public struct AllowedReactionsResponse: Decodable, Sendable {
     public var conversationId: Int?
     public var allowedReactions: [Sticker]?
 

@@ -8,7 +8,7 @@ import Additive
 import CoreData
 import Foundation
 
-public final class Logger {
+public final class Logger: @unchecked Sendable {
     public weak var delegate: LogDelegate?
     internal var config: LoggerConfig
     private var timer: TimerProtocol
@@ -88,47 +88,53 @@ public final class Logger {
 
     private func startSending() {
         if config.persistLogsOnServer == false { return }
-        timer.scheduledTimer(interval: config.sendLogInterval, repeats: true) { [weak self] timer in
-            if let bgTask = self?.persistentManager.newBgTask, let self = self, timer.isValid {
-                CDLog.firstLog(self, bgTask) { log in
-                    if let log = log {
-                        self.sendLog(log: log, context: bgTask)
-                    } else {
-                        timer.invalidateTimer()
-                    }
-                }
+        timer.scheduledTimer(interval: config.sendLogInterval, repeats: true) { [weak self] _ in
+            Task {
+                await self?.onSendingTimer()
+            }
+        }
+    }
+    
+    private func onSendingTimer() async {
+        if let bgTask = self.persistentManager.newBgTask, timer.isValid {
+            let log = await CDLog.firstLog(self, bgTask)
+            if let log = log {
+                await sendLog(log: log, context: bgTask)
+            } else {
+                timer.invalidateTimer()
             }
         }
     }
 
-    private func sendLog(log: CDLog, context: NSManagedObjectContext) {
+    private func sendLog(log: CDLog, context: NSManagedObjectContext) async {
+        let sendable = context.sendable
         guard let urlString = config.logServerURL, let url = URL(string: urlString) else { return }
         var req = URLRequest(url: url)
         req.httpMethod = config.logServerMethod
         req.httpBody = try? JSONEncoder().encode(log.codable)
         req.allHTTPHeaderFields = config.logServerRequestheaders
-        let task = urlSession.dataTask(req) { [weak self] _, response, error in
+        do {
+            let (data, response) = await try urlSession.data(req)
             if (response as? HTTPURLResponse)?.statusCode == 200 {
-                self?.deleteLogFromCache(log: log, context: context)
+                deleteLogFromCache(log: log, context: sendable.context)
             }
-
-            if let error = error {
-                print("error to send log \(error)")
-            }
+        } catch {
+            print("error to send log \(error)")
         }
-        task.resume()
     }
 
     private func deleteLogFromCache(log: CDLog, context: NSManagedObjectContext) {
+        let sendable = context.sendable
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return }
-            CDLog.delete(logger: self, context: context, logs: [log])
+            CDLog.delete(logger: self, context: sendable.context, logs: [log])
         }
     }
 
     private func addLogToCache(_ log: Log) {
         guard let context = persistentManager.context else { return }
-        DispatchQueue.main.async(qos: .background) {
+        DispatchQueue.main.async(qos: .background) { [weak self] in
+            guard let self = self else { return }
             CDLog.insert(self, context, [log])
         }
     }

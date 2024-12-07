@@ -10,7 +10,7 @@ import Logger
 /// Configuration data that needs to prepare to use SDK.
 ///
 /// To work with SDK this struct must be passed to ``Async`` initializer.
-public struct AsyncConfig: Codable {
+public struct AsyncConfig: Codable, Sendable {
     public private(set) var socketAddress: String
     public private(set) var peerName: String
     public private(set) var deviceId: String = UUID().uuidString

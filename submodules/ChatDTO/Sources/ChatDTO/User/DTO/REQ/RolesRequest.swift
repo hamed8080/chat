@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct RolesRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct RolesRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let userRoles: [UserRoleRequest]
     public let threadId: Int
     public let uniqueId: String

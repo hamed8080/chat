@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum Sticker: Int, CaseIterable, Identifiable, Codable {
+public enum Sticker: Int, CaseIterable, Identifiable, Codable, Sendable {
     public var id: Self { self }
     case hifive = 1
     case like = 2

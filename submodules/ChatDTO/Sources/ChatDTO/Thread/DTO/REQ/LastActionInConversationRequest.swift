@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct LastActionInConversationRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct LastActionInConversationRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var ids: [Int]
     public let uniqueId: String
     public var typeCodeIndex: Index

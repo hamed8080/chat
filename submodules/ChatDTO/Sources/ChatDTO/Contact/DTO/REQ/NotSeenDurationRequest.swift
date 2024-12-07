@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct NotSeenDurationRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct NotSeenDurationRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let userIds: [Int]
     public let uniqueId: String
     public var typeCodeIndex: Index

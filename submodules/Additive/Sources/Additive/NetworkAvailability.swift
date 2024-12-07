@@ -12,7 +12,7 @@ public protocol NetworkAvailabilityProtocol {
 }
 
 @available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
-open class NativeNetworkAvailability: NetworkAvailabilityProtocol {
+open class NativeNetworkAvailability: NetworkAvailabilityProtocol, @unchecked Sendable {
     private var lastStatus: NWPath.Status?
     public var onNetworkChange: ((Bool) -> Void)?
     private let path = NWPathMonitor()

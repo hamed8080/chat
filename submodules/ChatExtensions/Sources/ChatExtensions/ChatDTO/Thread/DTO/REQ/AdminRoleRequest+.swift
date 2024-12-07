@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension AdminRoleRequest: ChatSendable, SubjectProtocol {}
+extension AdminRoleRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension AdminRoleRequest {
     var subjectId: Int { conversationId }

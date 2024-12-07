@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct BlockUnblockAssistantRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct BlockUnblockAssistantRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let assistants: [Assistant]
     public let uniqueId: String
     public var typeCodeIndex: Index

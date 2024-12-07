@@ -7,7 +7,7 @@
 import Foundation
 import Async
 
-public struct CallConfig: Codable {
+public struct CallConfig: Codable, Sendable {
     public private(set) var targetVideoWidth: Int
     public private(set) var targetVideoHeight: Int
     public private(set) var targetFPS: Int

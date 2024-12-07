@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct UserRoleRequest: Encodable, TypeCodeIndexProtocol {
+public struct UserRoleRequest: Encodable, TypeCodeIndexProtocol, Sendable {
     private let userId: Int
     private var roles: [Roles] = []
     public var typeCodeIndex: Index

@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct CreateCall: Codable {
+public struct CreateCall: Codable, Sendable {
     public let invitees: [Invitee]?
     public let type: CallType
     public let creatorId: Int

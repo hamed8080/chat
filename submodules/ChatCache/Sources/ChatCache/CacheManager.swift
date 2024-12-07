@@ -8,7 +8,7 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheManager {
+public final class CacheManager: @unchecked Sendable {
     internal let persistentManager: PersistentManagerProtocol
     public private(set) var assistant: CacheAssistantManager?
     public private(set) var contact: CacheContactManager?
@@ -61,7 +61,7 @@ public final class CacheManager {
         forwardQueue?.delete(uniqueIds)
     }
 
-    public func switchToContainerOnMain(userId: Int, completion: (() ->Void)? = nil) {
+    public func switchToContainerOnMain(userId: Int, completion: (@Sendable () ->Void)? = nil) {
         DispatchQueue.main.async { [weak self] in
             self?.switchToContainer(userId: userId, completion: completion)
         }

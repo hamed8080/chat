@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct LeaveThreadRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct LeaveThreadRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let threadId: Int
     public let clearHistory: Bool?
     public let uniqueId: String

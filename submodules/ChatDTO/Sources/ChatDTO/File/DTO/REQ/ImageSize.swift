@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum ImageSize: String, Encodable, Identifiable, CaseIterable {
+public enum ImageSize: String, Encodable, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case SMALL
     case MEDIUM

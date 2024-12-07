@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct EditMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct EditMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var queueTime: Date = .init()
     public var messageType: MessageType
     public let repliedTo: Int?

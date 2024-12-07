@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension RegisterAssistantsRequest: ChatSendable {}
+extension RegisterAssistantsRequest: @retroactive ChatSendable {}
 
 public extension RegisterAssistantsRequest {
     var content: String? { assistants.jsonString }

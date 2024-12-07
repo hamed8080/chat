@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct DeleteMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct DeleteMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let deleteForAll: Bool
     public let messageId: Int
     public let uniqueId: String

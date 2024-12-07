@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct PinMessage: Codable, Identifiable, Hashable {
+public struct PinMessage: Codable, Identifiable, Hashable, Sendable {
     public var id: Int? { messageId }
     public var messageId: Int?
     public var text: String?

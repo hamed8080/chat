@@ -8,9 +8,9 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheConversationManager: BaseCoreDataManager<CDConversation> {
+public final class CacheConversationManager: BaseCoreDataManager<CDConversation>, @unchecked Sendable {
 
-    public override func insert(model: Entity.Model, context: NSManagedObjectContextProtocol) {
+    public override func insert(model: Entity.Model, context: CacheManagedContext) {
         guard let threadId = model.id else { return }
         let req = Entity.fetchRequest()
         req.predicate = NSPredicate(format: "\(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue)
@@ -67,7 +67,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         update(propertiesToUpdate, predicate)
     }
     
-    public func setUnreadCount(action: CacheUnreadCountAction, threadId: Int, completion: ((Int) -> Void)? = nil) {
+    public func setUnreadCount(action: CacheUnreadCountAction, threadId: Int, completion: (@Sendable (Int) -> Void)? = nil) {
         firstOnMain(with: threadId.nsValue, context: viewContext) { entity in
             var cachedThreadCount = entity?.unreadCount?.intValue ?? 0
             switch action {
@@ -86,7 +86,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         }
     }
 
-    public func fetch(_ req: FetchThreadRequest, _ completion: @escaping ([Entity], Int) -> Void) {
+    public func fetch(_ req: FetchThreadRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
         let fetchRequest = Entity.fetchRequest()
         fetchRequest.fetchLimit = req.count
         fetchRequest.fetchOffset = req.offset
@@ -137,7 +137,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         }
     }
 
-    public func fetchIds(_ completion: @escaping ([Int]) -> Void) {
+    public func fetchIds(_ completion: @escaping @Sendable ([Int]) -> Void) {
         let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = [Entity.idName]
@@ -184,7 +184,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
 
     /// Insert if there is no conversation or message object, and update if there is a message or thread entity.
     /// It will not save anything by itself. Only the parent task should call save whenever you feel it is enough to save context.
-    public func replaceLastMessage(_ model: Entity.Model, _ context: NSManagedObjectContextProtocol) throws {
+    public func replaceLastMessage(_ model: Entity.Model, _ context: CacheManagedContext) throws {
         guard let threadId = model.id, let lastMessageVO = model.lastMessageVO
         else { throw NSError(domain: "The threadId or LastMessageVO is nil.", code: 0) }
         first(with: threadId.nsValue, context: context) { entity in
@@ -199,7 +199,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
 
     /// We use uniqueId of message to get a message if it the sender were me and if so, in sendMessage method we have added an entity inside message table without an 'Message.id'
     /// and it will lead to problem such as dupicate message row.
-    private func updateLastMessage(_ entity: CDConversation, _ threadId: Int, _ lastMessageVO: Message, _ context: NSManagedObjectContextProtocol) {
+    private func updateLastMessage(_ entity: CDConversation, _ threadId: Int, _ lastMessageVO: Message, _ context: CacheManagedContext) {
         entity.lastMessage = lastMessageVO.message
         entity.lastSeenMessageTime = lastMessageVO.time as? NSNumber
         entity.lastSeenMessageNanos = lastMessageVO.timeNanos as? NSNumber
@@ -254,7 +254,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         }
     }
 
-    public func threadsUnreadcount(_ threadIds: [Int], _ completion: @escaping ([String: Int]) -> Void) {
+    public func threadsUnreadcount(_ threadIds: [Int], _ completion: @escaping @Sendable ([String: Int]) -> Void) {
         let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = ["id", "unreadCount"]

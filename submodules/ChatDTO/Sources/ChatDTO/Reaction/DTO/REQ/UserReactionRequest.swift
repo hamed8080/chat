@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UserReactionRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct UserReactionRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let messageId: Int
     public let conversationId: Int
     public let uniqueId: String

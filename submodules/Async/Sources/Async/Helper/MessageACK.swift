@@ -7,7 +7,7 @@
 import Foundation
 
 /// The message acknowledge request/response.
-struct MessageACK: Codable {
+struct MessageACK: Codable, Sendable {
     /// Message Id that got/received an acknowledgment.
     var messageId: Int64
 

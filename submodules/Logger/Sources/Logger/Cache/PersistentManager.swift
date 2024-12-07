@@ -22,14 +22,14 @@ public final class PersistentManager {
     var context: NSManagedObjectContext? {
         guard let context = container?.viewContext else { return nil }
         context.name = "Main"
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         return context
     }
 
     var newBgTask: NSManagedObjectContext? {
         guard let bgTask = container?.newBackgroundContext() else { return nil }
         bgTask.name = "BGTASK"
-        bgTask.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        bgTask.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         return bgTask
     }
 

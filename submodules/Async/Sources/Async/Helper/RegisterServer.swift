@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-struct RegisterServer: Codable {
+struct RegisterServer: Codable, Sendable {
     /// The name of the peer server.
     var name: String
 

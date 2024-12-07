@@ -7,7 +7,7 @@
 import Foundation
 
 /// A struct of the request/response for registering the device with the server.
-struct RegisterDevice: Codable {
+struct RegisterDevice: Codable, Sendable {
     /// A boolean is set to true if the peerId has never set before.
     var renew: Bool?
 

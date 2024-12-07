@@ -8,7 +8,7 @@ import CoreData
 import Foundation
 
 @objc(CDLog)
-public final class CDLog: NSManagedObject {}
+public final class CDLog: NSManagedObject, @unchecked Sendable {}
 
 public extension CDLog {
     @nonobjc class func fetchRequest() -> NSFetchRequest<CDLog> {
@@ -64,6 +64,15 @@ public extension CDLog {
             req.fetchLimit = 1
             req.sortDescriptors = [sortByTime]
             completion(try context.fetch(req).first)
+        }
+    }
+    
+    class func firstLog(_ logger: Logger, _ context: NSManagedObjectContext) async -> CDLog? {
+        typealias ResultType = CheckedContinuation<CDLog?, Never>
+        return await withCheckedContinuation { (continutation: ResultType) in
+            firstLog(logger, context) { log in
+                continutation.resume(with: .success(log))
+            }
         }
     }
 

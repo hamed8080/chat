@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct ContactsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ContactsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var size: Int = 25
     public var offset: Int = 0
     // use in cashe

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Route: Decodable {
+public struct Route: Decodable, Sendable {
     public var overviewPolyline: OverviewPolyline?
     public var legs: [Leg]?
 
@@ -27,7 +27,7 @@ public struct Route: Decodable {
     }
 }
 
-public struct Leg: Decodable {
+public struct Leg: Decodable, Sendable {
     public var summary: String?
     public var distance: Distance?
     public var duration: Duration?
@@ -56,7 +56,7 @@ public struct Leg: Decodable {
     }
 }
 
-public struct OverviewPolyline: Decodable {
+public struct OverviewPolyline: Decodable, Sendable {
     public var points: String?
 
     private enum CodingKeys: CodingKey {
@@ -73,7 +73,7 @@ public struct OverviewPolyline: Decodable {
     }
 }
 
-public struct Distance: Decodable {
+public struct Distance: Decodable, Sendable {
     public var value: Double?
     public var text: String?
 
@@ -94,7 +94,7 @@ public struct Distance: Decodable {
     }
 }
 
-public struct Duration: Decodable {
+public struct Duration: Decodable, Sendable {
     public var value: Double?
     public var text: String?
 
@@ -115,7 +115,7 @@ public struct Duration: Decodable {
     }
 }
 
-public struct Step: Decodable {
+public struct Step: Decodable, Sendable {
     public var name: String?
     public var instruction: String?
     public var rotaryName: String?

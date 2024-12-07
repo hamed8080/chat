@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct SendClient: Codable {
+public struct SendClient: Codable, Sendable {
     public let id: String?
     public let type: ClientType
     public let deviceId: String?

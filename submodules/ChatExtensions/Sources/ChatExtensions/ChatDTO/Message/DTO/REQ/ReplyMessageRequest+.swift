@@ -9,7 +9,7 @@ import ChatCore
 import Foundation
 import ChatModels
 
-extension ReplyMessageRequest: Queueable, PlainTextSendable, ReplyProtocol, MessageTypeProtocol, MetadataProtocol, SystemtMetadataProtocol, SubjectProtocol {
+extension ReplyMessageRequest: @retroactive Queueable, @retroactive PlainTextSendable, @retroactive ReplyProtocol, @retroactive MessageTypeProtocol, @retroactive MetadataProtocol, @retroactive SystemtMetadataProtocol, @retroactive SubjectProtocol {
 }
 
 public extension ReplyMessageRequest {

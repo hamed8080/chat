@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UpdateThreadInfoRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct UpdateThreadInfoRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let description: String?
     public var metadata: String?
     public var threadImage: UploadImageRequest?

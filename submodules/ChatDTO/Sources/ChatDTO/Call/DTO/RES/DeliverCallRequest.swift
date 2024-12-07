@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct DeliverCallRequest: Decodable {
+public struct DeliverCallRequest: Decodable, Sendable {
     public let userId: Int
     public let callStatus: CallStatus
     public let mute: Bool

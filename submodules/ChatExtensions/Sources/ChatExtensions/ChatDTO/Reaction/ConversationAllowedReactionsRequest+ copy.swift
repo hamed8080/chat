@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension ConversationCustomizeReactionsRequest: ChatSendable, SubjectProtocol {}
+extension ConversationCustomizeReactionsRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension ConversationCustomizeReactionsRequest {
     var subjectId: Int { conversationId }

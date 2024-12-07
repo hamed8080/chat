@@ -7,7 +7,7 @@
 import Foundation
 
 /// Bot more information.
-public struct BotInfo: Decodable, Hashable {
+public struct BotInfo: Decodable, Hashable, Sendable {
     /// The name of the bot.
     public var name: String?
 

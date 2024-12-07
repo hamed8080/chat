@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct ReplyMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ReplyMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var queueTime: Date = .init()
     public var messageType: MessageType
     public var metadata: String?

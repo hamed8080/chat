@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct RemoveContactResponse: Decodable {
+public struct RemoveContactResponse: Decodable, Sendable {
     public var deteled: Bool
 
     private enum CodingKeys: String, CodingKey {

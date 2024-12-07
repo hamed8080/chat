@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Coordinate: Codable {
+public struct Coordinate: Codable, Sendable {
     public let lat: Double
     public let lng: Double
 
@@ -17,7 +17,7 @@ public struct Coordinate: Codable {
     }
 }
 
-public struct MapRoutingRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct MapRoutingRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var alternative: Bool = true
     private let destination: Coordinate
     private let origin: Coordinate

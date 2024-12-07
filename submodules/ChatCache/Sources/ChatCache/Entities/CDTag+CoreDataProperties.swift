@@ -13,7 +13,7 @@ public extension CDTag {
     typealias Model = Tag
     typealias Id = NSNumber
     static let name = "CDTag"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 
@@ -46,7 +46,7 @@ public extension CDTag {
         name = model.name
         active = model.active as NSNumber
         model.tagParticipants?.forEach{ participnat in
-            if let context = managedObjectContext {
+            if let context = managedObjectContext?.sendable {
                 let participantEntity = CDTagParticipant.insertEntity(context)
                 participantEntity.update(participnat)
                 participantEntity.tag = self

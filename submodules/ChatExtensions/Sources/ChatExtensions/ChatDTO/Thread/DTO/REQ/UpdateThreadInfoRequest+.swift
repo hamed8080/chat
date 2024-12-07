@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension UpdateThreadInfoRequest: ChatSendable, SubjectProtocol {}
+extension UpdateThreadInfoRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension UpdateThreadInfoRequest {
     var subjectId: Int { threadId }

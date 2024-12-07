@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MapSearchRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct MapSearchRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let lat: Double
     public let lng: Double
     public let term: String

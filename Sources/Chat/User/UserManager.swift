@@ -59,7 +59,9 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         let typeCode = request.toTypeCode(chat)
         chat.cache?.user?.fetchCurrentUser { [weak self] userEntity in
             let response = ChatResponse(uniqueId: request.uniqueId, result: userEntity?.codable, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .user(.user(response)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.chat.delegate?.chatEvent(event: .user(.user(response)))
+            }
         }
     }
 
@@ -67,7 +69,9 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         if chat.userInfo == nil {
             fetchUserInfo()
             requestUserTimer = requestUserTimer.scheduledTimer(interval: 5, repeats: true) { [weak self] _ in
-                self?.fetchUserInfo()
+                Task { @ChatGlobalActor in
+                    self?.fetchUserInfo()
+                }
             }
         } else {
             // it mean chat was connected before and reconnected again
@@ -104,19 +108,15 @@ final class UserManager: UserProtocol, InternalUserProtocol {
             // reach to max retry
             requestUserTimer.invalidateTimer()
             let error = ChatError(type: .errorRaedyChat, message: "Reached max retry count!")
-            let errorResponse = ChatResponse(result: Any?.none, error: error, typeCode: response.typeCode)
+            let errorResponse = ChatResponse<Sendable>(error: error, typeCode: response.typeCode)
             chat.delegate?.chatEvent(event: .system(.error(errorResponse)))
         }
     }
 
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
-        if let user = response.result {
-            chat.cache?.user?.insertOnMain(user)
-        }
         onInternalUser(response: response)
         chat.delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time, typeCode: response.typeCode))))
-        chat.delegate?.chatEvent(event: .user(.user(response)))
     }
 
     func set(_ request: UpdateChatProfile) {

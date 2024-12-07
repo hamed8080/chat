@@ -10,7 +10,7 @@ import Logger
 
 /// iOS native websocket provider. It will be chosen automatically if the device is running iOS 13+.
 @available(iOS 13.0, macOS 10.15, watchOS 6.0, tvOS 13.0, *)
-final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDelegate, URLSessionWebSocketDelegate {
+final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDelegate, URLSessionWebSocketDelegate, @unchecked Sendable {
     /// A delegation provider to inform events.
     weak var delegate: WebSocketProviderDelegate?
 

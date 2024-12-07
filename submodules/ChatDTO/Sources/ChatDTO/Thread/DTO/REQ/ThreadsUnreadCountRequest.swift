@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ThreadsUnreadCountRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ThreadsUnreadCountRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let threadIds: [Int]
     public let uniqueId: String
     public var typeCodeIndex: Index

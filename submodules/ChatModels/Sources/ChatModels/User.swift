@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct User: Codable, Hashable, Identifiable {
+public struct User: Codable, Hashable, Identifiable, Sendable {
     public var cellphoneNumber: String?
     public var coreUserId: Int?
     public var email: String?

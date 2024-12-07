@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum InviteeTypes: Int, Codable, CaseIterable {
+public enum InviteeTypes: Int, Codable, CaseIterable, Sendable {
     case ssoId = 1
     case contactId = 2
     case cellphoneNumber = 3

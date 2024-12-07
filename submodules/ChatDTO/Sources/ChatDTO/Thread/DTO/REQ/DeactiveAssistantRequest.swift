@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct DeactiveAssistantRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct DeactiveAssistantRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let assistants: [Assistant]
     public let uniqueId: String
     public var typeCodeIndex: Index

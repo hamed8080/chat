@@ -24,7 +24,9 @@ final class AssistantManager: AssistantProtocol {
             let assistants = assistants.map(\.codable)
             let hasNext = assistants.count >= request.count
             let response = ChatResponse(uniqueId: request.uniqueId, result: assistants, hasNext: hasNext, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .assistant(.assistants(response)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.chat.delegate?.chatEvent(event: .assistant(.assistants(response)))
+            }
         }
     }
 
@@ -67,8 +69,14 @@ final class AssistantManager: AssistantProtocol {
             let assistants = assistants.map(\.codable)
             let hasNext = assistants.count >= request.count
             let response = ChatResponse(uniqueId: request.uniqueId, result: assistants, hasNext: hasNext, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .assistant(.blockedList(response)))
+            Task { [weak self] in
+                await self?.onCacheBlockedListResponse(response)
+            }
         }
+    }
+    
+    private func onCacheBlockedListResponse(_ response: ChatResponse<[CDAssistant.Model]> ) {
+        chat.delegate?.chatEvent(event: .assistant(.blockedList(response)))
     }
 
     func onGetBlockedAssistants(_ asyncMessage: AsyncMessage) {

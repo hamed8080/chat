@@ -13,7 +13,7 @@ public extension CDConversation {
     typealias Model = Conversation
     typealias Id = NSNumber
     static let name = "CDConversation"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 
@@ -166,7 +166,7 @@ public extension CDConversation {
         pinMessage = model.pinMessage?.toClass ?? pinMessage
     }
 
-    class func findOrCreate(threadId: Int, context: NSManagedObjectContextProtocol) -> CDConversation {
+    class func findOrCreate(threadId: Int, context: CacheManagedContext) -> CDConversation {
         let req = CDConversation.fetchRequest()
         req.predicate = NSPredicate(format: "%K == %@", #keyPath(CDConversation.id), threadId.nsValue)
         let entity = (try? context.fetch(req).first) ?? CDConversation.insertEntity(context)

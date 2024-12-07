@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct EditTagRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct EditTagRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var name: String
     public var id: Int
     public let uniqueId: String

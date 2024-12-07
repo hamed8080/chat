@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ForwardMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ForwardMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var queueTime: Date = .init()
     public let messageIds: [Int]
     public let fromThreadId: Int

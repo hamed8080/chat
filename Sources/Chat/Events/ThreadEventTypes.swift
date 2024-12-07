@@ -9,7 +9,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public enum ThreadEventTypes {
+public enum ThreadEventTypes: Sendable {
     case threads(ChatResponse<[Conversation]>)
     case joined(ChatResponse<Conversation>)
     case closed(ChatResponse<Int>)

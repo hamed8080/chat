@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct AddRemoveParticipant: Decodable {
+public struct AddRemoveParticipant: Decodable, Sendable {
     public var participnats: [Participant]?
     public var requestType: Int?
     public var requestTime: UInt?

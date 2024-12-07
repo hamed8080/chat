@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Contact: Codable, Hashable, Identifiable {
+public struct Contact: Codable, Hashable, Identifiable, Sendable {
     public var blocked: Bool?
     public var cellphoneNumber: String?
     public var email: String?

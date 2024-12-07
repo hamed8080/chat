@@ -8,7 +8,7 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheUserManager: BaseCoreDataManager<CDUser> {
+public final class CacheUserManager: BaseCoreDataManager<CDUser>, @unchecked Sendable {
  
     public func insert(_ model: Entity.Model, isMe: Bool = false) {
         insertObjects() { context in
@@ -29,7 +29,7 @@ public final class CacheUserManager: BaseCoreDataManager<CDUser> {
         }
     }
 
-    public func fetchCurrentUser(_ compeletion: @escaping (Entity?) -> Void) {
+    public func fetchCurrentUser(_ compeletion: @escaping @Sendable (Entity?) -> Void) {
         viewContext.perform {
             let req = Entity.fetchRequest()
             req.predicate = NSPredicate(format: "isMe == %@", NSNumber(booleanLiteral: true))

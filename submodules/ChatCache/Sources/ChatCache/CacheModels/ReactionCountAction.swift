@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum ReactionCountAction {
+public enum ReactionCountAction: Sendable {
     case increase
     case decrease
     case set(Int)

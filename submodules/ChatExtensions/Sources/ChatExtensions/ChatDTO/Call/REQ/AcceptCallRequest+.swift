@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension AcceptCallRequest: ChatSendable, SubjectProtocol {}
+extension AcceptCallRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension AcceptCallRequest {
     var subjectId: Int { callId }

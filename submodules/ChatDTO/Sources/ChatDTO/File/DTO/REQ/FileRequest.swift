@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct FileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct FileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let hashCode: String
     public let checkUserGroupAccess: Bool
     public var forceToDownloadFromServer: Bool

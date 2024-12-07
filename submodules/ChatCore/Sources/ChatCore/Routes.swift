@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum Routes: String {
+public enum Routes: String, Sendable {
     // Devices:
     case ssoDevices = "/oauth2/grants/devices"
     case ssoGenerateKey = "/handshake/users/"

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Log: Codable, Identifiable, Hashable {
+public struct Log: Codable, Identifiable, Hashable, Sendable {
     public static func == (lhs: Log, rhs: Log) -> Bool {
         lhs.id == rhs.id
     }

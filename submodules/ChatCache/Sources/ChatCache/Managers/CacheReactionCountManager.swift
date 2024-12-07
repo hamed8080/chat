@@ -8,11 +8,12 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCountList> {
+public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCountList>, @unchecked Sendable {
 
-    public func fetch(_ messageIds: [Int], _ compeletion: @escaping ([Entity]) -> Void) {
+    public func fetch(_ messageIds: [Int], _ compeletion: @escaping @Sendable ([Entity]) -> Void) {
         let predicate = NSPredicate(format: "%K IN %@", #keyPath(CDReactionCountList.messageId), messageIds)
-        find(predicate: predicate) { entities in
+        let sPredicate = SendableNSPredicate(predicate: predicate)
+        find(predicate: sPredicate) { entities in
             compeletion(entities)
         }
     }

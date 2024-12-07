@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension PinUnpinMessageRequest: ChatSendable, SubjectProtocol {}
+extension PinUnpinMessageRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension PinUnpinMessageRequest {
     var subjectId: Int { messageId }

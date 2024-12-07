@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let hashCode: String
     public var forceToDownloadFromServer: Bool
     public var quality: Float?

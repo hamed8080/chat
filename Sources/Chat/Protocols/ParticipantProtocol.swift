@@ -8,7 +8,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol ParticipantProtocol {
+@ChatGlobalActor
+public protocol ParticipantProtocol: AnyObject {
     /// Add participant to a thread.
     /// - Parameters:
     ///   - request: Fill in the appropriate initializer.

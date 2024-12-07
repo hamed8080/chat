@@ -14,7 +14,7 @@ public extension CDAssistant {
     typealias Model = Assistant
     typealias Id = NSNumber
     static let name = "CDAssistant"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 
@@ -39,7 +39,7 @@ public extension CDAssistant {
     }
     
     func setParticipant(model: Model) {
-        guard let context = managedObjectContext else { return }
+        guard let context = managedObjectContext?.sendable else { return }
         let predicate = NSPredicate(format: "%K == %@", #keyPath(CDParticipant.id), (model.participant?.id ?? 0).nsValue)
         let req = CDParticipant.fetchRequest()
         req.predicate = predicate

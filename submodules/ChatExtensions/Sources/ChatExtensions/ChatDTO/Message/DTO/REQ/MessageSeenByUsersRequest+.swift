@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension MessageSeenByUsersRequest: ChatSendable {}
+extension MessageSeenByUsersRequest: @retroactive ChatSendable {}
 
 public extension MessageSeenByUsersRequest {
     var content: String? { jsonString }

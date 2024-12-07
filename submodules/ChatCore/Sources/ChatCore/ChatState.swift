@@ -7,7 +7,7 @@
 import Async
 import Foundation
 
-public enum ChatState: String, Identifiable, CaseIterable {
+public enum ChatState: String, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case connecting
     case connected

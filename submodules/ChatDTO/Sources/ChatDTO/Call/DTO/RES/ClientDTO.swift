@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ClientDTO: Codable {
+public struct ClientDTO: Codable, Sendable {
     public let clientId: String
     public let topicReceive: String?
     public let topicSend: String

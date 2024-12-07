@@ -8,7 +8,8 @@ import Additive
 import ChatDTO
 import Foundation
 
-public protocol SystemProtocol {
+@ChatGlobalActor
+public protocol SystemProtocol: AnyObject {
     /// Send a event to the participants of a thread that you are typing something.
     /// - Parameter threadId: The id of the thread.
     func sendStartTyping(threadId: Int)
@@ -21,7 +22,8 @@ public protocol SystemProtocol {
     func sendSignalMessage(_ req: SendSignalMessageRequest)
 }
 
-protocol InternalSystemProtocol {
+@ChatGlobalActor
+protocol InternalSystemProtocol: AnyObject {
     /// A variable that determines how many times the user is typing is sent to the other participants.
     var isTypingCount: Int { get set }
 

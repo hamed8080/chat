@@ -11,6 +11,7 @@ import ChatCore
 import Additive
 import ChatExtensions
 
+@ChatGlobalActor
 internal final class HistoryStore {
     typealias ResponseType = ChatResponse<[Message]>
     private var chat: ChatInternalProtocol
@@ -50,7 +51,9 @@ internal final class HistoryStore {
         }
         cache?.message?.fetch(req.fetchRequest) { [weak self] messages, totalCacheCount in
             let messages = messages.map { $0.codable(fillConversation: false) }
-            self?.onCacheResponse(req, messages, totalCacheCount)
+            Task { @ChatGlobalActor [weak self] in
+                self?.onCacheResponse(req, messages, totalCacheCount)
+            }
         }
     }
 
@@ -58,12 +61,13 @@ internal final class HistoryStore {
         if !hasLastMessageOfTheThread(threadId: req.threadId.nsValue) {
             directRequest(req)
         } else {
-            chainedMessages(req: req) { [weak self] isChain, chunk in
-                guard let self = self else { return }
-                if !isChain {
-                    directRequest(req)
-                } else {
-                    emit(makeResponse(req, messages: chunk))
+            chainedMessages(req: req) { isChain, chunk in
+                Task { @ChatGlobalActor [weak self] in
+                    if !isChain {
+                        self?.directRequest(req)
+                    } else if let self = self {
+                        emit(makeResponse(req, messages: chunk))
+                    }
                 }
             }
         }
@@ -117,7 +121,8 @@ internal final class HistoryStore {
         if let uniqueId = response.uniqueId, let part = missed[uniqueId] {
             onPartialResponse(response, part)
         } else {
-            chat.delegate?.chatEvent(event: .message(.history(response)))
+            let copy = response
+            chat.delegate?.chatEvent(event: .message(.history(copy)))
         }
         let copies = response.result?.compactMap{$0} ?? []
         if !copies.isEmpty {
@@ -235,13 +240,13 @@ fileprivate extension HistoryStore {
         cache?.message?.get(id: id)
     }
 
-    private func offsetsAreExist(_ messages: [CDMessage], _ startIndex: Int, _ endIndex: Int) -> Bool {
+    private func offsetsAreExist(_ messages: [Message], _ startIndex: Int, _ endIndex: Int) -> Bool {
         let hasStartIndex = messages.indices.contains(where: { $0 == startIndex })
         let hasEndIndex = messages.indices.contains(where: { $0 == endIndex })
         return hasStartIndex && hasEndIndex
     }
 
-    private func checkChain(messages: [CDMessage]) -> Bool {
+    private func checkChain(messages: [Message]) -> Bool {
         for message in messages {
             if let prevId = message.previousId, !messages.contains(where: {$0.id == prevId}), message.id != messages.last?.id {
                 return false
@@ -259,19 +264,21 @@ fileprivate extension HistoryStore {
         return true
     }
 
-    private func chainedMessages(req: GetHistoryRequest, completion: @escaping (Bool, [Message]) -> Void) {
+    private func chainedMessages(req: GetHistoryRequest, completion: @escaping @Sendable (Bool, [Message]) -> Void) {
         let startIndex = req.offset
         let endIndex = (req.offset + req.count) - 1
         let req = FetchMessagesRequest(threadId: req.threadId, count: endIndex + 1)
         cache?.message?.fetch(req) { [weak self] messages, totalCount in
-            guard let self = self else { return }
-            let reversed = Array(messages.reversed())
-            if !self.checkChain(messages: reversed) || !offsetsAreExist(reversed, startIndex, endIndex) {
-                completion(false, [])
-                return
+            let reversed = Array(messages.reversed()).compactMap{$0.codable(fillConversation: false)}
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                if !self.checkChain(messages: reversed) || !self.offsetsAreExist(reversed, startIndex, endIndex) {
+                    completion(false, [])
+                    return
+                }
+                let chunk = Array(reversed[startIndex...endIndex])
+                completion(true, chunk)
             }
-            let chunk = reversed[startIndex...endIndex].compactMap({$0.codable(fillConversation: false)})
-            completion(true, chunk)
         }
     }
 }

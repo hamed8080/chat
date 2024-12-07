@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ReplyPrivatelyInfo: Codable, Hashable {
+public struct ReplyPrivatelyInfo: Codable, Hashable, Sendable {
     public var threadId: Int?
     public var threadName: String?
 

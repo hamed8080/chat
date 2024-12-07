@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum CallClientErrorType: Int, Codable {
+public enum CallClientErrorType: Int, Codable, Sendable {
     case microphoneNotAvailable = 3000
     case cameraNotAvailable = 3001
 }

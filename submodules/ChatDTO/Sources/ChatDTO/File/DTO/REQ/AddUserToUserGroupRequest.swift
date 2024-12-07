@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct AddUserToUserGroupRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AddUserToUserGroupRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var conversationId: Int
     public let uniqueId: String
     public var typeCodeIndex: Index

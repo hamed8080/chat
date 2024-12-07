@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Assistant: Codable, Identifiable, Hashable {
+public struct Assistant: Codable, Identifiable, Hashable, Sendable {
     public static func == (lhs: Assistant, rhs: Assistant) -> Bool {
         lhs.id == rhs.id &&
         lhs.contactType == rhs.contactType &&

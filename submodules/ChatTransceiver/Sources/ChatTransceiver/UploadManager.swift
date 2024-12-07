@@ -12,7 +12,7 @@ public final class UploadManager {
     public init() {
     }
 
-    public func upload(_ req: UploadManagerParameters, _ data: Data, _ urlSession: URLSessionProtocol, completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func upload(_ req: UploadManagerParameters, _ data: Data, _ urlSession: URLSessionProtocol, completion: @escaping @Sendable Additive.URLSessionProtocol.UploadCompletionType) -> URLSessionDataTaskProtocol? {
         guard let url = URL(string: req.url) else { return nil }
         var request = URLRequest(url: url)
         let boundary = "Boundary-\(UUID().uuidString)"

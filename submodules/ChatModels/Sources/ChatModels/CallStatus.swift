@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum CallStatus: Int, Codable {
+public enum CallStatus: Int, Codable, Sendable {
     case requested = 1
     case canceled = 2
     case miss = 3

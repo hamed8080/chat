@@ -9,7 +9,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension BlockUnblockAssistantRequest: ChatSendable {}
+extension BlockUnblockAssistantRequest: @retroactive ChatSendable {}
 
 public extension BlockUnblockAssistantRequest {
     var content: String? { assistants.jsonString }

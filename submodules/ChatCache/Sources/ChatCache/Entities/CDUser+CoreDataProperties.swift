@@ -13,7 +13,7 @@ public extension CDUser {
     typealias Model = User
     typealias Id = NSNumber
     static let name = "CDUser"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 

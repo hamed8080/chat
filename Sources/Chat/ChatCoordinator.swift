@@ -6,6 +6,7 @@
 
 import Foundation
 
+@ChatGlobalActor
 protocol StoreTypes {
     var conversation: ThreadsStore { get }
     var history: HistoryStore { get }
@@ -24,8 +25,6 @@ public class ChatCoordinator: ChatStoreProtocol {
     let conversation: ThreadsStore
     let history: HistoryStore
 
-    private let queue = DispatchQueue(label: "ChatCoordinator")
-
     required init(chat: ChatInternalProtocol) {
         self.chat = chat
         reaction = .init(chat: chat)
@@ -34,11 +33,8 @@ public class ChatCoordinator: ChatStoreProtocol {
     }
 
     func invalidate() {
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            reaction.invalidate()
-            conversation.invalidate()
-            history.invalidate()
-        }
+        reaction.invalidate()
+        conversation.invalidate()
+        history.invalidate()
     }
 }

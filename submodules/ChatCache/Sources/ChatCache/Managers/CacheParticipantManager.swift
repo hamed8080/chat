@@ -8,7 +8,7 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheParticipantManager: BaseCoreDataManager<CDParticipant> {
+public final class CacheParticipantManager: BaseCoreDataManager<CDParticipant>, @unchecked Sendable {
 
     public func insert(model: Conversation) {
         guard let threadId = model.id else { return }
@@ -25,7 +25,7 @@ public final class CacheParticipantManager: BaseCoreDataManager<CDParticipant> {
         }
     }
 
-    public func first(_ threadId: Int, _ participantId: Int, _ completion: @escaping (CDParticipant?) -> Void) {
+    public func first(_ threadId: Int, _ participantId: Int, _ completion: @escaping @Sendable (CDParticipant?) -> Void) {
         viewContext.perform {
             let req = CDParticipant.fetchRequest()
             req.predicate = self.predicate(threadId, participantId)
@@ -38,9 +38,10 @@ public final class CacheParticipantManager: BaseCoreDataManager<CDParticipant> {
         NSPredicate(format: "conversation.\(CDConversation.idName) == \(CDConversation.queryIdSpecifier) AND \(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue, participantId.nsValue)
     }
 
-    public func getThreadParticipants(_ threadId: Int, _ count: Int = 25, _ offset: Int = 0, _ completion: @escaping ([Entity], Int) -> Void) {
+    public func getThreadParticipants(_ threadId: Int, _ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
         let predicate = NSPredicate(format: "conversation.\(CDConversation.idName) == \(CDConversation.queryIdSpecifier)", threadId.nsValue)
-        fetchWithOffset(count: count, offset: offset, predicate: predicate, completion)
+        let sPredicate = SendableNSPredicate(predicate: predicate)
+        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
     }
 
     public func delete(_ models: [Entity.Model], _ threadId: Int) {
@@ -52,7 +53,7 @@ public final class CacheParticipantManager: BaseCoreDataManager<CDParticipant> {
     }
 
     /// Attach a participant entity to a message entity as well as set a conversation entity over the participant entity.
-    func attach(messageEntity: CDMessage, threadEntity: CDConversation, lastMessageVO: Message, threadId: Int, context: NSManagedObjectContextProtocol) {
+    func attach(messageEntity: CDMessage, threadEntity: CDConversation, lastMessageVO: Message, threadId: Int, context: CacheManagedContext) {
         if let participant = lastMessageVO.participant, let participantId = participant.id {
             let entity = Entity.findOrCreate(threadId: threadId, participantId: participantId, context: context)
             messageEntity.participant = entity

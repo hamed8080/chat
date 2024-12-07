@@ -6,5 +6,6 @@
 
 import Foundation
 
-public typealias DownloadProgressType = (DownloadFileProgress) -> Void
-public typealias UploadProgressType = (UploadFileProgress?) -> Void
+public typealias DownloadProgressType = @Sendable (DownloadFileProgress) -> Void
+public typealias UploadProgressType = @Sendable (UploadFileProgress?) -> Void
+public typealias ProgressCompletionType = @Sendable (Data?, HTTPURLResponse?, Error?) -> Void

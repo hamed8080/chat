@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension CancelCallRequest: ChatSendable, SubjectProtocol {}
+extension CancelCallRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension CancelCallRequest {
     var subjectId: Int { call.id }

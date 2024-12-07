@@ -13,7 +13,7 @@ public extension CDMutualGroup {
     typealias Model = MutualGroup
     typealias Id = NSNumber
     static let name = "CDMutualGroup"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 
@@ -43,7 +43,7 @@ public extension CDMutualGroup {
         idType = model.idType?.rawValue as? NSNumber ?? idType
         mutualId = model.mutualId ?? mutualId
         model.conversations?.forEach{ thread in
-            if let context = managedObjectContext, let threadId = thread.id {
+            if let context = managedObjectContext?.sendable, let threadId = thread.id {
                 let threadEntity = CDConversation.findOrCreate(threadId: threadId, context: context)
                 threadEntity.update(thread)
                 addToConversations(threadEntity)

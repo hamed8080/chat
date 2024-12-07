@@ -48,7 +48,7 @@ public class MessageInMemoryReaction {
     var copy: ReactionInMemoryCopy { .init(messageId: messageId, currentUserReaction: currentUserReaction, summary: summary, details: details) }
 }
 
-public struct ReactionInMemoryCopy {
+public struct ReactionInMemoryCopy: Sendable {
     public let messageId: Int
     public var currentUserReaction: Reaction?
     public var summary: [ReactionCount] = []

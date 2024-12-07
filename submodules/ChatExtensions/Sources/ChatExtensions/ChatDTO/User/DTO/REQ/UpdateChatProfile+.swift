@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension UpdateChatProfile: ChatSendable {}
+extension UpdateChatProfile: @retroactive ChatSendable {}
 
 public extension UpdateChatProfile {
     var content: String? { jsonString }

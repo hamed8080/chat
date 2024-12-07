@@ -7,7 +7,8 @@
 import ChatDTO
 import Foundation
 
-public protocol FileProtocol {
+@ChatGlobalActor
+public protocol FileProtocol: AnyObject {
     /// Downloading or getting a file from the Server / cache?.
     /// - Parameters:
     ///   - req: The request that contains Hashcode of file and a config to download from server or use cache?.
@@ -56,19 +57,20 @@ public protocol FileProtocol {
     func filePathInGroup(_ url: URL) -> URL?
 
     /// Get data of a cache file in the correspondent URL.
-    func getData(_ url: URL, completion: @escaping (Data?) -> Void)
+    func getData(_ url: URL, completion: @escaping @Sendable (Data?) -> Void)
 
     /// Get data of a cache file in the correspondent URL inside a shared group.
-    func getDataInGroup(_ url: URL, completion: @escaping (Data?) -> Void)
+    func getDataInGroup(_ url: URL, completion: @escaping @Sendable (Data?) -> Void)
 
     /// Save a file inside the sandbox of the Chat SDK.
-    func saveFile(url: URL, data: Data, completion: @escaping (URL?) -> Void)
+    func saveFile(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void)
 
     /// Save a file inside a shared group.
-    func saveFileInGroup(url: URL, data: Data, completion: @escaping (URL?) -> Void)
+    func saveFileInGroup(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void)
 }
 
-protocol InternalFileProtocol {
+@ChatGlobalActor
+protocol InternalFileProtocol: AnyObject {
     // Try to add the user to the user group then retry the download.
     func handleUserGroupAccessError(_ params: DownloadManagerParameters)
 }

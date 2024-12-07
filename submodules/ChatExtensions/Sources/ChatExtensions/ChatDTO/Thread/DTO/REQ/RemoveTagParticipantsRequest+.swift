@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension RemoveTagParticipantsRequest: ChatSendable, SubjectProtocol {}
+extension RemoveTagParticipantsRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension RemoveTagParticipantsRequest {
     var subjectId: Int { tagId }

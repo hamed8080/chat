@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct FetchThreadRequest {
+public struct FetchThreadRequest: Sendable {
     public let count: Int
     public let offset: Int
     public var title: String?

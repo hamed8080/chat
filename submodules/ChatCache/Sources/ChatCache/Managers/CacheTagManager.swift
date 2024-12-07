@@ -8,9 +8,9 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheTagManager: BaseCoreDataManager<CDTag> {
+public final class CacheTagManager: BaseCoreDataManager<CDTag>, @unchecked Sendable {
     
-    public func getTags(_ completion: @escaping ([Entity]) -> Void) {
+    public func getTags(_ completion: @escaping @Sendable ([Entity]) -> Void) {
         viewContext.perform {
             let req = Entity.fetchRequest()
             req.relationshipKeyPathsForPrefetching = ["tagParticipants"]

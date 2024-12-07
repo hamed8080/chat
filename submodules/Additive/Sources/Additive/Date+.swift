@@ -7,7 +7,7 @@
 import Foundation
 
 public extension Date {
-    static var formatter = DateFormatter()
+    nonisolated(unsafe) static var formatter = DateFormatter()
     static let pCal = Calendar(identifier: .persian)
 
     func getTime(localIdentifire: String = "en_US", withAbbrevation: String? = nil) -> String {

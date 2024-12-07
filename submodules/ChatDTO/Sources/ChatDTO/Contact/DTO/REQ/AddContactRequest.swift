@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var cellphoneNumber: String?
     public var email: String?
     public var firstName: String?

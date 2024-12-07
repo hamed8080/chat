@@ -6,7 +6,7 @@
 
 import Foundation
 
-internal enum Routes: String {
+internal enum Routes: String, Sendable {
     // File/Image Upload and Download
     case uploadImage = "/nzh/uploadImage"
     case getImage = "/nzh/image/"

@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct SystemEventMessageModel: Codable {
+public struct SystemEventMessageModel: Codable, Sendable {
     public let coreUserId: Int64
     /// System message type.
     public let smt: SMT

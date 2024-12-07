@@ -13,7 +13,7 @@ public extension CDImage {
     typealias Model = Image
     typealias Id = String
     static let name = "CDImage"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "hashCode"
 }
 

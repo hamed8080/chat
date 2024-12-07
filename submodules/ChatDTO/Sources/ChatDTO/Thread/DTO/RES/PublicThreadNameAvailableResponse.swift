@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct PublicThreadNameAvailableResponse: Decodable {
+public struct PublicThreadNameAvailableResponse: Decodable, Sendable {
     private let uniqueName: String?
     public var name: String?
 

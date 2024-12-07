@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct CallHistory: Codable, Hashable, Identifiable {
+public struct CallHistory: Codable, Hashable, Identifiable, Sendable {
     public var id: Int?
     public var creatorId: Int?
     public var type: CallType?

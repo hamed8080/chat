@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct LastSeenMessageResponse: Decodable {
+public struct LastSeenMessageResponse: Decodable, Sendable {
     public let id: Int?
     public let unreadCount: Int?
     public let lastSeenMessageTime: UInt?

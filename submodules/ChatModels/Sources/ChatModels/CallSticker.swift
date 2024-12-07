@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum CallSticker: String, Codable, CaseIterable {
+public enum CallSticker: String, Codable, CaseIterable, Sendable {
     case raiseHand = "raise_hand"
     case like
     case dislike

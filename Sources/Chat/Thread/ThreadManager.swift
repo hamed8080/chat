@@ -29,18 +29,23 @@ final class ThreadManager: ThreadProtocol {
         if let image = request.threadImage {
             saveThreadImageToCashe(req: request)
             (chat.file as? ChatFileManager)?.upload(image, nil) { [weak self] _, fileMetaData, error in
-                // send update thread Info with new file
-                if let error = error {
-                    let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: error, typeCode: typeCode)
-                    self?.delegate?.chatEvent(event: .system(.error(response)))
-
-                } else {
-                    self?.updateThreadInfo(request, fileMetaData)
+                Task {
+                    await self?.onUploadProfileImage(fileMetaData, error, request, typeCode)
                 }
             }
         } else {
             // update directly without metadata
             updateThreadInfo(request, nil)
+        }
+    }
+    
+    private func onUploadProfileImage(_ fileMetaData: FileMetaData?, _ error: ChatError?, _ request: UpdateThreadInfoRequest, _ typeCode: String?) {
+        // send update thread Info with new file
+        if let error = error {
+            let response = ChatResponse<Sendable>(uniqueId: request.uniqueId, error: error, typeCode: typeCode)
+            delegate?.chatEvent(event: .system(.error(response)))
+        } else {
+            updateThreadInfo(request, fileMetaData)
         }
     }
 
@@ -70,7 +75,9 @@ final class ThreadManager: ThreadProtocol {
         let typeCode = request.toTypeCode(chat)
         cache?.conversation?.threadsUnreadcount(request.threadIds) { [weak self] unreadCount in
             let response = ChatResponse(uniqueId: request.uniqueId, result: unreadCount, cache: true, typeCode: typeCode)
-            self?.delegate?.chatEvent(event: .thread(.unreadCount(response)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.delegate?.chatEvent(event: .thread(.unreadCount(response)))
+            }
         }
     }
 
@@ -134,7 +141,7 @@ final class ThreadManager: ThreadProtocol {
             chat.user.set(roleRequest)
         } else {
             let chatError = ChatError(message: "Current User have no Permission to Change the ThreadAdmin", code: 6666, hasError: true)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: chatError, typeCode: response.typeCode)
+            let response = ChatResponse<Sendable>(uniqueId: request.uniqueId, error: chatError, typeCode: response.typeCode)
             delegate?.chatEvent(event: .system(.error(response)))
         }
     }
@@ -180,7 +187,9 @@ final class ThreadManager: ThreadProtocol {
         cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id ?? "") { [weak self] mutuals in
             let threads = mutuals.first?.conversations?.allObjects.compactMap { $0 as? CDConversation }.map { $0.codable() }
             let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: threads?.count ?? 0 >= request.count, cache: true, typeCode: typeCode)
-            self?.delegate?.chatEvent(event: .thread(.mutual(response)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.delegate?.chatEvent(event: .thread(.mutual(response)))
+            }
         }
     }
 
@@ -352,7 +361,9 @@ final class ThreadManager: ThreadProtocol {
         let typeCode = request.toTypeCode(chat)
         cache?.conversation?.allUnreadCount { [weak self] allUnreadCount in
             let response = ChatResponse(uniqueId: request.uniqueId, result: allUnreadCount, cache: true, typeCode: typeCode)
-            self?.delegate?.chatEvent(event: .thread(.allUnreadCount(response)))
+            Task {
+                self?.delegate?.chatEvent(event: .thread(.allUnreadCount(response)))
+            }
         }
     }
 

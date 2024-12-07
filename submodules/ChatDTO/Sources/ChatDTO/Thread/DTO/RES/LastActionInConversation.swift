@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct LastActionInConversation: Decodable {
+public struct LastActionInConversation: Decodable, Sendable {
     public let conversationId: Int?
     public let lastMessage: Message?
     public let lastReaction: Reaction?

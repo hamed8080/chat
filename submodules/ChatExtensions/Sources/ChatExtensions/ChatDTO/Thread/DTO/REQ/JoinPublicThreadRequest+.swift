@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension JoinPublicThreadRequest: PlainTextSendable {}
+extension JoinPublicThreadRequest: @retroactive PlainTextSendable {}
 
 public extension JoinPublicThreadRequest {
     var content: String? { threadName }

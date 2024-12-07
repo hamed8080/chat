@@ -7,7 +7,7 @@
 import Foundation
 
 /// This struct only manages the state of the connection and persists all values that need for the async state.
-struct AsyncStateModel {
+struct AsyncStateModel: Sendable {
     /// A boolean that indicates the device is successfully registered with the async server.
     var isServerRegistered: Bool = false
 

@@ -7,12 +7,12 @@
 import Additive
 import Foundation
 
-public struct DownloadManagerParameters: CustomDebugStringConvertible {
+public struct DownloadManagerParameters: CustomDebugStringConvertible, Sendable {
     public var forceToDownload: Bool = false
     public let url: URL
     public let token: String
     public var headers: [String: String]
-    public var params: [String: Any]?
+    public var params: [String: Sendable]?
     public let isImage: Bool
     public let thumbnail: Bool
     public var hashCode: String?
@@ -24,7 +24,7 @@ public struct DownloadManagerParameters: CustomDebugStringConvertible {
     public init(forceToDownload: Bool = false,
                 url: URL,
                 token: String,
-                params: [String: Any]? = nil,
+                params: [String: Sendable]? = nil,
                 headers: [String: String] = [:],
                 thumbnail: Bool = false,
                 hashCode: String? = nil,

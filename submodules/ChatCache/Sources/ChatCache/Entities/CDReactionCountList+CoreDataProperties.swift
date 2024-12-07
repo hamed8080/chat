@@ -14,7 +14,7 @@ public extension CDReactionCountList {
     typealias Model = ReactionCountList
     typealias Id = NSNumber
     static let name = "CDReactionCountList"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "messageId"
 }
 

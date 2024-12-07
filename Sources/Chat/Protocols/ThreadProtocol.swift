@@ -9,7 +9,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol ThreadProtocol {
+@ChatGlobalActor
+public protocol ThreadProtocol: AnyObject {
     /// Accessing to participants of a thread.
     var participant: ParticipantProtocol { get }
 

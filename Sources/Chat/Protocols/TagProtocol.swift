@@ -8,7 +8,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol TagProtocol {
+@ChatGlobalActor
+public protocol TagProtocol: AnyObject {
     /// Get the list of tag participants.
     /// - Parameters:
     ///   - request: The tag id.

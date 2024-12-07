@@ -7,7 +7,7 @@
 import CoreData
 
 public protocol EntityProtocol: NSManagedObject {
-    associatedtype Model: Codable
+    associatedtype Model: Codable & Sendable
     associatedtype Id: IdProtocol
     static var name: String { get }
     static var queryIdSpecifier: String { get }
@@ -20,18 +20,18 @@ public extension EntityProtocol {
         NSFetchRequest<Self>(entityName: name)
     }
     
-    static func entityDescription(_ context: NSManagedObjectContextProtocol) -> NSEntityDescription {
+    static func entityDescription(_ context: CacheManagedContext) -> NSEntityDescription {
         NSEntityDescription.entityDescription(forEntityName: name, in: context)!
     }
     
-    static func insertEntity(_ context: NSManagedObjectContextProtocol) -> Self {
-        Self(entity: entityDescription(context), insertInto: context as? NSManagedObjectContext)
+    static func insertEntity(_ context: CacheManagedContext) -> Self {
+        Self(entity: entityDescription(context), insertInto: context.context as? NSManagedObjectContext)
     }
 }
 
 extension NSEntityDescription {
-    class func entityDescription(forEntityName entityName: String, in context: NSManagedObjectContextProtocol) -> NSEntityDescription? {
-        if let context = context as? NSManagedObjectContext {
+    class func entityDescription(forEntityName entityName: String, in context: CacheManagedContext) -> NSEntityDescription? {
+        if let context = context.context as? NSManagedObjectContext {
             return NSEntityDescription.entity(forEntityName: entityName, in: context)
         } else {
             return NSEntityDescription.entity(forEntityName: entityName, in: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType))

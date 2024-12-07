@@ -6,13 +6,13 @@
 
 import Foundation
 
-public enum MessageResponseState {
+public enum MessageResponseState: Sendable {
     case sent
     case delivered
     case seen
 }
 
-public struct MessageResponse: Decodable {
+public struct MessageResponse: Decodable, Sendable {
     public var threadId: Int?
     public var participantId: Int?
     public var messageId: Int?

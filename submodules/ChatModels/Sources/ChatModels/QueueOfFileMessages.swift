@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct QueueOfFileMessages: Codable, Hashable, Identifiable {    
+public struct QueueOfFileMessages: Codable, Hashable, Identifiable, Sendable {    
     public var id: String? { uniqueId }
     public var fileExtension: String?
     public var fileName: String?

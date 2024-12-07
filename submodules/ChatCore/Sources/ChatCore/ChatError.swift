@@ -7,7 +7,7 @@
 import Async
 import Foundation
 
-public enum ChatErrorType: String, Identifiable, CaseIterable {
+public enum ChatErrorType: String, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case asyncError
     case outOfStorage
@@ -18,12 +18,12 @@ public enum ChatErrorType: String, Identifiable, CaseIterable {
     case undefined
 }
 
-public struct ChatError: Decodable {
+public struct ChatError: Decodable, Sendable {
     public var message: String?
     public var code: Int?
     public var hasError: Bool?
     public var content: String?
-    public var userInfo: [String: Any]?
+    public var userInfo: [String: Sendable]?
     public var rawError: Error?
     public var type: ChatErrorType = .undefined
     public var banError: BanError?
@@ -37,7 +37,7 @@ public struct ChatError: Decodable {
         case message
     }
 
-    public init(type: ChatErrorType = .undefined, code: Int? = nil, message: String? = nil, userInfo: [String: Any]? = nil, rawError: Error? = nil, content: String? = nil) {
+    public init(type: ChatErrorType = .undefined, code: Int? = nil, message: String? = nil, userInfo: [String: Sendable]? = nil, rawError: Error? = nil, content: String? = nil) {
         self.type = type
         self.message = message
         self.userInfo = userInfo
@@ -71,7 +71,7 @@ public struct ChatError: Decodable {
     }
 }
 
-public final class BanError: Decodable {
+public final class BanError: Decodable, Sendable {
     public let errorMessage: String?
     public let duration: Int?
     public let uniqueId: String?

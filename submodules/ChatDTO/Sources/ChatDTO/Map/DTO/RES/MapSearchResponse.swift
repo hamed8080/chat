@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MapSearchResponse: Decodable {
+public struct MapSearchResponse: Decodable, Sendable {
     public var count: Int
     public var items: [MapItem]?
 
@@ -27,7 +27,7 @@ public struct MapSearchResponse: Decodable {
     }
 }
 
-public struct MapItem: Codable {
+public struct MapItem: Codable, Sendable {
     public let address: String?
     public let category: String?
     public let region: String?
@@ -68,7 +68,7 @@ public struct MapItem: Codable {
     }
 }
 
-public struct Location: Codable {
+public struct Location: Codable, Sendable {
     public let x: Double
     public let y: Double
 

@@ -9,7 +9,7 @@ import ChatCore
 import ChatDTO
 import ChatModels
 
-extension ForwardMessageRequest: Queueable, PlainTextSendable, SubjectProtocol {}
+extension ForwardMessageRequest: @retroactive Queueable, @retroactive PlainTextSendable, @retroactive SubjectProtocol {}
 
 public extension ForwardMessageRequest {
     var subjectId: Int { threadId }

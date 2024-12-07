@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct ReplyPrivatelyRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ReplyPrivatelyRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var queueTime: Date = .init()
     public var messageType: MessageType
     public var metadata: String?
@@ -56,7 +56,7 @@ public struct ReplyPrivatelyRequest: Encodable, UniqueIdProtocol, TypeCodeIndexP
     }
 }
 
-public struct ReplyPrivatelyContent: Encodable {
+public struct ReplyPrivatelyContent: Encodable, Sendable {
     public let text: String
     public let invitees: [Invitee]?
     public let targetConversationId: Int?

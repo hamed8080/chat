@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum SignalMessageType: Int, Encodable, Identifiable, CaseIterable {
+public enum SignalMessageType: Int, Encodable, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case isTyping = 1
     case recordVoice = 2

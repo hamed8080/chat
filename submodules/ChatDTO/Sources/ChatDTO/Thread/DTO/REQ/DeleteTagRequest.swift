@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct DeleteTagRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct DeleteTagRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var id: Int
     public let uniqueId: String
     public var typeCodeIndex: Index

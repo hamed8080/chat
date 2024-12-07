@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Image: Codable, Hashable, Identifiable {
+public struct Image: Codable, Hashable, Identifiable, Sendable {
     public var id = UUID()
     public var actualHeight: Int?
     public var actualWidth: Int?

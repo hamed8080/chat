@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MapReverse: Codable {
+public struct MapReverse: Codable, Sendable {
     public var address: String?
     public var city: String?
     public var neighbourhood: String?

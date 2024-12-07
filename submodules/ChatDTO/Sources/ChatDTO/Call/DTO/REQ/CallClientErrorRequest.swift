@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct CallClientErrorRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct CallClientErrorRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let code: CallClientErrorType
     public let callId: Int
     public let uniqueId: String

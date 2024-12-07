@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct FetchContactsRequest {
+public struct FetchContactsRequest: Sendable {
     public var size: Int = 25
     public var offset: Int = 0
     public let id: Int?

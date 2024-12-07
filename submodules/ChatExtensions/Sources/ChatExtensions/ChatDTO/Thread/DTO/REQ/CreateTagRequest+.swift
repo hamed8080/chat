@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension CreateTagRequest: ChatSendable {}
+extension CreateTagRequest: @retroactive ChatSendable {}
 
 public extension CreateTagRequest {
     var content: String? { jsonString }

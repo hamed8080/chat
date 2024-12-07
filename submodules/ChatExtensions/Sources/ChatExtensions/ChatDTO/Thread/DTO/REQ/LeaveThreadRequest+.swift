@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension LeaveThreadRequest: ChatSendable, SubjectProtocol {}
+extension LeaveThreadRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension LeaveThreadRequest {
     var subjectId: Int { threadId }

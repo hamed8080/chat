@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Conversation: Codable, Hashable, Identifiable {
+public struct Conversation: Codable, Hashable, Identifiable, Sendable {
     public var admin: Bool?
     public var canEditInfo: Bool?
     public var canSpam: Bool = false

@@ -12,7 +12,7 @@ import UIKit
 #endif
 
 /// It will connect through Apple native socket in iOS 13 and above, unless it will connect through StarScream in older devices.
-public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate {
+public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate, @unchecked Sendable {
     public weak var delegate: AsyncDelegate?
     var config: AsyncConfig
     var socket: WebSocketProvider
@@ -26,6 +26,7 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate {
     var isDisposed: Bool = false
     private var networkObserver = NetworkAvailabilityFactory.create()
     private var debug = ProcessInfo().environment["talk.pod.ir.async.debug"] == "1"
+    var deviceInfo: DeviceInfo?
 
     /// The initializer of async.
     ///
@@ -43,6 +44,7 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate {
         self.socket = socket
         self.queue = queue
         self.socket.delegate = self
+        setDeviceInfo()
         setupObservers()
     }
 

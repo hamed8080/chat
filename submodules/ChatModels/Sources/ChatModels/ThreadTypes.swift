@@ -7,7 +7,7 @@
 import Foundation
 
 /// Type of thread.
-public enum ThreadTypes: Int, Codable, Identifiable, CaseIterable {
+public enum ThreadTypes: Int, Codable, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
 
     /// This type can be P2P only 2 user or can be a Private group.

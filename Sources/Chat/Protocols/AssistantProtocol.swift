@@ -8,7 +8,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol AssistantProtocol {
+@ChatGlobalActor
+public protocol AssistantProtocol: AnyObject {
     /// Get list of assistants for user.
     /// - Parameters:
     ///   - request: A request with a contact type and offset, count.

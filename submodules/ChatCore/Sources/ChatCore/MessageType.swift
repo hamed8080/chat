@@ -7,7 +7,7 @@
 import Additive
 import Foundation
 
-public enum MessageType: Int, Codable, SafeDecodable, Identifiable, CaseIterable {
+public enum MessageType: Int, Codable, SafeDecodable, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case text = 1
     case voice = 2

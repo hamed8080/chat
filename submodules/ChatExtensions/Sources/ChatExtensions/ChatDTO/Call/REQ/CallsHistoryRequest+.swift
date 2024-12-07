@@ -8,11 +8,11 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension CallsHistoryRequest: ChatSendable {}
+extension CallsHistoryRequest: @retroactive ChatSendable {}
 
 public extension CallsHistoryRequest {
     var content: String? { jsonString }
     var chatTypeCodeIndex: Index { typeCodeIndex }
 }
 
-extension CallsHistoryRequest: Paginateable{}
+extension CallsHistoryRequest: @retroactive Paginateable{}

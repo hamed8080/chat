@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UploadFileResponse: Decodable {
+public struct UploadFileResponse: Decodable, Sendable {
     public let name: String?
     public let hash: String?
     public let parentHash: String?
@@ -68,7 +68,7 @@ public struct UploadFileResponse: Decodable {
     }
 }
 
-public struct FileOwner: Decodable {
+public struct FileOwner: Decodable, Sendable {
     public let username: String?
     public let name: String?
     public let ssoId: Int?

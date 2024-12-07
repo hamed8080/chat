@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct CallParticipant: Codable, Equatable {
+public struct CallParticipant: Codable, Equatable, Sendable {
     public var joinTime: Int?
     public var leaveTime: Int?
     public var userId: Int?

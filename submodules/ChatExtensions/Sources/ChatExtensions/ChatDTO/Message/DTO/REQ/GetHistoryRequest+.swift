@@ -9,7 +9,7 @@ import ChatCore
 import ChatDTO
 import ChatCache
 
-extension GetHistoryRequest: ChatSendable, SubjectProtocol {}
+extension GetHistoryRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension GetHistoryRequest {
     var subjectId: Int { threadId }
@@ -34,4 +34,4 @@ public extension GetHistoryRequest {
     }
 }
 
-extension GetHistoryRequest: Paginateable{}
+extension GetHistoryRequest: @retroactive Paginateable{}

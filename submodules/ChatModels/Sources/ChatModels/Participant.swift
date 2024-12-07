@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Participant: Codable, Hashable, Identifiable {
+public struct Participant: Codable, Hashable, Identifiable, Sendable {
     public var admin: Bool?
     /// It means that the user is an assistant or not.
     public var auditor: Bool?

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ThreadLastActivity: Decodable {
+public struct ThreadLastActivity: Decodable, Sendable {
     public let time: Int?
     public let threadId: Int?
 

@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct BlockedContactResponse: Decodable {
+public struct BlockedContactResponse: Decodable, Sendable {
     public var blockId: Int?
     public var firstName: String?
     public var lastName: String?

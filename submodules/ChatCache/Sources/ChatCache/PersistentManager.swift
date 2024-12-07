@@ -17,7 +17,7 @@ extension Bundle {
 }
 
 /// It leads to loading the MOMD file from the current module, not by default the main module.
-final class PMPersistentContainer: NSPersistentContainer {
+final class PMPersistentContainer: NSPersistentContainer, @unchecked Sendable {
     override class func defaultDirectoryURL() -> URL {
         super.defaultDirectoryURL().appendingPathComponent("ChatSDKModel")
     }
@@ -34,18 +34,18 @@ public final class PersistentManager: PersistentManagerProtocol {
         self.logger = logger
     }
 
-    public func viewContext(name: String = "Main") -> NSManagedObjectContextProtocol? {
+    public func viewContext(name: String = "Main") -> CacheManagedContext? {
         guard let context = container?.viewContext else { return nil }
         context.name = name
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return context
+        context.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        return context.sendable
     }
 
-    public func newBgTask(name: String = "BGTASK") -> NSManagedObjectContextProtocol? {
+    public func newBgTask(name: String = "BGTASK") -> CacheManagedContext? {
         guard let bgTask = container?.newBackgroundContext() else { return nil }
         bgTask.name = name
-        bgTask.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return bgTask
+        bgTask.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        return bgTask.sendable
     }
 
     /// The structure and model of SQLite database which is a file we created at Resources/ChaSDKModel.xcdataModeld.

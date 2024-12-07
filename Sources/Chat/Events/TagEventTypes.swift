@@ -8,7 +8,7 @@ import ChatCore
 import ChatModels
 import Foundation
 
-public enum TagEventTypes {
+public enum TagEventTypes: Sendable {
     case created(ChatResponse<Tag>)
     case deleted(ChatResponse<Tag>)
     case edited(ChatResponse<Tag>)

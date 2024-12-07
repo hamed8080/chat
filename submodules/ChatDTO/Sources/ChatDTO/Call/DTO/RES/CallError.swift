@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct CallError: Codable {
+public struct CallError: Codable, Sendable {
     public var code: CallClientErrorType?
     public var message: String?
     public var participant: Participant

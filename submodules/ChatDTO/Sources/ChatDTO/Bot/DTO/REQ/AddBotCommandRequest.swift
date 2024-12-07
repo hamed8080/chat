@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct AddBotCommandRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AddBotCommandRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     /// The bot name.
     public let botName: String
     public let commandList: [String]

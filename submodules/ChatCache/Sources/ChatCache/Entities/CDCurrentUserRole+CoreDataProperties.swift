@@ -13,7 +13,7 @@ public extension CDCurrentUserRole {
     typealias Model = UserRole
     typealias Id = NSNumber
     static let name = "CDCurrentUserRole"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "threadId"
 }
 

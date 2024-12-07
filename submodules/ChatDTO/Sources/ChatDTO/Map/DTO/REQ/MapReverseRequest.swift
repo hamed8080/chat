@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MapReverseRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct MapReverseRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let lat: Double
     public let lng: Double
     public let uniqueId: String

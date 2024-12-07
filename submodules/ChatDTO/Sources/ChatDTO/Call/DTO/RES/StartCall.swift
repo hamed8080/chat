@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct StartCall: Codable {
+public struct StartCall: Codable, Sendable {
     public let certificateFile: String?
     public let clientDTO: ClientDTO
     public let otherClientDtoList: [ClientDTO]?

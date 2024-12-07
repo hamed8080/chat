@@ -18,12 +18,12 @@ final class MessageManager: MessageProtocol {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
-    var exportVM: ExportMessagesProtocol?
+    var exportVM: ExportMessagesInternalProtocol?
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
     }
-
+    
     func cancel(uniqueId: String) {
         cache?.deleteQueues(uniqueIds: [uniqueId])
         chat.file.manageUpload(uniqueId: uniqueId, action: .cancel)
@@ -52,9 +52,14 @@ final class MessageManager: MessageProtocol {
         let threadId = response.subjectId ?? -1
         let messageId = response.result?.id ?? -1
         delegate?.chatEvent(event: .message(.deleted(response)))
+        let userId = chat.userInfo?.id
         cache?.message?.find(threadId, messageId) { [weak self] entity in
-            if entity?.seen == nil, entity?.ownerId?.intValue != self?.chat.userInfo?.id {
-                self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId)
+            let ownerId = entity?.ownerId?.intValue
+            let isSeenNil = entity?.seen == nil
+            Task { @ChatGlobalActor [weak self] in
+                if isSeenNil, ownerId != userId {
+                    self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId)
+                }
             }
         }
         cache?.message?.delete(threadId, messageId)
@@ -91,7 +96,9 @@ final class MessageManager: MessageProtocol {
         cache?.textQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsedTexts, _ in
             let requests = unsedTexts.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .message(.queueTextMessages(response)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.chat.delegate?.chatEvent(event: .message(.queueTextMessages(response)))
+            }
         }
     }
 
@@ -100,7 +107,10 @@ final class MessageManager: MessageProtocol {
         cache?.editQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsendEdits, _ in
             let requests = unsendEdits.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .message(.queueEditMessages(response)))
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.chat.delegate?.chatEvent(event: .message(.queueEditMessages(response)))
+            }
         }
     }
 
@@ -109,7 +119,10 @@ final class MessageManager: MessageProtocol {
         cache?.forwardQueue?.unsendForThread(request.threadId, request.count, 100) { [weak self] unsendForwards, _ in
             let requests = unsendForwards.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .message(.queueForwardMessages(response)))
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.chat.delegate?.chatEvent(event: .message(.queueForwardMessages(response)))
+            }
         }
     }
 
@@ -118,7 +131,10 @@ final class MessageManager: MessageProtocol {
         cache?.fileQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsendFiles, _ in
             let requests = unsendFiles.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .message(.queueFileMessages(response)))
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.chat.delegate?.chatEvent(event: .message(.queueFileMessages(response)))
+            }
         }
     }
 
@@ -151,23 +167,25 @@ final class MessageManager: MessageProtocol {
                                                  zoom: request.mapZoom,
                                                  type: request.mapType)
 
-        (chat.map as? InternalMapProtocol)?.image(mapStaticReq) { [weak self] response in
-            guard let self = self, let data = response.result else { return }
+        Task { @ChatGlobalActor [weak self] in
+            guard
+                let self = self,
+                let data = try? await chat.map.image(mapStaticReq)
+            else { return }
             var hC = 0
             var wC = 0
-            #if canImport(UIKit)
-                let image = UIImage(data: data) ?? UIImage()
-                hC = Int(image.size.height)
-                wC = Int(image.size.width)
-            #endif
+#if canImport(UIKit)
+            let image = UIImage(data: data) ?? UIImage()
+            hC = Int(image.size.height)
+            wC = Int(image.size.width)
+#endif
             /// Convert and set uniqueId request
             let imageRequest = request.imageRequest(data: data, wC: wC, hC: hC)
             let textMessageReq = request.textMessageRequest
-
-            (chat.map as? InternalMapProtocol)?.reverse(.init(lat: request.mapCenter.lat, lng: request.mapCenter.lng)) { [weak self] response in
-                if let reverse = response.result {
-                    self?.sendTextLoactionMessage(request.mapCenter, textMessageReq, imageRequest, reverse)
-                }
+            let req = MapReverseRequest(lat: request.mapCenter.lat, lng: request.mapCenter.lng)
+            let response = try? await chat.map.reverse(req)
+            if let reverse = response {
+                self.sendTextLoactionMessage(request.mapCenter, textMessageReq, imageRequest, reverse)
             }
         }
     }
@@ -181,7 +199,10 @@ final class MessageManager: MessageProtocol {
             metaData?.longitude = coordinate.lng
             metaData?.reverse = reverse.string
             metaData?.mapLink = mapLink
-            self?.sendTextMessageOnUploadCompletion(textMessageReq, imageRequest.uniqueId, imageResponse, metaData, error)
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.sendTextMessageOnUploadCompletion(textMessageReq, imageRequest.uniqueId, imageResponse, metaData, error)
+            }
         }
     }
 
@@ -193,7 +214,10 @@ final class MessageManager: MessageProtocol {
         let textMessage = imageRequest.textMessageRequest(textMessage: textMessage)
         cache?.fileQueue?.insert(models: [textMessage.queueOfFileMessages(imageRequest)])
         (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
-            self?.sendTextMessageOnUploadCompletion(textMessage, imageRequest.uniqueId, imageResponse, fileMetaData, error)
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.sendTextMessageOnUploadCompletion(textMessage, imageRequest.uniqueId, imageResponse, fileMetaData, error)
+            }
         }
     }
 
@@ -201,7 +225,10 @@ final class MessageManager: MessageProtocol {
         let textMessage = fileRequest.textMessageRequest(textMessage: textMessage)
         cache?.fileQueue?.insert(models: [textMessage.queueOfFileMessages(fileRequest)])
         (chat.file as? ChatFileManager)?.upload(fileRequest, nil) { [weak self] fileResponse, fileMetaData, error in
-            self?.sendTextMessageOnUploadCompletion(textMessage, fileRequest.uniqueId, fileResponse, fileMetaData, error)
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.sendTextMessageOnUploadCompletion(textMessage, fileRequest.uniqueId, fileResponse, fileMetaData, error)
+            }
         }
     }
 
@@ -216,7 +243,7 @@ final class MessageManager: MessageProtocol {
     private func sendTextMessageOnUploadCompletion(_ textMessage: SendTextMessageRequest, _ uniqueId: String, _: UploadFileResponse?, _ metadata: FileMetaData?, _ error: ChatError?) {
         let typeCode = textMessage.toTypeCode(chat)
         if let error = error {
-            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+            let response = ChatResponse<Sendable>(uniqueId: uniqueId, error: error, typeCode: typeCode)
             chat.delegate?.chatEvent(event: .system(.error(response)))
         } else {
             guard let stringMetaData = metadata.jsonString else { return }
@@ -233,7 +260,10 @@ final class MessageManager: MessageProtocol {
             let messages = messages.map { $0.codable() }
             let hasNext = messages.count >= request.count
             let response = ChatResponse(uniqueId: request.uniqueId, result: messages, hasNext: hasNext, typeCode: typeCode)
-            self?.delegate?.chatEvent(event: .message(.messages(response)))
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.delegate?.chatEvent(event: .message(.messages(response)))
+            }
         }
     }
 
@@ -350,20 +380,26 @@ final class MessageManager: MessageProtocol {
 
     func replyPrivately(_ replyMessage: ReplyPrivatelyRequest, _ fileRequest: UploadFileRequest) {
         (chat.file as? ChatFileManager)?.upload(fileRequest, nil) { [weak self] fileResponse, fileMetaData, error in
-            self?.sendReplyPrivatelyMessageOnUploadCompletion(replyMessage, fileRequest.uniqueId, fileResponse, fileMetaData, error)
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.sendReplyPrivatelyMessageOnUploadCompletion(replyMessage, fileRequest.uniqueId, fileResponse, fileMetaData, error)
+            }
         }
     }
 
     func replyPrivately(_ replyMessage: ReplyPrivatelyRequest, _ imageRequest: UploadImageRequest) {
         (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
-            self?.sendReplyPrivatelyMessageOnUploadCompletion(replyMessage, imageRequest.uniqueId, imageResponse, fileMetaData, error)
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.sendReplyPrivatelyMessageOnUploadCompletion(replyMessage, imageRequest.uniqueId, imageResponse, fileMetaData, error)
+            }
         }
     }
 
     private func sendReplyPrivatelyMessageOnUploadCompletion(_ replyMessage: ReplyPrivatelyRequest, _ uniqueId: String, _: UploadFileResponse?, _ metadata: FileMetaData?, _ error: ChatError?) {
         let typeCode = replyMessage.toTypeCode(chat)
         if let error = error {
-            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+            let response = ChatResponse<Sendable>(uniqueId: uniqueId, error: error, typeCode: typeCode)
             chat.delegate?.chatEvent(event: .system(.error(response)))
         } else {
             guard let stringMetaData = metadata.jsonString else { return }

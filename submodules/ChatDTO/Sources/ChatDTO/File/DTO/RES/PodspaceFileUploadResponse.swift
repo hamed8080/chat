@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct PodspaceFileUploadResponse: Decodable {
+public struct PodspaceFileUploadResponse: Decodable, Sendable {
     public let status: Int
     public let path: String?
     public let error: String?
@@ -52,7 +52,7 @@ public struct PodspaceFileUploadResponse: Decodable {
     }
 }
 
-public enum FileUploadError: Int {
+public enum FileUploadError: Int, Sendable {
     case noContent = 204
     case fileNotSent = 400
     case unauthorized = 401

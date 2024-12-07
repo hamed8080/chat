@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum CacheUnreadCountAction {
+public enum CacheUnreadCountAction: Sendable {
     case increase
     case decrease
     case set(Int)

@@ -8,7 +8,7 @@ import Foundation
 import ChatCore
 import ChatDTO
 
-extension DeleteMessageRequest: ChatSendable, SubjectProtocol {}
+extension DeleteMessageRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension DeleteMessageRequest {
     var content: String? { jsonString }

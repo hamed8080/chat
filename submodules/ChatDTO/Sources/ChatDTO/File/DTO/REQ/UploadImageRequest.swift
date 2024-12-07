@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UploadImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct UploadImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var data: Data
     public var fileExtension: String?
     public var fileName: String = ""

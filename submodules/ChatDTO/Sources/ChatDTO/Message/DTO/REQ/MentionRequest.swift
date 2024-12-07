@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MentionRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct MentionRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var count: Int = 25
     public var offset: Int = 0
     public let threadId: Int

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ThreadParticipantRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ThreadParticipantRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var count: Int
     public var offset: Int
     public var threadId: Int

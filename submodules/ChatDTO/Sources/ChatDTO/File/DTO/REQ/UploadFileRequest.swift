@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 #endif
 import Foundation
 
-public struct UploadFileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct UploadFileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var data: Data
     public var fileExtension: String?
     public var fileName: String = ""

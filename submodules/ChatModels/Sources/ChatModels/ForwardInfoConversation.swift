@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ForwardInfoConversation: Codable, Hashable {
+public struct ForwardInfoConversation: Codable, Hashable, Sendable {
     public var description: String?
     public var group: Bool?
     public var id: Int?

@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct RemoveTagParticipantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct RemoveTagParticipantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var tagId: Int
     public var tagParticipants: [TagParticipant]
     public let uniqueId: String

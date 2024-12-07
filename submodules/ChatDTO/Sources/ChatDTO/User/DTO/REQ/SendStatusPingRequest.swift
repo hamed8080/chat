@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum StatusPingType: Int, Encodable, Identifiable, CaseIterable {
+public enum StatusPingType: Int, Encodable, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case chat
     case thread
@@ -15,7 +15,7 @@ public enum StatusPingType: Int, Encodable, Identifiable, CaseIterable {
     case contactId
 }
 
-public struct SendStatusPingRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct SendStatusPingRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let statusType: StatusPingType
     public let id: Int?
     public let uniqueId: String

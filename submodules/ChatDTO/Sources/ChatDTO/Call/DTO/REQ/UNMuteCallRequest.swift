@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UNMuteCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct UNMuteCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let callId: Int
     public let userIds: [Int]
     public let uniqueId: String

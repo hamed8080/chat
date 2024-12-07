@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MapRoutingResponse: Decodable {
+public struct MapRoutingResponse: Decodable, Sendable {
     public var routes: [Route]?
 
     private enum CodingKeys: String, CodingKey {

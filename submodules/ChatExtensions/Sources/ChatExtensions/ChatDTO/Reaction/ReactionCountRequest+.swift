@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension ReactionCountRequest: ChatSendable, SubjectProtocol {}
+extension ReactionCountRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension ReactionCountRequest {
     var subjectId: Int { conversationId }

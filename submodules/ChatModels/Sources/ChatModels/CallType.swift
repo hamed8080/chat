@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum CallType: Int, Codable {
+public enum CallType: Int, Codable, Sendable {
     case voiceCall = 0
     case videoCall = 1
 }

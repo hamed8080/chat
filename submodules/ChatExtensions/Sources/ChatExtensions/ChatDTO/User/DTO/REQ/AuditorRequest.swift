@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension AuditorRequest: ChatSendable, SubjectProtocol {}
+extension AuditorRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension AuditorRequest {
     var content: String? { userRoles.jsonString }

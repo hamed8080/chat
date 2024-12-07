@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct CreateCallThreadRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct CreateCallThreadRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let title: String?
     public let image: String?
     public let description: String?

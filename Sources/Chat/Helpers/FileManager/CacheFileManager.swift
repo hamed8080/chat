@@ -9,7 +9,7 @@ import ChatCore
 import Foundation
 import Logger
 
-public final class CacheFileManager: CacheFileManagerProtocol {
+public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendable {
     public let fm: FileManagerProtocol
     public let logger: Logger?
     public let queue: DispatchQueueProtocol
@@ -39,7 +39,7 @@ public final class CacheFileManager: CacheFileManagerProtocol {
         self.logger = logger
     }
 
-    public func saveFile(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void) {
+    public func saveFile(url: URL, data: Data, saveCompeletion: @escaping @Sendable (URL?) -> Void) {
         queue.asyncWork { [weak self] in
             guard let self = self else { return }
             guard let filePath = filePath(url: url) else {
@@ -53,8 +53,17 @@ public final class CacheFileManager: CacheFileManagerProtocol {
             }
         }
     }
+    
+    public func saveFile(url: URL, data: Data) async -> URL? {
+        typealias Result = CheckedContinuation<URL?, Never>
+        return await withCheckedContinuation { [weak self] (continuation: Result) in
+            self?.saveFile(url: url, data: data) { url in
+                continuation.resume(with: .success(url))
+            }
+        }
+    }
 
-    public func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void) {
+    public func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping @Sendable (URL?) -> Void) {
         queue.asyncWork { [weak self] in
             guard let self = self else { return }
             guard let groupFilePath = filePathInGroup(url: url) else {
@@ -66,8 +75,17 @@ public final class CacheFileManager: CacheFileManagerProtocol {
             saveCompeletion(groupFilePath)
         }
     }
+    
+    public func saveFileInGroup(url: URL, data: Data) async -> URL? {
+        typealias Result = CheckedContinuation<URL?, Never>
+        return await withCheckedContinuation { [weak self] (continuation: Result) in
+            self?.saveFileInGroup(url: url, data: data) { url in
+                continuation.resume(with: .success(url))
+            }
+        }
+    }
 
-    public func getData(url: URL, completion: @escaping (Data?) -> Void) {
+    public func getData(url: URL, completion: @escaping @Sendable (Data?) -> Void) {
         queue.asyncWork { [weak self] in
             guard let self = self else { return }
             guard isFileExist(url: url), let filePath = filePath(url: url) else {
@@ -78,14 +96,32 @@ public final class CacheFileManager: CacheFileManagerProtocol {
             completion(data)
         }
     }
+    
+    public func getData(url: URL) async -> Data? {
+        typealias EntityResult = CheckedContinuation<Data?, Never>
+        return await withCheckedContinuation { [weak self] (continuation: EntityResult) in
+            self?.getData(url: url) { data in
+                continuation.resume(with: .success(data))
+            }
+        }
+    }
 
-    public func getDataInGroup(url: URL, completion: @escaping (Data?) -> Void) {
+    public func getDataInGroup(url: URL, completion: @escaping @Sendable (Data?) -> Void) {
         guard isFileExistInGroup(url: url), let groupFilePath = filePathInGroup(url: url) else {
             completion(nil)
             return
         }
         getData(url: groupFilePath) { data in
             completion(data)
+        }
+    }
+    
+    public func getDataInGroup(url: URL) async -> Data? {
+        typealias EntityResult = CheckedContinuation<Data?, Never>
+        return await withCheckedContinuation { [weak self] (continuation: EntityResult) in
+            self?.getDataInGroup(url: url) { data in
+                continuation.resume(with: .success(data))
+            }
         }
     }
 

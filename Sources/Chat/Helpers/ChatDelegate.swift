@@ -10,7 +10,7 @@ import ChatModels
 import Foundation
 import Logger
 
-public protocol ChatDelegate: AnyObject, LogDelegate {
+public protocol ChatDelegate: AnyObject, LogDelegate, Sendable {
     func chatState(state: ChatState, currentUser: User?, error: ChatError?)
     func chatEvent(event: ChatEventType)
 }

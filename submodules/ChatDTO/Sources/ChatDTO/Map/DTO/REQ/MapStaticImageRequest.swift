@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MapStaticImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct MapStaticImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var key: String?
     public var center: String
     public var height: Int = 500

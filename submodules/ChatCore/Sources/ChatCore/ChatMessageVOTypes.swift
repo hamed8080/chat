@@ -7,7 +7,7 @@
 import Additive
 import Foundation
 
-public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
+public enum ChatMessageVOTypes: Int, Codable, SafeDecodable, Sendable {
     case createThread = 1
     case message = 2
     case sent = 3

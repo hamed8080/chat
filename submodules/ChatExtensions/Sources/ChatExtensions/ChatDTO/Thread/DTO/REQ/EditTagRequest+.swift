@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension EditTagRequest: ChatSendable, SubjectProtocol {}
+extension EditTagRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension EditTagRequest {
     var subjectId: Int { id }

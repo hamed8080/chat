@@ -8,7 +8,7 @@ import Foundation
 import ChatDTO
 import ChatCore
 
-extension GetUserBotsRequest: ChatSendable {}
+extension GetUserBotsRequest: @retroactive ChatSendable {}
 
 public extension GetUserBotsRequest {
     var content: String? { return nil }

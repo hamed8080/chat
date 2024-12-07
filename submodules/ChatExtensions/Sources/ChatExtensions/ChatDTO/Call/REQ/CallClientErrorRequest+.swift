@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension CallClientErrorRequest: ChatSendable, SubjectProtocol {}
+extension CallClientErrorRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension CallClientErrorRequest {
     var subjectId: Int { callId }

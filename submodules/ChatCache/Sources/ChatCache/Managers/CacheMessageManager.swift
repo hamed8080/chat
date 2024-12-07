@@ -8,7 +8,7 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheMessageManager: BaseCoreDataManager<CDMessage> {
+public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @unchecked Sendable {
 
     /// This method prevents excess query to Store and SQLite as a result of only fetching conversation one time.
     /// We must fetch the message object with findOrCreate, if not it will lead to lastMessageVO object corruption.
@@ -127,7 +127,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage> {
         return NSCompoundPredicate(type: .and, subpredicates: predicateArray)
     }
 
-    public func find(_ threadId: Int, _ messageId: Int, _ completion: @escaping (Entity?) -> Void) {
+    public func find(_ threadId: Int, _ messageId: Int, _ completion: @escaping @Sendable (Entity?) -> Void) {
         viewContext.perform {
             let req = Entity.fetchRequest()
             req.predicate = self.joinPredicate(threadId.nsValue, messageId.nsValue)
@@ -136,7 +136,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage> {
         }
     }
 
-    public func fetch(_ req: FetchMessagesRequest, _ completion: @escaping ([Entity], Int) -> Void) {
+    public func fetch(_ req: FetchMessagesRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
         viewContext.perform {
             let fetchRequest = Entity.fetchRequest()
             let asc = (req.order == Ordering.asc.rawValue) ? true : false
@@ -163,9 +163,10 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage> {
         }
     }
 
-    public func getMentions(threadId: Int, offset: Int = 0, count: Int = 25, _ completion: @escaping ([Entity], Int) -> Void) {
+    public func getMentions(threadId: Int, offset: Int = 0, count: Int = 25, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
         let predicate = NSPredicate(format: "threadId == \(CDConversation.queryIdSpecifier) AND mentioned == YES", threadId.nsValue)
-        fetchWithOffset(count: count, offset: offset, predicate: predicate, completion)
+        let sPredicate = SendableNSPredicate(predicate: predicate)
+        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
     }
 
     public func clearHistory(threadId: Int) {

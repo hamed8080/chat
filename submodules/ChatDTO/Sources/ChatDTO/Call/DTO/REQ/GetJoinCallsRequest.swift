@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct GetJoinCallsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct GetJoinCallsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let offset: Int
     public let count: Int
     public let name: String?

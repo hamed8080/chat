@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct DownloadFileProgress {
+public struct DownloadFileProgress: Sendable {
     public var percent: Int64
     public var totalSize: Int64
     public var bytesRecivied: Int64

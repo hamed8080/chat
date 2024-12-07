@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct AssistantsHistoryRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AssistantsHistoryRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let count: Int
     public let offset: Int
     public let fromTime: UInt?

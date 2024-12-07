@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct AssistantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AssistantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let contactType: String
     public let count: Int
     public let offset: Int

@@ -49,8 +49,12 @@ final class ContactManager: ContactProtocol {
 
     public func sync() {
         authorizeContactAccess(grant: { [weak self] store in
-            self?.getContactsFromAuthorizedStore(store) { [weak self] phoneContacts in
-                self?.syncWithCache(phoneContacts)
+            Task {
+                await self?.getContactsFromAuthorizedStore(store) { [weak self] phoneContacts in
+                    Task {
+                        await self?.syncWithCache(phoneContacts)
+                    }
+                }
             }
         }, errorResult: { [weak self] error in
             self?.chat.logger.createLog(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", persist: true, level: .error, type: .received, userInfo: self?.chat.loggerUserInfo)
@@ -58,9 +62,8 @@ final class ContactManager: ContactProtocol {
     }
 
     private func syncWithCache(_ phoneContacts: [Contact]) {
-        var contactsToSync: [AddContactRequest] = []
         chat.cache?.contact?.all { [weak self] contactEntities in
-            guard let self = self else { return }
+            var contactsToSync: [AddContactRequest] = []
             phoneContacts.forEach { phoneContact in
                 if let findedContactchat = contactEntities.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
                     if findedContactchat.isContactChanged(contact: phoneContact) {
@@ -75,18 +78,20 @@ final class ContactManager: ContactProtocol {
                 uniqueIds.append(contact.uniqueId)
             }
             if contactsToSync.count <= 0 { return }
-            self.addAll(contactsToSync)
+            Task {
+                await self?.addAll(contactsToSync)
+            }
         }
     }
 
-    func getContactsFromAuthorizedStore(_ store: CNContactStore, completion: @escaping (([Contact]) -> Void)) {
-        var phoneContacts: [Contact] = []
-        let keys = [CNContactGivenNameKey,
-                    CNContactFamilyNameKey,
-                    CNContactPhoneNumbersKey,
-                    CNContactEmailAddressesKey]
-        let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+    func getContactsFromAuthorizedStore(_ store: CNContactStore, completion: @escaping (@Sendable ([Contact]) -> Void)) {
         DispatchQueue.global(qos: .background).async {
+            let keys = [CNContactGivenNameKey,
+                        CNContactFamilyNameKey,
+                        CNContactPhoneNumbersKey,
+                        CNContactEmailAddressesKey]
+            var phoneContacts: [Contact] = []
+            let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
             try? store.enumerateContacts(with: request, usingBlock: { contact, _ in
                 var contactModel = Contact()
                 contactModel.cellphoneNumber = contact.phoneNumbers.first?.value.stringValue ?? ""
@@ -99,7 +104,7 @@ final class ContactManager: ContactProtocol {
         }
     }
 
-    func authorizeContactAccess(grant: @escaping (CNContactStore) -> Void, errorResult: ((Error) -> Void)? = nil) {
+    func authorizeContactAccess(grant: @escaping @Sendable (CNContactStore) -> Void, errorResult: ((Error) -> Void)? = nil) {
         let store = CNContactStore()
         store.requestAccess(for: .contacts) { granted, error in
             if let error = error {
@@ -125,6 +130,7 @@ final class ContactManager: ContactProtocol {
         let typeCode = request.toTypeCode(chat)
         var request = request
         request.setTypeCode(typeCode: typeCode)
+        let request1 = request
 
         let bodyData = request.parameterData
         var urlReq = URLRequest(url: URL(string: url)!)
@@ -133,14 +139,20 @@ final class ContactManager: ContactProtocol {
         urlReq.method = .post
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: Bool.self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, urlResponse, error in
-            let response: ChatResponse<RemoveContactResponse>? = self?.chat.session.decode(data, urlResponse, error, typeCode: typeCode)
-            self?.chat.logger.logHTTPResponse(data, urlResponse, error, persist: true, type: .received, userInfo: self?.chat.loggerUserInfo)
-            let deletedContacts = [Contact(id: request.contactId)]
-            let chatResponse = ChatResponse(uniqueId: request.uniqueId, result: deletedContacts, error: response?.error, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .contact(.delete(chatResponse, deleted: response?.result?.deteled ?? false)))
-            self?.removeFromCacheIfExist(removeContactResponse: response?.result, contactId: request.contactId)
+            Task {
+                await self?.onRemoveContactsResult(data, urlResponse, error, typeCode, request1)
+            }
         }
         .resume()
+    }
+    
+    private func onRemoveContactsResult(_ data: Data?, _ urlResponse: URLResponse?, _ error: Error?, _ typeCode: String?, _ request1: RemoveContactsRequest) {
+        let response: ChatResponse<RemoveContactResponse>? = data?.decode(urlResponse, error, typeCode: typeCode)
+        chat.logger.logHTTPResponse(data, urlResponse, error, persist: true, type: .received, userInfo: chat.loggerUserInfo)
+        let deletedContacts = [Contact(id: request1.contactId)]
+        let chatResponse = ChatResponse(uniqueId: request1.uniqueId, result: deletedContacts, error: response?.error, typeCode: typeCode)
+        chat.delegate?.chatEvent(event: .contact(.delete(chatResponse, deleted: response?.result?.deteled ?? false)))
+        removeFromCacheIfExist(removeContactResponse: response?.result, contactId: request1.contactId)
     }
 
     func removeFromCacheIfExist(removeContactResponse: RemoveContactResponse?, contactId: Int) {
@@ -161,7 +173,9 @@ final class ContactManager: ContactProtocol {
             let contacts = contacts.map(\.codable)
             let hasNext = contacts.count >= request.size
             let reponse = ChatResponse(uniqueId: request.uniqueId, result: contacts, hasNext: hasNext, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .contact(.contacts(reponse)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.chat.delegate?.chatEvent(event: .contact(.contacts(reponse)))
+            }
         }
     }
 
@@ -226,7 +240,9 @@ final class ContactManager: ContactProtocol {
         urlReq.method = .post
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
-            self?.onAddContacts(uniqueId: request.uniqueId, data: data, response: response, error: error)
+            Task {
+                await self?.onAddContacts(uniqueId: request.uniqueId, data: data, response: response, error: error)
+            }
         }
         .resume()
     }
@@ -258,16 +274,20 @@ final class ContactManager: ContactProtocol {
         urlReq.method = .post
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
-            self?.onAddContacts(uniqueId: request.first?.uniqueId, data: data, response: response, error: error)
+            Task {
+                await self?.onAddContacts(uniqueId: request.first?.uniqueId, data: data, response: response, error: error)
+            }
         }
         .resume()
     }
 
     private func onAddContacts(uniqueId: String?, data: Data?, response: URLResponse?, error: Error?) {
-        let result: ChatResponse<ContactResponse>? = chat.session.decode(data, response, error, typeCode: nil)
+        let result: ChatResponse<ContactResponse>? = data?.decode(response, error, typeCode: nil)
         chat.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: chat.loggerUserInfo)
         let response = ChatResponse(uniqueId: uniqueId, result: result?.result?.contacts, error: result?.error, typeCode: result?.typeCode)
         chat.delegate?.chatEvent(event: .contact(.add(response)))
         chat.cache?.contact?.insert(models: result?.result?.contacts ?? [])
     }
 }
+
+extension CNContactStore: @retroactive @unchecked Sendable {}

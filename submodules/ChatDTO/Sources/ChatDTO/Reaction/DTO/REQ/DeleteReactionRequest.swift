@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct DeleteReactionRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct DeleteReactionRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let reactionId: Int
     public let conversationId: Int
     public let uniqueId: String

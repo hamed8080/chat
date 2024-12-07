@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum ReactionStatus: Int, CaseIterable, Identifiable, Codable {
+public enum ReactionStatus: Int, CaseIterable, Identifiable, Codable, Sendable {
     public var id: Self { self }
     case disable = 1
     case enable = 2

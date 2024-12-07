@@ -14,7 +14,7 @@ public extension CDParticipant {
     typealias Model = Participant
     typealias Id = NSNumber
     static let name = "CDParticipant"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 
@@ -115,13 +115,13 @@ public extension CDParticipant {
         metadata = model.chatProfileVO?.metadata ?? metadata
     }
 
-    class func findOrCreate(threadId: Int, participantId: Int, context: NSManagedObjectContextProtocol) -> CDParticipant {
+    class func findOrCreate(threadId: Int, participantId: Int, context: CacheManagedContext) -> CDParticipant {
         let req = CDParticipant.fetchRequest()
         req.predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(CDParticipant.id), participantId.nsValue,
                                     #keyPath(CDParticipant.conversation.id), threadId.nsValue
         )
-        let entity = (try? context.fetch(req).first) ?? CDParticipant.insertEntity(context)
+        let entity = (try? context.context.fetch(req).first) ?? CDParticipant.insertEntity(context)
         return entity
     }
 

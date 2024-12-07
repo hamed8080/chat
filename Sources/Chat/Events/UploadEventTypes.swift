@@ -9,7 +9,7 @@ import ChatModels
 import ChatTransceiver
 import Foundation
 
-public enum UploadEventTypes {
+public enum UploadEventTypes: Sendable {
     case resumed(uniqueId: String)
     case canceled(uniqueId: String)
     case suspended(uniqueId: String)

@@ -13,7 +13,7 @@ public extension CDQueueOfFileMessages {
     typealias Model = QueueOfFileMessages
     typealias Id = NSNumber
     static let name = "CDQueueOfFileMessages"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 

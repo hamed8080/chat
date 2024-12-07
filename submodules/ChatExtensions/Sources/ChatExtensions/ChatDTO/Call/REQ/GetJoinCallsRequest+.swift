@@ -8,11 +8,11 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension GetJoinCallsRequest: ChatSendable {}
+extension GetJoinCallsRequest: @retroactive ChatSendable {}
 
 public extension GetJoinCallsRequest {
     var content: String? { jsonString }
     var chatTypeCodeIndex: Index { typeCodeIndex }
 }
 
-extension GetJoinCallsRequest: Paginateable{}
+extension GetJoinCallsRequest: @retroactive Paginateable{}

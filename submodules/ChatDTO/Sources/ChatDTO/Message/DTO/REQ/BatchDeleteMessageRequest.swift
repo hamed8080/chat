@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct BatchDeleteMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct BatchDeleteMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     let threadId: Int
     let deleteForAll: Bool
     let messageIds: [Int]

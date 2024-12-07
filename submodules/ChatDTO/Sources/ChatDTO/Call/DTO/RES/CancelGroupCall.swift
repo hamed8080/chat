@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct CancelGroupCall: Codable {
+public struct CancelGroupCall: Codable, Sendable {
     public let userId: Int
     public let mute: Bool
     public let joinTime: Int?

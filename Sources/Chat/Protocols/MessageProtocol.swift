@@ -8,7 +8,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol MessageProtocol {
+@ChatGlobalActor
+public protocol MessageProtocol: AnyObject {
     /// Cancel a message send.
     /// - Parameters:
     ///   - uniqueId: The uniqueId of a message to cancel and delete from cache.

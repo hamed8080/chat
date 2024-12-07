@@ -33,14 +33,20 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
         }
         isTypingCount = 0
         timerTyping = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            if self?.isTypingCount ?? 0 < 30 {
-                self?.isTypingCount += 1
-                self?.sendSignalMessage(.init(signalType: .isTyping, threadId: threadId))
-            } else {
-                self?.sendStopTyping()
+            Task {
+                await self?.onTypingTimer(threadId: threadId)
             }
         }
         stopTimerWhenUserIsNotTyping()
+    }
+    
+    private func onTypingTimer(threadId: Int) {
+        if isTypingCount < 30 {
+            isTypingCount += 1
+            sendSignalMessage(.init(signalType: .isTyping, threadId: threadId))
+        } else {
+            sendStopTyping()
+        }
     }
 
     func sendStopTyping() {
@@ -56,7 +62,9 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
     func stopTimerWhenUserIsNotTyping() {
         timerCheckUserStoppedTyping?.invalidateTimer()
         timerCheckUserStoppedTyping = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] _ in
-            self?.sendStopTyping()
+            Task {
+                await self?.sendStopTyping()
+            }
         }
     }
 
@@ -69,11 +77,11 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
         let chatMessage = asyncMessage.chatMessage
         let data = chatMessage?.content?.data(using: .utf8) ?? Data()
         let chatError = try? JSONDecoder.instance.decode(ChatError.self, from: data)
-        let response = ChatResponse(uniqueId: chatMessage?.uniqueId, result: Any?.none, error: chatError, typeCode: chatMessage?.typeCode)
+        let response = ChatResponse<Sendable>(uniqueId: chatMessage?.uniqueId, error: chatError, typeCode: chatMessage?.typeCode)
         error(response: response)
     }
 
-    func error(response: ChatResponse<Any>) {
+    func error(response: ChatResponse<Sendable>) {
         chat.delegate?.chatEvent(event: .system(.error(response)))
     }
 }

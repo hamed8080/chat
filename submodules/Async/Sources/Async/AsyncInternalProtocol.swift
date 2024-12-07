@@ -27,6 +27,7 @@ protocol AsyncInternalProtocol: AsyncProtocol {
     var config: AsyncConfig { get }
     var queue: DispatchQueueProtocol { get }
     var stateModel: AsyncStateModel { get set }
+    var deviceInfo: DeviceInfo? { get set }
 
     func sendInternalData(type: AsyncMessageTypes, data: Data?)
     func disposeObject()

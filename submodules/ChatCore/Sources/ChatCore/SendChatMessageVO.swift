@@ -7,7 +7,7 @@
 import Async
 import Foundation
 
-public struct SendChatMessageVO: Codable {
+public struct SendChatMessageVO: Codable, Sendable {
     public let type: Int
     public let token: String?
     public var content: String?

@@ -13,7 +13,7 @@ public extension CDFile {
     typealias Model = File
     typealias Id = String
     static let name = "CDFile"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "hashCode"
 }
 

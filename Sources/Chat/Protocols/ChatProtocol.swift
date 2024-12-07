@@ -15,6 +15,7 @@
 import Foundation
 import Logger
 
+@ChatGlobalActor
 public protocol Chat {
     init(
         config: ChatConfig,
@@ -82,7 +83,7 @@ public protocol ChatInternalProtocol: Chat {
     var logger: Logger { get set }
 
     /// An array to manage a list of threads in the queue of exporting messages of a thread.
-    var exportMessageViewModels: [ExportMessagesProtocol] { get set }
+    var exportMessageViewModels: [ExportMessagesInternalProtocol] { get set }
 
     /// A url session to initiate a network call.
     var session: URLSessionProtocol { get set }
@@ -102,10 +103,12 @@ public protocol ChatInternalProtocol: Chat {
     func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes)
 
     /// A private method that will be called by the SDK to pass data that received from onMessage.
-    func invokeCallback(asyncMessage: AsyncMessage)
+    func invokeCallback(asyncMessage: AsyncMessage) async
 
     /// Dispose and close object.
     func dispose()
 
     var loggerUserInfo: [String: String] { get }
+    
+    var deviceInfo: DeviceInfo? { get set }
 }

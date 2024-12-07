@@ -8,11 +8,11 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension BlockedAssistantsRequest: ChatSendable {}
+extension BlockedAssistantsRequest: @retroactive ChatSendable {}
 
 public extension BlockedAssistantsRequest {
     var content: String? { jsonString }
     var chatTypeCodeIndex: Index { typeCodeIndex }
 }
 
-extension BlockedAssistantsRequest: Paginateable {}
+extension BlockedAssistantsRequest: @retroactive Paginateable {}

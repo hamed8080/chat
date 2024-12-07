@@ -8,7 +8,7 @@ import Foundation
 import ChatDTO
 import ChatCore
 
-extension NotSeenDurationRequest: ChatSendable {}
+extension NotSeenDurationRequest: @retroactive ChatSendable {}
 
 public extension NotSeenDurationRequest {
     var content: String? { jsonString }

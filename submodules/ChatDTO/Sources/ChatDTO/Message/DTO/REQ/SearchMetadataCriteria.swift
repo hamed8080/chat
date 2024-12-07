@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct SearchMetadataCriteria: Codable {
+public struct SearchMetadataCriteria: Codable, Sendable {
     public var field: String?
     public var `is`: String? // can be used for string and number
     public var has: String?

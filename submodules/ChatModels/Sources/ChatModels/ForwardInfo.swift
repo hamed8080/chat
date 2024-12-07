@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ForwardInfo: Codable, Hashable {
+public struct ForwardInfo: Codable, Hashable, Sendable {
     public var conversation: ForwardInfoConversation?
     public var participant: Participant?
 

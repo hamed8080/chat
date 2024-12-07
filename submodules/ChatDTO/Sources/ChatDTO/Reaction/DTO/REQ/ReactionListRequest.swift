@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct ReactionListRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ReactionListRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let messageId: Int
     public var offset: Int
     public let count: Int

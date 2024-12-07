@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ReactionCountList: Codable, Hashable, Identifiable {
+public struct ReactionCountList: Codable, Hashable, Identifiable, Sendable {
     public var id: Int? { messageId }
     public var messageId: Int?
     public var reactionCounts: [ReactionCount]?

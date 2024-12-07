@@ -10,6 +10,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
+@ChatGlobalActor
 public final class ChatManager {
     private init() {}
     public static var instance: ChatManager = .init()

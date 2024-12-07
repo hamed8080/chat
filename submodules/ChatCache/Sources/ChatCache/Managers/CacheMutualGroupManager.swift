@@ -8,14 +8,14 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheMutualGroupManager: BaseCoreDataManager<CDMutualGroup> {
+public final class CacheMutualGroupManager: BaseCoreDataManager<CDMutualGroup>, @unchecked Sendable {
 
     public func insert(_ threads: [Conversation], idType: InviteeTypes = .unknown, mutualId: String?) {
         let model = Entity.Model(idType: idType , mutualId: mutualId, conversations: threads)
         insert(models: [model])
     }
 
-    public func mutualGroups(_ id: String, _ completion: @escaping ([Entity]) -> Void) {
+    public func mutualGroups(_ id: String, _ completion: @escaping @Sendable ([Entity]) -> Void) {
         viewContext.perform {
             let req = Entity.fetchRequest()
             req.predicate = NSPredicate(format: "mutualId == %@", id)

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct RemoveContactsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct RemoveContactsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let contactId: Int
     private var typeCode: String?
     public let uniqueId: String

@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct ContactResponse: Decodable {
+public struct ContactResponse: Decodable, Sendable {
     public var contentCount: Int = 0
     public var contacts: [Contact] = []
 

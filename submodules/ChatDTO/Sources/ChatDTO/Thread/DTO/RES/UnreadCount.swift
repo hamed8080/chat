@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UnreadCount: Decodable {
+public struct UnreadCount: Decodable, Sendable {
     public let unreadCount: Int?
     public let threadId: Int?
 

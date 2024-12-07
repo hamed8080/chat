@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct CallStickerRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct CallStickerRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let callId: Int
     public let stickers: [CallSticker]
     public let uniqueId: String

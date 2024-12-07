@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct RenewCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct RenewCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let invitess: [Invitee]
     public let callId: Int
     public let uniqueId: String

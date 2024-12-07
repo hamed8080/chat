@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct SendSignalMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct SendSignalMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let signalType: SignalMessageType
     public let threadId: Int
     public let uniqueId: String

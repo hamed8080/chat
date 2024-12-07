@@ -7,7 +7,7 @@
 import Foundation
 
 /// Remove the bot commands request.
-public struct RemoveBotCommandRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct RemoveBotCommandRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     /// The bot name.
     public let botName: String
     public let commandList: [String]

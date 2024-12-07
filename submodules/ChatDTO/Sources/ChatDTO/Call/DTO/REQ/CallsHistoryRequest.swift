@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct CallsHistoryRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct CallsHistoryRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let count: Int
     public let offset: Int
     public let callIds: [Int]?

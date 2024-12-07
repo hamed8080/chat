@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct ReplaceReactionRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ReplaceReactionRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let messageId: Int
     public let conversationId: Int
     public let reactionId: Int

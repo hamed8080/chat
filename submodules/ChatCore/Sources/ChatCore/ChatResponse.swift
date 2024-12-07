@@ -8,7 +8,7 @@ import Foundation
 
 protocol ChatResponseProtocol {}
 
-public struct ChatResponse<T> {
+public struct ChatResponse<T: Sendable>: Sendable {
     public var uniqueId: String?
     public var result: T?
     public var error: ChatError?

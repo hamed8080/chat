@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension LastActionInConversationRequest: ChatSendable {}
+extension LastActionInConversationRequest: @retroactive ChatSendable {}
 
 public extension LastActionInConversationRequest {
     var content: String? { ids.jsonString }

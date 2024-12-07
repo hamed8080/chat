@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension RenewCallRequest: ChatSendable, SubjectProtocol {}
+extension RenewCallRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension RenewCallRequest {
     var subjectId: Int { callId }

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ReplyInfo: Codable, Identifiable, Hashable {
+public struct ReplyInfo: Codable, Identifiable, Hashable, Sendable {
     public var id: Int? { repliedToMessageId }
     public var deleted: Bool?
     public var repliedToMessageId: Int?

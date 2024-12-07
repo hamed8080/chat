@@ -8,7 +8,7 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheAssistantManager: BaseCoreDataManager<CDAssistant> {
+public final class CacheAssistantManager: BaseCoreDataManager<CDAssistant>, @unchecked Sendable {
 
     public func block(block: Bool, assistants: [Entity.Model]) {
         fetchWithIntIds(assistants) { [weak self] entities in
@@ -19,9 +19,10 @@ public final class CacheAssistantManager: BaseCoreDataManager<CDAssistant> {
         }
     }
 
-    public func getBlocked(_ count: Int = 25, _ offset: Int = 0, _ completion: @escaping ([Entity], Int) -> Void) {
+    public func getBlocked(_ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
         let predicate = NSPredicate(format: "%K == %@", #keyPath(CDAssistant.block), NSNumber(booleanLiteral: true))
-        fetchWithOffset(count: count, offset: offset, predicate: predicate, completion)
+        let sPredicate = SendableNSPredicate(predicate: predicate)
+        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
     }
 
     public func delete(_ models: [Entity.Model]) {
@@ -33,18 +34,19 @@ public final class CacheAssistantManager: BaseCoreDataManager<CDAssistant> {
         }
     }
 
-    private func fetchWithIntIds(_ models: [Entity.Model], _ compeletion: @escaping ([Entity]) -> Void) {        
+    private func fetchWithIntIds(_ models: [Entity.Model], _ compeletion: @escaping @Sendable ([Entity]) -> Void) {
         models.forEach { model in
             if let participantId = model.participant?.id {
                 let predicate = NSPredicate(format: "%K == %@", #keyPath(CDAssistant.participant.id), participantId.nsValue)
-                find(predicate: predicate) { entities in
+                let sPredicate = SendableNSPredicate(predicate: predicate)
+                find(predicate: sPredicate) { entities in
                     compeletion(entities)
                 }
             }
         }
     }
 
-    public func fetch(_ count: Int = 25, _ offset: Int = 0, _ completion: @escaping ([Entity], Int) -> Void) {
+    public func fetch(_ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
         let fetchRequest = Entity.fetchRequest()
         viewContext.perform {
             let threads = try self.viewContext.fetch(fetchRequest)

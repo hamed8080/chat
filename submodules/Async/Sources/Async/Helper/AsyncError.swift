@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum AsyncErrorCodes: Int, Identifiable, CaseIterable {
+public enum AsyncErrorCodes: Int, Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case errorPing = 4000
     case socketIsNotConnected = 4001
@@ -15,7 +15,7 @@ public enum AsyncErrorCodes: Int, Identifiable, CaseIterable {
 }
 
 /// When an error happen in the server or in your request you will receive an error this type.
-public struct AsyncError: Error {
+public struct AsyncError: Error, Sendable {
     /// Error code. it can be undifined.
     public var code: AsyncErrorCodes = .undefined
 
@@ -23,7 +23,7 @@ public struct AsyncError: Error {
     public var message: String?
 
     /// The user info of the error.
-    public var userInfo: [String: Any]?
+    public var userInfo: [String: Sendable]?
 
     /// Raw error so you could diagnose the error in a way you prefer.
     public var rawError: Error?
@@ -34,7 +34,7 @@ public struct AsyncError: Error {
     ///   - message: The message that will give you more information about the error.
     ///   - userInfo: The user info of the error.
     ///   - rawError: Raw error so you could diagnose the error in a way you prefer.
-    public init(code: AsyncErrorCodes = .undefined, message: String? = nil, userInfo: [String: Any]? = nil, rawError: Error? = nil) {
+    public init(code: AsyncErrorCodes = .undefined, message: String? = nil, userInfo: [String: Sendable]? = nil, rawError: Error? = nil) {
         self.code = code
         self.message = message
         self.userInfo = userInfo

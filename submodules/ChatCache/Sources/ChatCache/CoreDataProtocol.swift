@@ -7,7 +7,7 @@
 import CoreData
 import Foundation
 
-public protocol IdProtocol {}
+public protocol IdProtocol: Sendable {}
 extension NSNumber: IdProtocol {}
 extension String: IdProtocol {}
 
@@ -19,29 +19,29 @@ public protocol CoreDataProtocol {
     associatedtype Entity: EntityProtocol
     init(container: PersistentManagerProtocol, logger: CacheLogDelegate)
     var container: PersistentManagerProtocol { get set }
-    var viewContext: NSManagedObjectContextProtocol { get }
-    var bgContext: NSManagedObjectContextProtocol { get }
+    var viewContext: CacheManagedContext { get }
+    var bgContext: CacheManagedContext { get }
     var logger: CacheLogDelegate { get }
     func idPredicate(id: Entity.Id) -> NSPredicate
-    func save(context: NSManagedObjectContextProtocol)
+    func save(context: CacheManagedContext)
     func saveViewContext()
-    func firstOnMain(with id: Entity.Id, context: NSManagedObjectContextProtocol, completion: @escaping (Entity?) -> Void)
-    func first(with id: Entity.Id, context: NSManagedObjectContextProtocol, completion: @escaping (Entity?) -> Void)
-    func find(predicate: NSPredicate, completion: @escaping ([Entity]) -> Void)
-    func insert(model: Entity.Model, context: NSManagedObjectContextProtocol)
+    func firstOnMain(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void)
+    func first(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void)
+    func find(predicate: SendableNSPredicate, completion: @escaping @Sendable ([Entity]) -> Void)
+    func insert(model: Entity.Model, context: CacheManagedContext)
     func insert(models: [Entity.Model])
     func delete(entity: Entity)
     func update(model: Entity.Model, entity: Entity)
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate)
     func mergeChanges(key: String, _ objectIDs: [NSManagedObjectID])
-    func insertObjects(_ makeEntities: @escaping ((NSManagedObjectContextProtocol) throws -> Void))
+    func insertObjects(_ makeEntities: @escaping @Sendable (CacheManagedContext) throws -> Void)
     func delete(_ id: Int)
     func batchDelete(_ ids: [Int])
     func batchDelete(predicate: NSPredicate)
-    func fetchWithOffset(count: Int, offset: Int, predicate: NSPredicate?, sortDescriptor: [NSSortDescriptor]?, _ completion: @escaping ([Entity], Int) -> Void)
-    func all(_ completion: @escaping ([Entity]) -> Void)
-    func fetchWithObjectIds(ids: [NSManagedObjectID], _ completion: @escaping ([Entity]) -> Void)
-    func findOrCreate(_ id: Entity.Id, _ context: NSManagedObjectContextProtocol) -> Entity
+    func fetchWithOffset(count: Int, offset: Int, predicate: SendableNSPredicate?, sortDescriptor: [SendableNSSortDescriptor]?, _ completion: @escaping @Sendable ([Entity], Int) -> Void)
+    func all(_ completion: @escaping @Sendable ([Entity]) -> Void)
+    func fetchWithObjectIds(ids: [NSManagedObjectID], _ completion: @escaping @Sendable ([Entity]) -> Void)
+    func findOrCreate(_ id: Entity.Id, _ context: CacheManagedContext) -> Entity
     func truncate()
 }
 

@@ -8,7 +8,7 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheCurrentUserRoleManager: BaseCoreDataManager<CDCurrentUserRole> {
+public final class CacheCurrentUserRoleManager: BaseCoreDataManager<CDCurrentUserRole>, @unchecked Sendable {
 
     public func roles(_ threadId: Int) -> [Roles] {
         let req = Entity.fetchRequest()

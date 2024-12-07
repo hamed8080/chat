@@ -6,19 +6,19 @@
 
 import Foundation
 
-public final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
+public final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate, @unchecked Sendable {
     private let uploadProgress: UploadProgressType?
     private let downloadProgress: DownloadProgressType?
     private var buffer: NSMutableData = .init()
-    private var downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)?
+    private let downloadCompletion: ProgressCompletionType?
     private var downloadFileProgress = DownloadFileProgress(percent: 0, totalSize: 0, bytesRecivied: 0)
     private var response: HTTPURLResponse?
-    private var uniqueId: String
+    private let uniqueId: String
 
     public init(uniqueId: String,
          uploadProgress: UploadProgressType? = nil,
          downloadProgress: DownloadProgressType? = nil,
-         downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil)
+         downloadCompletion: ProgressCompletionType? = nil)
     {
         self.uniqueId = uniqueId
         self.uploadProgress = uploadProgress

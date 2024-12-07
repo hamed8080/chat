@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MessageSeenByUsersRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct MessageSeenByUsersRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let messageId: Int
     public let offset: Int
     public let count: Int

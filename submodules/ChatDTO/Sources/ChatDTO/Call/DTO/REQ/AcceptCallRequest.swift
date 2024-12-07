@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct AcceptCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AcceptCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let client: SendClient
     public let callId: Int
     public let uniqueId: String

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct QueueOfTextMessages: Codable, Identifiable, Hashable {
+public struct QueueOfTextMessages: Codable, Identifiable, Hashable, Sendable {
     public var id: String? { uniqueId }
     public var messageType: MessageType?
     public var metadata: String?

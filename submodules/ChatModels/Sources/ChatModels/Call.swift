@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Call: Codable, Equatable, Identifiable, Hashable {
+public struct Call: Codable, Equatable, Identifiable, Hashable, Sendable {
     public let id: Int
     public let creatorId: Int
     public let type: CallType

@@ -6,19 +6,21 @@
 
 import Foundation
 
-public protocol URLSessionProtocol {
-    typealias CompletionType = (Data?, URLResponse?, Error?) -> Void
+public protocol URLSessionProtocol: Sendable {
+    typealias CompletionType = @Sendable (Data?, URLResponse?, Error?) -> Void
+    typealias UploadCompletionType = @Sendable (Data?, URLResponse?, Error?) -> Void
     var configuration: URLSessionConfiguration { get }
     var delegate: URLSessionDelegate? { get }
     var delegateQueue: OperationQueue { get }
-    func dataTask(_ request: URLRequest, completionHandler: @escaping CompletionType) -> URLSessionDataTaskProtocol
+    func dataTask(_ request: URLRequest, completionHandler: @escaping @Sendable CompletionType) -> URLSessionDataTaskProtocol
+    func data(_ request: URLRequest) async throws -> (Data, URLResponse)
     func dataTask(_ request: URLRequest) -> URLSessionDataTaskProtocol
     func dataTask(_ url: URL) -> URLSessionDataTaskProtocol
-    func uploadTask(_ request: URLRequest, _ completion: @escaping ((Data?, URLResponse?, Error?) -> Void)) -> URLSessionDataTaskProtocol
+    func uploadTask(_ request: URLRequest, _ completion: @escaping @Sendable UploadCompletionType) -> URLSessionDataTaskProtocol
 }
 
 extension URLSession: URLSessionProtocol {
-    public func dataTask(_ request: URLRequest, completionHandler: @escaping CompletionType) -> URLSessionDataTaskProtocol {
+    public func dataTask(_ request: URLRequest, completionHandler: @escaping @Sendable CompletionType) -> URLSessionDataTaskProtocol {
         dataTask(with: request, completionHandler: completionHandler)
     }
 
@@ -29,8 +31,12 @@ extension URLSession: URLSessionProtocol {
     public func dataTask(_ url: URL) -> URLSessionDataTaskProtocol {
         dataTask(with: url)
     }
+    
+    public func data(_ request: URLRequest) async throws -> (Data, URLResponse) {
+        try await data(for: request)
+    }
 
-    public func uploadTask(_ request: URLRequest, _ completion: @escaping ((Data?, URLResponse?, Error?) -> Void)) -> URLSessionDataTaskProtocol {
+    public func uploadTask(_ request: URLRequest, _ completion: @escaping @Sendable UploadCompletionType) -> URLSessionDataTaskProtocol {
         dataTask(with: request, completionHandler: completion)
     }
 }

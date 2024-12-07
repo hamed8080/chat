@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct MutualGroupsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct MutualGroupsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let count: Int
     public let offset: Int
     public let toBeUserVO: Invitee

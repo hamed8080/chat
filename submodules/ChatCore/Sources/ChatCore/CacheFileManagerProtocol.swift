@@ -19,7 +19,7 @@ public protocol FileManagerProtocol {
 
 extension FileManager: FileManagerProtocol {}
 
-public protocol CacheFileManagerProtocol {
+public protocol CacheFileManagerProtocol: Sendable {
     var fm: FileManagerProtocol { get }
     var logger: Logger? { get }
     var queue: DispatchQueueProtocol { get }
@@ -33,24 +33,28 @@ public protocol CacheFileManagerProtocol {
     ///   - url: The real HttpURL of the file.
     ///   - data: The data of the file to be saved.
     /// - Returns: Throw an exception if something went wrong and saving has failed.
-    func saveFile(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void)
+    func saveFile(url: URL, data: Data, saveCompeletion: @escaping @Sendable (URL?) -> Void)
+    func saveFile(url: URL, data: Data) async -> URL?
 
     /// Save the file asynchronously into the disk by making an md5 hash name for the uniqueness of the path.
     /// - Parameters:
     ///   - url: The string real HttpURL string.
     ///   - data: The data of the file to be saved.
     /// - Returns: Throw an exception if something went wrong and saving has failed.
-    func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void)
+    func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping @Sendable (URL?) -> Void)
+    func saveFileInGroup(url: URL, data: Data) async -> URL?
 
     /// Return the data of the file if it exists. Get data of the file asynchronously on the background thread.
     /// - Returns: Data of the file.
     /// - Parameter url: The HttpURL of the file.
-    func getData(url: URL, completion: @escaping (Data?) -> Void)
+    func getData(url: URL, completion: @escaping @Sendable (Data?) -> Void)
+    func getData(url: URL) async -> Data?
 
     /// Return the data of the file a file in group if it exists. Get data of the a file in a group asynchronously on the background thread.
     /// - Returns: Data of the file.
     /// - Parameter url: The HttpURL of the file.
-    func getDataInGroup(url: URL, completion: @escaping (Data?) -> Void)
+    func getDataInGroup(url: URL, completion: @escaping @Sendable (Data?) -> Void)
+    func getDataInGroup(url: URL) async -> Data?
 
     /// Return crosspondent file url for a HttpURL.
     /// - Parameter url: The HttpURL of the file.

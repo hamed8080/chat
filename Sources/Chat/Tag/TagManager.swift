@@ -34,7 +34,9 @@ final class TagManager: TagProtocol {
         chat.cache?.tag?.getTags { [weak self] tags in
             let tagModels = tags.map(\.codable)
             let response = ChatResponse(uniqueId: req.uniqueId, result: tagModels, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .tag(.tags(response)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.chat.delegate?.chatEvent(event: .tag(.tags(response)))
+            }
         }
     }
 

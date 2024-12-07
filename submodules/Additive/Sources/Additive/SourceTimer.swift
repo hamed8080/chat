@@ -11,13 +11,13 @@ open class SourceTimer {
     public init(){}
     private let queue = DispatchQueue(label: "SourceTimerSerilaQueue")
 
-    public func start(duration: TimeInterval, completion: @escaping () -> Void) {
+    public func start(duration: TimeInterval, completion: @escaping @Sendable () -> Void) {
         queue.sync {
             startTimer(duration: duration, completion: completion)
         }
     }
 
-    private func startTimer(duration: TimeInterval, completion: @escaping () -> Void) {
+    private func startTimer(duration: TimeInterval, completion: @escaping @Sendable () -> Void) {
         // Create a new DispatchSourceTimer
         timer = DispatchSource.makeTimerSource()
 
@@ -26,19 +26,19 @@ open class SourceTimer {
 
         // Set the timer event handler
         timer?.setEventHandler { [weak self] in
-            self?.onEventHandler(completion: completion)
+            self?.queue.sync {
+                self?.onEventHandler(completion: completion)
+            }
         }
 
         // Start the timer
         timer?.resume()
     }
 
-    private func onEventHandler(completion: @escaping () -> Void) {
-        queue.sync {
-            if timer?.isCancelled == false {
-                completion()
-                timer?.cancel()
-            }
+    private func onEventHandler(completion: @escaping @Sendable () -> Void) {
+        if timer?.isCancelled == false {
+            completion()
+            timer?.cancel()
         }
     }
 

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UploadFileProgress {
+public struct UploadFileProgress: Sendable {
     public let percent: Int64
     public let totalSize: Int64
     public let bytesSend: Int64

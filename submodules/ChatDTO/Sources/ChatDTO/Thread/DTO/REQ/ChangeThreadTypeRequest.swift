@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct ChangeThreadTypeRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct ChangeThreadTypeRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let uniqueName: String?
     public var threadId: Int
     public var type: ThreadTypes

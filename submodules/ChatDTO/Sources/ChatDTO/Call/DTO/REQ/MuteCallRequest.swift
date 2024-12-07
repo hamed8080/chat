@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct MuteCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct MuteCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let callId: Int
     public let userIds: [Int]
     public let uniqueId: String

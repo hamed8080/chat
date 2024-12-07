@@ -8,4 +8,4 @@ import ChatModels
 import ChatCore
 import ChatDTO
 
-public typealias UploadCompletionType = (UploadFileResponse?, FileMetaData?, ChatError?) -> Void
+public typealias UploadCompletionType = @Sendable (UploadFileResponse?, FileMetaData?, ChatError?) -> Void

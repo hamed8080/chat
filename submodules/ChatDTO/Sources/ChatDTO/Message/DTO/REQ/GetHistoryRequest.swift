@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct GetHistoryRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct GetHistoryRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let threadId: Int
     public var offset: Int
     public var count: Int

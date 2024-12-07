@@ -7,7 +7,7 @@
 import Foundation
 
 /// A bot object.
-public struct Bot: Codable, Hashable {
+public struct Bot: Codable, Hashable, Sendable {
     ///
     public var apiToken: String?
 

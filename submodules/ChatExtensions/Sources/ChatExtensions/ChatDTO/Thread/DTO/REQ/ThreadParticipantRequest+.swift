@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension ThreadParticipantRequest: ChatSendable, SubjectProtocol {}
+extension ThreadParticipantRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension ThreadParticipantRequest {
     var content: String? { jsonString }
@@ -21,4 +21,4 @@ public extension ThreadParticipantRequest {
     }
 }
 
-extension ThreadParticipantRequest: Paginateable {}
+extension ThreadParticipantRequest: @retroactive Paginateable {}

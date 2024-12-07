@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct LastMessageVO: Codable, Identifiable, Hashable {
+public struct LastMessageVO: Codable, Identifiable, Hashable, Sendable {
     public var deletable: Bool?
     public var delivered: Bool?
     public var editable: Bool?

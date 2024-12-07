@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Reaction: Codable, Hashable, Identifiable {
+public struct Reaction: Codable, Hashable, Identifiable, Sendable {
     public var id: Int?
     public var time: UInt?
     public var reaction: Sticker?

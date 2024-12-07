@@ -7,7 +7,7 @@
 import ChatDTO
 import Foundation
 
-public struct UploadManagerParameters {
+public struct UploadManagerParameters: Sendable {
     public let imageRequest: UploadImageRequest?
     public let fileRequest: UploadFileRequest?
     public var data: Data? { imageRequest?.data ?? fileRequest?.data }

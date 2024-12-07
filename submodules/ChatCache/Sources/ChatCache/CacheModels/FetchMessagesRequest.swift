@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct FetchMessagesRequest {
+public struct FetchMessagesRequest: Sendable {
     public let messageType: Int?
     public let fromTime: NSNumber?
     public let messageId: NSNumber?

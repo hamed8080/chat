@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct AddCallParticipantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AddCallParticipantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let callId: Int
     public var contactIds: [Int]?
     public var userNames: [Invitee]?

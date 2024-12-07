@@ -7,7 +7,7 @@
 import Foundation
 
 /// The request to fetch the list of user bots.
-public struct GetUserBotsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct GetUserBotsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let uniqueId: String
     public var typeCodeIndex: Index
 

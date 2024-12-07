@@ -6,6 +6,7 @@
 
 import ChatModels
 
+@ChatGlobalActor
 public protocol InMemoryReactionProtocol {
     /// Return current user reaction for a message if there is any.
     func currentReaction(_ messageId: Int) -> Reaction?

@@ -43,7 +43,7 @@ public final class AsyncChatServerMessage: AsyncSnedable {
 }
 
 /// If a message is marked as Chat Sendable, it will send the data to the async server and chat server afterward.
-public protocol ChatSendable: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public protocol ChatSendable: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     var content: String? { get }
 }
 
@@ -70,14 +70,20 @@ public protocol SubjectProtocol {
     var subjectId: Int { get }
 }
 
-public class BareChatSendableRequest: UniqueIdManagerRequest, ChatSendable {
-    public var chatUniqueId: String {
-        return uniqueId
-    }
-    public var content: String?
+public struct BareChatSendableRequest: ChatSendable {
+    public let uniqueId: String
+    public let isAutoGenratedUniqueId: Bool
+    public let chatTypeCodeIndex: TypeCodeIndexProtocol.Index
+    public let content: String?
 
     public init(content: String? = nil, uniqueId: String? = nil, chatTypeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.content = content
-        super.init(uniqueId: uniqueId, chatTypeCodeIndex: chatTypeCodeIndex)
+        self.isAutoGenratedUniqueId = uniqueId == nil
+        self.chatTypeCodeIndex = chatTypeCodeIndex
+        self.uniqueId = uniqueId ?? UUID().uuidString
+    }
+    
+    public var chatUniqueId: String {
+        return uniqueId
     }
 }

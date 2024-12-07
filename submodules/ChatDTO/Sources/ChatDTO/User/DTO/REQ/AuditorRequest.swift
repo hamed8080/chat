@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct AuditorRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AuditorRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let userRoles: [UserRoleRequest]
     public let threadId: Int
     public let uniqueId: String

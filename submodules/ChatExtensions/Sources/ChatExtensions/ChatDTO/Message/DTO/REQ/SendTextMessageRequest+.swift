@@ -9,7 +9,7 @@ import ChatCore
 import Foundation
 import ChatModels
 
-extension SendTextMessageRequest: Queueable, PlainTextSendable, ReplyProtocol, MessageTypeProtocol, MetadataProtocol, SystemtMetadataProtocol, SubjectProtocol {}
+extension SendTextMessageRequest: @retroactive Queueable, @retroactive PlainTextSendable, @retroactive ReplyProtocol, @retroactive MessageTypeProtocol, @retroactive MetadataProtocol, @retroactive SystemtMetadataProtocol, @retroactive SubjectProtocol {}
 
 public extension SendTextMessageRequest {
     var content: String? { textMessage }

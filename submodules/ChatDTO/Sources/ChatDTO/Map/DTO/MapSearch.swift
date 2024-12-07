@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MapSearch {
+public struct MapSearch: Sendable {
     public var count: Int
     public var items: [MapItem]?
 

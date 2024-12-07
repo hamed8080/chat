@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct GeneralSubjectIdRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct GeneralSubjectIdRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var _subjectId: Int
     public let uniqueId: String
     public var typeCodeIndex: Index

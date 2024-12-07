@@ -9,7 +9,7 @@ import ChatCore
 import ChatDTO
 import ChatModels
 
-extension EditMessageRequest: Queueable, PlainTextSendable, ReplyProtocol, MetadataProtocol, SubjectProtocol, MessageTypeProtocol {
+extension EditMessageRequest: @retroactive Queueable, @retroactive PlainTextSendable, @retroactive ReplyProtocol, @retroactive MetadataProtocol, @retroactive SubjectProtocol, @retroactive MessageTypeProtocol {
 }
 
 public extension EditMessageRequest {

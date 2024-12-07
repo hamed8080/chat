@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.0
 
 import PackageDescription
 
@@ -17,7 +17,6 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../ChatModels"),
-        .package(url: "https://pubgi.sandpod.ir/chat/ios/chat-models", from: "2.2.1"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [

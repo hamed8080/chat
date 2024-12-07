@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension UNMuteCallRequest: ChatSendable, SubjectProtocol {}
+extension UNMuteCallRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
 public extension UNMuteCallRequest {
     var subjectId: Int { callId }

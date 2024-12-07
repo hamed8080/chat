@@ -8,7 +8,7 @@ import CoreData
 import Foundation
 import ChatModels
 
-public final class CacheTagParticipantManager: BaseCoreDataManager<CDTagParticipant> {
+public final class CacheTagParticipantManager: BaseCoreDataManager<CDTagParticipant>, @unchecked Sendable {
 
     public func delete(_ models: [Entity.Model], tagId: Int) {
         let ids = models.compactMap(\.id)

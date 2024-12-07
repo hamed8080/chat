@@ -13,7 +13,7 @@ public extension CDContact {
     typealias Model = Contact
     typealias Id = NSNumber
     static let name = "CDContact"
-    static var queryIdSpecifier: String = "%@"
+    static let queryIdSpecifier: String = "%@"
     static let idName = "id"
 }
 
@@ -50,7 +50,7 @@ public extension CDContact {
     }
 
     func setUser(model: Model) {
-        guard let context = managedObjectContext else { return }
+        guard let context = managedObjectContext?.sendable else { return }
         let predicate = NSPredicate(format: "%K == %@", #keyPath(CDUser.id), (model.user?.id ?? 0).nsValue)
         let req = CDUser.fetchRequest()
         req.predicate = predicate

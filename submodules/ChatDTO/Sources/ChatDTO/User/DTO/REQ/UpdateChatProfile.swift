@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UpdateChatProfile: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct UpdateChatProfile: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let bio: String?
     public let metadata: String?
     public let uniqueId: String

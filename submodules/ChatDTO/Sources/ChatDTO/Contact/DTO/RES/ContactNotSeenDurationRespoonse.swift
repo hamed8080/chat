@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct UserLastSeenDuration: Codable {
+public struct UserLastSeenDuration: Codable, Sendable {
     public var userId: Int
     public var time: Int
 
@@ -22,7 +22,7 @@ public struct UserLastSeenDuration: Codable {
     }
 }
 
-public struct ContactNotSeenDurationRespoonse: Decodable {
+public struct ContactNotSeenDurationRespoonse: Decodable, Sendable {
     public let notSeenDuration: [UserLastSeenDuration]
 
     public init(from decoder: Decoder) throws {

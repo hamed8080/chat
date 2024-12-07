@@ -7,9 +7,9 @@
 import Additive
 
 open class MockURLSessionDataTask: URLSessionDataTaskProtocol {
-    private (set) var resumeWasCalled = false
-    private (set) var cancelWasCalled = false
-    private (set) var suspendWasCalled = false
+    private(set) var resumeWasCalled = false
+    private(set) var cancelWasCalled = false
+    private(set) var suspendWasCalled = false
 
     public func resume() {
         resumeWasCalled = true

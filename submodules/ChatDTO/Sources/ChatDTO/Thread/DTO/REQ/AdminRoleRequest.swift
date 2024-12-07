@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct AdminRoleRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
+public struct AdminRoleRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let invitees: [Invitee]
     public let conversationId: Int
     public let uniqueId: String

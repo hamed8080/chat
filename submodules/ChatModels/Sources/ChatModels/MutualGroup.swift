@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct MutualGroup: Codable, Hashable {
+public struct MutualGroup: Codable, Hashable, Sendable {
     public var mutualId: String?
     public var idType: InviteeTypes?
     public var conversations: [Conversation]?

@@ -9,7 +9,7 @@ import ChatCore
 import Foundation
 import ChatCache
 
-extension ThreadsRequest: ChatSendable {}
+extension ThreadsRequest: @retroactive ChatSendable {}
 
 public extension ThreadsRequest {
     var content: String? { jsonString }
@@ -69,4 +69,4 @@ public extension ThreadsRequest {
     }
 }
 
-extension ThreadsRequest: Paginateable{}
+extension ThreadsRequest: @retroactive Paginateable{}

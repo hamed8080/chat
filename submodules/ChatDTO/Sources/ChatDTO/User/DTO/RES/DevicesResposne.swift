@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Device: Decodable {
+public struct Device: Decodable, Sendable {
     public var agent: String?
     public var browser: String?
     public var current: Bool?
@@ -63,7 +63,7 @@ public struct Device: Decodable {
     }
 }
 
-public struct DevicesResposne: Decodable {
+public struct DevicesResposne: Decodable, Sendable {
     public let devices: [Device]?
     public let offset: Int?
     public let size: Int?

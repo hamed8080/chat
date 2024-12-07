@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct ReactionList: Decodable, Hashable, Identifiable {
+public struct ReactionList: Decodable, Hashable, Identifiable, Sendable {
     public var id: Int? { messageId }
     public var messageId: Int?
     public var reactions: [Reaction]?

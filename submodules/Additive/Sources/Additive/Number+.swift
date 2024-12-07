@@ -14,7 +14,7 @@ extension Double: Arritmatic {
     static let unit: [String] = { ["General.KB", "General.MB", "General.GB"] }()
 }
 
-private var nf = NumberFormatter()
+nonisolated(unsafe) private var nf = NumberFormatter()
 let dateFormatterComp = DateComponentsFormatter()
 
 public extension Numeric {

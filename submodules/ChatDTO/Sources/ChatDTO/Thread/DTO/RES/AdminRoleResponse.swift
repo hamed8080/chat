@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct AdminRoleResponse: Decodable {
+public struct AdminRoleResponse: Decodable, Sendable {
     public let participant: Participant?
     public let hasError: Bool?
     public let errorMessage: String?

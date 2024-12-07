@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct AssistantAction: Decodable, Identifiable, Equatable {
+public struct AssistantAction: Decodable, Identifiable, Equatable, Sendable {
     public var id = UUID().uuidString
     public var actionName: String?
     public var actionTime: UInt?

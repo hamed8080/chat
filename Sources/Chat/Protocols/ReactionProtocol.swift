@@ -7,7 +7,8 @@
 import ChatDTO
 import Foundation
 
-public protocol ReactionProtocol {
+@ChatGlobalActor
+public protocol ReactionProtocol: AnyObject {
     var inMemoryReaction: InMemoryReactionProtocol { get }
     /// Get the user current reaction on a message.
     /// - Parameters:
