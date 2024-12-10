@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "FanapPodChatSDK"
-  s.version      = "1.2.9"
+  s.version      = "1.2.10"
   s.summary      = "Fanap's POD Chat SDK"
   s.description  = "This Package is used for creating chat apps for companies whoes want to use Fanap Chat Services; This Package will use Fanap-Pod-Async-SDK"
   s.homepage     = "https://pubgi.sandpod.ir/chat/ios/chat"
