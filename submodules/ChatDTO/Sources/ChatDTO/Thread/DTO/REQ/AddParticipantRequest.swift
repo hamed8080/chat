@@ -15,6 +15,16 @@ public struct AddParticipantRequest: Encodable, UniqueIdProtocol, TypeCodeIndexP
     public var userNames: [String]?
     public let uniqueId: String
     public var typeCodeIndex: Index
+    
+    /// Only use "username" and "coreUserId" as a type to add participants.
+    /// If you want to limit new users' historyTime use the provided property inside an Invitee.
+    public init(invitees: [Invitee], threadId: Int, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
+        self.threadId = threadId
+        self.invitees = invitees
+        self.threadId = threadId
+        self.uniqueId = UUID().uuidString
+        self.typeCodeIndex = typeCodeIndex
+    }
 
     public init(userNames: [String], threadId: Int, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         invitees = userNames.map { .init(id: $0, idType : .username) }

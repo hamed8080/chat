@@ -9,10 +9,12 @@ import Foundation
 public struct Invitee: Codable, Hashable {
     public var id: String?
     public var idType: Int?
+    public var historyTime: UInt?
 
-    public init(id: String?, idType: InviteeTypes?) {
+    public init(id: String?, idType: InviteeTypes?, historyTime: UInt? = nil) {
         self.id = id
         self.idType = idType?.rawValue
+        self.historyTime = historyTime
     }
 
     public var inviteeTypes: InviteeTypes {
@@ -32,10 +34,12 @@ public extension Invitee {
 open class InviteeClass: NSObject, Codable {
     public var id: String?
     public var idType: Int?
+    public var historyTime: UInt?
 
-    public init(id: String?, idType: InviteeTypes?) {
+    public init(id: String?, idType: InviteeTypes?, historyTime: UInt? = nil) {
         self.id = id
         self.idType = idType?.rawValue
+        self.historyTime = historyTime
     }
 
     public var inviteeTypes: InviteeTypes {
@@ -46,7 +50,7 @@ open class InviteeClass: NSObject, Codable {
 public extension InviteeClass {
     var toStruct: Invitee {
         let idType = InviteeTypes(rawValue: idType ?? InviteeTypes.unknown.rawValue)
-        let inviteeStruct = Invitee(id: id, idType: idType)
+        let inviteeStruct = Invitee(id: id, idType: idType, historyTime: historyTime)
         return inviteeStruct
     }
 }
