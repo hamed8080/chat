@@ -39,13 +39,25 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     }
 
     internal func upload(_ request: UploadImageRequest, _ progress: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let params = UploadManagerParameters(request, token: chat.config.token, fileServer: chat.config.fileServer)
+        let url = url(imageRequest: request, fileServer: chat.config.fileServer)
+        let params = UploadManagerParameters(url: url, request, token: chat.config.token)
         upload(params, request.data, progress, completion)
     }
 
     internal func upload(_ request: UploadFileRequest, _ progress: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let params = UploadManagerParameters(request, token: chat.config.token, fileServer: chat.config.fileServer)
+        let url = url(fileRequest: request, fileServer: chat.config.fileServer)
+        let params = UploadManagerParameters(url: url, request, token: chat.config.token)
         upload(params, request.data, progress, completion)
+    }
+    
+    private func url(imageRequest: UploadImageRequest? = nil, fileRequest: UploadFileRequest? = nil, fileServer: String) -> String {
+        let userGroupHash = imageRequest?.userGroupHash ?? fileRequest?.userGroupHash
+        let uploadImage = imageRequest != nil
+        let userGroupPath: Routes = uploadImage ? .uploadImageWithUserGroup : .uploadFileWithUserGroup
+        let normalPath: Routes = uploadImage ? .images : .files
+        let path: Routes = userGroupHash != nil ? userGroupPath : normalPath
+        let url = fileServer + path.rawValue.replacingOccurrences(of: "{userGroupHash}", with: userGroupHash ?? "")
+        return url
     }
 
     private func upload(_ req: UploadManagerParameters, _ data: Data, _ progressCompletion: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {

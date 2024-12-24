@@ -12,4 +12,5 @@ public enum ImageSize: String, Encodable, Identifiable, CaseIterable, Sendable {
     case MEDIUM
     case LARG
     case ACTUAL
+    case CUSTOM
 }
