@@ -170,9 +170,23 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
             let task = DownloadManager.download(params, session)
             addTask(uniqueId: params.uniqueId, session: session, task: task)
         } else {
-            log("Start fetching from cache with params:\n\(params.debugDescription)")
-            fetchFromCache(params)
+            Task {
+                do {
+                    log("Start fetching from cache with params:\n\(params.debugDescription)")
+                    try await fetchFromCache(params)
+                } catch {
+                    log("Failed to find a cache for url: \(params.url.absoluteString)")
+                    forceToDownloadIfCacheFailed(params)
+                }
+            }
         }
+    }
+    
+    private func forceToDownloadIfCacheFailed(_ params: DownloadManagerParameters) {
+        log("Start fetching from the server as a result of a cache failure:\n\(params.debugDescription)")
+        var newParams = params
+        newParams.forceToDownload = true
+        download(newParams)
     }
     
     private func onDownloadProgressCompletion(_ event: ChatEventType) {
@@ -191,17 +205,21 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 #endif
     }
 
-    private func fetchFromCache(_ params: DownloadManagerParameters) {
+    private func fetchFromCache(_ params: DownloadManagerParameters) async throws {
         if let filePath = fm?.filePath(url: params.url), let hashCode = params.hashCode {
-            Task {
-                guard let _ = await cache?.file?.first(hashCode: hashCode) else { return }
-                let data = await fm?.getData(url: params.url)
-                let dataInGroup = await fm?.getDataInGroup(url: params.url)
-                if let resultData = data ?? dataInGroup {
-                    let response = ChatResponse(uniqueId: params.uniqueId, result: resultData, cache: true, typeCode: nil)
-                    delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
-                }
+            guard let _ = await cache?.file?.first(hashCode: hashCode) else {
+                throw URLError(.fileDoesNotExist)
             }
+            let data = await fm?.getData(url: params.url)
+            let dataInGroup = await fm?.getDataInGroup(url: params.url)
+            if let resultData = data ?? dataInGroup {
+                let response = ChatResponse(uniqueId: params.uniqueId, result: resultData, cache: true, typeCode: nil)
+                delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
+            } else {
+                throw URLError(.fileDoesNotExist)
+            }
+        } else {
+            throw URLError(.fileDoesNotExist)
         }
     }
 
