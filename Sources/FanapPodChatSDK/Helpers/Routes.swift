@@ -42,6 +42,8 @@ public enum Routes: String {
     // Public
     case files = "/api/files"
     case images = "/api/v2/images"
+    /// Upload Image API remains the same, only V2 Download Image API has been changed.
+    case uploadImages = "/api/images"
 
     // Neshan Map
     case mapReverse = "/reverse"

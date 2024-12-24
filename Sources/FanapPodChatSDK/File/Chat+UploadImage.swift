@@ -18,7 +18,7 @@ extension Chat {
                             uploadCompletion: UploadCompletionType? = nil)
     {
         uploadUniqueIdResult?(request.uniqueId)
-        let imagePath: Routes = request.userGroupHash != nil ? .uploadImageWithUserGroup : .images
+        let imagePath: Routes = request.userGroupHash != nil ? .uploadImageWithUserGroup : .uploadImages
         let url = config.fileServer + imagePath.rawValue.replacingOccurrences(of: "{userGroupHash}", with: request.userGroupHash ?? "")
         guard let parameters = try? request.asDictionary() else { return }
         let headers = ["Authorization": "Bearer \(config.token)", "Content-type": "multipart/form-data"]
