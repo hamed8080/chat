@@ -54,7 +54,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         let userGroupHash = imageRequest?.userGroupHash ?? fileRequest?.userGroupHash
         let uploadImage = imageRequest != nil
         let userGroupPath: Routes = uploadImage ? .uploadImageWithUserGroup : .uploadFileWithUserGroup
-        let normalPath: Routes = uploadImage ? .images : .files
+        let normalPath: Routes = uploadImage ? .uploadImages : .files
         let path: Routes = userGroupHash != nil ? userGroupPath : normalPath
         let url = fileServer + path.rawValue.replacingOccurrences(of: "{userGroupHash}", with: userGroupHash ?? "")
         return url
