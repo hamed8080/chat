@@ -9,7 +9,7 @@ import Foundation
 import ChatModels
 
 public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @unchecked Sendable {
-
+    
     /// This method prevents excess query to Store and SQLite as a result of only fetching conversation one time.
     /// We must fetch the message object with findOrCreate, if not it will lead to lastMessageVO object corruption.
     public func insert(models: [Message], threadId: Int) {
@@ -24,7 +24,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
             }
         }
     }
-
+    
     public func delete(_ threadId: Int, _ messageId: Int) {
         let predicate = predicate(threadId, messageId)
         let req = Entity.fetchRequest()
@@ -36,13 +36,13 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         viewContext.delete(message)
         saveViewContext()
     }
-
+    
     public func pin(_ pin: Bool, _ threadId: Int, _ messageId: Int) {
         let predicate = predicate(threadId, messageId)
         let propertiesToUpdate = ["pinned": NSNumber(booleanLiteral: pin)]
         update(propertiesToUpdate, predicate)
     }
-
+    
     public func addOrRemoveThreadPinMessages(_ pin: Bool, _ threadId: Int, _ messageId: Int) {
         let req = CDConversation.fetchRequest()
         req.predicate = NSPredicate(format: "id == %@", threadId.nsValue)
@@ -51,7 +51,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
             threadEntity.pinMessage = nil
             saveViewContext()
         }
-
+        
         if pin == true {
             let messageReq = Entity.fetchRequest()
             messageReq.predicate = predicate(threadId, messageId)
@@ -61,7 +61,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
             }
         }
     }
-
+    
     /// The owner of the message is our partner so we just seen it.
     /// Set seen only for prior messages where the owner of the message is not me.
     /// We should do that because we need to distinguish between messages that came from the partner or messages sent by myself.
@@ -74,16 +74,16 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         let cmConversation = CacheConversationManager(container: container, logger: logger)
         cmConversation.seen(threadId: threadId, lastSeenMessageId: messageId)
     }
-
+    
     /// We don't join with the conversation.id because it leads to a crash when batch updating due to lack of relation update query support in a predicate in batch mode.
     public func predicate(_ threadId: Int, _ messageId: Int) -> NSPredicate {
         return NSPredicate(format: "threadId == \(CDConversation.queryIdSpecifier) AND \(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue, messageId.nsValue)
     }
-
+    
     public func joinPredicate(_ threadId: NSNumber, _ messageId: NSNumber) -> NSPredicate {
         return NSPredicate(format: "(conversation.id == \(CDConversation.queryIdSpecifier) OR threadId == \(CDConversation.queryIdSpecifier)) AND \(Entity.idName) == \(Entity.queryIdSpecifier)", threadId, threadId, messageId)
     }
-
+    
     public func partnerDeliver(threadId: Int, messageId: Int, messageTime: UInt = 0) {
         let predicate = NSPredicate(format: "threadId == \(CDConversation.queryIdSpecifier) AND \(Entity.idName) <= \(Entity.queryIdSpecifier) AND (delivered = nil OR delivered == NO)", threadId.nsValue, messageId.nsValue)
         let propertiesToUpdate = ["delivered": NSNumber(booleanLiteral: true)]
@@ -91,7 +91,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         let cm = CacheConversationManager(container: container, logger: logger)
         cm.partnerDeliver(threadId: threadId, messageId: messageId, messageTime: messageTime)
     }
-
+    
     /// The owner of the message is us so all prior messages will be seen for our partner if they see last message.
     /// We must update all entities rows where all seen are nil or false
     /// As well as cheking the owner is mine.
@@ -102,7 +102,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         let cm = CacheConversationManager(container: container, logger: logger)
         cm.partnerSeen(threadId: threadId, messageId: messageId)
     }
-
+    
     public func predicateArray(_ req: FetchMessagesRequest) -> NSCompoundPredicate {
         var predicateArray = [NSPredicate]()
         predicateArray.append(NSPredicate(format: "threadId == \(CDConversation.queryIdSpecifier)", req.threadId))
@@ -126,13 +126,32 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         }
         return NSCompoundPredicate(type: .and, subpredicates: predicateArray)
     }
-
+    
     public func find(_ threadId: Int, _ messageId: Int, _ completion: @escaping @Sendable (Entity?) -> Void) {
         viewContext.perform {
             let req = Entity.fetchRequest()
             req.predicate = self.joinPredicate(threadId.nsValue, messageId.nsValue)
             let message = try self.viewContext.fetch(req).first
             completion(message)
+        }
+    }
+    
+    public func find(_ threadId: Int, _ messageId: Int) async -> Entity.Model? {
+        typealias ResultType = CheckedContinuation<Entity.Model?, Never>
+        return await withCheckedContinuation { (continuation: ResultType) in
+            find(threadId, messageId) { entity in
+                continuation.resume(with: .success(entity?.codable()))
+            }
+        }
+    }
+    
+    public func deleteAndReduceUnreadCountIfNeeded(_ threadId: Int, _ messageId: Int, _ userId: Int) async {
+        if let entity = await find(threadId, messageId) {
+            if entity.ownerId != userId, entity.seen == nil {
+                let cm = CacheConversationManager(container: container, logger: logger)
+                cm.setUnreadCount(action: .decrease, threadId: threadId)
+            }
+            delete(threadId, messageId)
         }
     }
 

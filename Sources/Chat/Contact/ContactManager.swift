@@ -57,8 +57,14 @@ final class ContactManager: ContactProtocol {
                 }
             }
         }, errorResult: { [weak self] error in
-            self?.chat.logger.createLog(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", persist: true, level: .error, type: .received, userInfo: self?.chat.loggerUserInfo)
+            Task {
+                await self?.onSyncError(error: error)
+            }
         })
+    }
+    
+    private func onSyncError(error: Error) {
+        chat.logger.createLog(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", persist: true, level: .error, type: .received, userInfo: chat.loggerUserInfo)
     }
 
     private func syncWithCache(_ phoneContacts: [Contact]) {
@@ -104,7 +110,7 @@ final class ContactManager: ContactProtocol {
         }
     }
 
-    func authorizeContactAccess(grant: @escaping @Sendable (CNContactStore) -> Void, errorResult: ((Error) -> Void)? = nil) {
+    func authorizeContactAccess(grant: @escaping @Sendable (CNContactStore) -> Void, errorResult: (@Sendable (Error) -> Void)? = nil) {
         let store = CNContactStore()
         store.requestAccess(for: .contacts) { granted, error in
             if let error = error {

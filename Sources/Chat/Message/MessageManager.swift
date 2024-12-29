@@ -49,20 +49,14 @@ final class MessageManager: MessageProtocol {
 
     func onDeleteMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
-        let threadId = response.subjectId ?? -1
-        let messageId = response.result?.id ?? -1
         delegate?.chatEvent(event: .message(.deleted(response)))
-        let userId = chat.userInfo?.id
-        cache?.message?.find(threadId, messageId) { [weak self] entity in
-            let ownerId = entity?.ownerId?.intValue
-            let isSeenNil = entity?.seen == nil
-            Task { @ChatGlobalActor [weak self] in
-                if isSeenNil, ownerId != userId {
-                    self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId)
-                }
-            }
+        guard let threadId = response.subjectId,
+              let messageId = response.result?.id,
+              let userId = chat.userInfo?.id
+        else { return }
+        Task {
+            await cache?.message?.deleteAndReduceUnreadCountIfNeeded(threadId, messageId, userId)
         }
-        cache?.message?.delete(threadId, messageId)
     }
 
     func edit(_ request: EditMessageRequest) {
