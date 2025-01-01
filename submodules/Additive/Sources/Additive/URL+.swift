@@ -18,7 +18,13 @@ public extension URL {
     func imageScale(width: Int) -> (image: CGImage, properties: [String: Any]?)? {
         guard let imageSource = CGImageSourceCreateWithURL(self as CFURL, nil) else { return nil }
         let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil)
-        let opt: [NSString: Any] = [kCGImageSourceThumbnailMaxPixelSize: width, kCGImageSourceCreateThumbnailFromImageAlways: true]
+        let opt: [NSString: Any] = [
+            kCGImageSourceThumbnailMaxPixelSize: width,
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceShouldCache: true,
+            kCGImageSourceShouldCacheImmediately: true
+        ]
         guard let scaledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, opt as CFDictionary) else { return nil }
         return (scaledImage, properties as? [String: Any])
     }
