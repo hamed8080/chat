@@ -33,7 +33,7 @@ public protocol CacheFileManagerProtocol: Sendable {
     ///   - url: The real HttpURL of the file.
     ///   - data: The data of the file to be saved.
     /// - Returns: Throw an exception if something went wrong and saving has failed.
-    func saveFile(url: URL, data: Data, saveCompeletion: @escaping @Sendable (URL?) -> Void)
+    func saveFile(url: URL, data: Data, saveCompletion: @escaping @Sendable (URL?) -> Void)
     func saveFile(url: URL, data: Data) async -> URL?
 
     /// Save the file asynchronously into the disk by making an md5 hash name for the uniqueness of the path.
@@ -41,7 +41,7 @@ public protocol CacheFileManagerProtocol: Sendable {
     ///   - url: The string real HttpURL string.
     ///   - data: The data of the file to be saved.
     /// - Returns: Throw an exception if something went wrong and saving has failed.
-    func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping @Sendable (URL?) -> Void)
+    func saveFileInGroup(url: URL, data: Data, saveCompletion: @escaping @Sendable (URL?) -> Void)
     func saveFileInGroup(url: URL, data: Data) async -> URL?
 
     /// Return the data of the file if it exists. Get data of the file asynchronously on the background thread.

@@ -63,7 +63,7 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
         self.callDelegate = callDelegate
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         if config.enableCache {
-            cacheFileManager = CacheFileManager()
+            cacheFileManager = CacheFileManager(logger: logger)
             cache = CacheManager(persistentManager: PersistentManager(logger: self))
         }
         Task { [weak self] in

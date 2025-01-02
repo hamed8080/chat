@@ -14,6 +14,7 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
     public let logger: Logger?
     public let queue: DispatchQueueProtocol
     public let group: String?
+    private let canLog = ProcessInfo().environment["ENABLE_FILE_STORAGE_LOGGING"] == "1"
     public var groupFolder: URL? {
         if let group = group {
             return fm.containerURL(forSecurityApplicationGroupIdentifier: group)?
@@ -39,17 +40,22 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
         self.logger = logger
     }
 
-    public func saveFile(url: URL, data: Data, saveCompeletion: @escaping @Sendable (URL?) -> Void) {
+    public func saveFile(url: URL, data: Data, saveCompletion: @escaping @Sendable (URL?) -> Void) {
         queue.asyncWork { [weak self] in
             guard let self = self else { return }
             guard let filePath = filePath(url: url) else {
-                saveCompeletion(nil)
+                saveCompletion(nil)
+                log("File URL was nil for url: \(url.absoluteString)")
                 return
             }
             createDirectory()
-            try? data.write(to: filePath)
-            DispatchQueue.global(qos: .background).async {
-                saveCompeletion(filePath)
+            do {
+                try data.write(to: filePath)
+                saveCompletion(filePath)
+                log("File Saved at: \(filePath.absoluteString) for url: \(url.absoluteString)")
+            } catch {
+                log("Error saving the file at file path: \(filePath.absoluteString) for url: \(url.absoluteString) error: \(error.localizedDescription)")
+                saveCompletion(nil)
             }
         }
     }
@@ -63,16 +69,23 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
         }
     }
 
-    public func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping @Sendable (URL?) -> Void) {
+    public func saveFileInGroup(url: URL, data: Data, saveCompletion: @escaping @Sendable (URL?) -> Void) {
         queue.asyncWork { [weak self] in
             guard let self = self else { return }
             guard let groupFilePath = filePathInGroup(url: url) else {
-                saveCompeletion(nil)
+                saveCompletion(nil)
+                log("File Group URL was nil for url: \(url.absoluteString)")
                 return
             }
             createGroupDirectory()
-            try? data.write(to: url)
-            saveCompeletion(groupFilePath)
+            do {
+                try data.write(to: groupFilePath)
+                saveCompletion(groupFilePath)
+                log("File Group Saved at: \(groupFilePath.absoluteString) for url: \(url.absoluteString)")
+            } catch {
+                log("Error saving the group file at file path: \(groupFilePath.absoluteString) for url: \(url.absoluteString) error: \(error.localizedDescription)")
+                saveCompletion(nil)
+            }
         }
     }
     
@@ -90,10 +103,17 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
             guard let self = self else { return }
             guard isFileExist(url: url), let filePath = filePath(url: url) else {
                 completion(nil)
+                log("Get Data filePath was nil for url: \(url.absoluteString)")
                 return
             }
-            let data = try? Data(contentsOf: filePath)
-            completion(data)
+            do {
+                let data = try Data(contentsOf: filePath)
+                completion(data)
+                log("Successfully got the data at file path: \(filePath.absoluteString) for url: \(url.absoluteString)")
+            } catch {
+                log("Error getting data at file path: \(filePath.absoluteString) for url: \(url.absoluteString) error: \(error.localizedDescription)")
+                completion(nil)
+            }
         }
     }
     
@@ -143,16 +163,31 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
 
     public func deleteFile(at url: URL) {
         if let documentPath = filePath(url: url) {
-            try? fm.removeItem(at: documentPath)
+            do {
+                try fm.removeItem(at: documentPath)
+                log("Successfully deleted the file for url: \(url.absoluteString)")
+            } catch {
+                log("Failed to delete the file for url: \(url.absoluteString) error: \(error.localizedDescription)")
+            }
         }
 
         if let groupPath = filePathInGroup(url: url) {
-            try? fm.removeItem(at: groupPath)
+            do {
+                try fm.removeItem(at: groupPath)
+                log("Successfully deleted the file in group for url: \(url.absoluteString)")
+            } catch {
+                log("Failed to deleted the file in group for url: \(url.absoluteString) error: \(error.localizedDescription)")
+            }
         }
     }
 
     public func deleteFolder(url: URL) {
-        try? fm.removeItem(at: url)
+        do {
+            try fm.removeItem(at: url)
+            log("Successfully deleted the foler for url: \(url.absoluteString)")
+        } catch {
+            log("Failed to delete the folder for url: \(url.absoluteString) error: \(error.localizedDescription)")
+        }
     }
 
     public func isFileExist(url: URL) -> Bool {
@@ -167,13 +202,31 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
 
     public func createDirectory() {
         if let documentPath = documentPath {
-            try? fm.createDirectory(at: documentPath, withIntermediateDirectories: true, attributes: nil)
+            do {
+                try fm.createDirectory(at: documentPath, withIntermediateDirectories: true, attributes: nil)
+                log("Successfully created the folder at: \(documentPath.absoluteString)")
+            } catch {
+                log("Failed to carete directory for documentPath at: \(documentPath.absoluteString) error: \(error.localizedDescription)")
+            }
         }
     }
 
     public func createGroupDirectory() {
         if let groupFolder = groupFolder {
-            try? fm.createDirectory(at: groupFolder, withIntermediateDirectories: true, attributes: nil)
+            do {
+                try fm.createDirectory(at: groupFolder, withIntermediateDirectories: true, attributes: nil)
+                log("Successfully created a group folder at: \(groupFolder.absoluteString)")
+            } catch {
+                log("Failed to carete group directory for groupFolder: \(groupFolder.absoluteString) error: \(error.localizedDescription)")
+            }
         }
+    }
+    
+    private func log(_ message: String) {
+#if DEBUG
+        if canLog {
+            logger?.log(title: "Store File", message: message, persist: false, type: .internalLog)
+        }
+#endif
     }
 }

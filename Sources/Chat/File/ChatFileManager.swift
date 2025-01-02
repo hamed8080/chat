@@ -103,17 +103,27 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         } else if let data = responseData, let uploadResponse = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
             chat.logger.logJSON(title: "File uploaded successfully", jsonString: data.utf8StringOrEmpty, persist: false, type: .internalLog)
             let fileMetaData = uploadResponse.toMetaData(chat.config, width: req.imageRequest?.wC, height: req.imageRequest?.hC)
-            uploadCompletion?(uploadResponse.result, fileMetaData, nil)
-            delegate?.chatEvent(event: .upload(.completed(uniqueId: req.uniqueId, fileMetaData: fileMetaData, data: data, error: nil)))
-            cache?.deleteQueues(uniqueIds: [req.uniqueId])
+            /// Saving the file should occur before calling the delegate.
             if chat.config.saveOnUpload == true {
-                saveUploadedFile(req ,uploadResponse, fileData)
+                saveUploadedFile(req ,uploadResponse, fileData) { url in
+                    Task { @ChatGlobalActor [weak self] in
+                        uploadCompletion?(uploadResponse.result, fileMetaData, nil)
+                        self?.delegate?.chatEvent(event: .upload(.completed(uniqueId: req.uniqueId, fileMetaData: fileMetaData, data: data, error: nil)))
+                    }
+                }
+            } else {
+                uploadCompletion?(uploadResponse.result, fileMetaData, nil)
+                delegate?.chatEvent(event: .upload(.completed(uniqueId: req.uniqueId, fileMetaData: fileMetaData, data: data, error: nil)))
             }
+            cache?.deleteQueues(uniqueIds: [req.uniqueId])
         }
         removeTask(req.uniqueId)
     }
 
-    private func saveUploadedFile(_ params: UploadManagerParameters, _ response: PodspaceFileUploadResponse, _ fileData: Data) {
+    private func saveUploadedFile(_ params: UploadManagerParameters,
+                                  _ response: PodspaceFileUploadResponse,
+                                  _ fileData: Data,
+                                  _ saveCompletion: @escaping @Sendable (URL?) -> Void) {
         let config = chat.config
         let isImage = params.imageRequest != nil
         guard let hashCode = response.result?.hash else { return }
@@ -124,7 +134,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
             url = URL(string: "\(config.fileServer)\(Routes.files.rawValue)/\(hashCode)")!
         }
         guard let url = url else { return }
-        fm?.saveFile(url: url, data: fileData) {_ in}
+        fm?.saveFile(url: url, data: fileData, saveCompletion: saveCompletion)
     }
 
     func manageUpload(uniqueId: String, action: DownloaUploadAction) {
@@ -300,12 +310,12 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 
     /// Save a file inside the sandbox of the Chat SDK.
     func saveFile(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void) {
-        fm?.saveFile(url: url, data: data, saveCompeletion: completion)
+        fm?.saveFile(url: url, data: data, saveCompletion: completion)
     }
 
     /// Save a file inside a shared group.
     func saveFileInGroup(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void) {
-        fm?.saveFileInGroup(url: url, data: data, saveCompeletion: completion)
+        fm?.saveFileInGroup(url: url, data: data, saveCompletion: completion)
     }
 
     private func removeTask(_ uniqueId: String) {
