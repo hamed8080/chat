@@ -72,7 +72,8 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         let propertiesToUpdate = ["seen": NSNumber(booleanLiteral: true), "delivered": NSNumber(booleanLiteral: true)]
         update(propertiesToUpdate, predicate)
         let cmConversation = CacheConversationManager(container: container, logger: logger)
-        cmConversation.seen(threadId: threadId, lastSeenMessageId: messageId)
+        let seen = CacheLastSeenMessageResponse(threadId: threadId, lastSeenMessageId: messageId)
+        cmConversation.seen(seen)
     }
     
     /// We don't join with the conversation.id because it leads to a crash when batch updating due to lack of relation update query support in a predicate in batch mode.

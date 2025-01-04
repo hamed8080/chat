@@ -14,7 +14,7 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
     public let logger: Logger?
     public let queue: DispatchQueueProtocol
     public let group: String?
-    private let canLog = ProcessInfo().environment["ENABLE_FILE_STORAGE_LOGGING"] == "1"
+    private let debug = ProcessInfo().environment["ENABLE_FILE_STORAGE_LOGGING"] == "1"
     public var groupFolder: URL? {
         if let group = group {
             return fm.containerURL(forSecurityApplicationGroupIdentifier: group)?
@@ -224,7 +224,7 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
     
     private func log(_ message: String) {
 #if DEBUG
-        if canLog {
+        if debug {
             logger?.log(title: "Store File", message: message, persist: false, type: .internalLog)
         }
 #endif

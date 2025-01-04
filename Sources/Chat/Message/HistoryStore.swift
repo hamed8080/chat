@@ -15,7 +15,7 @@ import ChatExtensions
 internal final class HistoryStore {
     typealias ResponseType = ChatResponse<[Message]>
     private var chat: ChatInternalProtocol
-    private var debug = ProcessInfo().environment["talk.pod.ir.chat.debugStore.debug"] == "1"
+    private var debug = ProcessInfo().environment["ENABLE_HISTORY_STORE_LOGGING"] == "1"
     private var cache: CacheManager? { chat.cache }
     private var missed: [String: [Message]] = [:]
 

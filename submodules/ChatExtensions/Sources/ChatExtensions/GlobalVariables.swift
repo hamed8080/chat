@@ -8,4 +8,22 @@ import ChatModels
 import ChatCore
 import ChatDTO
 
-public typealias UploadCompletionType = @Sendable (UploadFileResponse?, FileMetaData?, ChatError?) -> Void
+public struct UploadResult: Sendable {
+    public var resp: UploadFileResponse?
+    public var metaData: FileMetaData?
+    public var error: ChatError?
+    
+    public init(resp: UploadFileResponse?, metaData: FileMetaData?, error: ChatError?) {
+        self.resp = resp
+        self.metaData = metaData
+        self.error = error
+    }
+    
+    public init(_ resp: UploadFileResponse?, _ metaData: FileMetaData?, _ error: ChatError?) {
+        self.resp = resp
+        self.metaData = metaData
+        self.error = error
+    }
+}
+
+public typealias UploadCompletionType = @Sendable (UploadResult) -> Void

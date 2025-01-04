@@ -107,12 +107,12 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
             if chat.config.saveOnUpload == true {
                 saveUploadedFile(req ,uploadResponse, fileData) { url in
                     Task { @ChatGlobalActor [weak self] in
-                        uploadCompletion?(uploadResponse.result, fileMetaData, nil)
+                        uploadCompletion?(.init(uploadResponse.result, fileMetaData, nil))
                         self?.delegate?.chatEvent(event: .upload(.completed(uniqueId: req.uniqueId, fileMetaData: fileMetaData, data: data, error: nil)))
                     }
                 }
             } else {
-                uploadCompletion?(uploadResponse.result, fileMetaData, nil)
+                uploadCompletion?(.init(uploadResponse.result, fileMetaData, nil))
                 delegate?.chatEvent(event: .upload(.completed(uniqueId: req.uniqueId, fileMetaData: fileMetaData, data: data, error: nil)))
             }
             cache?.deleteQueues(uniqueIds: [req.uniqueId])

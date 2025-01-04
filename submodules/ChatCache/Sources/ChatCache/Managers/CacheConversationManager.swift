@@ -9,18 +9,18 @@ import Foundation
 import ChatModels
 
 public final class CacheConversationManager: BaseCoreDataManager<CDConversation>, @unchecked Sendable {
-
+    
     public override func insert(model: Entity.Model, context: CacheManagedContext) {
         guard let threadId = model.id else { return }
         let req = Entity.fetchRequest()
         req.predicate = NSPredicate(format: "\(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue)
         let entity = (try? context.fetch(req).first) ?? Entity.insertEntity(context)
         entity.update(model)
-
+        
         if model.lastMessageVO != nil {
             try? replaceLastMessage(model, context)
         }
-
+        
         model.participants?.forEach { participnat in
             if let participantId = participnat.id {
                 let participantEntity = CDParticipant.findOrCreate(threadId: threadId, participantId: participantId, context: context)
@@ -31,13 +31,13 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
     }
 
     /// It will update, the last message seen when the owner of the message is not me I just saw the partner message.
-    public func seen(threadId: Int, lastSeenMessageId: Int, lastSeenMessageTime: UInt? = nil, lastSeenMessageNanos: UInt? = nil) {
-        let predicate = idPredicate(id: threadId.nsValue)
+    public func seen(_ seen: CacheLastSeenMessageResponse) {
+        let predicate = idPredicate(id: seen.threadId.nsValue)
         let date = Date()
         let propertiesToUpdate = [
-            "lastSeenMessageId": (lastSeenMessageId) as NSNumber,
-            "lastSeenMessageTime": (lastSeenMessageTime ?? UInt(date.timeIntervalSince1970)) as NSNumber,
-            "lastSeenMessageNanos": (lastSeenMessageNanos ?? UInt(date.timeIntervalSince1970)) as NSNumber,
+            "lastSeenMessageId": (seen.lastSeenMessageId) as NSNumber,
+            "lastSeenMessageTime": (seen.lastSeenMessageTime ?? UInt(date.timeIntervalSince1970)) as NSNumber,
+            "lastSeenMessageNanos": (seen.lastSeenMessageNanos ?? UInt(date.timeIntervalSince1970)) as NSNumber,
         ]
         update(propertiesToUpdate, predicate)
     }

@@ -25,7 +25,7 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate, @unc
     var logger: Logger
     var isDisposed: Bool = false
     private var networkObserver = NetworkAvailabilityFactory.create()
-    private var debug = ProcessInfo().environment["talk.pod.ir.async.debug"] == "1"
+    private var debug = ProcessInfo().environment["ENABLE_ASYNC_LOGGING"] == "1"
     var deviceInfo: DeviceInfo?
 
     /// The initializer of async.
