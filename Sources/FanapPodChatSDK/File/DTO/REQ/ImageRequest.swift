@@ -20,14 +20,16 @@ public class ImageRequest: UniqueIdManagerRequest, Encodable {
     public let quality: Float?
     public let size: ImageSize?
     public let crop: Bool?
+    public let forceConvert: Bool
     public let checkUserGroupAccess: Bool
 
-    public init(hashCode: String, checkUserGroupAccess: Bool = true, forceToDownloadFromServer: Bool = false, quality: Float? = nil, size: ImageSize? = nil, crop: Bool? = nil) {
+    public init(hashCode: String, checkUserGroupAccess: Bool = true, forceToDownloadFromServer: Bool = false, quality: Float? = nil, size: ImageSize? = nil, crop: Bool? = nil, forceConvert: Bool = false) {
         self.hashCode = hashCode
         self.forceToDownloadFromServer = forceToDownloadFromServer
         self.size = size
         self.crop = crop
         self.quality = quality ?? 1
+        self.forceConvert = forceConvert
         self.checkUserGroupAccess = checkUserGroupAccess
     }
 
@@ -36,6 +38,7 @@ public class ImageRequest: UniqueIdManagerRequest, Encodable {
         case quality
         case crop
         case checkUserGroupAccess
+        case forceConvert
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -43,6 +46,7 @@ public class ImageRequest: UniqueIdManagerRequest, Encodable {
         try? container.encodeIfPresent(size, forKey: .size)
         try? container.encodeIfPresent(crop, forKey: .crop)
         try? container.encodeIfPresent(quality, forKey: .quality)
+        try? container.encodeIfPresent(forceConvert, forKey: .forceConvert)
         try? container.encodeIfPresent(checkUserGroupAccess, forKey: .checkUserGroupAccess)
     }
 }
