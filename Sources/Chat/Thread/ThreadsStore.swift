@@ -107,6 +107,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     /// 0...24 offset = 0 count = 25
     /// 25...49 offset = 25 count = 25
     func store(_ conversations: [Conversation], request: ThreadsRequest) {
+        if conversations.count == 0 { return } // prevent crash at the last page
         let start = request.offset
         let end = start + (conversations.count - 1)
         let range = start...end
