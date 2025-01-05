@@ -14,7 +14,8 @@ public struct ImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, 
     public let width: Int?
     public let height: Int?
     public let keepRatio: Bool?
-    public let froceConvert: Bool?
+    // Default value should be false unless it will convert to JPEG when downloading a PNG.
+    public let forceConvert: Bool
     public let crop: Bool?
     public let cropX: Int?
     public let cropY: Int?
@@ -43,7 +44,7 @@ public struct ImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, 
         width: Int? = nil,
         height: Int? = nil,
         keepRatio: Bool? = nil,
-        froceConvert: Bool? = nil,
+        forceConvert: Bool = false,
         cropX: Int? = nil,
         cropY: Int? = nil,
         cropWidth: Int? = nil,
@@ -61,7 +62,7 @@ public struct ImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, 
         self.width = width
         self.height = height
         self.keepRatio = keepRatio
-        self.froceConvert = froceConvert
+        self.forceConvert = forceConvert
         self.cropX = cropX
         self.cropY = cropY
         self.cropWidth = cropWidth
@@ -84,7 +85,7 @@ public struct ImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, 
         case width
         case height
         case keepRatio
-        case froceConvert
+        case forceConvert
         case cropX
         case cropY
         case cropWidth
@@ -101,7 +102,7 @@ public struct ImageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, 
         try? container.encodeIfPresent(width, forKey: .width)
         try? container.encodeIfPresent(height, forKey: .height)
         try? container.encodeIfPresent(keepRatio, forKey: .keepRatio)
-        try? container.encodeIfPresent(froceConvert, forKey: .froceConvert)
+        try? container.encodeIfPresent(forceConvert, forKey: .forceConvert)
         try? container.encodeIfPresent(cropX, forKey: .cropX)
         try? container.encodeIfPresent(cropY, forKey: .cropY)
         try? container.encodeIfPresent(cropWidth, forKey: .cropWidth)
