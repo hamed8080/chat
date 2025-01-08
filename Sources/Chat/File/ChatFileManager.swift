@@ -228,18 +228,15 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     }
 
     private func fetchFromCache(_ params: DownloadManagerParameters) async throws {
-        if let filePath = fm?.filePath(url: params.url), let hashCode = params.hashCode {
-            guard let _ = await cache?.file?.first(hashCode: hashCode) else {
-                throw URLError(.fileDoesNotExist)
-            }
-            let data = await fm?.getData(url: params.url)
-            let dataInGroup = await fm?.getDataInGroup(url: params.url)
-            if let resultData = data ?? dataInGroup {
-                let response = ChatResponse(uniqueId: params.uniqueId, result: resultData, cache: true, typeCode: nil)
-                delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
-            } else {
-                throw URLError(.fileDoesNotExist)
-            }
+        guard let filePath = fm?.filePath(url: params.url),
+              let hashCode = params.hashCode,
+              fm?.isFileExist(url: params.url) == true || fm?.isFileExistInGroup(url: params.url) == true
+        else { throw URLError(.fileDoesNotExist) }
+        let data = await fm?.getData(url: params.url)
+        let dataInGroup = await fm?.getDataInGroup(url: params.url)
+        if let resultData = data ?? dataInGroup {
+            let response = ChatResponse(uniqueId: params.uniqueId, result: resultData, cache: true, typeCode: nil)
+            delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
         } else {
             throw URLError(.fileDoesNotExist)
         }
