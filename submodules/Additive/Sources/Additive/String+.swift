@@ -139,3 +139,15 @@ public struct Trimmed {
         text = wrappedValue
     }
 }
+
+public extension Character {
+    var isEnglishCharacter: Bool {
+        guard let scalar = unicodeScalars.first else { return true }
+        let normalArabicSet = CharacterSet(charactersIn: "\u{0600}"..."\u{06FF}")
+        let supplementArabicSet = CharacterSet(charactersIn: "\u{0750}"..."\u{077F}")
+        let extendedArabicSet = CharacterSet(charactersIn: "\u{08A0}"..."\u{08FF}")
+        let set = [normalArabicSet, supplementArabicSet, extendedArabicSet]
+        let isRTL = set.contains(where: {$0.contains(scalar)})
+        return !isRTL
+    }
+}
