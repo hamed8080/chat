@@ -18,6 +18,9 @@ internal final class HistoryStore {
     private var debug = ProcessInfo().environment["ENABLE_HISTORY_STORE_LOGGING"] == "1"
     private var cache: CacheManager? { chat.cache }
     private var missed: [String: [Message]] = [:]
+    /// These requests don't have a contigous response,
+    /// so they should not be stored in the CoreData.
+    private var requestToIgnoreCache: [String: GetHistoryRequest] = [:]
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -34,6 +37,7 @@ internal final class HistoryStore {
     private func requestFromCache(_ request: GetHistoryRequest) {
         let canFetchFromCache = request.canFetchFromCache
         if !canFetchFromCache {
+            requestToIgnoreCache[request.uniqueId] = request
             directRequest(request)
         } else if isTimeRequest(request) {
             requestFromCacheWithTime(request)
@@ -126,7 +130,11 @@ internal final class HistoryStore {
         }
         let copies = response.result?.compactMap{$0} ?? []
         if !copies.isEmpty {
-            cache?.message?.insert(models: copies, threadId: response.subjectId ?? -1)
+            if let key = requestToIgnoreCache.first(where: {$0.key == response.uniqueId })?.key {
+                requestToIgnoreCache.removeValue(forKey: key)
+            } else {
+                cache?.message?.insert(models: copies, threadId: response.subjectId ?? -1)
+            }
         }
     }
 
@@ -136,6 +144,8 @@ internal final class HistoryStore {
 
     func invalidate() {
         cache?.message?.truncate()
+        missed.removeAll()
+        requestToIgnoreCache.removeAll()
     }
 
     private func log(_ message: String) {
