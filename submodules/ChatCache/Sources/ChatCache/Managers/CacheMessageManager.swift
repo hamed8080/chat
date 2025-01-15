@@ -139,8 +139,8 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
     
     public func find(_ threadId: Int, _ messageId: Int) async -> Entity.Model? {
         typealias ResultType = CheckedContinuation<Entity.Model?, Never>
-        return await withCheckedContinuation { (continuation: ResultType) in
-            find(threadId, messageId) { entity in
+        return await withCheckedContinuation { [weak self] (continuation: ResultType) in
+            self?.find(threadId, messageId) { entity in
                 continuation.resume(with: .success(entity?.codable()))
             }
         }

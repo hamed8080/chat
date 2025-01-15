@@ -77,8 +77,8 @@ public final class CacheManager: @unchecked Sendable {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func switchToContainer(userId: Int) async -> Bool {
         typealias ContinuationType = CheckedContinuation<Bool, Never>
-        return await withCheckedContinuation { (continuation: ContinuationType) in
-            switchToContainer(userId: userId) {
+        return await withCheckedContinuation { [weak self] (continuation: ContinuationType) in
+            self?.switchToContainer(userId: userId) {
                 continuation.resume(returning: true)
             }
         }
