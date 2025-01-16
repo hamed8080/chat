@@ -15,19 +15,19 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
     weak var delegate: WebSocketProviderDelegate?
 
     /// The socket to manage connection with the async server.
-    weak var socket: URLSessionWebSocketTask?
+    private var socket: URLSessionWebSocketTask?
 
     /// The timeout to disconnect or retry if the connection has any trouble.
-    private var timeout: TimeInterval!
+    private let timeout: TimeInterval!
 
     /// The base url of the socket.
-    private var url: URL!
+    private let url: URL!
 
     /// A value that indicates neither socket is connected or not.
-    var isConnected: Bool = false
+    private var isConnected: Bool = false
 
     /// The logger class for logging events and exceptions if it's not a runtime exception.
-    private weak var logger: Logger?
+    private var logger: Logger?
 
     private let queue = DispatchQueue(label: "NativeWebSocketProviderSerailQueue")
 
@@ -85,31 +85,35 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
     /// A read message receiver. It'll be called again on receiving a message to stay awake for the next message.
     private func readMessage() {
         socket?.receive { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure:
-                break
-            case let .success(message):
-                switch message {
-                case let .data(data):
-                    self.setConnectedOnReceiveAnyData()
-                    self.delegate?.onReceivedData(self, didReceive: data)
-                case let .string(string):
-                    self.setConnectedOnReceiveAnyData()
-                    self.delegate?.onReceivedData(self, didReceive: string.data(using: .utf8)!)
-                @unknown default:
-                    self.logger?.createLog(message: "An unimplemented case found in the NativeWebSocketProvider", persist: true, level: .error, type: .internalLog)
-                }
-                self.readMessage()
+            self?.queue.sync {
+                self?.onReceiveMessage(result)
             }
+        }
+    }
+    
+    private func onReceiveMessage(_ result: Result<URLSessionWebSocketTask.Message, any Error>) {
+        switch result {
+        case let .failure(error):
+            delegate?.onReceivedError(error)
+            break
+        case let .success(message):
+            switch message {
+            case let .data(data):
+                self.setConnectedOnReceiveAnyData()
+                self.delegate?.onReceivedData(self, didReceive: data)
+            case let .string(string):
+                self.setConnectedOnReceiveAnyData()
+                self.delegate?.onReceivedData(self, didReceive: string.data(using: .utf8)!)
+            @unknown default:
+                self.logger?.createLog(message: "An unimplemented case found in the NativeWebSocketProvider", persist: true, level: .error, type: .internalLog)
+            }
+            self.readMessage()
         }
     }
 
     /// This is essential here because urlSession(_: URLSession, webSocketTask _: URLSessionWebSocketTask, didOpenWithProtocol _: String?) will not call occasionally by the os so it will lead to a problem in the device register get an error.
-    func setConnectedOnReceiveAnyData() {
-        queue.sync {
-            isConnected = true
-        }
+    private func setConnectedOnReceiveAnyData() {
+        isConnected = true
     }
 
     /// It'll be called by the os whenever a connection opened successfully.
@@ -138,7 +142,11 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
     /// Never call delegate?.webSocketDidDisconnect in this method it leads to close next connection
     func urlSession(_: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         queue.sync {
-            completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+            if let serverTrust = challenge.protectionSpace.serverTrust {
+                completionHandler(.useCredential, URLCredential(trust: serverTrust))
+            } else {
+                completionHandler(.cancelAuthenticationChallenge, nil)
+            }
         }
     }
 
@@ -166,12 +174,16 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
     func handleError(_ error: Error?) {
         if let error = error as NSError? {
             if [53, 54, 57, 60, 89, -1200].contains(error.code) || error.isInDomainError {
-                isConnected = false
-                closeConnection()
-                delegate?.onDisconnected(self, error)
+                disconnectAndNotifyDelegate(error: error)
             } else {
                 delegate?.onReceivedError(error)
             }
         }
+    }
+    
+    private func disconnectAndNotifyDelegate(error: NSError) {
+        isConnected = false
+        closeConnection()
+        delegate?.onDisconnected(self, error)
     }
 }

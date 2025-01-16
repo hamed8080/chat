@@ -14,9 +14,6 @@ struct AsyncStateModel: Sendable {
     /// A boolean that indicates the device is successfully registered.
     var isDeviceRegistered: Bool = false
 
-    /// The number of retries that have happened to connect to the async server.
-    var retryCount: Int = 0
-
     /// The peerId of, which will be filled after the device is registered.
     private(set) var peerId: Int?
 

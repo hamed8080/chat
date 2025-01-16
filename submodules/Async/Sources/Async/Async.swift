@@ -18,15 +18,13 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate, @unc
     var socket: WebSocketProvider
     var queue: DispatchQueueProtocol
     var stateModel: AsyncStateModel = .init()
-    var reconnectTimer: SourceTimer?
-    var pingTimerFirst: SourceTimer?
-    var pingTimerSecond: SourceTimer?
-    var pingTimerThird: SourceTimer?
     var logger: Logger
-    var isDisposed: Bool = false
+    var deviceInfo: DeviceInfo?
+    private var isDisposed: Bool = false
+    private let pingManager: AsyncPingManager
+    private let reconnctManager: AsyncReconnectManager?
     private var networkObserver = NetworkAvailabilityFactory.create()
     private var debug = ProcessInfo().environment["ENABLE_ASYNC_LOGGING"] == "1"
-    var deviceInfo: DeviceInfo?
 
     /// The initializer of async.
     ///
@@ -43,6 +41,12 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate, @unc
         self.delegate = delegate
         self.socket = socket
         self.queue = queue
+        self.pingManager = AsyncPingManager(pingInterval: config.pingInterval, logger: logger)
+        if config.reconnectOnClose == true {
+            self.reconnctManager = AsyncReconnectManager(maxReconnect: config.reconnectCount, logger: logger)
+        } else {
+            self.reconnctManager = nil
+        }
         self.socket.delegate = self
         setDeviceInfo()
         setupObservers()
@@ -53,10 +57,26 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate, @unc
         networkObserver.onNetworkChange = { [weak self] isConnected in
             guard let self = self else { return }
             if isConnected {
-                stopReconnectTimer()
+                reconnctManager?.resetAndStop()
                 reconnect()
             } else {
                 onDisconnected(self.socket, NSError(domain: "There is no active connection status interface.", code: NSURLErrorCancelled))
+            }
+        }
+        
+        pingManager.callback = { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                onDisconnected(self.socket, error)
+            } else {
+                sendPing()
+            }
+        }
+        
+        reconnctManager?.callback = { [weak self] error in
+            guard let self = self else { return }
+            if error == nil, isDisposed == false && stateModel.socketState != .connected {
+                reconnect()
             }
         }
     }
@@ -90,13 +110,13 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate, @unc
         onStatusChanged(.closed, error)
         queue.asyncWork { [weak self] in
             guard let self = self else { return }
-            stopPingTimers()
-            stopReconnectTimer()
-            let connectImmediately = (error as? NSError)?.code == 53
+            pingManager.stopPingTimers()
+            let code = (error as? NSError)?.code
+            let connectImmediately =  code == 53 || code == 89
             if connectImmediately {
                 logger.log(message: "Connect immediately", persist: false, type: .internalLog)
             }
-            restartReconnectTimer(duration: connectImmediately ? 0 : config.connectionRetryInterval)
+            reconnctManager?.restart(duration: connectImmediately ? 0 : config.connectionRetryInterval)
         }
     }
 
@@ -104,93 +124,14 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate, @unc
 
     public func onReceivedData(_: WebSocketProvider, didReceive data: Data) {
         queue.asyncWork { [weak self] in
-            self?.schedulePingTimers()
+            self?.pingManager.reschedule()
             self?.messageReceived(data: data)
-        }
-    }
-
-    private func schedulePingTimers() {
-        log("schedulePingTimers called")
-        stopPingTimers()
-        scheduleFirstTimer()
-        scheduleSecondTimer()
-        scheduleThirdTimer()
-    }
-
-    private func scheduleFirstTimer() {
-        log("scheduleFirstTimer called")
-        pingTimerFirst = SourceTimer()
-        pingTimerFirst?.start(duration: config.pingInterval) { [weak self] in
-            guard let self = self else { return }
-            sendPing()
-        }
-    }
-
-    private func scheduleSecondTimer() {
-        log("scheduleSecondTimer called")
-        pingTimerSecond = SourceTimer()
-        pingTimerSecond?.start(duration: config.pingInterval + 3) { [weak self] in
-            guard let self = self else { return }
-            sendPing()
-        }
-    }
-
-    private func scheduleThirdTimer() {
-        log("scheduleThirdTimer called")
-        pingTimerThird = SourceTimer()
-        pingTimerThird?.start(duration: config.pingInterval + 3 + 2){ [weak self] in
-            guard let self = self else { return }
-            let error = NSError(domain: "Failed to retrieve a ping from the Async server.", code: NSURLErrorCannotConnectToHost)
-            self.onDisconnected(self.socket, error)
         }
     }
 
     private func socketConnected() {
         log("socketConnected called")
-        stateModel.retryCount = 0
-        stopReconnectTimer()
-    }
-
-    private func restartReconnectTimer(duration: TimeInterval) {
-        log("restartReconnectTimer called")
-        if config.reconnectOnClose == true && reconnectTimer == nil {
-            reconnectTimer = SourceTimer()
-            reconnectTimer?.start(duration: duration){ [weak self] in
-                guard let self = self else { return }
-                log("restartReconnectTimer closufre called")
-                if isDisposed == false && stateModel.socketState != .connected {
-                    tryReconnect()
-                }
-            }
-        }
-    }
-
-    public func stopPingTimers() {
-        log("stopPingTimers called")
-        pingTimerFirst?.cancel()
-        pingTimerFirst = nil
-        pingTimerSecond?.cancel()
-        pingTimerSecond = nil
-        pingTimerThird?.cancel()
-        pingTimerThird = nil
-    }
-
-    public func stopReconnectTimer() {
-        log("stopReconnectTimer called")
-        reconnectTimer?.cancel()
-        reconnectTimer = nil
-    }
-
-    private func tryReconnect() {
-        log("tryReconnect called")
-        if stateModel.retryCount < config.reconnectCount {
-            stateModel.retryCount += 1
-            logger.log(message: "Try reconnect for \(stateModel.retryCount) times", persist: false, type: .internalLog)
-            reconnect()
-        } else {
-            logger.log(message: "Failed to reconnect after \(config.reconnectCount) tries", persist: false, type: .internalLog)
-            stopReconnectTimer()
-        }
+        reconnctManager?.resetAndStop()
     }
 
     /// Send data to server.
@@ -274,8 +215,8 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate, @unc
     /// Dispose and try to disconnect immediately and release all related objects.
     public func disposeObject() {
         log("disposeObject called")
-        stopPingTimers()
-        stopReconnectTimer()
+        pingManager.stopPingTimers()
+        reconnctManager?.resetAndStop()
         closeConnection()
         delegate = nil
         isDisposed = true
@@ -379,8 +320,7 @@ extension Async {
         logger.log(message: "onSceneBeomeActive called in Async with deviceId:\(stateModel.deviceId ?? "nil") socketState:\(stateModel.socketState)", persist: false, type: .internalLog)
         if stateModel.deviceId != nil, stateModel.socketState == .closed {
             logger.log(message: "onSceneBeomeActive restart reconnect timer", persist: false, type: .internalLog)
-            stopReconnectTimer()
-            restartReconnectTimer(duration: 0)
+            reconnctManager?.restart(duration: 0)
         }
     }
 }

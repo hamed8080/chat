@@ -18,11 +18,7 @@ public protocol AsyncProtocol {
 }
 
 protocol AsyncInternalProtocol: AsyncProtocol {
-    var socket: WebSocketProvider { get }
-    var pingTimerFirst: SourceTimer? { get set }
-    var pingTimerSecond: SourceTimer? { get set }
-    var pingTimerThird: SourceTimer? { get set }
-    var reconnectTimer: SourceTimer? { get set }
+    var socket: WebSocketProvider { get }    
     var logger: Logger { get }
     var config: AsyncConfig { get }
     var queue: DispatchQueueProtocol { get }
