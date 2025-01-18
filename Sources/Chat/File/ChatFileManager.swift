@@ -166,11 +166,13 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     }
 
     public func get(_ request: ImageRequest) {
+        if request.hashCode.isEmpty { return }
         let params = DownloadManagerParameters(request, chat.config, fm)
         download(params)
     }
 
     public func get(_ request: FileRequest) {
+        if request.hashCode.isEmpty { return }
         let params = DownloadManagerParameters(request, chat.config, fm)
         download(params)
     }
