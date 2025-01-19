@@ -50,7 +50,7 @@ final class ReactionManager: ReactionProtocol {
         } else {
             _internalInMemoryReaction?.createEmptySlot(messageId: request.messageId)
         }
-        if  allowedRequestOffset <= request.offset || request.sticker == nil {
+        if allowedRequestOffset <= request.offset || request.sticker == nil {
             var newReq = request
             newReq.offset = request.sticker == nil ? request.offset : allowedRequestOffset
             chat.prepareToSendAsync(req: newReq, type: .reactionList)

@@ -98,8 +98,8 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
 
     func getOffset(_ request: ReactionListRequest) -> Int? {
         guard let index = indexOfMessageId(request.messageId) else { return nil }
-        let reacrionInMemory = reactions[index]
-        let allStoredReactions = reacrionInMemory.details
+        let reactionInMemory = reactions[index]
+        let allStoredReactions = reactionInMemory.details
         let byStickerFilter = allStoredReactions.filter({$0.reaction == request.sticker})
 
         let currentStoredInMemory = request.sticker == nil ? allStoredReactions : byStickerFilter
@@ -111,8 +111,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
                                                   cache: true,
                                                   subjectId: request.conversationId, typeCode: typeCode)
         chat.delegate?.chatEvent(event: .reaction(.list(response)))
-        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [reacrionInMemory.copy])))
-
+        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [reactionInMemory.copy])))
         return count
     }
 

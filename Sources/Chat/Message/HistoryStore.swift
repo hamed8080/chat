@@ -129,11 +129,18 @@ internal final class HistoryStore {
             chat.delegate?.chatEvent(event: .message(.history(copy)))
         }
         let copies = response.result?.compactMap{$0} ?? []
+        let sorted = sortAscending(messages: copies)
         if !copies.isEmpty {
             if let key = requestToIgnoreCache.first(where: {$0.key == response.uniqueId })?.key {
                 requestToIgnoreCache.removeValue(forKey: key)
             } else {
-                cache?.message?.insert(models: copies, threadId: response.subjectId ?? -1)
+                let isChain = allResponseChain(sorted)
+                if !isChain { return }
+                if isLoadMoreOrLaodBottom(sorted: sorted) {
+                    cache?.message?.insert(models: sorted, threadId: response.subjectId ?? -1)
+                } else if hasLastMessageOnOpenning(sorted: sorted) {
+                    cache?.message?.insert(models: sorted, threadId: response.subjectId ?? -1)
+                }
             }
         }
     }
@@ -290,6 +297,55 @@ fileprivate extension HistoryStore {
                 completion(true, chunk)
             }
         }
+    }
+    
+    private func hasLastMessageOnOpenning(sorted: [Message]) -> Bool {
+        let threadId = sorted.last?.conversation?.id ?? sorted.last?.threadId
+        let lastMessage = lastMessageIn(threadId: threadId?.nsValue ?? -1)
+        if let threadId = threadId, let lastMessageId = lastMessage?.id?.intValue {
+            return sorted.contains(where: { $0.id == lastMessageId })
+        }
+        return false
+    }
+    
+    private func isLoadMoreOrLaodBottom(sorted: [Message]) -> Bool {
+        let result = isResponseBottomChainTopCurrent(sorted) || isResponseTopChainBottomCurrent(sorted)
+        return result
+    }
+    
+    /// Older to newer values
+    /// Older values are at top, and newer values are at bottom.
+    private func sortAscending(messages: [Message]) -> [Message] {
+        messages.sorted(by: { $0.id ?? -0 < $1.id ?? 0 })
+    }
+    
+    private func allResponseChain(_ sorted: [Message]) -> Bool {
+        let reversed = sorted.reversed()
+        for message in reversed {
+            if let prevId = message.previousId,
+               !sorted.contains(where: {$0.id == prevId}),
+               message.id != reversed.last?.id {
+                return false
+            }
+        }
+        return true
+    }
+    
+    private func isResponseBottomChainTopCurrent(_ sorted: [Message]) -> Bool {
+        guard
+            let bottomId = sorted.last?.id,
+            let threadId = sorted.last?.conversation?.id ?? sorted.last?.threadId
+        else { return false }
+        let next = cache?.message?.next(threadId: threadId, messageId: bottomId)
+        return next?.previousId?.intValue == bottomId
+    }
+    
+    private func isResponseTopChainBottomCurrent(_ sorted: [Message]) -> Bool {
+        guard
+            let prevId = sorted.first?.previousId,
+            let threadId = sorted.first?.conversation?.id ?? sorted.first?.threadId
+        else { return false }
+        return cache?.message?.isContains(messageId: prevId, threadId: threadId) == true
     }
 }
 

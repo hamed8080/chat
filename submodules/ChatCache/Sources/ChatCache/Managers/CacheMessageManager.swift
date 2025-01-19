@@ -212,4 +212,13 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         let result = try? viewContext.fetch(req)
         return result?.count == 1
     }
+    
+    public func isContains(messageId: Int, threadId: Int) -> Bool {
+        let predicate = NSPredicate(format: "id == %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
+        let req = Entity.fetchRequest()
+        req.predicate = predicate
+        req.fetchLimit = 1
+        let result = try? viewContext.fetch(req)
+        return result?.count == 1
+    }
 }
