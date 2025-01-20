@@ -61,7 +61,9 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
         queue.sync {
             if isConnected {
                 socket?.send(.data(data)) { [weak self] error in
-                    self?.handleError(error)
+                    self?.queue.async { [weak self] in
+                        self?.handleError(error)
+                    }
                 }
             } else {
                 handleError(AsyncError(code: .socketIsNotConnected))
@@ -74,7 +76,9 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
         queue.sync {
             if isConnected {
                 socket?.send(.string(text)) { [weak self] error in
-                    self?.handleError(error)
+                    self?.queue.async { [weak self] in
+                        self?.handleError(error)
+                    }
                 }
             } else {
                 handleError(AsyncError(code: .socketIsNotConnected))
