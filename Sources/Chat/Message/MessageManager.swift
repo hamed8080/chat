@@ -232,6 +232,17 @@ final class MessageManager: MessageProtocol {
         /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
         try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
     }
+    
+    func onForwardMessage(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        let copiedMessage = response.result
+        emitEvent(.message(.forward(response)))
+        guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
+        cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+        /// It will insert a new message into the Message table if the sender is not me
+        /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
+        try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
+    }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
         guard let response = asyncMessage.messageResponse(state: .sent) else { return }

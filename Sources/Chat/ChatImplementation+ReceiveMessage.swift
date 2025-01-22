@@ -50,7 +50,7 @@ public extension ChatImplementation {
         case .editMessage:
              (message as? MessageManager)?.onEditMessage(asyncMessage)
         case .forwardMessage:
-             (message as? MessageManager)?.onNewMessage(asyncMessage)
+             (message as? MessageManager)?.onForwardMessage(asyncMessage)
         case .getBlocked:
              (contact as? ContactManager)?.onBlockedContacts(asyncMessage)
         case .getContacts:
