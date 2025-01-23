@@ -44,6 +44,7 @@ public extension CDMessage {
     @NSManaged var participant: CDParticipant?
     @NSManaged var pinMessages: CDConversation?
     @NSManaged var replyInfo: ReplyInfoClass?
+    @NSManaged var replyToMessageId: NSNumber?
 }
 
 public extension CDMessage {
@@ -69,6 +70,7 @@ public extension CDMessage {
         notifyAll = model.pinNotifyAll as? NSNumber ?? notifyAll
         replyInfo = model.replyInfo?.toClass ?? replyInfo
         forwardInfo = model.forwardInfo?.toClass ?? forwardInfo
+        replyToMessageId = model.replyInfo?.repliedToMessageId?.nsValue
 
         if let participant = model.participant, let threadId = threadId, let context = managedObjectContext?.sendable {
             setParticipant(participant, threadId.intValue, context)

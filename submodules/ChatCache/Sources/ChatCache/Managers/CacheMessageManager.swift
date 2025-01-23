@@ -33,8 +33,22 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         if let next = next(threadId: threadId, messageId: messageId) {
             next.previousId = message.previousId
         }
+        setNilReplyReferences(for: messageId)
         viewContext.delete(message)
         saveViewContext()
+    }
+    
+    private func setNilReplyReferences(for messageId: Int) {
+        // Fetch all reply referencecs to this message
+        let replyMessagesPredicate = NSPredicate(format: "replyToMessageId == %@", messageId.nsValue)
+        let replyReq = Entity.fetchRequest()
+        replyReq.predicate = replyMessagesPredicate
+        
+        let referencingMessages = (try? viewContext.fetch(replyReq)) ?? []
+        for referencingMessage in referencingMessages {
+            // Update replyInfo to set as deleted
+            referencingMessage.replyInfo = ReplyInfoClass(deleted: true)
+        }
     }
     
     public func pin(_ pin: Bool, _ threadId: Int, _ messageId: Int) {
