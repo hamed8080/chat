@@ -9,7 +9,6 @@ import Foundation
 
 @ChatGlobalActor
 public protocol ReactionProtocol: AnyObject {
-    var inMemoryReaction: InMemoryReactionProtocol { get }
     /// Get the user current reaction on a message.
     /// - Parameters:
     ///   - request: The request that contains a messageId and conversationId.

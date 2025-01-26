@@ -16,44 +16,52 @@ final class ReactionManager: ReactionProtocol {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
-    let inMemoryReaction: InMemoryReactionProtocol
-    var _internalInMemoryReaction: InMemoryReaction? { inMemoryReaction as? InMemoryReaction }
+    private var store: ReactionsStore? { chat.coordinator.reaction }
     
     init(chat: ChatInternalProtocol) {
         self.chat = chat
-        inMemoryReaction = chat.coordinator.reaction
     }
     
     func reaction(_ request: UserReactionRequest) {
-        if _internalInMemoryReaction?.reaction(request) == false {
+        if store?.reaction(request) == false {
             /// Featch current user Message reaction from the server
             chat.prepareToSendAsync(req: request, type: .getReaction)
         }
     }
     
     func count(_ request: ReactionCountRequest) {
-        guard let tuple = _internalInMemoryReaction?.tupleOfMessageIds(request.messageIds) else { return }
+        guard let tuple = store?.tupleOfMessageIds(request.messageIds) else { return }
         var newRquest = request
         newRquest.messageIds = tuple.notInMemory
-        _internalInMemoryReaction?.countEvent(inMemoryMessageIds: tuple.inMemory, uniqueId: request.uniqueId, conversationId: request.conversationId)
-        _internalInMemoryReaction?.storeNewCountRequestMessageIds(newRquest.messageIds)
+        store?.countEvent(inMemoryMessageIds: tuple.inMemory, uniqueId: request.uniqueId, conversationId: request.conversationId)
+        store?.storeNewCountRequestMessageIds(newRquest.messageIds)
         if newRquest.messageIds.isEmpty { return }
         chat.prepareToSendAsync(req: newRquest, type: .reactionCount)
     }
     
     func get(_ request: ReactionListRequest) {
-        //Creating and inserting an empty slot to the reactions array is essential if there is a connection disruption.
-        
-        var allowedRequestOffset = 0
-        if let lastStoredOffset = _internalInMemoryReaction?.getOffset(request) {
-            allowedRequestOffset = lastStoredOffset
+        if request.sticker == nil {
+            getAllDetail(request)
         } else {
-            _internalInMemoryReaction?.createEmptySlot(messageId: request.messageId)
+            getStickerDetail(request)
         }
-        if allowedRequestOffset <= request.offset || request.sticker == nil {
-            var newReq = request
-            newReq.offset = request.sticker == nil ? request.offset : allowedRequestOffset
-            chat.prepareToSendAsync(req: newReq, type: .reactionList)
+    }
+    
+    private func getAllDetail(_ request: ReactionListRequest) {
+        if let response = store?.getAllDetailOffset(request) {
+            emitEvent(.reaction(.list(response)))
+        } else {
+            store?.listRequests[request.uniqueId] = request
+            chat.prepareToSendAsync(req: request, type: .reactionList)
+        }
+    }
+    
+    private func getStickerDetail(_ request: ReactionListRequest) {
+        if let response = store?.getStickerOffset(request), response.result?.reactions?.count ?? 0 >= request.count {
+            emitEvent(.reaction(.list(response)))
+        } else {
+            store?.listRequests[request.uniqueId] = request
+            chat.prepareToSendAsync(req: request, type: .reactionList)
         }
     }
     
@@ -83,46 +91,46 @@ final class ReactionManager: ReactionProtocol {
         let copies = response.result?.compactMap{$0} ?? []
         cache?.reactionCount?.insert(models: copies)
         emitEvent(.reaction(.count(response)))
-        _internalInMemoryReaction?.onSummaryCount(response)
+        store?.onSummaryCount(response)
     }
     
     func onUserReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<CurrentUserReaction> = asyncMessage.toChatResponse()
         emitEvent(.reaction(.reaction(response)))
-        _internalInMemoryReaction?.onUserReaction(response)
+        store?.onUserReaction(response)
     }
     
     func onReactionList(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionList> = asyncMessage.toChatResponse()
         emitEvent(.reaction(.list(response)))
-        _internalInMemoryReaction?.onReactionList(response)
+        store?.onReactionList(response)
     }
     
     func onAddReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .increase)
         emitEvent(.reaction(.add(response)))
-        _internalInMemoryReaction?.onAdd(response)
+        store?.onAdd(response)
     }
     
     func onReplaceReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         emitEvent(.reaction(.replace(response)))
         cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .increase)
-        _internalInMemoryReaction?.onReplace(response)
+        store?.onReplace(response)
     }
     
     func onDeleteReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .decrease)
         emitEvent(.reaction(.delete(response)))
-        _internalInMemoryReaction?.onDelete(response)
+        store?.onDelete(response)
     }
     
     func onNewMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         if let messageId = response.result?.id {
-            _internalInMemoryReaction?.onNewMessage(messageId: messageId)
+            store?.onNewMessage(messageId: messageId)
         }
     }
     

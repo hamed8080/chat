@@ -10,7 +10,7 @@ import Foundation
 protocol StoreTypes {
     var conversation: ThreadsStore { get }
     var history: HistoryStore { get }
-    var reaction: InMemoryReaction { get }
+    var reaction: ReactionsStore { get }
 }
 
 protocol ChatStoreProtocol: StoreTypes {
@@ -21,7 +21,7 @@ protocol ChatStoreProtocol: StoreTypes {
 
 public class ChatCoordinator: ChatStoreProtocol {
     let chat: ChatInternalProtocol
-    let reaction: InMemoryReaction
+    let reaction: ReactionsStore
     let conversation: ThreadsStore
     let history: HistoryStore
 
