@@ -13,7 +13,7 @@ import ChatExtensions
 @ChatGlobalActor
 public final class ReactionsStore {
     private let chat: ChatInternalProtocol
-    var reactions: ContiguousArray<MessageInMemoryReaction> = []
+    private var reactions: ContiguousArray<MessageInMemoryReaction> = []
     private var queue = DispatchQueue(label: "ReactionsStoreQueue")
     var listRequests: [String: ReactionListRequest] = [:]
     
@@ -21,13 +21,10 @@ public final class ReactionsStore {
         self.chat = chat
     }
     
-    func reaction(_ request: UserReactionRequest) -> Bool {
-        /// If we have a cached version of messageId in reactions list it means that the last time it was nil and did not have a user reaction.
-        if let response = userReactionResponse(request: request) {
-            emit(.reaction(response))
-            return true
-        }
-        return false
+    func reaction(_ request: UserReactionRequest) -> ChatResponse<CurrentUserReaction>? {
+        guard let index = indexOfMessageId(request.messageId),
+              let cachedVersion = reactions[index].currentUserReaction else { return nil }
+        return request.toCurrentUserReactionResponse(reaction: cachedVersion, typeCode: request.toTypeCode(chat))
     }
     
     func storeNewCountRequestMessageIds(_ messageIds: [Int]) {
@@ -38,10 +35,10 @@ public final class ReactionsStore {
         }
     }
     
-    func countEvent(inMemoryMessageIds: [Int], uniqueId: String, conversationId: Int) {
-        if let response = countCacheResponse(inMemoryMessageIds, uniqueId, conversationId) {
-            emit(.count(response))
-        }
+    func count(inMemoryMessageIds: [Int], request: ReactionCountRequest) -> ChatResponse<[ReactionCountList]>? {
+        let list = listOfReactionCount(inMemoryMessageIds)
+        guard !list.isEmpty else { return nil }
+        return request.toCountListResponse(list: list, typeCode: request.toTypeCode(chat))
     }
     
     private func listOfReactionCount(_ messageIds: [Int]) -> [ReactionCountList] {
@@ -78,7 +75,7 @@ public final class ReactionsStore {
     
     func getStickerOffset(_ request: ReactionListRequest) -> ChatResponse<ReactionList>? {
         guard let index = indexOfMessageId(request.messageId) else { return nil }
-        let reactionInMemory = reactions[index]        
+        let reactionInMemory = reactions[index]
         return normalReactionTabWithStickerCacheResponse(request, reactionInMemory)
     }
     
@@ -92,51 +89,42 @@ public final class ReactionsStore {
         response.result?.compactMap{$0}.forEach { listCount in
             let index = findOrCreateIndex(listCount.messageId ?? 0)
             reactions[index].summary = listCount.reactionCounts ?? []
-            setUserReaction(listCount)
-        }
-    }
-    
-    private func setUserReaction(_ list: ReactionCountList) {
-        if let userReaction = list.userReaction, let index = indexOfMessageId(list.messageId ?? 0) {
-            reactions[index].currentUserReaction = userReaction
+            reactions[index].currentUserReaction = listCount.userReaction
         }
     }
     
     func onUserReaction(_ response: ChatResponse<CurrentUserReaction>) {
-        if let result = response.result, let messageId = result.messageId {
-            if let firstIndex = indexOfMessageId(messageId) {
-                reactions[firstIndex].currentUserReaction = result.reaction
-            } else {
-                let inMemoryItem = MessageInMemoryReaction(messageId: messageId)
-                inMemoryItem.currentUserReaction = result.reaction
-                reactions.append(inMemoryItem)
-            }
+        guard let result = response.result, let messageId = result.messageId else { return }
+        if let firstIndex = indexOfMessageId(messageId) {
+            reactions[firstIndex].currentUserReaction = result.reaction
+        } else {
+            reactions.append(MessageInMemoryReaction(messageId: messageId, currentUserReaction: result.reaction))
         }
     }
     
     func onReactionList(_ response: ChatResponse<ReactionList>) {
-        guard let uniqueId = response.uniqueId, let listRequest = listRequests[uniqueId] else { return }
-        let copied = response.result
-        if let messageId = copied?.messageId,
-           let index = indexOfMessageId(messageId),
-           let reactions = copied?.reactions {
-               self.reactions[index].appendOrReplaceDetail(reactions: reactions, listRequest: listRequest)
+        guard let uniqueId = response.uniqueId,
+              let listRequest = listRequests[uniqueId],
+              let copied = response.result,
+              let messageId = copied.messageId,
+              let index = indexOfMessageId(messageId),
+              let reactions = copied.reactions
+        else {
+            /// Clean up the request if reactions is nil
+            listRequests.removeValue(forKey: response.uniqueId ?? "")
+            return
         }
+        self.reactions[index].appendOrReplaceDetail(reactions: reactions, listRequest: listRequest)
         listRequests.removeValue(forKey: uniqueId)
     }
     
     func onAdd(_ response: ChatResponse<ReactionMessageResponse>) {
-        if let messageId = response.result?.messageId, isInCache(messageId){
+        if let messageId = response.result?.messageId, let index = indexOfMessageId(messageId) {
             let reaction = response.result?.reaction
-            let index = findOrCreateIndex(messageId)
             reactions[index].addOrReplaceSummaryCount(sticker: reaction?.reaction ?? Sticker.unknown)
             reactions[index].details.append(.init(id: reaction?.id, reaction: reaction?.reaction, participant: reaction?.participant, time: reaction?.time))
             setUserReaction(index: index, action: response.result)
         }
-    }
-    
-    private func isInCache(_ messageId: Int) -> Bool {
-        reactions.contains(where: {$0.messageId == messageId})
     }
     
     func onReplace(_ response: ChatResponse<ReactionMessageResponse>) {
@@ -173,7 +161,7 @@ public final class ReactionsStore {
         if let index = indexOfMessageId(messageId) {
             return index
         } else {
-            reactions.append(.init(messageId: messageId))
+            reactions.append(MessageInMemoryReaction(messageId: messageId))
             return max(0, reactions.count - 1)
         }
     }
@@ -205,62 +193,22 @@ public final class ReactionsStore {
             reactions.removeAll()
         }
     }
-    
-    private func emit(_ event: ReactionEventTypes) {
-        chat.delegate?.chatEvent(event: .reaction(event))
-    }
 }
 
 fileprivate extension ReactionsStore {
-    
-     func userReactionResponse(request: UserReactionRequest) -> ChatResponse<CurrentUserReaction>? {
-        guard let index = indexOfMessageId(request.messageId) else { return nil }
-        let cachedVersion = reactions[index].currentUserReaction
-        let typeCode = request.toTypeCode(chat)
-        let response = ChatResponse<CurrentUserReaction>(uniqueId: request.uniqueId,
-                                                         result: .init(messageId: request.messageId, reaction: cachedVersion),
-                                                         cache: true,
-                                                         subjectId: request.conversationId,
-                                                         typeCode: typeCode)
-        return response
-    }
-    
-    func countCacheResponse(_ inMemoryMessageIds: [Int], _ uniqueId: String, _ conversationId: Int) ->ChatResponse<[ReactionCountList]>? {
-        let list = listOfReactionCount(inMemoryMessageIds)
-        guard !list.isEmpty else { return nil }
-        let response = ChatResponse<[ReactionCountList]>(uniqueId: uniqueId,
-                                                         result: list,
-                                                         cache: true,
-                                                         subjectId: conversationId,
-                                                         typeCode: nil)
-        return response
-    }
-    
-    func normalReactionTabWithStickerCacheResponse(_ request: ReactionListRequest,
-                                     _ inMemoryReaction: MessageInMemoryReaction) -> ChatResponse<ReactionList>? {
-        let allStoredReactions = inMemoryReaction.details
+    func normalReactionTabWithStickerCacheResponse(_ request: ReactionListRequest, _ memReaction: MessageInMemoryReaction) -> ChatResponse<ReactionList>? {
+        let allStoredReactions = memReaction.details
         let byStickerFilter = allStoredReactions.filter({$0.reaction == request.sticker})
-        
-        let currentStoredInMemory = request.sticker == nil ? allStoredReactions : byStickerFilter
-        let count = currentStoredInMemory.count
-        
+        let endIndex = request.offset + request.count
+        if !byStickerFilter.indices.contains(where: { endIndex == $0 }) { return nil }
+        let slice = byStickerFilter[request.offset...endIndex]
         let typeCode = request.toTypeCode(chat)
-        let response = ChatResponse<ReactionList>(uniqueId: request.uniqueId,
-                                                  result: .init(messageId: request.messageId, reactions: currentStoredInMemory),
-                                                  cache: true,
-                                                  subjectId: request.conversationId, typeCode: typeCode)
-        return response
+        return request.toListResponse(reactions: Array(slice), typeCode: typeCode)
     }
     
     func noStickerTabCacheReactions(_ request: ReactionListRequest, _ inMemoryReaction: MessageInMemoryReaction) -> ChatResponse<ReactionList>? {
         if let reactions = inMemoryReaction.containsAllOffset(request) {
-            /// Response with cache
-            let typeCode = request.toTypeCode(chat)
-            let response = ChatResponse<ReactionList>(uniqueId: request.uniqueId,
-                                                      result: .init(messageId: request.messageId, reactions: reactions),
-                                                      cache: true,
-                                                      subjectId: request.conversationId, typeCode: typeCode)
-            return response
+            request.toListResponse(reactions: reactions, typeCode: request.toTypeCode(chat))
         }
         return nil
     }

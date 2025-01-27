@@ -23,8 +23,9 @@ public class MessageInMemoryReaction {
     ///
     var allDetails: [String: [Reaction]] = [:]
 
-    public init(messageId: Int) {
+    public init(messageId: Int, currentUserReaction: Reaction? = nil) {
         self.messageId = messageId
+        self.currentUserReaction = currentUserReaction
     }
     
     public func appendOrReplaceDetail(reactions: [Reaction], listRequest: ReactionListRequest) {

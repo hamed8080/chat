@@ -23,8 +23,9 @@ final class ReactionManager: ReactionProtocol {
     }
     
     func reaction(_ request: UserReactionRequest) {
-        if store?.reaction(request) == false {
-            /// Featch current user Message reaction from the server
+        if let response = store?.reaction(request) {
+            emitEvent(.reaction(.reaction(response)))
+        } else {
             chat.prepareToSendAsync(req: request, type: .getReaction)
         }
     }
@@ -33,7 +34,9 @@ final class ReactionManager: ReactionProtocol {
         guard let tuple = store?.tupleOfMessageIds(request.messageIds) else { return }
         var newRquest = request
         newRquest.messageIds = tuple.notInMemory
-        store?.countEvent(inMemoryMessageIds: tuple.inMemory, uniqueId: request.uniqueId, conversationId: request.conversationId)
+        if let response = store?.count(inMemoryMessageIds: tuple.inMemory, request: request) {
+            emitEvent(.reaction(.count(response)))
+        }
         store?.storeNewCountRequestMessageIds(newRquest.messageIds)
         if newRquest.messageIds.isEmpty { return }
         chat.prepareToSendAsync(req: newRquest, type: .reactionCount)

@@ -443,3 +443,34 @@ extension ContactManager {
         return (event, response?.result, removeData.request.contactId)
     }
 }
+
+
+extension ReactionListRequest {
+    func toListResponse(reactions: [Reaction], typeCode: String?) -> ChatResponse<ReactionList> {
+        ChatResponse<ReactionList>(uniqueId: uniqueId,
+                                   result: .init(messageId: messageId, reactions: reactions),
+                                   cache: true,
+                                   subjectId: conversationId,
+                                   typeCode: typeCode)
+    }
+}
+
+extension ReactionCountRequest {
+    func toCountListResponse(list: [ReactionCountList], typeCode: String?) -> ChatResponse<[ReactionCountList]> {
+        ChatResponse<[ReactionCountList]>(uniqueId: uniqueId,
+                                          result: list,
+                                          cache: true,
+                                          subjectId: conversationId,
+                                          typeCode: typeCode)
+    }
+}
+
+extension UserReactionRequest {
+    func toCurrentUserReactionResponse(reaction: Reaction, typeCode: String?) -> ChatResponse<CurrentUserReaction> {
+        ChatResponse<CurrentUserReaction>(uniqueId: uniqueId,
+                                          result: .init(messageId: messageId, reaction: reaction),
+                                          cache: true,
+                                          subjectId: conversationId,
+                                          typeCode: typeCode)
+    }
+}
