@@ -21,27 +21,56 @@ public extension String {
         let digest = Insecure.MD5.hash(data: data(using: .utf8) ?? Data())
         return digest.map { String(format: "%02hhx", $0) }.joined()
     }
+    
+    /// Decodes and pretty-prints JSON, including nested JSON strings within fields like `content`.
+      func decodeNestedJson() -> String {
+          guard let data = self.data(using: .utf8) else { return self }
 
-    func removeBackSlashes() -> String {
-        replacingOccurrences(of: "\\", with: "")
-            .replacingOccurrences(of: "\"{", with: "\n{")
-            .replacingOccurrences(of: "}\"", with: "}\n")
-            .replacingOccurrences(of: "\"[", with: "\n[")
-            .replacingOccurrences(of: "]\"", with: "]\n")
-    }
+          do {
+              // Parse the top-level JSON object
+              let jsonObject = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+
+              // Recursively process and decode any nested JSON strings
+              let decodedObject = recursivelyDecode(jsonObject)
+
+              // Convert the fully decoded object back to a pretty-printed JSON string
+              let prettyJsonData = try JSONSerialization.data(withJSONObject: decodedObject, options: .prettyPrinted)
+              return String(data: prettyJsonData, encoding: .utf8) ?? self
+          } catch {
+              // Return the original string if any errors occur
+              print("Error decoding JSON: \(error)")
+              return self
+          }
+      }
+
+      /// Recursively decodes nested JSON strings.
+      private func recursivelyDecode(_ json: Any) -> Any {
+          if let jsonString = json as? String, let jsonData = jsonString.data(using: .utf8) {
+              // Try to decode the string as JSON
+              if let nestedJsonObject = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) {
+                  // Recursively decode the nested JSON object
+                  return recursivelyDecode(nestedJsonObject)
+              }
+              return jsonString // If decoding fails, return the original string
+          } else if let jsonArray = json as? [Any] {
+              // Process each element in the array
+              return jsonArray.map { recursivelyDecode($0) }
+          } else if let jsonDict = json as? [String: Any] {
+              // Process each value in the dictionary
+              var decodedDict = [String: Any]()
+              for (key, value) in jsonDict {
+                  decodedDict[key] = recursivelyDecode(value)
+              }
+              return decodedDict
+          }
+
+          // If the value is not a string, array, or dictionary, return it as is
+          return json
+      }
 
     /// Pretty print of a JSON.
     func prettyJsonString() -> String {
-        let string = removeBackSlashes()
-        let stringData = string.data(using: .utf8) ?? Data()
-        if let jsonObject = try? JSONSerialization.jsonObject(with: stringData, options: .mutableContainers),
-           let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-        {
-            let prettyString = String(data: prettyJsonData, encoding: .utf8) ?? ""
-            return prettyString.removeBackSlashes()
-        } else {
-            return ""
-        }
+        return decodeNestedJson()
     }
 
     func localized(bundle: Bundle = .main) -> String {
