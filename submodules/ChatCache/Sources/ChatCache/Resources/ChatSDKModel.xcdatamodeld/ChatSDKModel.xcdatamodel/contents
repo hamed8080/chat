@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24B83" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CDAssistant" representedClassName="ChatCache.CDAssistant" syncable="YES">
-        <attribute name="assistant" optional="YES" attributeType="Transformable" valueTransformerName="AssistantValueTransformer" customClassName="Invitee"/>
+        <attribute name="assistant" optional="YES" attributeType="Transformable" valueTransformerName="AssistantValueTransformer"/>
         <attribute name="block" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="contactType" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
@@ -64,7 +64,7 @@
         <attribute name="partnerLastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="partnerLastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="pin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="pinMessage" optional="YES" attributeType="Transformable" valueTransformerName="PinMessageValueTransformer" customClassName="PinMessage"/>
+        <attribute name="pinMessage" optional="YES" attributeType="Transformable" valueTransformerName="PinMessageValueTransformer"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -122,7 +122,7 @@
         <attribute name="delivered" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="editable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="edited" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="forwardInfo" optional="YES" attributeType="Transformable" valueTransformerName="ForwardInfoValueTransformer" customClassName="ForwardInfo"/>
+        <attribute name="forwardInfo" optional="YES" attributeType="Transformable" valueTransformerName="ForwardInfoValueTransformer"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="mentioned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="message" optional="YES" attributeType="String"/>
@@ -133,7 +133,7 @@
         <attribute name="pinned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="pinTime" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="previousId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="replyInfo" optional="YES" attributeType="Transformable" valueTransformerName="ReplyInfoValueTransformer" customClassName="ReplyInfo"/>
+        <attribute name="replyInfo" optional="YES" attributeType="Transformable" valueTransformerName="ReplyInfoValueTransformer"/>
         <attribute name="replyToMessageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="systemMetadata" optional="YES" attributeType="String"/>
