@@ -8,6 +8,7 @@ import Foundation
 import Logger
 
 /// A delegate to raise events.
+@AsyncGlobalActor
 public protocol WebSocketProviderDelegate: AnyObject {
     /// A delegate method that informs the connection provider connected successfully.
     func onConnected(_ webSocket: WebSocketProvider)
@@ -22,9 +23,10 @@ public protocol WebSocketProviderDelegate: AnyObject {
     func onReceivedError(_ error: Error?)
 }
 
+@AsyncGlobalActor
 public protocol WebSocketProvider: AnyObject {
     /// default initializer for an Async provider.
-    init(url: URL, timeout: TimeInterval, logger: Logger)
+    init(url: URL, timeout: TimeInterval, logger: Logger) 
 
     /// A delegation provider to inform events.
     var delegate: WebSocketProviderDelegate? { get set }

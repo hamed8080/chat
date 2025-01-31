@@ -72,17 +72,17 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
         asyncManager.chat = self
     }
 
-    public func connect() {
+    public func connect() async {
         if config.getDeviceIdFromToken == false {
-            asyncManager.createAsync()
+            await asyncManager.createAsync()
         } else {
             requestDeviceId()
         }
         DiskStatus.checkIfDeviceHasFreeSpace(needSpaceInMB: config.deviecLimitationSpaceMB, turnOffTheCache: true, delegate: delegate)
     }
 
-    public func dispose() {
-        asyncManager.disposeObject()
+    public func dispose() async {
+        await asyncManager.disposeObject()
         logger.dispose()
     }
 
@@ -90,13 +90,13 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
         asyncManager.sendData(sendable: req, type: type)
     }
 
-    public func setToken(newToken: String, reCreateObject: Bool = false) {
+    public func setToken(newToken: String, reCreateObject: Bool = false) async {
         config.updateToken(newToken)
         if state != .chatReady {
             (user as? UserManager)?.getUserForChatReady()
         }
         if reCreateObject {
-            asyncManager.createAsync()
+            await asyncManager.createAsync()
         }
     }
     
@@ -111,7 +111,7 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
                 let result: ChatResponse<DevicesResposne>? = data.decode(response, nil, typeCode: nil)
                 if let device = result?.result?.devices?.first(where: { $0.current == true }) {
                     self.config.asyncConfig.updateDeviceId(device.uid ?? UUID().uuidString)
-                    self.asyncManager.createAsync()
+                    await self.asyncManager.createAsync()
                 }
             } catch {
                 print("Failed to request deviceId: \(error)")

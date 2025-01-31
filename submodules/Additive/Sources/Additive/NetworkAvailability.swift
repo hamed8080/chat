@@ -8,13 +8,13 @@ import Foundation
 import Network
 
 public protocol NetworkAvailabilityProtocol {
-    var onNetworkChange: ((Bool) -> Void)? { get set }
+    var onNetworkChange: (@Sendable (Bool) -> Void)? { get set }
 }
 
 @available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
 open class NativeNetworkAvailability: NetworkAvailabilityProtocol, @unchecked Sendable {
     private var lastStatus: NWPath.Status?
-    public var onNetworkChange: ((Bool) -> Void)?
+    public var onNetworkChange: (@Sendable (Bool) -> Void)?
     private let path = NWPathMonitor()
     private let queue: DispatchQueueProtocol = DispatchQueue(label: "NetworkObserverQueue")
 
@@ -33,7 +33,7 @@ open class NativeNetworkAvailability: NetworkAvailabilityProtocol, @unchecked Se
 }
 
 open class CompatibleNetworkAvailability: NetworkAvailabilityProtocol {
-    public var onNetworkChange: ((Bool) -> Void)?
+    public var onNetworkChange: (@Sendable (Bool) -> Void)?
 
     public init() {}
 }

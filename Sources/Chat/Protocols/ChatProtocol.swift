@@ -57,13 +57,13 @@ public protocol Chat {
     /// - Parameters:
     ///   - newToken: The token string.
     ///   - reCreateObject: If you set it to true the chat object will recreate itself and will reconnect completely.
-    func setToken(newToken: String, reCreateObject: Bool)
+    func setToken(newToken: String, reCreateObject: Bool) async
 
     /// A method to destroy a chat object and release all strong reference objects.
-    func dispose()
+    func dispose() async
 
     /// A method that should be called by clients whenever they fill it is the right time to connect to the server.
-    func connect()
+    func connect() async
 }
 
 public protocol ChatInternalProtocol: Chat {
@@ -106,7 +106,7 @@ public protocol ChatInternalProtocol: Chat {
     func invokeCallback(asyncMessage: AsyncMessage) async
 
     /// Dispose and close object.
-    func dispose()
+    func dispose() async
 
     var loggerUserInfo: [String: String] { get }
     

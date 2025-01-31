@@ -41,16 +41,20 @@ extension Async {
         return dic
     }
 
-    func setDeviceInfo() {
-        DispatchQueue.main.async { [weak self] in
-            let bundle = Bundle.main.bundleIdentifier
-            var osVersion = ""
-            var deviceModel = ""
+    func setDeviceInfo() async {
+        let tuple = await deviceInfo()
+        deviceInfo = DeviceInfo(deviceModel: tuple.deviceModel, os: "iOS", osVersion: tuple.osVersion, sdkVersion: "1.0.0", bundleIdentifire: tuple.bundleIdentifire)
+    }
+    
+    @MainActor
+    func deviceInfo() async -> (bundleIdentifire: String?, osVersion: String, deviceModel: String) {
+        let bundle = Bundle.main.bundleIdentifier
+        var osVersion = ""
+        var deviceModel = ""
 #if canImport(UIKit)
-            osVersion = UIDevice.current.systemVersion
-            deviceModel = UIDevice.current.model
+        osVersion = UIDevice.current.systemVersion
+        deviceModel = UIDevice.current.model
 #endif
-            self?.deviceInfo = DeviceInfo(deviceModel: deviceModel, os: "iOS", osVersion: osVersion, sdkVersion: "1.0.0", bundleIdentifire: bundle)
-        }
+        return (bundle, osVersion, deviceModel)
     }
 }

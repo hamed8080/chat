@@ -12,7 +12,7 @@ import Logger
 @testable import Async
 
 @available(iOS 13.0, *)
-final class NativeWebSocketProviderTests: XCTestCase, WebSocketProviderDelegate, LogDelegate {
+final class NativeWebSocketProviderTests: XCTestCase, WebSocketProviderDelegate, LogDelegate, @unchecked Sendable {
     var sut: NativeWebSocketProvider!
     var url = URL(string: "wss://msg.pod.ir/ws")!
     var timeout: TimeInterval = 10
@@ -84,7 +84,6 @@ final class NativeWebSocketProviderTests: XCTestCase, WebSocketProviderDelegate,
         // Given
         delegateOnLogExp = expectation(description: "Expected error delegate get called.")
         sut.connect()
-        sut.isConnected = true
 
         // When
         Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { timer in
@@ -99,7 +98,6 @@ final class NativeWebSocketProviderTests: XCTestCase, WebSocketProviderDelegate,
         // Given
         delegateOnLogExp = expectation(description: "Expected error delegate get called.")
         sut.connect()
-        sut.isConnected = true
 
         // When
         Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { timer in

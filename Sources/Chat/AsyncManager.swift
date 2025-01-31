@@ -43,10 +43,10 @@ public final class AsyncManager: AsyncDelegate {
     }
 
     /// Create an async connection.
-    public func createAsync() {
+    public func createAsync() async {
         if let asyncConfig = config?.asyncConfig {
-            asyncClient = SocketFactory.create(config: asyncConfig, delegate: self)
-            asyncClient?.connect()
+            asyncClient = await SocketFactory.create(config: asyncConfig, delegate: self)
+            await asyncClient?.connect()
         }
     }
 
@@ -96,8 +96,8 @@ public final class AsyncManager: AsyncDelegate {
     }
 
     /// A public method to completely destroy the async object.
-    public func disposeObject() {
-        asyncClient?.disposeObject()
+    public func disposeObject() async {
+        await asyncClient?.disposeObject()
         asyncClient = nil
         cancelPingTimer()
         queueTimer.cancel()
@@ -183,7 +183,9 @@ public final class AsyncManager: AsyncDelegate {
                                               uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
         guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
         logger?.logJSON(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", persist: false, type: .sent)
-        asyncClient?.send(message: asyncMessage)
+        Task {
+            await asyncClient?.send(message: asyncMessage)
+        }
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.

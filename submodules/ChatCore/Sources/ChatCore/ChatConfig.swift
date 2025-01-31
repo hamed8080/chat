@@ -197,7 +197,7 @@ public struct ChatConfig: Codable, Sendable {
     }
 }
 
-public final class ChatConfigBuilder: @unchecked Sendable {
+public final class ChatConfigBuilder {
     private(set) var asyncConfig: AsyncConfig
     private(set) var callConfig: CallConfig = CallConfigBuilder().build()
     private(set) var ssoHost: String = ""

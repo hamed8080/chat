@@ -16,6 +16,7 @@ final class AsyncConfigTests: XCTestCase {
     private var reconnectOnClose = true
     private var maxRetryCount = Int.max
     private var peerId: Int?
+    private var appId = "POD-Chat"
     private var messageTTL = 1000
     private var connectionRetryInterval: TimeInterval = 5
     private var connectionCheckTimeout: TimeInterval = 5

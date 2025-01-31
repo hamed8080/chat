@@ -8,9 +8,10 @@ import Additive
 import Foundation
 import Logger
 
+@AsyncGlobalActor
 public protocol AsyncProtocol {
     var delegate: AsyncDelegate? { get }
-    init(socket: WebSocketProvider, config: AsyncConfig, delegate: AsyncDelegate?, logger: Logger, queue: DispatchQueueProtocol)
+    init(socket: WebSocketProvider, config: AsyncConfig, delegate: AsyncDelegate?, logger: Logger) async 
     func recreate()
     func connect()
     func send(message: SendAsyncMessageVO, type: AsyncMessageTypes)
@@ -21,7 +22,6 @@ protocol AsyncInternalProtocol: AsyncProtocol {
     var socket: WebSocketProvider { get }    
     var logger: Logger { get }
     var config: AsyncConfig { get }
-    var queue: DispatchQueueProtocol { get }
     var stateModel: AsyncStateModel { get set }
     var deviceInfo: DeviceInfo? { get set }
 

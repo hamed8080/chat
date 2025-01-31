@@ -137,7 +137,9 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         chat.prepareToSendAsync(req: req, type: .logout)
         chat.cache?.delete()
         chat.deleteDocumentFolders()
-        chat.dispose()
+        Task {
+            await chat.dispose()
+        }
     }
 
     func send(_ request: SendStatusPingRequest) {

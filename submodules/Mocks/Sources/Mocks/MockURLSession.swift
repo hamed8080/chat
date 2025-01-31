@@ -17,7 +17,8 @@ public extension HTTPURLResponse {
     }
 }
 
-open class MockURLSession: URLSessionProtocol, @unchecked Sendable {
+@MainActor
+open class MockURLSession: @preconcurrency URLSessionProtocol {
     public func data(_ request: URLRequest) async throws -> (Data, URLResponse) {
         throw URLError(.badURL)
     }

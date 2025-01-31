@@ -26,6 +26,7 @@ let package = Package(
                 ]),
         .testTarget(name: "AsyncTests",
                     dependencies: [
+                        .target(name: "Async"),
                         .product(name: "Additive", package: "Additive"),
                         .product(name: "Logger", package: "Logger"),
                         .product(name: "Mocks", package: "Mocks"),

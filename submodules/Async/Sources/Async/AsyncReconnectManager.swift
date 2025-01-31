@@ -8,7 +8,8 @@ import Foundation
 import Additive
 import Logger
 
-class AsyncReconnectManager: @unchecked Sendable {
+@AsyncGlobalActor
+class AsyncReconnectManager {
     private var reconnectTimer: SourceTimer?
     /// The number of retries that have happened to connect to the async server.
     private var retryCount: Int = 0
@@ -27,7 +28,10 @@ class AsyncReconnectManager: @unchecked Sendable {
         log("restarting reconnect timer, it will trigger in \(duration)")
         reconnectTimer = SourceTimer()
         reconnectTimer?.start(duration: duration) { [weak self] in
-            self?.onReconnectTimer()
+            Task { @AsyncGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.onReconnectTimer()
+            }
         }
     }
     

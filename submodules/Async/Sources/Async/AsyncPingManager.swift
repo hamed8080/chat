@@ -8,7 +8,8 @@ import Foundation
 import Additive
 import Logger
 
-class AsyncPingManager: @unchecked Sendable {
+@AsyncGlobalActor
+class AsyncPingManager {
     private var pingTimerFirst: SourceTimer?
     private var pingTimerSecond: SourceTimer?
     private var pingTimerThird: SourceTimer?
@@ -38,7 +39,10 @@ class AsyncPingManager: @unchecked Sendable {
         log("Scheduling the first timer, it will triggered in \(pingInterval)")
         pingTimerFirst = SourceTimer()
         pingTimerFirst?.start(duration: pingInterval) { [weak self] in
-            self?.callback?(nil)
+            Task { @AsyncGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.callback?(nil)
+            }
         }
     }
 
@@ -46,7 +50,10 @@ class AsyncPingManager: @unchecked Sendable {
         log("Scheduling the second timer, it will be triggered in \(pingInterval + 3)")
         pingTimerSecond = SourceTimer()
         pingTimerSecond?.start(duration: pingInterval + 3) { [weak self] in
-            self?.callback?(nil)
+            Task { @AsyncGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.callback?(nil)
+            }
         }
     }
 
@@ -55,7 +62,10 @@ class AsyncPingManager: @unchecked Sendable {
         pingTimerThird = SourceTimer()
         pingTimerThird?.start(duration: pingInterval + 3 + 2) { [weak self] in
             let error = NSError(domain: "Failed to retrieve a ping from the Async server.", code: NSURLErrorCannotConnectToHost)
-            self?.callback?(error)
+            Task { @AsyncGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.callback?(error)
+            }
         }
     }
     

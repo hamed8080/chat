@@ -10,7 +10,8 @@ import Logger
 
 /// iOS native websocket provider. It will be chosen automatically if the device is running iOS 13+.
 @available(iOS 13.0, macOS 10.15, watchOS 6.0, tvOS 13.0, *)
-final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDelegate, URLSessionWebSocketDelegate, @unchecked Sendable {
+@AsyncGlobalActor
+final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDelegate, URLSessionWebSocketDelegate {
     /// A delegation provider to inform events.
     weak var delegate: WebSocketProviderDelegate?
 
@@ -28,8 +29,6 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
 
     /// The logger class for logging events and exceptions if it's not a runtime exception.
     private var logger: Logger?
-
-    private let queue = DispatchQueue(label: "NativeWebSocketProviderSerailQueue")
 
     /// The socket initializer.
     /// - Parameters:
@@ -55,41 +54,37 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
         socket?.resume()
         readMessage()
     }
-
+    
     /// Send a message to the async server with a type of stream data.
     func send(data: Data) {
-        queue.sync {
-            if isConnected {
-                socket?.send(.data(data)) { [weak self] error in
-                    self?.queue.async { [weak self] in
-                        self?.handleError(error)
-                    }
+        if isConnected {
+            socket?.send(.data(data)) { [weak self] error in
+                Task { @AsyncGlobalActor [weak self] in
+                    self?.handleError(error)
                 }
-            } else {
-                handleError(AsyncError(code: .socketIsNotConnected))
             }
+        } else {
+            handleError(AsyncError(code: .socketIsNotConnected))
         }
     }
-
+    
     /// Send a message to the async server with a type of text.
     func send(text: String) {
-        queue.sync {
-            if isConnected {
-                socket?.send(.string(text)) { [weak self] error in
-                    self?.queue.async { [weak self] in
-                        self?.handleError(error)
-                    }
+        if isConnected {
+            socket?.send(.string(text)) { [weak self] error in
+                Task { @AsyncGlobalActor [weak self] in
+                    self?.handleError(error)
                 }
-            } else {
-                handleError(AsyncError(code: .socketIsNotConnected))
             }
+        } else {
+            handleError(AsyncError(code: .socketIsNotConnected))
         }
     }
 
     /// A read message receiver. It'll be called again on receiving a message to stay awake for the next message.
     private func readMessage() {
         socket?.receive { [weak self] result in
-            self?.queue.sync {
+            Task { @AsyncGlobalActor [weak self] in
                 self?.onReceiveMessage(result)
             }
         }
@@ -121,8 +116,9 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
     }
 
     /// It'll be called by the os whenever a connection opened successfully.
-    func urlSession(_: URLSession, webSocketTask _: URLSessionWebSocketTask, didOpenWithProtocol _: String?) {
-        queue.sync {
+    nonisolated func urlSession(_: URLSession, webSocketTask _: URLSessionWebSocketTask, didOpenWithProtocol _: String?) {
+        Task { @AsyncGlobalActor [weak self] in
+            guard let self = self else { return }
             isConnected = true
             delegate?.onConnected(self)
         }
@@ -131,8 +127,9 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
     /// It'll be called by the os whenever a connection dropped.
     ///
     /// It may be called when we don't send ping message to the ``Async Server``.
-    func urlSession(_: URLSession, webSocketTask _: URLSessionWebSocketTask, didCloseWith _: URLSessionWebSocketTask.CloseCode, reason: Data?) {
-        queue.sync {
+    nonisolated func urlSession(_: URLSession, webSocketTask _: URLSessionWebSocketTask, didCloseWith _: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+        Task { @AsyncGlobalActor [weak self] in
+            guard let self = self else { return }
             if let reason = reason, let message = String(data: reason, encoding: .utf8) {
                 logger?.log(message: message, persist: false, type: .internalLog)
             }
@@ -144,20 +141,19 @@ final class NativeWebSocketProvider: NSObject, WebSocketProvider, URLSessionDele
     /// trust the credential for the desired URL if it's not valid or trusted by issuers.
     ///
     /// Never call delegate?.webSocketDidDisconnect in this method it leads to close next connection
-    func urlSession(_: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        queue.sync {
-            if let serverTrust = challenge.protectionSpace.serverTrust {
-                completionHandler(.useCredential, URLCredential(trust: serverTrust))
-            } else {
-                completionHandler(.cancelAuthenticationChallenge, nil)
-            }
+    nonisolated func urlSession(_: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        if let serverTrust = challenge.protectionSpace.serverTrust {
+            completionHandler(.useCredential, URLCredential(trust: serverTrust))
+        } else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
         }
     }
 
     ///  Whenever an error has happened the error will be raised and passed to the event.
-    func urlSession(_: URLSession, task _: URLSessionTask, didCompleteWithError error: Error?) {
-        queue.sync {
-            if let error = error {
+    nonisolated func urlSession(_: URLSession, task _: URLSessionTask, didCompleteWithError error: Error?) {
+        if let error = error {
+            Task { @AsyncGlobalActor [weak self] in
+                guard let self = self else { return }
                 handleError(error)
             }
         }
