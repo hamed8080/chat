@@ -13,15 +13,3 @@ public protocol URLSessionDataTaskProtocol {
 }
 
 extension URLSessionDataTask: URLSessionDataTaskProtocol {}
-
-public struct SendableURLSessionDataTask: @unchecked Sendable {
-    public let task: URLSessionDataTaskProtocol
-    
-    public init(task: URLSessionDataTaskProtocol) {
-        self.task = task
-    }
-}
-
-public extension URLSessionDataTaskProtocol {
-    var sendable: SendableURLSessionDataTask { SendableURLSessionDataTask(task: self) }
-}
