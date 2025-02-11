@@ -365,15 +365,68 @@ extension AddContactRequest {
     }
 }
 
-
-extension Array<AddContactRequest> {
-    func toCompnents(url: String) -> URLComponents {
+@ChatGlobalActor
+extension Array where Element == UpdateContactRequest {
+    func toCompnents(url: String, chat: ChatInternalProtocol) -> URLComponents {
         var urlComp = URLComponents(string: url)!
         urlComp.queryItems = []
         forEach { contact in
-
             // ****
-            // do not use if let to only pass un nil value if you pass un nil value in some property like email value are null so
+            // do not use if let to only pass none-nil value if you do some property like email is going to be null so
+            // the number of paramter is not equal in all contact and get invalid request like below:
+            // [firstname,lastname,email,cellPhoneNumber],[firstname,lastname,cellPhoneNumber]
+            // ****
+            urlComp.queryItems?.append(URLQueryItem(name: "id", value: String(contact.id)))
+            urlComp.queryItems?.append(URLQueryItem(name: "firstName", value: contact.firstName))
+            urlComp.queryItems?.append(URLQueryItem(name: "lastName", value: contact.lastName))
+            urlComp.queryItems?.append(URLQueryItem(name: "email", value: contact.email))
+            urlComp.queryItems?.append(URLQueryItem(name: "cellphoneNumber", value: contact.cellphoneNumber))
+            if let userName = contact.username {
+                urlComp.queryItems?.append(URLQueryItem(name: "username", value: userName))
+            }
+            urlComp.queryItems?.append(URLQueryItem(name: "uniqueId", value: contact.uniqueId))
+            urlComp.queryItems?.append(URLQueryItem(name: "metadata", value: contact.metadata))
+            urlComp.queryItems?.append(URLQueryItem(name: "typeCode", value: contact.toTypeCode(chat)))
+        }
+        return urlComp
+    }
+    
+    func toUpdateReq(_ urlString: String, _ token: String, _ chat: ChatInternalProtocol) -> URLRequest? {
+        let urlComp = toCompnents(url: urlString, chat: chat)
+        guard let urlString = urlComp.string else { return nil }
+        
+        let headers = contactHeaders(token: token, xform: true)
+        var urlReq = URLRequest(url: URL(string: urlString)!)
+        urlReq.allHTTPHeaderFields = headers
+        urlReq.method = .post
+        return urlReq
+    }
+}
+
+@ChatGlobalActor
+extension ContactsRequest {
+    func toListReq(_ urlString: String, _ token: String, _ typeCode: String?) -> URLRequest? {
+        guard var url = URL(string: urlString) else { return nil }
+        url.appendQueryItems(with: self)
+        let headers = contactHeaders(token: token, xform: true)
+        var newRequest = self
+        newRequest.setTypeCode(typeCode: typeCode)
+        
+        var urlReq = URLRequest(url: url)
+        urlReq.allHTTPHeaderFields = headers
+        urlReq.method = .get
+        return urlReq
+    }
+}
+
+@ChatGlobalActor
+extension Array<AddContactRequest> {
+    func toCompnents(url: String, chat: ChatInternalProtocol) -> URLComponents {
+        var urlComp = URLComponents(string: url)!
+        urlComp.queryItems = []
+        forEach { contact in
+            // ****
+            // do not use if let to only pass none-nil value if you do some property like email is going to be null so
             // the number of paramter is not equal in all contact and get invalid request like below:
             // [firstname,lastname,email,cellPhoneNumber],[firstname,lastname,cellPhoneNumber]
             // ****
@@ -385,12 +438,14 @@ extension Array<AddContactRequest> {
                 urlComp.queryItems?.append(URLQueryItem(name: "username", value: userName))
             }
             urlComp.queryItems?.append(URLQueryItem(name: "uniqueId", value: contact.uniqueId))
+            urlComp.queryItems?.append(URLQueryItem(name: "metadata", value: contact.metadata))
+            urlComp.queryItems?.append(URLQueryItem(name: "typeCode", value: contact.toTypeCode(chat)))
         }
         return urlComp
     }
     
-    func toAddAllReq(url: String, token: String) -> URLRequest? {
-        let urlComp = toCompnents(url: url)
+    func toAddAllReq(url: String, token: String, chat: ChatInternalProtocol) -> URLRequest? {
+        let urlComp = toCompnents(url: url, chat: chat)
         guard let urlString = urlComp.string else { return nil }
         
         let headers = contactHeaders(token: token, xform: true)

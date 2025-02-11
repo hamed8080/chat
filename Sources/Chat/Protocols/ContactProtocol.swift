@@ -18,7 +18,19 @@ public protocol ContactProtocol: AnyObject {
     /// Add multiple contacts at once.
     /// - Parameters:
     ///   - request: The request.
-    func addAll(_ request: [AddContactRequest])
+    /// - Returns: UniqueId to store once you get the result and you want to distinguish it from other requests.
+    func addAll(_ request: [AddContactRequest]) -> String?
+    
+    /// Update a contact.
+    /// - Parameters:
+    ///   - request: The request.
+    func update(_ request: UpdateContactRequest)
+    
+    /// Update multiple contacts at once.
+    /// - Parameters:
+    ///   - request: The request.
+    /// - Returns: UniqueId to store once you get the result and you want to distinguish it from other requests.
+    func updateAll(_ request: [UpdateContactRequest]) -> String?
 
     /// Block a specific contact.
     /// - Parameters:

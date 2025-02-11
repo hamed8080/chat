@@ -54,7 +54,8 @@ public extension ChatImplementation {
         case .getBlocked:
              (contact as? ContactManager)?.onBlockedContacts(asyncMessage)
         case .getContacts:
-             (contact as? ContactManager)?.onContacts(asyncMessage)
+             // Handeled directly via a REST request
+            break
         case .getCurrentUserRoles:
              (user as? UserManager)?.onCurrentUserRoles(asyncMessage)
              (conversation as? ThreadManager)?.onCurrentUserRoles(asyncMessage)

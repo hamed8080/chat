@@ -13,10 +13,10 @@ public enum Routes: String, Sendable {
     case ssoGetKey = "/handshake/keys/"
 
     // Contacts:
+    case listContacts = "/nzh/contact/contacts"
     case addContacts = "/nzh/addContacts"
-    case updateContacts = "/nzh/updateContacts"
+    case updateContacts = "/nzh/contact/updateContacts"
     case removeContacts = "/nzh/removeContacts"
-    case searchContacts = "/nzh/listContacts"
 
     // File/Image Upload and Download
     case uploadImage = "/nzh/uploadImage"

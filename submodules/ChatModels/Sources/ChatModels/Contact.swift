@@ -7,7 +7,7 @@
 import Foundation
 
 public struct Contact: Codable, Hashable, Identifiable, Sendable {
-    public var blocked: Bool?
+    // MARK: Social Server Properties
     public var cellphoneNumber: String?
     public var email: String?
     public var firstName: String?
@@ -16,9 +16,12 @@ public struct Contact: Codable, Hashable, Identifiable, Sendable {
     public var image: String?
     public var lastName: String?
     public var user: User?
-    public var notSeenDuration: Int?
     public var time: UInt?
     public var userId: Int?
+    
+    // MARK: Chat Server Properties
+    public var blocked: Bool?
+    public var notSeenDuration: Int?
 
     public init(from decoder: Decoder) throws {
         guard let container = try? decoder.container(keyedBy: CodingKeys.self) else { return }

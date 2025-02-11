@@ -13,6 +13,7 @@ public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
     public var lastName: String?
     public var ownerId: Int?
     public var username: String?
+    public var metadata: String?
     // This property will be override in runtime in addContactMethod
     private var typeCode: String?
     public let uniqueId: String
@@ -23,6 +24,7 @@ public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
                 firstName: String? = nil,
                 lastName: String? = nil,
                 ownerId: Int? = nil,
+                metadata: String? = nil,
                 typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.cellphoneNumber = cellphoneNumber
@@ -31,6 +33,7 @@ public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
         self.lastName = lastName
         self.ownerId = ownerId
         username = nil
+        self.metadata = metadata
         self.uniqueId = UUID().uuidString
         self.typeCodeIndex = typeCodeIndex
     }
@@ -41,6 +44,7 @@ public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
                 lastName: String? = nil,
                 ownerId: Int? = nil,
                 username: String? = nil,
+                metadata: String? = nil,
                 typeCodeIndex: TypeCodeIndexProtocol.Index = 0
     )
     {
@@ -50,6 +54,7 @@ public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
         self.lastName = lastName
         self.ownerId = ownerId
         self.username = username
+        self.metadata = metadata
         self.uniqueId = UUID().uuidString
         self.typeCodeIndex = typeCodeIndex
     }
@@ -67,6 +72,7 @@ public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
         case username
         case uniqueId
         case typeCode
+        case metadata
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -79,5 +85,6 @@ public struct AddContactRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
         try container.encodeIfPresent(username, forKey: .username)
         try container.encodeIfPresent(uniqueId, forKey: .uniqueId)
         try container.encodeIfPresent(typeCode, forKey: .typeCode)
+        try container.encodeIfPresent(metadata, forKey: .metadata)
     }
 }
