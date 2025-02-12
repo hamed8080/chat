@@ -26,7 +26,7 @@ public extension ContactsRequest {
               coreUserId: coreUserId,
               offset: offset,
               order: fetchOrdering,
-              query: query,
+              query: q,
               summery: summery)
     }
 
