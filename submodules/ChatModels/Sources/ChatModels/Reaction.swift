@@ -34,5 +34,11 @@ public struct Reaction: Codable, Hashable, Identifiable, Sendable {
         case participantVO
     }
 
-    public func encode(to encoder: Encoder) throws {}
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try? container.encodeIfPresent(id, forKey: .id)
+        try? container.encodeIfPresent(time, forKey: .time)
+        try? container.encodeIfPresent(reaction, forKey: .reaction)
+        try? container.encodeIfPresent(participant, forKey: .participantVO)
+    }
 }

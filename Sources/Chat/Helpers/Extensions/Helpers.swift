@@ -311,8 +311,6 @@ extension ContactManager {
          CNContactPhoneNumbersKey,
          CNContactEmailAddressesKey]
     }
-    
-  
 }
 
 extension CNContact {
@@ -472,5 +470,30 @@ extension UserReactionRequest {
                                           cache: true,
                                           subjectId: conversationId,
                                           typeCode: typeCode)
+    }
+}
+
+
+extension ReactionCountRequest {
+    func toCountResponse(models: [ReactionCountList], typeCode: String?) -> ChatResponse<[ReactionCountList]> {
+        ChatResponse(uniqueId: uniqueId,
+                     result: models,
+                     error: nil,
+                     contentCount: nil,
+                     hasNext: models.count >= messageIds.count,
+                     cache: true,
+                     subjectId: conversationId,
+                     time: nil,
+                     typeCode: typeCode)
+    }
+}
+
+extension ChatResponse<ReactionMessageResponse> {
+    func toCacheModel(action: ReactionCountAction, myId: Int?) -> CacheReactionCountModel {
+        CacheReactionCountModel(action: action,
+                                messageId: result?.messageId ?? -1,
+                                reaction: result?.reaction,
+                                oldSticker: result?.oldSticker,
+                                myUserId: myId ?? -1)
     }
 }

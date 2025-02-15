@@ -31,15 +31,23 @@ final class ReactionManager: ReactionProtocol {
     }
     
     func count(_ request: ReactionCountRequest) {
-        guard let tuple = store?.tupleOfMessageIds(request.messageIds) else { return }
+        guard let store = store else { return }
+        let tuple = store.tupleOfMessageIds(request.messageIds)
         var newRquest = request
         newRquest.messageIds = tuple.notInMemory
-        if let response = store?.count(inMemoryMessageIds: tuple.inMemory, request: request) {
+        if let response = store.count(inMemoryMessageIds: tuple.inMemory, request: request) {
             emitEvent(.reaction(.count(response)))
         }
-        store?.storeNewCountRequestMessageIds(newRquest.messageIds)
+        store.storeNewCountRequestMessageIds(newRquest.messageIds)
         if newRquest.messageIds.isEmpty { return }
         chat.prepareToSendAsync(req: newRquest, type: .reactionCount)
+        
+        let typeCode = request.toTypeCode(chat)
+        cache?.reactionCount?.fetch(request.messageIds) { [weak self] models in
+            let reactionCounts = models.compactMap({$0.codable})
+            let response = request.toCountResponse(models: reactionCounts, typeCode: typeCode)
+            self?.emitEvent(event: .reaction(.count(response)))
+        }
     }
     
     func get(_ request: ReactionListRequest) {
@@ -74,7 +82,6 @@ final class ReactionManager: ReactionProtocol {
     
     func replace(_ request: ReplaceReactionRequest) {
         chat.prepareToSendAsync(req: request, type: .replaceReaction)
-        cache?.reactionCount?.setReactionCount(messageId: request.messageId, reaction: request.reaction, action: .decrease)
     }
     
     func delete(_ request: DeleteReactionRequest) {
@@ -111,7 +118,7 @@ final class ReactionManager: ReactionProtocol {
     
     func onAddReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
-        cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .increase)
+        cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .add, myId: chat.userInfo?.id))
         emitEvent(.reaction(.add(response)))
         store?.onAdd(response)
     }
@@ -119,13 +126,13 @@ final class ReactionManager: ReactionProtocol {
     func onReplaceReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         emitEvent(.reaction(.replace(response)))
-        cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .increase)
+        cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .replace, myId: chat.userInfo?.id))
         store?.onReplace(response)
     }
     
     func onDeleteReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
-        cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .decrease)
+        cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .delete, myId: chat.userInfo?.id))
         emitEvent(.reaction(.delete(response)))
         store?.onDelete(response)
     }
@@ -145,6 +152,12 @@ final class ReactionManager: ReactionProtocol {
     func onCustomizeReactions(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<CustomizeReactionsResponse> = asyncMessage.toChatResponse()
         emitEvent(.reaction(.customizeReactions(response)))
+    }
+    
+    private nonisolated func emitEvent(event: ChatEventType) {
+        Task { @ChatGlobalActor [weak self] in
+            self?.emitEvent(event)
+        }
     }
     
     private func emitEvent(_ event: ChatEventType) {

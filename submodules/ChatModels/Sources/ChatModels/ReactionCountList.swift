@@ -36,5 +36,6 @@ public struct ReactionCountList: Codable, Hashable, Identifiable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(messageId, forKey: .messageId)
         try container.encodeIfPresent(reactionCounts, forKey: .reactionCountVO)
+        try container.encodeIfPresent(userReaction, forKey: .userReaction)
     }
 }

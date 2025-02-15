@@ -264,6 +264,7 @@
     <entity name="CDReactionCountList" representedClassName="ChatCache.CDReactionCountList" syncable="YES">
         <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="reactionCounts" optional="YES" attributeType="Binary" valueTransformerName=""/>
+        <attribute name="userReaction" optional="YES" attributeType="Binary"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="messageId"/>
