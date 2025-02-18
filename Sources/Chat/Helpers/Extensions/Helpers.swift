@@ -46,8 +46,10 @@ internal func toConversation(request: SendTextMessageRequest) -> Conversation {
 }
 
 internal func lastMessageToConversation(thread: Conversation) -> Conversation {
-    let lastMessageVO = Message(threadId: thread.id, message: thread.lastMessage)
-    return Conversation(id: lastMessageVO.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO.toLastMessageVO)
+    var lastMessageVO = thread.lastMessageVO
+    lastMessageVO?.threadId = thread.id
+    lastMessageVO?.message = thread.lastMessage
+    return Conversation(id: lastMessageVO?.threadId, lastMessage: lastMessageVO?.message, lastMessageVO: lastMessageVO)
 }
 
 internal extension Message {

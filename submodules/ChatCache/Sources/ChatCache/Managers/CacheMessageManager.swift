@@ -30,12 +30,15 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         let req = Entity.fetchRequest()
         req.predicate = predicate
         guard let message = (try? viewContext.fetch(req))?.first else { return }
-        if let next = next(threadId: threadId, messageId: messageId) {
-            next.previousId = message.previousId
+        viewContext.perform { [weak self] in
+            guard let self = self else { return }
+            if let next = next(threadId: threadId, messageId: messageId) {
+                next.previousId = message.previousId
+            }
+            setNilReplyReferences(for: messageId)
+            viewContext.delete(message)
+            saveViewContext()
         }
-        setNilReplyReferences(for: messageId)
-        viewContext.delete(message)
-        saveViewContext()
     }
     
     private func setNilReplyReferences(for messageId: Int) {
