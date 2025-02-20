@@ -118,6 +118,7 @@
         </uniquenessConstraints>
     </entity>
     <entity name="CDMessage" representedClassName="ChatCache.CDMessage" syncable="YES">
+        <attribute name="callHistory" optional="YES" attributeType="Transformable" valueTransformerName="CallHistoryValueTransformer"/>
         <attribute name="deletable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="delivered" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="editable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>

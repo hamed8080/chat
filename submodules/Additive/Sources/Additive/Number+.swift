@@ -58,6 +58,15 @@ public extension Numeric {
         dateFormatterComp.zeroFormattingBehavior = .pad
         return dateFormatterComp.string(from: TimeInterval(Int(truncating: seconds)))
     }
+    
+    func timerStringTripleSection(locale: Locale = .current) -> String? {
+        guard let seconds = self as? NSNumber else { return nil }
+        dateFormatterComp.calendar?.locale = locale
+        dateFormatterComp.allowedUnits = [.hour, .minute, .second]
+        dateFormatterComp.unitsStyle = .positional
+        dateFormatterComp.zeroFormattingBehavior = .pad
+        return dateFormatterComp.string(from: TimeInterval(Int(truncating: seconds)))
+    }
 
     func localNumber(locale: Locale = .current) -> String? {
         guard let nsNumber = self as? NSNumber else { return nil }

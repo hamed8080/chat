@@ -63,7 +63,9 @@ public extension URL {
                 appendQueryItems(queryItems)
             }
         } catch {
+#if DEBUG
             print("An error has happened when trying to appned query.")
+#endif            
         }
     }
 

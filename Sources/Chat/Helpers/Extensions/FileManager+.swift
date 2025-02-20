@@ -15,7 +15,9 @@ extension FileManager {
                 fileHandle.write(data)
                 fileHandle.closeFile()
             } catch {
+#if DEBUG
                 print("Can't open file to append\(error.localizedDescription)")
+#endif                
             }
         }
     }

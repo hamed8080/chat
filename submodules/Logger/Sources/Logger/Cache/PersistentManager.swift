@@ -15,7 +15,9 @@ public final class PersistentManager {
         do {
             try loadContainer()
         } catch {
+#if DEBUG
             print(error)
+#endif            
         }
     }
 
@@ -43,7 +45,9 @@ public final class PersistentManager {
         let container = NSPersistentContainer(name: "\(baseModelFileName)", managedObjectModel: try modelFile())
         container.loadPersistentStores { desc, error in
             if let error = error {
+#if DEBUG
                 print("error load CoreData persistentstore des:\(desc) error: \(error)")
+#endif
             }
         }
         container.viewContext.automaticallyMergesChangesFromParent = true

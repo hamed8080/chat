@@ -45,6 +45,7 @@ public extension CDMessage {
     @NSManaged var pinMessages: CDConversation?
     @NSManaged var replyInfo: ReplyInfoClass?
     @NSManaged var replyToMessageId: NSNumber?
+    @NSManaged var callHistory: CallHistoryClass?
 }
 
 public extension CDMessage {
@@ -71,6 +72,7 @@ public extension CDMessage {
         replyInfo = model.replyInfo?.toClass ?? replyInfo
         forwardInfo = model.forwardInfo?.toClass ?? forwardInfo
         replyToMessageId = model.replyInfo?.repliedToMessageId?.nsValue
+        callHistory = model.callHistory?.toClass ?? callHistory
 
         if let participant = model.participant, let threadId = threadId, let context = managedObjectContext?.sendable {
             setParticipant(participant, threadId.intValue, context)
@@ -109,6 +111,8 @@ public extension CDMessage {
                 participant: fillParticipant ? participant?.codable : nil,
                 replyInfo: replyInfo?.toStruct,
                 pinTime: pinTime?.uintValue,
-                notifyAll: notifyAll?.boolValue)
+                notifyAll: notifyAll?.boolValue,
+                callHistoryVO: callHistory?.toStruct
+       )
     }
 }

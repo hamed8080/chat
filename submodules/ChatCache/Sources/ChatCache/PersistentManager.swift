@@ -106,5 +106,6 @@ extension PersistentManager {
         ReplyInfoValueTransformer.register()
         PinMessageValueTransformer.register()
         ForwardInfoValueTransformer.register()
+        CallHistoryValueTransformer.register()
     }
 }

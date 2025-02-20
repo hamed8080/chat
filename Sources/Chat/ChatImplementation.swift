@@ -114,7 +114,9 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
                     await self.asyncManager.createAsync()
                 }
             } catch {
+#if DEBUG
                 print("Failed to request deviceId: \(error)")
+#endif                
             }
         }
     }

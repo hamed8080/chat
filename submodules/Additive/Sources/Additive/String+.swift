@@ -38,7 +38,9 @@ public extension String {
               return String(data: prettyJsonData, encoding: .utf8) ?? self
           } catch {
               // Return the original string if any errors occur
+#if DEBUG
               print("Error decoding JSON: \(error)")
+#endif              
               return self
           }
       }

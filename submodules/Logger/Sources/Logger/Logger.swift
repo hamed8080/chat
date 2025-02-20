@@ -119,7 +119,9 @@ public final class Logger: @unchecked Sendable {
                 deleteLogFromCache(log: log, context: sendable.context)
             }
         } catch {
+#if DEBUG
             print("error to send log \(error)")
+#endif            
         }
     }
 
