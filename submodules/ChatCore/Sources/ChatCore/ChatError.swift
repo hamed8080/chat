@@ -71,10 +71,36 @@ public struct ChatError: Decodable, Sendable {
     }
 }
 
-public final class BanError: Decodable, Sendable {
+public struct BanError: Codable, Sendable, Hashable {
     public let errorMessage: String?
     public let duration: Int?
     public let uniqueId: String?
+    
+    public init(errorMessage: String?, duration: Int?, uniqueId: String?) {
+        self.errorMessage = errorMessage
+        self.duration = duration
+        self.uniqueId = uniqueId
+    }
+    
+    enum CodingKeys: CodingKey {
+        case errorMessage
+        case duration
+        case uniqueId
+    }
+    
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.errorMessage = try container.decodeIfPresent(String.self, forKey: .errorMessage)
+        self.duration = try container.decodeIfPresent(Int.self, forKey: .duration)
+        self.uniqueId = try container.decodeIfPresent(String.self, forKey: .uniqueId)
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.errorMessage, forKey: .errorMessage)
+        try container.encodeIfPresent(self.duration, forKey: .duration)
+        try container.encodeIfPresent(self.uniqueId, forKey: .uniqueId)
+    }
 }
 
 public extension AsyncError {
