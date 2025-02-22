@@ -47,7 +47,8 @@ public class ReplyInfoClass: NSObject, Codable, Identifiable {
         systemMetadata: String? = nil,
         repliedToMessageNanos: UInt? = nil,
         repliedToMessageTime: UInt? = nil,
-        participant: Participant? = nil
+        participant: Participant? = nil,
+        replyPrivatelyInfo: ReplyPrivatelyInfo? = nil
     ) {
         self.deleted = deleted
         self.repliedToMessageId = repliedToMessageId
@@ -58,6 +59,7 @@ public class ReplyInfoClass: NSObject, Codable, Identifiable {
         self.repliedToMessageNanos = repliedToMessageNanos
         self.repliedToMessageTime = repliedToMessageTime
         self.participant = participant
+        self.replyPrivatelyInfo = replyPrivatelyInfo
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -84,6 +86,7 @@ public class ReplyInfoClass: NSObject, Codable, Identifiable {
         try container.encodeIfPresent(repliedToMessageTime, forKey: .repliedToMessageTime)
         try container.encodeIfPresent(repliedToMessageNanos, forKey: .repliedToMessageNanos)
         try container.encodeIfPresent(participant, forKey: .participant)
+        try container.encodeIfPresent(replyPrivatelyInfo, forKey: .replyPrivatelyInfoVO)
     }
 }
 
@@ -97,7 +100,9 @@ public extension ReplyInfo {
                                        systemMetadata: systemMetadata,
                                        repliedToMessageNanos: repliedToMessageNanos,
                                        repliedToMessageTime: repliedToMessageTime,
-                                       participant: participant)
+                                       participant: participant,
+                                       replyPrivatelyInfo: replyPrivatelyInfo
+        )
         return replyInfo
     }
 }
@@ -112,7 +117,9 @@ public extension ReplyInfoClass {
                                   systemMetadata: systemMetadata,
                                   repliedToMessageNanos: repliedToMessageNanos,
                                   repliedToMessageTime: repliedToMessageTime,
-                                  participant: participant)
+                                  participant: participant,
+                                  replyPrivatelyInfo: replyPrivatelyInfo
+        )
         return replyInfo
     }
 }

@@ -42,7 +42,8 @@ public struct ReplyInfo: Codable, Identifiable, Hashable, Sendable {
         systemMetadata: String? = nil,
         repliedToMessageNanos: UInt? = nil,
         repliedToMessageTime: UInt? = nil,
-        participant: Participant? = nil
+        participant: Participant? = nil,
+        replyPrivatelyInfo: ReplyPrivatelyInfo? = nil
     ) {
         self.deleted = deleted
         self.repliedToMessageId = repliedToMessageId
@@ -53,6 +54,7 @@ public struct ReplyInfo: Codable, Identifiable, Hashable, Sendable {
         self.repliedToMessageNanos = repliedToMessageNanos
         self.repliedToMessageTime = repliedToMessageTime
         self.participant = participant
+        self.replyPrivatelyInfo = replyPrivatelyInfo
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -79,5 +81,6 @@ public struct ReplyInfo: Codable, Identifiable, Hashable, Sendable {
         try container.encodeIfPresent(repliedToMessageTime, forKey: .repliedToMessageTime)
         try container.encodeIfPresent(repliedToMessageNanos, forKey: .repliedToMessageNanos)
         try container.encodeIfPresent(participant, forKey: .participant)
+        try container.encodeIfPresent(replyPrivatelyInfo, forKey: .replyPrivatelyInfoVO)
     }
 }
