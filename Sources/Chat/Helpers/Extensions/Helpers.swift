@@ -59,9 +59,9 @@ internal extension Message {
 }
 
 internal extension FileMetaData {
-    func toMapMetaData(coordinate: Coordinate) -> FileMetaData {
+    func toMapMetaData(config: ChatConfig, coordinate: Coordinate) -> FileMetaData {
         var metaData = self
-        let mapLink = "\(Routes.baseMapLink.rawValue)\(coordinate.lat),\(coordinate.lng)"
+        let mapLink = "\(config.spec.server.neshan)/@\(coordinate.lat),\(coordinate.lng)"
         metaData.latitude = coordinate.lat
         metaData.longitude = coordinate.lng
         metaData.reverse = reverse.string
@@ -144,8 +144,8 @@ typealias ReplyPrivatelyResponse = (uploadedRes: UploadResult?,
                                     uniqueId: String)
 
 public extension UploadResult {
-    func toMapMetaData(_ coordinate: Coordinate) -> UploadResult {
-        let mapMetaData = metaData?.toMapMetaData(coordinate: coordinate)
+    func toMapMetaData(config: ChatConfig, _ coordinate: Coordinate) -> UploadResult {
+        let mapMetaData = metaData?.toMapMetaData(config: config, coordinate: coordinate)
         var resp = self
         resp.metaData = mapMetaData
         return resp

@@ -8,6 +8,7 @@ import Foundation
 import ChatTransceiver
 import ChatDTO
 import ChatCore
+import Spec
 
 public extension DownloadManagerParameters {
 
@@ -15,10 +16,10 @@ public extension DownloadManagerParameters {
         var request = request
         let url: URL
         if request.thumbnail, request.withNewthumbnailAPI {
-            url = URL(string: "\(config.fileServer)\(Routes.thumbnail.rawValue.replacingOccurrences(of: "{hashCode}", with: request.hashCode))")!
+            url = URL(string: "\(config.spec.server.file)\(config.spec.paths.podspace.download.thumbnail.replacingOccurrences(of: "{hashCode}", with: request.hashCode))")!
             request.quality = 1
         } else {
-            url = URL(string: "\(config.fileServer)\(Routes.images.rawValue)/\(request.hashCode)")!
+            url = URL(string: "\(config.spec.server.file)\(config.spec.paths.podspace.download.images)/\(request.hashCode)")!
         }
         self.init(forceToDownload: request.forceToDownloadFromServer || cache?.isFileExist(url: url) == false,
                   url: url,
@@ -33,7 +34,7 @@ public extension DownloadManagerParameters {
     }
 
     init(_ request: FileRequest, _ config: ChatConfig, _ cache: CacheFileManagerProtocol?) {
-        let url = URL(string: "\(config.fileServer)\(Routes.files.rawValue)/\(request.hashCode)")!
+        let url = URL(string: "\(config.spec.server.file)\(config.spec.paths.podspace.download.files)/\(request.hashCode)")!
         self.init(forceToDownload: request.forceToDownloadFromServer || cache?.isFileExist(url: url) == false,
                   url: url,
                   token: config.token,

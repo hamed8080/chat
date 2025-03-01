@@ -12,6 +12,7 @@
 @_exported import ChatModels
 @_exported import ChatTransceiver
 @_exported import ChatExtensions
+@_exported import Spec
 import Foundation
 import Logger
 

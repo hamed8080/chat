@@ -18,6 +18,7 @@ let package = Package(
     dependencies:  [
         .package(path: "../Additive"),
         .package(path: "../Mocks"),
+        .package(path: "../Spec"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
@@ -25,6 +26,7 @@ let package = Package(
             name: "Logger",
             dependencies: [
                 .product(name: "Additive", package: "Additive"),
+                .product(name: "Spec", package: "Spec"),
                 .product(name: "Mocks", package: "Mocks"),
             ],
             resources: [.process("Resources")]
@@ -33,6 +35,7 @@ let package = Package(
             name: "LoggerTests",
             dependencies: [
                 .product(name: "Additive", package: "Additive"),
+                .product(name: "Spec", package: "Spec"),
                 .product(name: "Mocks", package: "Mocks"),
                 "Logger",
             ]

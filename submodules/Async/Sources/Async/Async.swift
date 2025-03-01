@@ -82,7 +82,7 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate {
     }
 
     public func recreate() {
-        socket = type(of: socket).init(url: URL(string: config.socketAddress)!, timeout: config.connectionRetryInterval, logger: logger)
+        socket = type(of: socket).init(url: URL(string: config.spec.server.socket)!, timeout: config.connectionRetryInterval, logger: logger)
         isDisposed = false
     }
 

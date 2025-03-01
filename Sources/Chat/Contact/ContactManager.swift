@@ -80,7 +80,7 @@ final class ContactManager: ContactProtocol {
     }
 
     func remove(_ request: RemoveContactsRequest) {
-        let url = "\(chat.config.platformHost)\(Routes.removeContacts.rawValue)"
+        let url = "\(chat.config.spec.server.social)\(chat.config.spec.paths.social.removeContacts)"
         let removeRequest = request
         let typeCode = request.toTypeCode(chat)
         let urlReq = request.toURLReq(url, chat.config.token, typeCode)
@@ -162,7 +162,7 @@ final class ContactManager: ContactProtocol {
     }
 
     func add(_ request: AddContactRequest) {
-        let url = "\(chat.config.platformHost)\(Routes.addContacts.rawValue)"
+        let url = "\(chat.config.spec.server.social)\(chat.config.spec.paths.social.addContacts)"
         let typeCode = chat.config.typeCodes[request.typeCodeIndex].typeCode
         let urlReq = request.toAddReq(url, chat.config.token, typeCode)
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
@@ -175,7 +175,7 @@ final class ContactManager: ContactProtocol {
     }
 
     func addAll(_ request: [AddContactRequest]) {
-        let url = "\(chat.config.platformHost)\(Routes.addContacts.rawValue)"
+        let url = "\(chat.config.spec.server.social)\(chat.config.spec.paths.social.addContacts)"
         guard let urlReq = request.toAddAllReq(url: url, token: chat.config.token) else { return }
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, response, error in

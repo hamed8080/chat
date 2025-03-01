@@ -108,7 +108,7 @@ public final class Logger: @unchecked Sendable {
 
     private func sendLog(log: CDLog, context: NSManagedObjectContext) async {
         let sendable = context.sendable
-        guard let urlString = config.logServerURL, let url = URL(string: urlString) else { return }
+        guard let url = URL(string: config.spec.server.log) else { return }
         var req = URLRequest(url: url)
         req.httpMethod = config.logServerMethod
         req.httpBody = try? JSONEncoder().encode(log.codable)

@@ -151,8 +151,9 @@ final class MessageManager: MessageProtocol {
 
     private func sendTextLoactionMessage(_ coordinate: Coordinate, _ textMessageReq: SendTextMessageRequest, _ imageRequest: UploadImageRequest, _ reverse: MapReverse) {
         cache?.fileQueue?.insert(models: [textMessageReq.queueOfFileMessages(imageRequest)])
+        let config = chat.config
         fileManager?.upload(imageRequest, nil) { [weak self] resp in
-            self?.sendTextMessageOnUpload(textMessageReq, imageRequest.uniqueId, resp.toMapMetaData(coordinate))
+            self?.sendTextMessageOnUpload(textMessageReq, imageRequest.uniqueId, resp.toMapMetaData(config: config, coordinate))
         }
     }
 

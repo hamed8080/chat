@@ -1,0 +1,35 @@
+{
+  "configurations" : [
+    {
+      "id" : "4530AF08-D3A0-4FCC-8B88-5D5FA80A5F77",
+      "name" : "English-US",
+      "options" : {
+        "language" : "en",
+        "region" : "US"
+      }
+    },
+    {
+      "id" : "F2931F19-67AC-4825-A27B-3E114311783B",
+      "name" : "Persian-IR",
+      "options" : {
+        "language" : "",
+        "region" : "IR"
+      }
+    },
+    {
+      "id" : "6099E8D1-4E11-4F50-A925-0B657F742233",
+      "name" : "Germany-DE",
+      "options" : {
+        "language" : "de",
+        "region" : "DE"
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+
+  ],
+  "version" : 1
+}

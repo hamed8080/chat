@@ -39,13 +39,13 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     }
 
     internal func upload(_ request: UploadImageRequest, _ progress: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let url = url(imageRequest: request, fileServer: chat.config.fileServer)
+        let url = url(imageRequest: request, fileServer: chat.config.spec.server.file)
         let params = UploadManagerParameters(url: url, request, token: chat.config.token)
         upload(params, request.data, progress, completion)
     }
 
     internal func upload(_ request: UploadFileRequest, _ progress: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let url = url(fileRequest: request, fileServer: chat.config.fileServer)
+        let url = url(fileRequest: request, fileServer: chat.config.spec.server.file)
         let params = UploadManagerParameters(url: url, request, token: chat.config.token)
         upload(params, request.data, progress, completion)
     }
@@ -53,10 +53,11 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     private func url(imageRequest: UploadImageRequest? = nil, fileRequest: UploadFileRequest? = nil, fileServer: String) -> String {
         let userGroupHash = imageRequest?.userGroupHash ?? fileRequest?.userGroupHash
         let uploadImage = imageRequest != nil
-        let userGroupPath: Routes = uploadImage ? .uploadImageWithUserGroup : .uploadFileWithUserGroup
-        let normalPath: Routes = uploadImage ? .uploadImages : .files
-        let path: Routes = userGroupHash != nil ? userGroupPath : normalPath
-        let url = fileServer + path.rawValue.replacingOccurrences(of: "{userGroupHash}", with: userGroupHash ?? "")
+        let uploadPath = chat.config.spec.paths.podspace.upload
+        let userGroupPath: String = uploadImage ? uploadPath.usergroupsImages : uploadPath.usergroupsFiles
+        let normalPath: String = uploadImage ? uploadPath.images : uploadPath.files
+        let path: String = userGroupHash != nil ? userGroupPath : normalPath
+        let url = fileServer + path.replacingOccurrences(of: "{userGroupHash}", with: userGroupHash ?? "")
         return url
     }
 
@@ -128,10 +129,11 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         let isImage = params.imageRequest != nil
         guard let hashCode = response.result?.hash else { return }
         var url: URL?
+        let server = config.spec.server.file
         if isImage {
-            url = URL(string: "\(config.fileServer)\(Routes.images.rawValue)/\(hashCode)")!
+            url = URL(string: "\(server)\(config.spec.paths.podspace.download.images)/\(hashCode)")!
         } else {
-            url = URL(string: "\(config.fileServer)\(Routes.files.rawValue)/\(hashCode)")!
+            url = URL(string: "\(server)\(config.spec.paths.podspace.download.files)/\(hashCode)")!
         }
         guard let url = url else { return }
         fm?.saveFile(url: url, data: fileData, saveCompletion: saveCompletion)

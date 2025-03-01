@@ -7,17 +7,14 @@
 import Async
 import Foundation
 import Logger
+import Spec
 
 public struct ChatConfig: Codable, Sendable {
+    public let spec: Spec
     public var asyncConfig: AsyncConfig
     public private(set) var callConfig: CallConfig
-    public private(set) var ssoHost: String
-    public private(set) var platformHost: String
-    public private(set) var fileServer: String
-    public private(set) var podSpaceFileServerAddress: String = "https://podspace.pod.ir"
     public private(set) var token: String
     public private(set) var mapApiKey: String?
-    public private(set) var mapServer: String = "https://api.neshan.org/v1"
     public private(set) var typeCodes: [OwnerTypeCode] = []
     public private(set) var enableCache: Bool = false
     public private(set) var cacheTimeStampInSec: Int = (2 * 24) * (60 * 60)
@@ -37,20 +34,15 @@ public struct ChatConfig: Codable, Sendable {
     public private(set) var saveOnUpload: Bool = true
     /// With Enabling queue you have the option to retry a message when a message fails to send in times there is a connection error.
     public private(set) var enableQueue: Bool = false
-
-    public private(set) var loggerConfig: LoggerConfig = .init(prefix: "CHAT_SDK")
+    public private(set) var loggerConfig: LoggerConfig
 
     // Memberwise Initializer
     public init(
+        spec: Spec,
         asyncConfig: AsyncConfig,
         callConfig: CallConfig,
         token: String,
-        ssoHost: String,
-        platformHost: String,
-        fileServer: String,
-        podSpaceFileServerAddress _: String = "https://podspace.pod.ir",
         mapApiKey: String? = nil,
-        mapServer: String = "https://api.neshan.org/v1",
         typeCodes: [OwnerTypeCode] = [],
         enableCache: Bool = false,
         cacheTimeStampInSec: Int = (2 * 24) * (60 * 60),
@@ -67,16 +59,13 @@ public struct ChatConfig: Codable, Sendable {
         appGroup: String? = nil,
         saveOnUpload: Bool = true,
         enableQueue: Bool = false,
-        loggerConfig: LoggerConfig = LoggerConfig(prefix: "CHAT_SDK")
+        loggerConfig: LoggerConfig? = nil
     ) {
+        self.spec = spec
         self.asyncConfig = asyncConfig
         self.callConfig = callConfig
-        self.ssoHost = ssoHost
-        self.platformHost = platformHost
-        self.fileServer = fileServer
         self.token = token
         self.mapApiKey = mapApiKey
-        self.mapServer = mapServer
         self.typeCodes.append(contentsOf: typeCodes)
         if self.typeCodes.count == 0 {
             fatalError("You have to pass at least one type code!")
@@ -96,7 +85,7 @@ public struct ChatConfig: Codable, Sendable {
         self.appGroup = appGroup
         self.saveOnUpload = saveOnUpload
         self.enableQueue = enableQueue
-        self.loggerConfig = loggerConfig
+        self.loggerConfig = loggerConfig ?? LoggerConfig(spec: spec, prefix: "CHAT_SDK")
     }
 
     public mutating func updateToken(_ token: String) {
@@ -104,6 +93,7 @@ public struct ChatConfig: Codable, Sendable {
     }
 
     enum CodingKeys: String, CodingKey {
+        case spec
         case asyncConfig
         case callConfig
         case ssoHost
@@ -135,15 +125,11 @@ public struct ChatConfig: Codable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.spec = try container.decode(Spec.self, forKey: .spec)
         self.asyncConfig = try container.decode(AsyncConfig.self, forKey: .asyncConfig)
         self.callConfig = try container.decode(CallConfig.self, forKey: .callConfig)
-        self.ssoHost = try container.decode(String.self, forKey: .ssoHost)
-        self.platformHost = try container.decode(String.self, forKey: .platformHost)
-        self.fileServer = try container.decode(String.self, forKey: .fileServer)
-        self.podSpaceFileServerAddress = try container.decode(String.self, forKey: .podSpaceFileServerAddress)
         self.token = try container.decode(String.self, forKey: .token)
         self.mapApiKey = try container.decodeIfPresent(String.self, forKey: .mapApiKey)
-        self.mapServer = try container.decode(String.self, forKey: .mapServer)
         self.typeCodes = try container.decodeIfPresent([OwnerTypeCode].self, forKey: .typeCodes) ?? []
         if typeCodes.count == 0, let oldTypeCode = try? container.decodeIfPresent(String.self, forKey: .oldTypeCode) {
             typeCodes = [.init(typeCode: oldTypeCode, ownerId: nil)]
@@ -168,15 +154,11 @@ public struct ChatConfig: Codable, Sendable {
     
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(spec, forKey: .spec)
         try container.encodeIfPresent(asyncConfig, forKey: .asyncConfig)
         try container.encodeIfPresent(callConfig, forKey: .callConfig)
-        try container.encodeIfPresent(ssoHost, forKey: .ssoHost)
-        try container.encodeIfPresent(platformHost, forKey: .platformHost)
-        try container.encodeIfPresent(fileServer, forKey: .fileServer)
-        try container.encodeIfPresent(podSpaceFileServerAddress, forKey: .podSpaceFileServerAddress)
         try container.encodeIfPresent(token, forKey: .token)
         try container.encodeIfPresent(mapApiKey, forKey: .mapApiKey)
-        try container.encodeIfPresent(mapServer, forKey: .mapServer)
         try container.encodeIfPresent(typeCodes, forKey: .typeCodes)
         try container.encodeIfPresent(enableCache, forKey: .enableCache)
         try container.encodeIfPresent(cacheTimeStampInSec, forKey: .cacheTimeStampInSec)
@@ -198,15 +180,11 @@ public struct ChatConfig: Codable, Sendable {
 }
 
 public final class ChatConfigBuilder {
+    private(set) var spec: Spec
     private(set) var asyncConfig: AsyncConfig
     private(set) var callConfig: CallConfig = CallConfigBuilder().build()
-    private(set) var ssoHost: String = ""
-    private(set) var platformHost: String = ""
-    private(set) var fileServer: String = ""
-    private(set) var podSpaceFileServerAddress: String = "https://podspace.pod.ir"
     private(set) var token: String = ""
     private(set) var mapApiKey: String?
-    private(set) var mapServer: String = "https://api.neshan.org/v1"
     private(set) var typeCodes: [OwnerTypeCode] = []
     private(set) var enableCache: Bool = false
     private(set) var cacheTimeStampInSec: Int = (2 * 24) * (60 * 60)
@@ -223,34 +201,16 @@ public final class ChatConfigBuilder {
     private(set) var appGroup: String?
     private(set) var saveOnUpload: Bool = true
     private(set) var enableQueue: Bool = false
-    private(set) var loggerConfig: LoggerConfig = .init(prefix: "CHAT_SDK")
+    private(set) var loggerConfig: LoggerConfig
 
-    public init(_ asyncConfig: AsyncConfig) {
+    public init(spec: Spec, _ asyncConfig: AsyncConfig) {
+        self.spec = spec
         self.asyncConfig = asyncConfig
+        self.loggerConfig = LoggerConfig(spec: spec, prefix: "CHAT_SDK")
     }
 
     @discardableResult public func callConfig(_ callConfig: CallConfig) -> ChatConfigBuilder {
         self.callConfig = callConfig
-        return self
-    }
-
-    @discardableResult public func ssoHost(_ ssoHost: String) -> ChatConfigBuilder {
-        self.ssoHost = ssoHost
-        return self
-    }
-
-    @discardableResult public func platformHost(_ platformHost: String) -> ChatConfigBuilder {
-        self.platformHost = platformHost
-        return self
-    }
-
-    @discardableResult public func fileServer(_ fileServer: String) -> ChatConfigBuilder {
-        self.fileServer = fileServer
-        return self
-    }
-
-    @discardableResult public func podSpaceFileServerAddress(_ podSpaceFileServerAddress: String) -> ChatConfigBuilder {
-        self.podSpaceFileServerAddress = podSpaceFileServerAddress
         return self
     }
 
@@ -261,11 +221,6 @@ public final class ChatConfigBuilder {
 
     @discardableResult public func mapApiKey(_ mapApiKey: String?) -> ChatConfigBuilder {
         self.mapApiKey = mapApiKey
-        return self
-    }
-
-    @discardableResult public func mapServer(_ mapServer: String) -> ChatConfigBuilder {
-        self.mapServer = mapServer
         return self
     }
 
@@ -356,15 +311,11 @@ public final class ChatConfigBuilder {
 
     public func build() -> ChatConfig {
         ChatConfig(
+            spec: spec,
             asyncConfig: asyncConfig,
             callConfig: callConfig,
             token: token,
-            ssoHost: ssoHost,
-            platformHost: platformHost,
-            fileServer: fileServer,
-            podSpaceFileServerAddress: podSpaceFileServerAddress,
             mapApiKey: mapApiKey,
-            mapServer: mapServer,
             typeCodes: typeCodes,
             enableCache: enableCache,
             cacheTimeStampInSec: cacheTimeStampInSec,
