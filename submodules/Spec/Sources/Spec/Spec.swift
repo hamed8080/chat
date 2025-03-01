@@ -12,17 +12,20 @@ public struct Spec: Codable, Sendable {
     public let servers: [Server]
     public let server: Server
     public let paths: Paths
+    public let subDomains: SubDomains
     
-    public init(servers: [Server], server: Server, paths: Paths) {
+    public init(servers: [Server], server: Server, paths: Paths, subDomains: SubDomains) {
         self.servers = servers
         self.paths = paths
         self.server = server
+        self.subDomains = subDomains
     }
     
     private enum CodingKeys: String, CodingKey {
         case servers = "servers"
         case server = "server"
         case paths = "paths"
+        case subDomains = "subDomains"
     }
 }
 
@@ -38,8 +41,9 @@ public struct Server: Codable, Sendable {
     public let log: String
     public let neshan: String
     public let neshanAPI: String
+    public let panel: String
     
-    public init(server: String, socket: String, sso: String, social: String, file: String, serverName: String, talk: String, talkback: String, log: String, neshan: String, neshanAPI: String) {
+    public init(server: String, socket: String, sso: String, social: String, file: String, serverName: String, talk: String, talkback: String, log: String, neshan: String, neshanAPI: String, panel: String) {
         self.server = server
         self.socket = socket
         self.sso = sso
@@ -51,6 +55,7 @@ public struct Server: Codable, Sendable {
         self.log = log
         self.neshan = neshan
         self.neshanAPI = neshanAPI
+        self.panel = panel
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -65,6 +70,7 @@ public struct Server: Codable, Sendable {
         case log = "log"
         case neshan = "neshan"
         case neshanAPI = "neshanAPI"
+        case panel = "panel"
     }
 }
 
@@ -242,6 +248,18 @@ public struct LogPaths: Codable, Sendable {
     }
 }
 
+public struct PanelPaths: Codable, Sendable {
+    public let info: String
+    
+    public init(info: String) {
+        self.info = info
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case info = "info"
+    }
+}
+
 public struct Paths: Codable, Sendable {
     public let social: SocialPaths
     public let podspace: PodspacePaths
@@ -250,8 +268,9 @@ public struct Paths: Codable, Sendable {
     public let talkBack: TalkBackPaths
     public let talk: TalkPaths
     public let log: LogPaths
+    public let panel: PanelPaths
     
-    public init(social: SocialPaths, podspace: PodspacePaths, neshan: NeshanPaths, sso: SSOPaths, talkBack: TalkBackPaths, talk: TalkPaths, log: LogPaths) {
+    public init(social: SocialPaths, podspace: PodspacePaths, neshan: NeshanPaths, sso: SSOPaths, talkBack: TalkBackPaths, talk: TalkPaths, log: LogPaths, panel: PanelPaths) {
         self.social = social
         self.podspace = podspace
         self.neshan = neshan
@@ -259,6 +278,7 @@ public struct Paths: Codable, Sendable {
         self.talkBack = talkBack
         self.talk = talk
         self.log = log
+        self.panel = panel
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -269,5 +289,20 @@ public struct Paths: Codable, Sendable {
         case talkBack = "talkBack"
         case talk = "talk"
         case log = "log"
+        case panel = "panel"
+    }
+}
+
+public struct SubDomains: Codable, Sendable {
+    public let core: String
+    public let podspace: String
+    
+    public init(core: String, podspace: String) {
+        self.core = core
+        self.podspace = podspace
+    }
+    private enum CodingKeys: String, CodingKey {
+        case core = "core"
+        case podspace = "podspace"
     }
 }
