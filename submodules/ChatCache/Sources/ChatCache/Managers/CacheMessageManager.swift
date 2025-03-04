@@ -25,38 +25,31 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         }
     }
     
+    @MainActor
     public func delete(_ threadId: Int, _ messageId: Int) {
         let predicate = predicate(threadId, messageId)
         let req = Entity.fetchRequest()
         req.predicate = predicate
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            guard let message = (try? self.viewContext.fetch(req))?.first else { return }
-            self.viewContext.perform { [weak self] in
-                guard let self = self else { return }
-                if let next = next(threadId: threadId, messageId: messageId) {
-                    next.previousId = message.previousId
-                }
-                setNilReplyReferences(for: messageId)
-                viewContext.delete(message)
-                saveViewContext()
-            }
+        guard let message = (try? self.viewContext.fetch(req))?.first else { return }
+        if let next = next(threadId: threadId, messageId: messageId) {
+            next.previousId = message.previousId
         }
+        setNilReplyReferences(for: messageId)
+        viewContext.delete(message)
+        saveViewContext()
     }
     
+    @MainActor
     private func setNilReplyReferences(for messageId: Int) {
         // Fetch all reply referencecs to this message
         let replyMessagesPredicate = NSPredicate(format: "replyToMessageId == %@", messageId.nsValue)
         let replyReq = Entity.fetchRequest()
         replyReq.predicate = replyMessagesPredicate
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            let referencingMessages = (try? self.viewContext.fetch(replyReq)) ?? []
-            for referencingMessage in referencingMessages {
-                // Update replyInfo to set as deleted
-                referencingMessage.replyInfo = ReplyInfoClass(deleted: true)
-            }
+        let referencingMessages = (try? self.viewContext.fetch(replyReq)) ?? []
+        for referencingMessage in referencingMessages {
+            // Update replyInfo to set as deleted
+            referencingMessage.replyInfo = ReplyInfoClass(deleted: true)
         }
     }
     
@@ -66,24 +59,22 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         update(propertiesToUpdate, predicate)
     }
     
+    @MainActor
     public func addOrRemoveThreadPinMessages(_ pin: Bool, _ threadId: Int, _ messageId: Int) {
         let req = CDConversation.fetchRequest()
         req.predicate = NSPredicate(format: "id == %@", threadId.nsValue)
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            guard let threadEntity = try? self.viewContext.fetch(req).first else { return }
-            if pin == false {
-                threadEntity.pinMessage = nil
+        guard let threadEntity = try? self.viewContext.fetch(req).first else { return }
+        if pin == false {
+            threadEntity.pinMessage = nil
+            self.saveViewContext()
+        }
+        
+        if pin == true {
+            let messageReq = Entity.fetchRequest()
+            messageReq.predicate = self.predicate(threadId, messageId)
+            if let entity = try? self.viewContext.fetch(messageReq).first {
+                threadEntity.pinMessage = PinMessageClass(message: entity.codable())
                 self.saveViewContext()
-            }
-            
-            if pin == true {
-                let messageReq = Entity.fetchRequest()
-                messageReq.predicate = self.predicate(threadId, messageId)
-                if let entity = try? self.viewContext.fetch(messageReq).first {
-                    threadEntity.pinMessage = PinMessageClass(message: entity.codable())
-                    self.saveViewContext()
-                }
             }
         }
     }
@@ -171,6 +162,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         }
     }
     
+    @MainActor
     public func deleteAndReduceUnreadCountIfNeeded(_ threadId: Int, _ messageId: Int, _ userId: Int) async {
         if let entity = await find(threadId, messageId) {
             if entity.ownerId != userId, entity.seen == nil {
@@ -181,22 +173,18 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         }
     }
 
-    public func fetch(_ req: FetchMessagesRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            viewContext.perform {
-                let fetchRequest = Entity.fetchRequest()
-                let asc = (req.order == Ordering.asc.rawValue) ? true : false
-                let sortByTime = NSSortDescriptor(key: "time", ascending: asc)
-                fetchRequest.sortDescriptors = [sortByTime]
-                fetchRequest.predicate = self.predicateArray(req)
-                let totalCount = try self.viewContext.count(for: fetchRequest)
-                fetchRequest.fetchOffset = req.offset
-                fetchRequest.fetchLimit = req.count
-                let messages = try self.viewContext.fetch(fetchRequest).sorted(by: { self.compare(asc, $0, $1) })
-                completion(messages, totalCount)
-            }
-        }
+    @MainActor
+    public func fetch(_ req: FetchMessagesRequest) -> ([Entity], Int)? {
+        let fetchRequest = Entity.fetchRequest()
+        let asc = (req.order == Ordering.asc.rawValue) ? true : false
+        let sortByTime = NSSortDescriptor(key: "time", ascending: asc)
+        fetchRequest.sortDescriptors = [sortByTime]
+        fetchRequest.predicate = self.predicateArray(req)
+        let totalCount = (try? viewContext.count(for: fetchRequest)) ?? 0
+        fetchRequest.fetchOffset = req.offset
+        fetchRequest.fetchLimit = req.count
+        let messages = (try? viewContext.fetch(fetchRequest).sorted(by: { self.compare(asc, $0, $1) })) ?? []
+        return (messages, totalCount)
     }
 
     private func compare(_ ascending: Bool, _ message1: CDMessage, _ message2: CDMessage) -> Bool {

@@ -161,9 +161,9 @@ extension ChatResponse where T == Int? {
 }
 
 extension ChatInternalProtocol {
-    func cachedUserRoles(_ request: GeneralSubjectIdRequest) -> ChatResponse<[Roles]> {
+    func cachedUserRoles(_ request: GeneralSubjectIdRequest) async -> ChatResponse<[Roles]> {
         let userRoleCache = cache?.userRole
-        let roles = DispatchQueue.main.sync { userRoleCache?.roles(request.subjectId) }
+        let roles = await userRoleCache?.roles(request.subjectId)
         let typeCode = request.toTypeCode(self)
         return ChatResponse<[Roles]>(uniqueId: request.uniqueId, result: roles, cache: true, typeCode: typeCode)
     }
@@ -189,9 +189,9 @@ extension ChatResponse where T == [UserRole] {
     }
 }
 
-extension CacheUserManager.Entity? {
+extension CDUser {
     func toEvent(_ request: UserInfoRequest, _ typeCode: String?) -> ChatEventType {
-        let response = ChatResponse<User>(uniqueId: request.uniqueId, result: self?.codable, cache: true, typeCode: typeCode)
+        let response = ChatResponse<User>(uniqueId: request.uniqueId, result: codable, cache: true, typeCode: typeCode)
         return .user(.user(response))
     }
 }

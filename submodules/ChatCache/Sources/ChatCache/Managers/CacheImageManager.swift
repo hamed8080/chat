@@ -11,6 +11,6 @@ import ChatModels
 public final class CacheImageManager: BaseCoreDataManager<CDImage>, @unchecked Sendable {
     @MainActor
     public func first(hashCode: String) -> Entity.Model? {
-        firstOnMain(with: hashCode)?.codable
+        first(with: hashCode)?.codable
     }
 }

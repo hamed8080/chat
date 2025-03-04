@@ -25,18 +25,6 @@ public final class CacheParticipantManager: BaseCoreDataManager<CDParticipant>, 
         }
     }
 
-    public func first(_ threadId: Int, _ participantId: Int, _ completion: @escaping @Sendable (CDParticipant?) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.viewContext.perform {
-                let req = CDParticipant.fetchRequest()
-                req.predicate = self.predicate(threadId, participantId)
-                let participant = try self.viewContext.fetch(req).first
-                completion(participant)
-            }
-        }
-    }
-
     func predicate(_ threadId: Int, _ participantId: Int) -> NSPredicate {
         NSPredicate(format: "conversation.\(CDConversation.idName) == \(CDConversation.queryIdSpecifier) AND \(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue, participantId.nsValue)
     }

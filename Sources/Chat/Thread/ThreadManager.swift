@@ -72,8 +72,11 @@ final class ThreadManager: ThreadProtocol {
     func unreadCount(_ request: ThreadsUnreadCountRequest) {
         chat.prepareToSendAsync(req: request, type: .threadsUnreadCount)
         let typeCode = request.toTypeCode(chat)
-        cache?.conversation?.threadsUnreadcount(request.threadIds) { [weak self] unreadCount in
-            self?.emitEvent(event: unreadCount.toCachedUnreadCountEvent(request, typeCode))
+        let conversationCache = cache?.conversation
+        Task { @MainActor in
+            if let unreadCount = conversationCache?.threadsUnreadcount(request.threadIds) {
+                emitEvent(event: unreadCount.toCachedUnreadCountEvent(request, typeCode))
+            }
         }
     }
 
@@ -109,7 +112,10 @@ final class ThreadManager: ThreadProtocol {
         response.result?.id = response.subjectId
         emitEvent(.thread(.updatedInfo(response)))
         if let threadId = response.subjectId {
-            cache?.conversation?.updateTitle(id: threadId, title: response.result?.title)
+            let conversationCache = cache?.conversation
+            Task { @MainActor in
+                conversationCache?.updateTitle(id: threadId, title: response.result?.title)
+            }
         }
     }
 
@@ -175,8 +181,10 @@ final class ThreadManager: ThreadProtocol {
         requests[request.uniqueId] = request
         chat.prepareToSendAsync(req: request, type: .mutualGroups)
         let typeCode = request.toTypeCode(chat)
-        cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id ?? "") { [weak self] mutuals in
-            self?.emitEvent(event: mutuals.toCachedMutualGroupEvent(request, typeCode))
+        let mutualCache = cache?.mutualGroup
+        Task { @MainActor in
+            let mutuals = mutualCache?.mutualGroups(request.toBeUserVO.id ?? "") ?? []
+            emitEvent(event: mutuals.toCachedMutualGroupEvent(request, typeCode))
         }
     }
 
@@ -335,8 +343,10 @@ final class ThreadManager: ThreadProtocol {
     func allUnreadCount(_ request: AllThreadsUnreadCountRequest) {
         chat.prepareToSendAsync(req: request, type: .allUnreadMessageCount)
         let typeCode = request.toTypeCode(chat)
-        cache?.conversation?.allUnreadCount { [weak self] allUnreadCount in
-            self?.emitEvent(event: allUnreadCount.toAllCachedUnreadCountEvent(request, typeCode))
+        let conversationCache = cache?.conversation
+        Task { @MainActor in
+            let allUnreadCount = conversationCache?.allUnreadCount() ?? 0
+            emitEvent(event: allUnreadCount.toAllCachedUnreadCountEvent(request, typeCode))
         }
     }
 

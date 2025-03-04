@@ -15,15 +15,10 @@ public final class CacheMutualGroupManager: BaseCoreDataManager<CDMutualGroup>, 
         insert(models: [model])
     }
 
-    public func mutualGroups(_ id: String, _ completion: @escaping @Sendable ([Entity]) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.viewContext.perform {
-                let req = Entity.fetchRequest()
-                req.predicate = NSPredicate(format: "mutualId == %@", id)
-                let mutuals = try self.viewContext.fetch(req)
-                completion(mutuals)
-            }
-        }
+    @MainActor
+    public func mutualGroups(_ id: String) -> [Entity] {
+        let req = Entity.fetchRequest()
+        req.predicate = NSPredicate(format: "mutualId == %@", id)
+        return (try? self.viewContext.fetch(req)) ?? []
     }
 }

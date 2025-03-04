@@ -111,8 +111,11 @@ final class ContactManager: ContactProtocol {
     func get(_ request: ContactsRequest) {
         chat.prepareToSendAsync(req: request, type: .getContacts)
         let typeCode = request.toTypeCode(chat)
-        chat.cache?.contact?.getContacts(request.fetchRequest) { [weak self] contacts, _ in
-            self?.emitEvent(event: contacts.toCachedContactsEvent(request, typeCode))
+        let contactCache = chat.cache?.contact
+        Task { @MainActor in
+            if let (contacts, _) = contactCache?.getContacts(request.fetchRequest) {
+                emitEvent(event: contacts.toCachedContactsEvent(request, typeCode))
+            }
         }
     }
 
@@ -120,10 +123,10 @@ final class ContactManager: ContactProtocol {
         get(request)
     }
 
-    func onContacts(_ asyncMessage: AsyncMessage) {
+    func onContacts(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<[Contact]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         let copies = response.result?.compactMap{$0} ?? []
-        chat.cache?.contact?.insertContacts(models: copies)
+        await chat.cache?.contact?.insertContacts(models: copies)
         emitEvent(.contact(.contacts(response)))
     }
 
@@ -140,9 +143,9 @@ final class ContactManager: ContactProtocol {
         chat.prepareToSendAsync(req: request, type: .getBlocked)
     }
 
-    func onBlockedContacts(_ asyncMessage: AsyncMessage) {
+    func onBlockedContacts(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<[BlockedContactResponse]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        chat.cache?.contact?.insertContacts(models: response.result?.compactMap(\.contact) ?? [])
+        await chat.cache?.contact?.insertContacts(models: response.result?.compactMap(\.contact) ?? [])
         emitEvent(.contact(.blockedList(response)))
     }
 
@@ -186,12 +189,12 @@ final class ContactManager: ContactProtocol {
         .resume()
     }
 
-    private func onAddContacts(uniqueId: String?, data: Data?, response: URLResponse?, error: Error?) {
+    private func onAddContacts(uniqueId: String?, data: Data?, response: URLResponse?, error: Error?) async {
         let result: ChatResponse<ContactResponse>? = data?.decode(response, error, typeCode: nil)
         chat.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: chat.loggerUserInfo)
         let response = ChatResponse(uniqueId: uniqueId, result: result?.result?.contacts, error: result?.error, typeCode: result?.typeCode)
         emitEvent(.contact(.add(response)))
-        chat.cache?.contact?.insertContacts(models: result?.result?.contacts ?? [])
+        await chat.cache?.contact?.insertContacts(models: result?.result?.contacts ?? [])
     }
     
     private nonisolated func emitEvent(event: ChatEventType) {

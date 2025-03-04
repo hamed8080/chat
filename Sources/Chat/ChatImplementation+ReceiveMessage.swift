@@ -52,14 +52,14 @@ public extension ChatImplementation {
         case .forwardMessage:
              (message as? MessageManager)?.onForwardMessage(asyncMessage)
         case .getBlocked:
-             (contact as? ContactManager)?.onBlockedContacts(asyncMessage)
+             await (contact as? ContactManager)?.onBlockedContacts(asyncMessage)
         case .getContacts:
-             (contact as? ContactManager)?.onContacts(asyncMessage)
+             await (contact as? ContactManager)?.onContacts(asyncMessage)
         case .getCurrentUserRoles:
              (user as? UserManager)?.onCurrentUserRoles(asyncMessage)
              (conversation as? ThreadManager)?.onCurrentUserRoles(asyncMessage)
         case .getHistory:
-             (message as? MessageManager)?.onGetHistroy(asyncMessage)
+            await (message as? MessageManager)?.onGetHistroy(asyncMessage)
         case .messageDeliveredToParticipants:
              (message as? MessageManager)?.onMessageDeliveredToParticipants(asyncMessage)
         case .getMessageSeenParticipants:
@@ -216,11 +216,11 @@ public extension ChatImplementation {
         case .reactionList:
              (reaction as? ReactionManager)?.onReactionList(asyncMessage)
         case .addReaction:
-             (reaction as? ReactionManager)?.onAddReaction(asyncMessage)
+            await (reaction as? ReactionManager)?.onAddReaction(asyncMessage)
         case .replaceReaction:
-             (reaction as? ReactionManager)?.onReplaceReaction(asyncMessage)
+            await (reaction as? ReactionManager)?.onReplaceReaction(asyncMessage)
         case .removeReaction:
-             (reaction as? ReactionManager)?.onDeleteReaction(asyncMessage)
+            await (reaction as? ReactionManager)?.onDeleteReaction(asyncMessage)
         case .reactionCount:
              (reaction as? ReactionManager)?.onReactionCount(asyncMessage)
         case .lastActionInThread:

@@ -32,7 +32,9 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     func currentUserRoles(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .getCurrentUserRoles)
-        emitEvent(.user(.currentUserRoles(chat.cachedUserRoles(request))))
+        Task {
+            await emitEvent(.user(.currentUserRoles(chat.cachedUserRoles(request))))
+        }
     }
 
     func onCurrentUserRoles(_ asyncMessage: AsyncMessage) {
@@ -51,8 +53,11 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     public func userInfo(_ request: UserInfoRequest) {
         chat.prepareToSendAsync(req: request, type: .userInfo)
         let typeCode = request.toTypeCode(chat)
-        chat.cache?.user?.fetchCurrentUser { [weak self] userEntity in
-            self?.emitEvent(event: userEntity.toEvent(request, typeCode))
+        let userCache = chat.cache?.user
+        Task { @MainActor in
+            if let userEntity = userCache?.fetchCurrentUser() {
+                emitEvent(event: userEntity.toEvent(request, typeCode))
+            }
         }
     }
 
@@ -82,11 +87,11 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         }
     }
 
-    private func onInternalUser(response: ChatResponse<User>) {
+    private func onInternalUser(response: ChatResponse<User>) async {
         guard let uniqueId = response.uniqueId, requests[uniqueId] != nil else { return }
         requests.removeValue(forKey: uniqueId)
         if let user = response.result {
-            chat.cache?.user?.insertOnMain(user, isMe: true)
+            await chat.cache?.user?.insertOnMain(user, isMe: true)
             chat.userInfo = user
             (chat as? ChatImplementation)?.state = .chatReady
             emitEvent(.user(.user(.init(result: user, typeCode: response.typeCode))))
@@ -106,7 +111,9 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
-        onInternalUser(response: response)
+        Task {
+            await onInternalUser(response: response)
+        }
         emitEvent(.system(.serverTime(.init(userInfoRes: response))))
     }
 
