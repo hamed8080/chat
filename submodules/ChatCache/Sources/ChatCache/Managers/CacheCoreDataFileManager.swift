@@ -10,9 +10,12 @@ import ChatModels
 
 public final class CacheCoreDataFileManager: BaseCoreDataManager<CDFile>, @unchecked Sendable {
     public func first(hashCode: String, completion: @escaping @Sendable (Entity.Model?) -> Void) {
-        firstOnMain(with: hashCode, context: viewContext) { file in
-            let file = file?.codable
-            completion(file)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.firstOnMain(with: hashCode, context: self.viewContext) { file in
+                let file = file?.codable
+                completion(file)
+            }
         }
     }
     

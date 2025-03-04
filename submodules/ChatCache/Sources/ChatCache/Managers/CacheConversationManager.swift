@@ -68,21 +68,24 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
     }
     
     public func setUnreadCount(action: CacheUnreadCountAction, threadId: Int, completion: (@Sendable (Int) -> Void)? = nil) {
-        firstOnMain(with: threadId.nsValue, context: viewContext) { entity in
-            var cachedThreadCount = entity?.unreadCount?.intValue ?? 0
-            switch action {
-            case .increase:
-                cachedThreadCount += 1
-                break
-            case .decrease:
-                cachedThreadCount = max(0, cachedThreadCount - 1)
-                break
-            case let .set(count):
-                cachedThreadCount = max(0, count)
-                break
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.firstOnMain(with: threadId.nsValue, context: self.viewContext) { entity in
+                var cachedThreadCount = entity?.unreadCount?.intValue ?? 0
+                switch action {
+                case .increase:
+                    cachedThreadCount += 1
+                    break
+                case .decrease:
+                    cachedThreadCount = max(0, cachedThreadCount - 1)
+                    break
+                case let .set(count):
+                    cachedThreadCount = max(0, count)
+                    break
+                }
+                self.update(["unreadCount": cachedThreadCount], self.idPredicate(id: threadId.nsValue))
+                completion?(cachedThreadCount)
             }
-            self.update(["unreadCount": cachedThreadCount], self.idPredicate(id: threadId.nsValue))
-            completion?(cachedThreadCount)
         }
     }
 
@@ -128,12 +131,15 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         let sortByPin = NSSortDescriptor(key: "pin", ascending: false)
         fetchRequest.sortDescriptors = [sortByPin, sortByTime]
         fetchRequest.relationshipKeyPathsForPrefetching = ["lastMessageVO"]
-        viewContext.perform {
-            let threads = try self.viewContext.fetch(fetchRequest)
-            fetchRequest.fetchLimit = 0
-            fetchRequest.fetchOffset = 0
-            let count = try self.viewContext.count(for: fetchRequest)
-            completion(threads, count)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.viewContext.perform {
+                let threads = try self.viewContext.fetch(fetchRequest)
+                fetchRequest.fetchLimit = 0
+                fetchRequest.fetchOffset = 0
+                let count = try self.viewContext.count(for: fetchRequest)
+                completion(threads, count)
+            }
         }
     }
 
@@ -141,10 +147,13 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = [Entity.idName]
-        viewContext.perform {
-            let dic = try self.viewContext.fetch(req)
-            let threadIds = dic.flatMap(\.allValues).compactMap { $0 as? Int }
-            completion(threadIds)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.viewContext.perform {
+                let dic = try self.viewContext.fetch(req)
+                let threadIds = dic.flatMap(\.allValues).compactMap { $0 as? Int }
+                completion(threadIds)
+            }
         }
     }
 
@@ -226,22 +235,25 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         update(propertiesToUpdate, predicate)
     }
 
-    public func allUnreadCount(_ completion: @escaping (Int) -> Void) {
-        viewContext.perform {
-            let col = NSExpression(forKeyPath: "unreadCount")
-            let exp = NSExpression(forFunction: "sum:", arguments: [col])
-            let sumDesc = NSExpressionDescription()
-            sumDesc.expression = exp
-            sumDesc.name = "sum"
-            sumDesc.expressionResultType = .integer64AttributeType
-            let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
-            req.propertiesToFetch = [sumDesc]
-            req.returnsObjectsAsFaults = false
-            req.resultType = .dictionaryResultType
-            if let dic = try self.viewContext.fetch(req).first as? [String: Int], let sum = dic["sum"] {
-                completion(sum)
-            } else {
-                completion(0)
+    public func allUnreadCount(_ completion: @escaping @Sendable (Int) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.viewContext.perform {
+                let col = NSExpression(forKeyPath: "unreadCount")
+                let exp = NSExpression(forFunction: "sum:", arguments: [col])
+                let sumDesc = NSExpressionDescription()
+                sumDesc.expression = exp
+                sumDesc.name = "sum"
+                sumDesc.expressionResultType = .integer64AttributeType
+                let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
+                req.propertiesToFetch = [sumDesc]
+                req.returnsObjectsAsFaults = false
+                req.resultType = .dictionaryResultType
+                if let dic = try self.viewContext.fetch(req).first as? [String: Int], let sum = dic["sum"] {
+                    completion(sum)
+                } else {
+                    completion(0)
+                }
             }
         }
     }
@@ -260,25 +272,31 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         req.propertiesToFetch = ["id", "unreadCount"]
         let nsNumbers = threadIds.compactMap{ $0.nsValue }
         req.predicate = NSPredicate(format: "\(Entity.idName) IN %@", nsNumbers)
-        viewContext.perform {
-            let rows = try self.viewContext.fetch(req)
-            let dictionary: [(String, Int)] = rows.compactMap { dic in
-                guard let threadId = dic[Entity.idName] as? Int, let unreadCount = dic["unreadCount"] as? Int else { return nil }
-                return (String(threadId), unreadCount)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.viewContext.perform {
+                let rows = try self.viewContext.fetch(req)
+                let dictionary: [(String, Int)] = rows.compactMap { dic in
+                    guard let threadId = dic[Entity.idName] as? Int, let unreadCount = dic["unreadCount"] as? Int else { return nil }
+                    return (String(threadId), unreadCount)
+                }
+                let result = dictionary.reduce(into: [:]) { $0[$1.0] = $1.1 }
+                completion(result)
             }
-            let result = dictionary.reduce(into: [:]) { $0[$1.0] = $1.1 }
-            completion(result)
         }
     }
 
     public func conversationsPin(_ dictionary: [Int: PinMessage]) {
-        viewContext.perform {
-            dictionary.forEach { (key, value) in
-                let entity = Entity.findOrCreate(threadId: key, context: self.viewContext)
-                entity.id = key as NSNumber
-                entity.pinMessage = value.toClass
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.viewContext.perform {
+                dictionary.forEach { (key, value) in
+                    let entity = Entity.findOrCreate(threadId: key, context: self.viewContext)
+                    entity.id = key as NSNumber
+                    entity.pinMessage = value.toClass
+                }
+                self.saveViewContext()
             }
-            self.saveViewContext()
         }
     }
 
@@ -286,9 +304,12 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         let req = Entity.fetchRequest()
         req.predicate = idPredicate(id: id.nsValue)
         req.fetchLimit = 1
-        if let cdConv = try? viewContext.fetch(req).first {
-            cdConv.title = title
-            saveViewContext()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if let cdConv = try? self.viewContext.fetch(req).first {
+                cdConv.title = title
+                self.saveViewContext()
+            }
         }
     }
 }

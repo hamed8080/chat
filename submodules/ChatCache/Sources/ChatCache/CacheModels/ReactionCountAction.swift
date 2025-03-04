@@ -22,7 +22,7 @@ public struct CacheReactionCountModel: Sendable {
     
     public init(action: ReactionCountAction, messageId: Int, reaction: Reaction? = nil, oldSticker: Sticker? = nil, myUserId: Int) {
         self.action = action
-        self.messageId = messageId ?? -1
+        self.messageId = messageId
         self.reaction = reaction
         self.oldSticker = oldSticker
         self.myUserId = myUserId
