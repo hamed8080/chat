@@ -9,22 +9,8 @@ import Foundation
 import ChatModels
 
 public final class CacheCoreDataFileManager: BaseCoreDataManager<CDFile>, @unchecked Sendable {
-    public func first(hashCode: String, completion: @escaping @Sendable (Entity.Model?) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.firstOnMain(with: hashCode, context: self.viewContext) { file in
-                let file = file?.codable
-                completion(file)
-            }
-        }
-    }
-    
-    public func first(hashCode: String) async -> Entity.Model? {
-        typealias EntityResult = CheckedContinuation<Entity.Model?, Never>
-        return await withCheckedContinuation { (continuation: EntityResult) in
-            first(hashCode: hashCode) { model in
-                continuation.resume(with: .success(model))
-            }
-        }
+    @MainActor
+    public func first(hashCode: String) -> Entity.Model? {
+        return firstOnMain(with: hashCode)?.codable
     }
 }

@@ -220,7 +220,9 @@ final class MessageManager: MessageProtocol {
     func seen(_ request: MessageSeenRequest) {
         chat.prepareToSendAsync(req: request, type: .seen)
         cache?.message?.seen(threadId: request.threadId, messageId: request.messageId, mineUserId: chat.userInfo?.id ?? -1)
-        cache?.conversation?.setUnreadCount(action: .decrease, threadId: request.threadId)
+        Task {
+            await cache?.conversation?.setUnreadCount(action: .decrease, threadId: request.threadId)
+        }
     }
 
     func onNewMessage(_ asyncMessage: AsyncMessage) {
@@ -228,7 +230,9 @@ final class MessageManager: MessageProtocol {
         let copiedMessage = response.result
         emitEvent(.message(.new(response)))
         guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
-        cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+        Task {
+            await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+        }
         /// It will insert a new message into the Message table if the sender is not me
         /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
         try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
@@ -239,7 +243,9 @@ final class MessageManager: MessageProtocol {
         let copiedMessage = response.result
         emitEvent(.message(.forward(response)))
         guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
-        cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+        Task {
+            await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+        }
         /// It will insert a new message into the Message table if the sender is not me
         /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
         try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
