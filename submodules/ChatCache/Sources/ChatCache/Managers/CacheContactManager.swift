@@ -10,20 +10,23 @@ import ChatModels
 
 public final class CacheContactManager: BaseCoreDataManager<CDContact>, @unchecked Sendable {
 
-    public override func insert(models: [Contact]) {
-        models.forEach { contact in
-            let req = Entity.fetchRequest()
-            req.fetchLimit = 1
-            req.predicate = idPredicate(id: contact.id?.nsValue ?? -1)
-            if let cdContact = try? viewContext.fetch(req).first {
-                cdContact.firstName = contact.firstName
-                cdContact.lastName = contact.lastName
-                cdContact.email = contact.email
-                cdContact.image = contact.image
-                cdContact.cellphoneNumber = contact.cellphoneNumber
-                saveViewContext()
-            } else {
-                super.insert(models: [contact])
+    public func insertContacts(models: [Contact]) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            models.forEach { contact in
+                let req = Entity.fetchRequest()
+                req.fetchLimit = 1
+                req.predicate = idPredicate(id: contact.id?.nsValue ?? -1)
+                if let cdContact = try? viewContext.fetch(req).first {
+                    cdContact.firstName = contact.firstName
+                    cdContact.lastName = contact.lastName
+                    cdContact.email = contact.email
+                    cdContact.image = contact.image
+                    cdContact.cellphoneNumber = contact.cellphoneNumber
+                    saveViewContext()
+                } else {
+                    insert(models: [contact])
+                }
             }
         }
     }

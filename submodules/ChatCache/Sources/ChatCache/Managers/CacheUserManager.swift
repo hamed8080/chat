@@ -28,13 +28,16 @@ public final class CacheUserManager: BaseCoreDataManager<CDUser>, @unchecked Sen
             }
         }
     }
-
+    
     public func fetchCurrentUser(_ compeletion: @escaping @Sendable (Entity?) -> Void) {
-        viewContext.perform {
-            let req = Entity.fetchRequest()
-            req.predicate = NSPredicate(format: "isMe == %@", NSNumber(booleanLiteral: true))
-            let cachedUseInfo = try self.viewContext.fetch(req).first
-            compeletion(cachedUseInfo)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.viewContext.perform {
+                let req = Entity.fetchRequest()
+                req.predicate = NSPredicate(format: "isMe == %@", NSNumber(booleanLiteral: true))
+                let cachedUseInfo = try self.viewContext.fetch(req).first
+                compeletion(cachedUseInfo)
+            }
         }
     }
 }

@@ -19,16 +19,20 @@ public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCoun
     }
     
     public func setReactionCount(model: CacheReactionCountModel) {
-        switch model.action {
-        case .add:
-            addReaction(model)
-        case .delete:
-            deleteReaction(model)
-        case .replace:
-            replaceReaction(model)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            switch model.action {
+            case .add:
+                self.addReaction(model)
+            case .delete:
+                self.deleteReaction(model)
+            case .replace:
+                self.replaceReaction(model)
+            }
         }
     }
     
+    @MainActor
     private func replaceReaction(_ model: CacheReactionCountModel) {
         /// Keep a reference copy of the model to proeprly set reaction property to old reaction sticker
         var deletedReactionModel = model
@@ -39,10 +43,14 @@ public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCoun
         var addReactionModel = model
         
         deleteReaction(deletedReactionModel) { [weak self, addReactionModel] in
-            self?.addReaction(addReactionModel)
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.addReaction(addReactionModel)
+            }
         }
     }
     
+    @MainActor
     private func addReaction(_ model: CacheReactionCountModel) {
         firstOnMain(with: model.messageId.nsValue, context: viewContext) { [weak self] entity in
             guard
@@ -75,6 +83,7 @@ public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCoun
         }
     }
     
+    @MainActor
     private func deleteReaction(_ model: CacheReactionCountModel, completion: (@Sendable () -> Void)? = nil) {
         firstOnMain(with: model.messageId.nsValue, context: viewContext) { [weak self] entity in
             guard

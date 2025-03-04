@@ -29,15 +29,18 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         let predicate = predicate(threadId, messageId)
         let req = Entity.fetchRequest()
         req.predicate = predicate
-        guard let message = (try? viewContext.fetch(req))?.first else { return }
-        viewContext.perform { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            if let next = next(threadId: threadId, messageId: messageId) {
-                next.previousId = message.previousId
+            guard let message = (try? self.viewContext.fetch(req))?.first else { return }
+            self.viewContext.perform { [weak self] in
+                guard let self = self else { return }
+                if let next = next(threadId: threadId, messageId: messageId) {
+                    next.previousId = message.previousId
+                }
+                setNilReplyReferences(for: messageId)
+                viewContext.delete(message)
+                saveViewContext()
             }
-            setNilReplyReferences(for: messageId)
-            viewContext.delete(message)
-            saveViewContext()
         }
     }
     
@@ -47,10 +50,13 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         let replyReq = Entity.fetchRequest()
         replyReq.predicate = replyMessagesPredicate
         
-        let referencingMessages = (try? viewContext.fetch(replyReq)) ?? []
-        for referencingMessage in referencingMessages {
-            // Update replyInfo to set as deleted
-            referencingMessage.replyInfo = ReplyInfoClass(deleted: true)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let referencingMessages = (try? self.viewContext.fetch(replyReq)) ?? []
+            for referencingMessage in referencingMessages {
+                // Update replyInfo to set as deleted
+                referencingMessage.replyInfo = ReplyInfoClass(deleted: true)
+            }
         }
     }
     
@@ -63,18 +69,21 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
     public func addOrRemoveThreadPinMessages(_ pin: Bool, _ threadId: Int, _ messageId: Int) {
         let req = CDConversation.fetchRequest()
         req.predicate = NSPredicate(format: "id == %@", threadId.nsValue)
-        guard let threadEntity = try? viewContext.fetch(req).first else { return }
-        if pin == false {
-            threadEntity.pinMessage = nil
-            saveViewContext()
-        }
-        
-        if pin == true {
-            let messageReq = Entity.fetchRequest()
-            messageReq.predicate = predicate(threadId, messageId)
-            if let entity = try? viewContext.fetch(messageReq).first {
-                threadEntity.pinMessage = PinMessageClass(message: entity.codable())
-                saveViewContext()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard let threadEntity = try? self.viewContext.fetch(req).first else { return }
+            if pin == false {
+                threadEntity.pinMessage = nil
+                self.saveViewContext()
+            }
+            
+            if pin == true {
+                let messageReq = Entity.fetchRequest()
+                messageReq.predicate = self.predicate(threadId, messageId)
+                if let entity = try? self.viewContext.fetch(messageReq).first {
+                    threadEntity.pinMessage = PinMessageClass(message: entity.codable())
+                    self.saveViewContext()
+                }
             }
         }
     }
@@ -146,11 +155,14 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
     }
     
     public func find(_ threadId: Int, _ messageId: Int, _ completion: @escaping @Sendable (Entity?) -> Void) {
-        viewContext.perform {
-            let req = Entity.fetchRequest()
-            req.predicate = self.joinPredicate(threadId.nsValue, messageId.nsValue)
-            let message = try self.viewContext.fetch(req).first
-            completion(message)
+        DispatchQueue.main.sync { [weak self] in
+            guard let self = self else { return }
+            viewContext.perform {
+                let req = Entity.fetchRequest()
+                req.predicate = self.joinPredicate(threadId.nsValue, messageId.nsValue)
+                let message = try self.viewContext.fetch(req).first
+                completion(message)
+            }
         }
     }
     
@@ -174,17 +186,19 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
     }
 
     public func fetch(_ req: FetchMessagesRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
-        viewContext.perform {
-            let fetchRequest = Entity.fetchRequest()
-            let asc = (req.order == Ordering.asc.rawValue) ? true : false
-            let sortByTime = NSSortDescriptor(key: "time", ascending: asc)
-            fetchRequest.sortDescriptors = [sortByTime]
-            fetchRequest.predicate = self.predicateArray(req)
-            let totalCount = try self.viewContext.count(for: fetchRequest)
-            fetchRequest.fetchOffset = req.offset
-            fetchRequest.fetchLimit = req.count
-            let messages = try self.viewContext.fetch(fetchRequest).sorted(by: { self.compare(asc, $0, $1) })
-            completion(messages, totalCount)
+        DispatchQueue.main.sync {
+            viewContext.perform {
+                let fetchRequest = Entity.fetchRequest()
+                let asc = (req.order == Ordering.asc.rawValue) ? true : false
+                let sortByTime = NSSortDescriptor(key: "time", ascending: asc)
+                fetchRequest.sortDescriptors = [sortByTime]
+                fetchRequest.predicate = self.predicateArray(req)
+                let totalCount = try self.viewContext.count(for: fetchRequest)
+                fetchRequest.fetchOffset = req.offset
+                fetchRequest.fetchLimit = req.count
+                let messages = try self.viewContext.fetch(fetchRequest).sorted(by: { self.compare(asc, $0, $1) })
+                completion(messages, totalCount)
+            }
         }
     }
 
@@ -212,30 +226,36 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
     }
 
     public func next(threadId: Int, messageId: Int) -> Entity? {
-        let predicate = NSPredicate(format: "id > %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
-        let req = Entity.fetchRequest()
-        req.predicate = predicate
-        req.fetchLimit = 1
-        req.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
-        guard let message = (try? viewContext.fetch(req))?.first else { return nil }
-        return message
+        DispatchQueue.main.sync {
+            let predicate = NSPredicate(format: "id > %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
+            let req = Entity.fetchRequest()
+            req.predicate = predicate
+            req.fetchLimit = 1
+            req.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+            guard let message = (try? viewContext.fetch(req))?.first else { return nil }
+            return message
+        }
     }
 
     public func isContains(time: UInt, threadId: Int) -> Bool {
-        let predicate = NSPredicate(format: "time == %@ && threadId == %@", Int(time).nsValue, threadId.nsValue)
-        let req = Entity.fetchRequest()
-        req.predicate = predicate
-        req.fetchLimit = 1
-        let result = try? viewContext.fetch(req)
-        return result?.count == 1
+        DispatchQueue.main.sync {
+            let predicate = NSPredicate(format: "time == %@ && threadId == %@", Int(time).nsValue, threadId.nsValue)
+            let req = Entity.fetchRequest()
+            req.predicate = predicate
+            req.fetchLimit = 1
+            let result = try? viewContext.fetch(req)
+            return result?.count == 1
+        }
     }
     
     public func isContains(messageId: Int, threadId: Int) -> Bool {
-        let predicate = NSPredicate(format: "id == %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
-        let req = Entity.fetchRequest()
-        req.predicate = predicate
-        req.fetchLimit = 1
-        let result = try? viewContext.fetch(req)
-        return result?.count == 1
+        DispatchQueue.main.sync {
+            let predicate = NSPredicate(format: "id == %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
+            let req = Entity.fetchRequest()
+            req.predicate = predicate
+            req.fetchLimit = 1
+            let result = try? viewContext.fetch(req)
+            return result?.count == 1
+        }
     }
 }

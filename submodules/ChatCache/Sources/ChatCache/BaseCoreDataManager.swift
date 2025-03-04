@@ -11,9 +11,9 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
     public typealias Entity = T
     public var container: PersistentManagerProtocol
     public let logger: CacheLogDelegate
+    @MainActor
     public var viewContext: CacheManagedContext { container.viewContext(name: "Main")! }
     public var bgContext: CacheManagedContext { container.newBgTask(name: "BGTask")! }
-    private let mainQueue = DispatchQueue.main
 
     required public init(container: PersistentManagerProtocol, logger: CacheLogDelegate) {
         self.container = container
@@ -45,8 +45,8 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         completion(entity)
     }
 
-    public func firstOnMain(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void) {
-        mainQueue.async { [weak self] in
+    public func firstOnMain(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @MainActor @Sendable (Entity?) -> Void) {
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             let req = Entity.fetchRequest()
             req.predicate = self.idPredicate(id: id)
@@ -56,8 +56,8 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         }
     }
 
-    public func find(predicate: SendableNSPredicate, completion: @escaping @Sendable ([Entity]) -> Void) {
-        mainQueue.async { [weak self] in
+    public func find(predicate: SendableNSPredicate, completion: @escaping @MainActor @Sendable ([Entity]) -> Void) {
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             viewContext.perform {
                 let req = Entity.fetchRequest()
@@ -98,17 +98,20 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
     }
 
     public func saveViewContext() {
-        mainQueue.async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             save(context: viewContext)
         }
     }
 
     public func mergeChanges(key: String, _ objectIDs: [NSManagedObjectID]) {
-        NSManagedObjectContext.mergeChanges(
-            fromRemoteContextSave: [key: objectIDs],
-            into: [viewContext.context as! NSManagedObjectContext]
-        )
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            NSManagedObjectContext.mergeChanges(
+                fromRemoteContextSave: [key: objectIDs],
+                into: [self.viewContext.context as! NSManagedObjectContext]
+            )
+        }
     }
 
     public func insertObjects(_ makeEntities: @escaping @Sendable (CacheManagedContext) throws -> Void) {
@@ -143,7 +146,7 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
     }
 
     public func fetchWithOffset(count: Int = 25, offset: Int = 0, predicate: SendableNSPredicate? = nil, sortDescriptor: [SendableNSSortDescriptor]? = nil, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
-        mainQueue.async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             viewContext.perform {
                 let req = NSFetchRequest<Entity>(entityName: Entity.name)
@@ -159,7 +162,7 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
     }
 
     public func all(_ completion: @escaping @Sendable ([Entity]) -> Void) {
-        mainQueue.async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             viewContext.perform {
                 let req = Entity.fetchRequest()
@@ -170,7 +173,7 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
     }
 
     public func fetchWithObjectIds(ids: [NSManagedObjectID], _ completion: @escaping @Sendable ([Entity]) -> Void) {
-        mainQueue.async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             viewContext.perform {
                 let req = Entity.fetchRequest()
@@ -205,9 +208,11 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
     }
 
     public func get(id: Entity.Id) -> Entity? {
-        let req = Entity.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        req.fetchLimit = 1
-        return try? viewContext.fetch(req).first
+        DispatchQueue.main.sync {
+            let req = Entity.fetchRequest()
+            req.predicate = idPredicate(id: id)
+            req.fetchLimit = 1
+            return try? viewContext.fetch(req).first
+        }
     }
 }

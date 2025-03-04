@@ -123,7 +123,7 @@ final class ContactManager: ContactProtocol {
     func onContacts(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Contact]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         let copies = response.result?.compactMap{$0} ?? []
-        chat.cache?.contact?.insert(models: copies)
+        chat.cache?.contact?.insertContacts(models: copies)
         emitEvent(.contact(.contacts(response)))
     }
 
@@ -142,7 +142,7 @@ final class ContactManager: ContactProtocol {
 
     func onBlockedContacts(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[BlockedContactResponse]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        chat.cache?.contact?.insert(models: response.result?.compactMap(\.contact) ?? [])
+        chat.cache?.contact?.insertContacts(models: response.result?.compactMap(\.contact) ?? [])
         emitEvent(.contact(.blockedList(response)))
     }
 
@@ -191,7 +191,7 @@ final class ContactManager: ContactProtocol {
         chat.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: chat.loggerUserInfo)
         let response = ChatResponse(uniqueId: uniqueId, result: result?.result?.contacts, error: result?.error, typeCode: result?.typeCode)
         emitEvent(.contact(.add(response)))
-        chat.cache?.contact?.insert(models: result?.result?.contacts ?? [])
+        chat.cache?.contact?.insertContacts(models: result?.result?.contacts ?? [])
     }
     
     private nonisolated func emitEvent(event: ChatEventType) {

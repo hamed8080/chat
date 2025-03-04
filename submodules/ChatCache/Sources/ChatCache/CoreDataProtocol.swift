@@ -19,15 +19,16 @@ public protocol CoreDataProtocol {
     associatedtype Entity: EntityProtocol
     init(container: PersistentManagerProtocol, logger: CacheLogDelegate)
     var container: PersistentManagerProtocol { get set }
+    @MainActor
     var viewContext: CacheManagedContext { get }
     var bgContext: CacheManagedContext { get }
     var logger: CacheLogDelegate { get }
     func idPredicate(id: Entity.Id) -> NSPredicate
     func save(context: CacheManagedContext)
     func saveViewContext()
-    func firstOnMain(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void)
+    func firstOnMain(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @MainActor @Sendable (Entity?) -> Void)
     func first(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void)
-    func find(predicate: SendableNSPredicate, completion: @escaping @Sendable ([Entity]) -> Void)
+    func find(predicate: SendableNSPredicate, completion: @escaping @MainActor @Sendable ([Entity]) -> Void)
     func insert(model: Entity.Model, context: CacheManagedContext)
     func insert(models: [Entity.Model])
     func delete(entity: Entity)

@@ -34,7 +34,7 @@ public final class CacheAssistantManager: BaseCoreDataManager<CDAssistant>, @unc
         }
     }
 
-    private func fetchWithIntIds(_ models: [Entity.Model], _ compeletion: @escaping @Sendable ([Entity]) -> Void) {
+    private func fetchWithIntIds(_ models: [Entity.Model], _ compeletion: @escaping @MainActor @Sendable ([Entity]) -> Void) {
         models.forEach { model in
             if let participantId = model.participant?.id {
                 let predicate = NSPredicate(format: "%K == %@", #keyPath(CDAssistant.participant.id), participantId.nsValue)
@@ -48,12 +48,15 @@ public final class CacheAssistantManager: BaseCoreDataManager<CDAssistant>, @unc
 
     public func fetch(_ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
         let fetchRequest = Entity.fetchRequest()
-        viewContext.perform {
-            let threads = try self.viewContext.fetch(fetchRequest)
-            fetchRequest.fetchLimit = count
-            fetchRequest.fetchOffset = offset
-            let count = try self.viewContext.count(for: fetchRequest)
-            completion(threads, count)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            viewContext.perform {
+                let threads = try self.viewContext.fetch(fetchRequest)
+                fetchRequest.fetchLimit = count
+                fetchRequest.fetchOffset = offset
+                let count = try self.viewContext.count(for: fetchRequest)
+                completion(threads, count)
+            }
         }
     }
 }
