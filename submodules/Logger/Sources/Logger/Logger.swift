@@ -133,10 +133,10 @@ public final class Logger: @unchecked Sendable {
         }
     }
 
+    
     private func addLogToCache(_ log: Log) {
-        guard let context = persistentManager.context else { return }
-        DispatchQueue.main.async(qos: .background) { [weak self] in
-            guard let self = self else { return }
+        Task { @MainActor in
+            guard let context = persistentManager.context else { return }
             CDLog.insert(self, context, [log])
         }
     }

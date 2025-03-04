@@ -10,23 +10,21 @@ import ChatModels
 
 public final class CacheContactManager: BaseCoreDataManager<CDContact>, @unchecked Sendable {
 
+    @MainActor
     public func insertContacts(models: [Contact]) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            models.forEach { contact in
-                let req = Entity.fetchRequest()
-                req.fetchLimit = 1
-                req.predicate = idPredicate(id: contact.id?.nsValue ?? -1)
-                if let cdContact = try? viewContext.fetch(req).first {
-                    cdContact.firstName = contact.firstName
-                    cdContact.lastName = contact.lastName
-                    cdContact.email = contact.email
-                    cdContact.image = contact.image
-                    cdContact.cellphoneNumber = contact.cellphoneNumber
-                    saveViewContext()
-                } else {
-                    insert(models: [contact])
-                }
+        models.forEach { contact in
+            let req = Entity.fetchRequest()
+            req.fetchLimit = 1
+            req.predicate = idPredicate(id: contact.id?.nsValue ?? -1)
+            if let cdContact = try? viewContext.fetch(req).first {
+                cdContact.firstName = contact.firstName
+                cdContact.lastName = contact.lastName
+                cdContact.email = contact.email
+                cdContact.image = contact.image
+                cdContact.cellphoneNumber = contact.cellphoneNumber
+                saveViewContext()
+            } else {
+                insert(models: [contact])
             }
         }
     }
@@ -37,7 +35,8 @@ public final class CacheContactManager: BaseCoreDataManager<CDContact>, @uncheck
         update(propertiesToUpdate, predicate)
     }
 
-    public func getContacts(_ req: FetchContactsRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func getContacts(_ req: FetchContactsRequest) -> ([Entity], Int) {
         let fetchRequest = Entity.fetchRequest()
         let ascending = req.order != Ordering.desc.rawValue
         if let id = req.id {
@@ -73,14 +72,11 @@ public final class CacheContactManager: BaseCoreDataManager<CDContact>, @uncheck
         let firstNameSort = NSSortDescriptor(key: "firstName", ascending: ascending)
         let lastNameSort = NSSortDescriptor(key: "lastName", ascending: ascending)
         fetchRequest.sortDescriptors = [notSeenDurationSort, hasUserSort, lastNameSort, firstNameSort]
-        DispatchQueue.main.async {
-            self.viewContext.perform {
-                let count = try self.viewContext.count(for: Entity.fetchRequest())
-                fetchRequest.fetchLimit = req.size
-                fetchRequest.fetchOffset = req.offset
-                let contacts = try self.viewContext.fetch(fetchRequest)
-                completion(contacts, count)
-            }
-        }
+        
+        let count = try? self.viewContext.count(for: Entity.fetchRequest())
+        fetchRequest.fetchLimit = req.size
+        fetchRequest.fetchOffset = req.offset
+        let contacts = try? self.viewContext.fetch(fetchRequest)
+        return (contacts ?? [], count ?? 0)
     }
 }

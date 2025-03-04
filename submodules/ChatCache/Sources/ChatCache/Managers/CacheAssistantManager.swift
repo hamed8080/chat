@@ -50,17 +50,16 @@ public final class CacheAssistantManager: BaseCoreDataManager<CDAssistant>, @unc
         return entities
     }
 
-    public func fetch(_ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func fetch(_ count: Int = 25, _ offset: Int = 0) -> ([Entity], Int)? {
         let fetchRequest = Entity.fetchRequest()
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            viewContext.perform {
-                let threads = try self.viewContext.fetch(fetchRequest)
-                fetchRequest.fetchLimit = count
-                fetchRequest.fetchOffset = offset
-                let count = try self.viewContext.count(for: fetchRequest)
-                completion(threads, count)
-            }
-        }
+        let threads = try? self.viewContext.fetch(fetchRequest)
+        fetchRequest.fetchLimit = count
+        fetchRequest.fetchOffset = offset
+        guard
+            let threads = threads,
+            let count = try? self.viewContext.count(for: fetchRequest)
+        else { return nil }
+        return (threads, count)
     }
 }

@@ -16,18 +16,16 @@ public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCoun
         let sPredicate = SendableNSPredicate(predicate: predicate)
         return find(predicate: sPredicate)
     }
-    
+   
+    @MainActor
     public func setReactionCount(model: CacheReactionCountModel) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            switch model.action {
-            case .add:
-                self.addReaction(model)
-            case .delete:
-                self.deleteReaction(model)
-            case .replace:
-                self.replaceReaction(model)
-            }
+        switch model.action {
+        case .add:
+            self.addReaction(model)
+        case .delete:
+            self.deleteReaction(model)
+        case .replace:
+            self.replaceReaction(model)
         }
     }
     
@@ -39,19 +37,13 @@ public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCoun
                                               reaction: model.oldSticker,
                                               participant: model.reaction?.participant,
                                               time: model.reaction?.time)
-        var addReactionModel = model
-        
-        deleteReaction(deletedReactionModel) { [weak self, addReactionModel] in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.addReaction(addReactionModel)
-            }
-        }
+        deleteReaction(model)
+        addReaction(model)
     }
     
     @MainActor
     private func addReaction(_ model: CacheReactionCountModel) {
-        let entity = firstOnMain(with: model.messageId.nsValue)
+        let entity = first(with: model.messageId.nsValue)
         guard let reaction = model.reaction else { return }
         let isMyReaction = reaction.participant?.id == model.myUserId
         
@@ -78,9 +70,9 @@ public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCoun
     }
     
     @MainActor
-    private func deleteReaction(_ model: CacheReactionCountModel, completion: (@Sendable () -> Void)? = nil) {
+    private func deleteReaction(_ model: CacheReactionCountModel ) {
         guard
-            let entity = firstOnMain(with: model.messageId.nsValue),
+            let entity = first(with: model.messageId.nsValue),
                 let reaction = model.reaction,
             var reactionCounts = entity.codable.reactionCounts,
             let index = reactionCounts.firstIndex(where: { $0.sticker == reaction.reaction })
@@ -106,6 +98,5 @@ public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCoun
         }
         
         saveViewContext()
-        completion?()
     }
 }

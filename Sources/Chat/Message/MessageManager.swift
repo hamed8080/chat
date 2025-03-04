@@ -81,7 +81,9 @@ final class MessageManager: MessageProtocol {
     }
 
     func history(_ request: GetHistoryRequest) {
-        chat.coordinator.history.doRequest(request)
+        Task {
+            await chat.coordinator.history.doRequest(request)
+        }
     }
 
     func unsentTextMessages(_ request: GetHistoryRequest) {
@@ -128,9 +130,9 @@ final class MessageManager: MessageProtocol {
         history(request)
     }
 
-    func onGetHistroy(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)        
-        chat.coordinator.history.onHistory(response)
+    func onGetHistroy(_ asyncMessage: AsyncMessage) async {
+        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
+        await chat.coordinator.history.onHistory(response)
     }
 
     func send(_ request: ForwardMessageRequest) {
@@ -140,7 +142,9 @@ final class MessageManager: MessageProtocol {
 
     func send(_ request: SendTextMessageRequest) {
         chat.prepareToSendAsync(req: request, type: .message)
-        try? cache?.conversation?.replaceLastMessage(toConversation(request: request))
+        Task {
+            await try? cache?.conversation?.replaceLastMessage(toConversation(request: request))
+        }
         cache?.textQueue?.insert(models: [request.queueOfTextMessages])
     }
 
@@ -247,10 +251,10 @@ final class MessageManager: MessageProtocol {
         guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
         Task {
             await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+            /// It will insert a new message into the Message table if the sender is not me
+            /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
+            await try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
         }
-        /// It will insert a new message into the Message table if the sender is not me
-        /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
-        try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
     }
     
     func onForwardMessage(_ asyncMessage: AsyncMessage) {
@@ -260,10 +264,10 @@ final class MessageManager: MessageProtocol {
         guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
         Task {
             await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+            /// It will insert a new message into the Message table if the sender is not me
+            /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
+            await try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
         }
-        /// It will insert a new message into the Message table if the sender is not me
-        /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
-        try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
@@ -294,7 +298,9 @@ final class MessageManager: MessageProtocol {
         let copied = response.result
         emitEvent(.thread(.lastMessageEdited(response)))
         if let thread = copied {
-            try? cache?.conversation?.replaceLastMessage(thread)
+            Task {
+                await try? cache?.conversation?.replaceLastMessage(thread)
+            }
         }
     }
 
@@ -303,7 +309,10 @@ final class MessageManager: MessageProtocol {
         let copied = response.result
         emitEvent(.thread(.lastMessageDeleted(response)))
         if let thread = copied {
-            try? cache?.conversation?.replaceLastMessage(lastMessageToConversation(thread: thread))
+            Task {
+                await
+                try? cache?.conversation?.replaceLastMessage(lastMessageToConversation(thread: thread))
+            }
         }
     }
 
@@ -342,7 +351,9 @@ final class MessageManager: MessageProtocol {
         chat.coordinator.conversation.onPinUnPin(pin, threadId, copied)
         emitEvent(.message(pin ? .pin(response) : .unpin(response)))
         cache?.message?.pin(pin, threadId, messageId)
-        cache?.message?.addOrRemoveThreadPinMessages(pin, threadId, messageId)
+        Task {
+            await cache?.message?.addOrRemoveThreadPinMessages(pin, threadId, messageId)
+        }
     }
 
     func replyPrivately(_ request: ReplyPrivatelyRequest) {

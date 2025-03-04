@@ -11,6 +11,6 @@ import ChatModels
 public final class CacheCoreDataFileManager: BaseCoreDataManager<CDFile>, @unchecked Sendable {
     @MainActor
     public func first(hashCode: String) -> Entity.Model? {
-        return firstOnMain(with: hashCode)?.codable
+        return first(with: hashCode)?.codable
     }
 }

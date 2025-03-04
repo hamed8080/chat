@@ -25,10 +25,10 @@ public protocol CoreDataProtocol {
     var logger: CacheLogDelegate { get }
     func idPredicate(id: Entity.Id) -> NSPredicate
     func save(context: CacheManagedContext)
+    @MainActor
     func saveViewContext()
     @MainActor
-    func firstOnMain(with id: Entity.Id) -> Entity?
-    func first(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void)    
+    func first(with id: Entity.Id) -> Entity?
     @MainActor
     func find(predicate: SendableNSPredicate) -> [Entity]?
     func insert(model: Entity.Model, context: CacheManagedContext)
@@ -36,6 +36,7 @@ public protocol CoreDataProtocol {
     func delete(entity: Entity)
     func update(model: Entity.Model, entity: Entity)
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate)
+    @MainActor
     func mergeChanges(key: String, _ objectIDs: [NSManagedObjectID])
     func insertObjects(_ makeEntities: @escaping @Sendable (CacheManagedContext) throws -> Void)
     func delete(_ id: Int)

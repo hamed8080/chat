@@ -10,7 +10,7 @@ import ChatModels
 
 public final class CacheConversationManager: BaseCoreDataManager<CDConversation>, @unchecked Sendable {
     
-    public override func insert(model: Entity.Model, context: CacheManagedContext) {
+    public func insertConversations(model: Entity.Model, context: CacheManagedContext) async {
         guard let threadId = model.id else { return }
         let req = Entity.fetchRequest()
         req.predicate = NSPredicate(format: "\(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue)
@@ -18,7 +18,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         entity.update(model)
         
         if model.lastMessageVO != nil {
-            try? replaceLastMessage(model, context)
+            try? await replaceLastMessage(model, context)
         }
         
         model.participants?.forEach { participnat in
@@ -69,7 +69,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
     
     @MainActor
     public func setUnreadCount(action: CacheUnreadCountAction, threadId: Int) -> Int? {
-        guard let entity = self.firstOnMain(with: threadId.nsValue) else { return nil }
+        guard let entity = self.first(with: threadId.nsValue) else { return nil }
         var cachedThreadCount = entity.unreadCount?.intValue ?? 0
         switch action {
         case .increase:
@@ -86,7 +86,8 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         return cachedThreadCount
     }
 
-    public func fetch(_ req: FetchThreadRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func fetch(_ req: FetchThreadRequest) -> ([Entity], Int) {
         let fetchRequest = Entity.fetchRequest()
         fetchRequest.fetchLimit = req.count
         fetchRequest.fetchOffset = req.offset
@@ -95,27 +96,27 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
             let searchTitle = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(CDConversation.title), title)
             orFetchPredicatArray.append(searchTitle)
         }
-
+        
         if let desc = req.description {
             let searchDescriptions = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(CDConversation.descriptions) , desc)
             orFetchPredicatArray.append(searchDescriptions)
         }
-
+        
         if let threadIds = req.threadIds, threadIds.count > 0 {
             let nsNumbers = threadIds.compactMap({ $0.nsValue })
             orFetchPredicatArray.append(NSPredicate(format: "%K IN %@", #keyPath(CDConversation.id), nsNumbers))
         }
-
+        
         if let isGroup = req.isGroup {
             let groupPredicate = NSPredicate(format: "%K == %@", #keyPath(CDConversation.group), NSNumber(value: isGroup))
             orFetchPredicatArray.append(groupPredicate)
         }
-
+        
         if let type = req.type {
             let thtreadTypePredicate = NSPredicate(format: "%K == %i", #keyPath(CDConversation.type), type)
             orFetchPredicatArray.append(thtreadTypePredicate)
         }
-
+        
         if let archived = req.archived {
             let keyPath = #keyPath(CDConversation.isArchive)
             let archivePredicate = NSPredicate(format: "%K == %@ OR %K == %@", keyPath, NSNumber(value: archived), keyPath, NSNull())
@@ -123,35 +124,26 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         }
         let orCompound = NSCompoundPredicate(type: .and, subpredicates: orFetchPredicatArray)
         fetchRequest.predicate = orCompound
-
+        
         let sortByTime = NSSortDescriptor(key: "time", ascending: false)
         let sortByPin = NSSortDescriptor(key: "pin", ascending: false)
         fetchRequest.sortDescriptors = [sortByPin, sortByTime]
         fetchRequest.relationshipKeyPathsForPrefetching = ["lastMessageVO"]
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.viewContext.perform {
-                let threads = try self.viewContext.fetch(fetchRequest)
-                fetchRequest.fetchLimit = 0
-                fetchRequest.fetchOffset = 0
-                let count = try self.viewContext.count(for: fetchRequest)
-                completion(threads, count)
-            }
-        }
+        let threads = (try? self.viewContext.fetch(fetchRequest)) ?? []
+        fetchRequest.fetchLimit = 0
+        fetchRequest.fetchOffset = 0
+        let count = (try? self.viewContext.count(for: fetchRequest)) ?? 0
+        return (threads, count)
     }
 
-    public func fetchIds(_ completion: @escaping @Sendable ([Int]) -> Void) {
+    @MainActor
+    public func fetchIds() -> [Int] {
         let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = [Entity.idName]
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.viewContext.perform {
-                let dic = try self.viewContext.fetch(req)
-                let threadIds = dic.flatMap(\.allValues).compactMap { $0 as? Int }
-                completion(threadIds)
-            }
-        }
+        let dic = try? self.viewContext.fetch(req)
+        let threadIds = dic?.flatMap(\.allValues).compactMap { $0 as? Int }
+        return threadIds ?? []
     }
 
     public func archive(_ archive: Bool, _ threadId: Int) {
@@ -180,26 +172,22 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
 
 
     /// Insert if there is no conversation or message object, and update if there is a message or thread entity. and save it immediately.
+    @MainActor
     public func replaceLastMessage(_ model: Entity.Model) throws {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            try? replaceLastMessage(model, viewContext)
-            save(context: viewContext)
-        }
+        try? replaceLastMessage(model, viewContext)
+        save(context: viewContext)
     }
 
     /// Insert if there is no conversation or message object, and update if there is a message or thread entity.
     /// It will not save anything by itself. Only the parent task should call save whenever you feel it is enough to save context.
+    @MainActor
     public func replaceLastMessage(_ model: Entity.Model, _ context: CacheManagedContext) throws {
         guard let threadId = model.id, let lastMessageVO = model.lastMessageVO
         else { throw NSError(domain: "The threadId or LastMessageVO is nil.", code: 0) }
-        first(with: threadId.nsValue, context: context) { entity in
-            if let entity = entity {
-                self.updateLastMessage(entity, threadId, lastMessageVO.toMessage, context)
-            } else {
-                // Insert
-                self.insert(models: [model])
-            }
+        if let entity = first(with: threadId.nsValue) {
+            self.updateLastMessage(entity, threadId, lastMessageVO.toMessage, context)
+        } else {
+            self.insert(models: [model])
         }
     }
 
@@ -232,27 +220,21 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         update(propertiesToUpdate, predicate)
     }
 
-    public func allUnreadCount(_ completion: @escaping @Sendable (Int) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.viewContext.perform {
-                let col = NSExpression(forKeyPath: "unreadCount")
-                let exp = NSExpression(forFunction: "sum:", arguments: [col])
-                let sumDesc = NSExpressionDescription()
-                sumDesc.expression = exp
-                sumDesc.name = "sum"
-                sumDesc.expressionResultType = .integer64AttributeType
-                let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
-                req.propertiesToFetch = [sumDesc]
-                req.returnsObjectsAsFaults = false
-                req.resultType = .dictionaryResultType
-                if let dic = try self.viewContext.fetch(req).first as? [String: Int], let sum = dic["sum"] {
-                    completion(sum)
-                } else {
-                    completion(0)
-                }
-            }
-        }
+    @MainActor
+    public func allUnreadCount() -> Int {
+        let col = NSExpression(forKeyPath: "unreadCount")
+        let exp = NSExpression(forFunction: "sum:", arguments: [col])
+        let sumDesc = NSExpressionDescription()
+        sumDesc.expression = exp
+        sumDesc.name = "sum"
+        sumDesc.expressionResultType = .integer64AttributeType
+        let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
+        req.propertiesToFetch = [sumDesc]
+        req.returnsObjectsAsFaults = false
+        req.resultType = .dictionaryResultType
+        let dic = try? viewContext.fetch(req).first as? [String: Int]
+        let sum = dic?["sum"]
+        return sum ?? 0
     }
 
     @MainActor
@@ -264,50 +246,40 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         }
     }
 
-    public func threadsUnreadcount(_ threadIds: [Int], _ completion: @escaping @Sendable ([String: Int]) -> Void) {
+    @MainActor
+    public func threadsUnreadcount(_ threadIds: [Int]) -> [String: Int] {
         let req = NSFetchRequest<NSDictionary>(entityName: Entity.name)
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = ["id", "unreadCount"]
         let nsNumbers = threadIds.compactMap{ $0.nsValue }
         req.predicate = NSPredicate(format: "\(Entity.idName) IN %@", nsNumbers)
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.viewContext.perform {
-                let rows = try self.viewContext.fetch(req)
-                let dictionary: [(String, Int)] = rows.compactMap { dic in
-                    guard let threadId = dic[Entity.idName] as? Int, let unreadCount = dic["unreadCount"] as? Int else { return nil }
-                    return (String(threadId), unreadCount)
-                }
-                let result = dictionary.reduce(into: [:]) { $0[$1.0] = $1.1 }
-                completion(result)
-            }
+        let rows = (try? self.viewContext.fetch(req)) ?? []
+        let dictionary: [(String, Int)] = rows.compactMap { dic in
+            guard let threadId = dic[Entity.idName] as? Int, let unreadCount = dic["unreadCount"] as? Int else { return nil }
+            return (String(threadId), unreadCount)
         }
+        let result = dictionary.reduce(into: [:]) { $0[$1.0] = $1.1 }
+        return result
     }
 
+    @MainActor
     public func conversationsPin(_ dictionary: [Int: PinMessage]) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.viewContext.perform {
-                dictionary.forEach { (key, value) in
-                    let entity = Entity.findOrCreate(threadId: key, context: self.viewContext)
-                    entity.id = key as NSNumber
-                    entity.pinMessage = value.toClass
-                }
-                self.saveViewContext()
-            }
+        dictionary.forEach { (key, value) in
+            let entity = Entity.findOrCreate(threadId: key, context: self.viewContext)
+            entity.id = key as NSNumber
+            entity.pinMessage = value.toClass
         }
+        saveViewContext()
     }
 
+    @MainActor
     public func updateTitle(id: Int, title: String?) {
         let req = Entity.fetchRequest()
         req.predicate = idPredicate(id: id.nsValue)
         req.fetchLimit = 1
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            if let cdConv = try? self.viewContext.fetch(req).first {
-                cdConv.title = title
-                self.saveViewContext()
-            }
+        if let cdConv = try? self.viewContext.fetch(req).first {
+            cdConv.title = title
+            self.saveViewContext()
         }
     }
 }

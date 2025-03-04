@@ -31,8 +31,9 @@ final class TagManager: TagProtocol {
         let req = BareChatSendableRequest()
         chat.prepareToSendAsync(req: req, type: .tagList)
         let typeCode = chat.config.typeCodes[req.chatTypeCodeIndex].typeCode
-        chat.cache?.tag?.getTags { [weak self] tags in
-            let tagModels = tags.map(\.codable)
+        let tagCache = chat.cache?.tag
+        Task { @MainActor in
+            let tagModels = tagCache?.getTags().map(\.codable)
             let response = ChatResponse(uniqueId: req.uniqueId, result: tagModels, cache: true, typeCode: typeCode)
             Task { @ChatGlobalActor [weak self] in
                 self?.chat.delegate?.chatEvent(event: .tag(.tags(response)))

@@ -37,16 +37,8 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         NSPredicate(format: "\(Entity.idName) == \(Entity.queryIdSpecifier)", id as! CVarArg)
     }
 
-    public func first(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void) {
-        let req = Entity.fetchRequest()
-        req.predicate = self.idPredicate(id: id)
-        req.fetchLimit = 1
-        let entity = try? context.context.fetch(req).first
-        completion(entity)
-    }
-
     @MainActor
-    public func firstOnMain(with id: Entity.Id) -> Entity? {
+    public func first(with id: Entity.Id) -> Entity? {
         let req = Entity.fetchRequest()
         req.predicate = self.idPredicate(id: id)
         req.fetchLimit = 1
@@ -62,14 +54,16 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
 
     public func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         let context = bgContext
-        context.perform { [weak self] in
+        context.perform {
             let batchRequest = NSBatchUpdateRequest(entityName: Entity.name)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
             let updateResult = try? context.execute(batchRequest) as? NSBatchUpdateResult
             if let updatedObjectIds = updateResult?.result as? [NSManagedObjectID], updatedObjectIds.count > 0 {
-                self?.mergeChanges(key: NSUpdatedObjectIDsKey, updatedObjectIds)
+                Task { @MainActor [weak self] in
+                    self?.mergeChanges(key: NSUpdatedObjectIDsKey, updatedObjectIds)
+                }
             }
         }
     }
@@ -89,21 +83,17 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         }
     }
 
+    @MainActor
     public func saveViewContext() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            save(context: viewContext)
-        }
+        save(context: viewContext)
     }
-
+    
+    @MainActor
     public func mergeChanges(key: String, _ objectIDs: [NSManagedObjectID]) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            NSManagedObjectContext.mergeChanges(
-                fromRemoteContextSave: [key: objectIDs],
-                into: [self.viewContext.context as! NSManagedObjectContext]
-            )
-        }
+        NSManagedObjectContext.mergeChanges(
+            fromRemoteContextSave: [key: objectIDs],
+            into: [viewContext.context as! NSManagedObjectContext]
+        )
     }
 
     public func insertObjects(_ makeEntities: @escaping @Sendable (CacheManagedContext) throws -> Void) {
@@ -129,10 +119,12 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         let request = NSBatchDeleteRequest(fetchRequest: req)
         request.resultType = .resultTypeObjectIDs
         let context = bgContext
-        context.perform { [weak self] in
+        context.perform {
             let deleteResult = try context.execute(request) as? NSBatchDeleteResult
             if let deletedObjectIds = deleteResult?.result as? [NSManagedObjectID], deletedObjectIds.count > 0 {
-                self?.mergeChanges(key: NSDeletedObjectIDsKey, deletedObjectIds)
+                Task { @MainActor [weak self] in
+                    self?.mergeChanges(key: NSDeletedObjectIDsKey, deletedObjectIds)
+                }
             }
         }
     }
@@ -168,12 +160,13 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: Entity.name)
         let batchReq = NSBatchDeleteRequest(fetchRequest: req)
         batchReq.resultType = .resultTypeObjectIDs
-
         let context = bgContext
-        context.perform { [weak self] in
+        context.perform {
             let deleteResult = try context.execute(batchReq) as? NSBatchDeleteResult
             if let deletedObjectIds = deleteResult?.result as? [NSManagedObjectID], deletedObjectIds.count > 0 {
-                self?.mergeChanges(key: NSDeletedObjectIDsKey, deletedObjectIds)
+                Task { @MainActor [weak self] in
+                    self?.mergeChanges(key: NSDeletedObjectIDsKey, deletedObjectIds)
+                }
             }
         }
     }

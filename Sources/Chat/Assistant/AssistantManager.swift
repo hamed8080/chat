@@ -20,8 +20,11 @@ final class AssistantManager: AssistantProtocol {
     func get(_ request: AssistantsRequest) {
         chat.prepareToSendAsync(req: request, type: .getAssistants)
         let typeCode = request.toTypeCode(chat)
-        chat.cache?.assistant?.fetch(request.count, request.offset) { [weak self] assistants, _ in
-            self?.emitEvent(event: assistants.toCachedAssistantsEvent(request, typeCode))
+        let assistantCache = chat.cache?.assistant
+        Task { @MainActor in
+            if let (assistants, _) = assistantCache?.fetch(request.count, request.offset) {
+                emitEvent(event: assistants.toCachedAssistantsEvent(request, typeCode))
+            }
         }
     }
     
