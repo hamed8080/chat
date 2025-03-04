@@ -27,7 +27,6 @@ let package = Package(
             name: "AdditiveTests",
             dependencies: ["Additive"],
             resources: [
-                .copy("Resources/icon.png"),
                 .copy("Resources/Localizable.strings")
             ]
         ),

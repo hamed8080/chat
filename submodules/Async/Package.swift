@@ -20,20 +20,23 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-docc-plugin", branch: "main"),
     ],
     targets: [
-        .target(name: "Async",
-                dependencies: [
-                    .product(name: "Additive", package: "Additive"),
-                    .product(name: "Logger", package: "Logger"),
-                    .product(name: "Spec", package: "Spec"),
-                ]),
-        .testTarget(name: "AsyncTests",
-                    dependencies: [
-                        .target(name: "Async"),
-                        .product(name: "Additive", package: "Additive"),
-                        .product(name: "Logger", package: "Logger"),
-                        .product(name: "Spec", package: "Spec"),
-                        .product(name: "Mocks", package: "Mocks"),
-                    ],
-                    path: "Tests"),
+        .target(
+            name: "Async",
+            dependencies: [
+                .product(name: "Additive", package: "Additive"),
+                .product(name: "Logger", package: "Logger"),
+                .product(name: "Spec", package: "Spec"),
+            ]
+        ),
+        .testTarget(
+            name: "AsyncTests",
+            dependencies: [
+                .target(name: "Async"),
+                .product(name: "Additive", package: "Additive"),
+                .product(name: "Logger", package: "Logger"),
+                .product(name: "Spec", package: "Spec"),
+                .product(name: "Mocks", package: "Mocks"),
+            ],
+            path: "Tests"),
     ]
 )
