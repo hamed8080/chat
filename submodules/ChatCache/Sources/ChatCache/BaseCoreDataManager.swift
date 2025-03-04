@@ -45,15 +45,12 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         completion(entity)
     }
 
-    public func firstOnMain(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @MainActor @Sendable (Entity?) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            let req = Entity.fetchRequest()
-            req.predicate = self.idPredicate(id: id)
-            req.fetchLimit = 1
-            let entity = try? context.context.fetch(req).first
-            completion(entity)
-        }
+    @MainActor
+    public func firstOnMain(with id: Entity.Id) -> Entity? {
+        let req = Entity.fetchRequest()
+        req.predicate = self.idPredicate(id: id)
+        req.fetchLimit = 1
+        return try? viewContext.fetch(req).first
     }
 
     public func find(predicate: SendableNSPredicate, completion: @escaping @MainActor @Sendable ([Entity]) -> Void) {

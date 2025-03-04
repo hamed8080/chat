@@ -67,26 +67,23 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         update(propertiesToUpdate, predicate)
     }
     
-    public func setUnreadCount(action: CacheUnreadCountAction, threadId: Int, completion: (@Sendable (Int) -> Void)? = nil) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.firstOnMain(with: threadId.nsValue, context: self.viewContext) { entity in
-                var cachedThreadCount = entity?.unreadCount?.intValue ?? 0
-                switch action {
-                case .increase:
-                    cachedThreadCount += 1
-                    break
-                case .decrease:
-                    cachedThreadCount = max(0, cachedThreadCount - 1)
-                    break
-                case let .set(count):
-                    cachedThreadCount = max(0, count)
-                    break
-                }
-                self.update(["unreadCount": cachedThreadCount], self.idPredicate(id: threadId.nsValue))
-                completion?(cachedThreadCount)
-            }
+    @MainActor
+    public func setUnreadCount(action: CacheUnreadCountAction, threadId: Int) -> Int? {
+        guard let entity = self.firstOnMain(with: threadId.nsValue) else { return nil }
+        var cachedThreadCount = entity.unreadCount?.intValue ?? 0
+        switch action {
+        case .increase:
+            cachedThreadCount += 1
+            break
+        case .decrease:
+            cachedThreadCount = max(0, cachedThreadCount - 1)
+            break
+        case let .set(count):
+            cachedThreadCount = max(0, count)
+            break
         }
+        self.update(["unreadCount": cachedThreadCount], self.idPredicate(id: threadId.nsValue))
+        return cachedThreadCount
     }
 
     public func fetch(_ req: FetchThreadRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
@@ -258,6 +255,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
         }
     }
 
+    @MainActor
     public func updateThreadsUnreadCount(_ resp: [String: Int]) {
         for (key, value) in resp {
             if let threadId = Int(key) {

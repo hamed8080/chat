@@ -52,69 +52,61 @@ public final class CacheReactionCountManager: BaseCoreDataManager<CDReactionCoun
     
     @MainActor
     private func addReaction(_ model: CacheReactionCountModel) {
-        firstOnMain(with: model.messageId.nsValue, context: viewContext) { [weak self] entity in
-            guard
-                let self = self,
-                let reaction = model.reaction
-            else { return }
-            
-            let isMyReaction = reaction.participant?.id == model.myUserId
-            
-            if let entity = entity {
-                var reactionCounts = entity.codable.reactionCounts ?? []
-                if let index = reactionCounts.firstIndex(where: { $0.sticker == reaction.reaction }) {
-                    /// Update reaction count
-                    reactionCounts[index].count = (reactionCounts[index].count ?? 0) + 1
-                } else {
-                    /// There were other reactions in the list but there were not any reaction with this sticker so we add a new one
-                    reactionCounts.append(.init(sticker: reaction.reaction, count: 1))
-                }
-                
-                entity.update(.init(messageId: model.messageId,
-                                    reactionCounts: reactionCounts,
-                                    userReaction: isMyReaction ? reaction : entity.codable.userReaction))
+        let entity = firstOnMain(with: model.messageId.nsValue)
+        guard let reaction = model.reaction else { return }
+        let isMyReaction = reaction.participant?.id == model.myUserId
+        
+        if let entity = entity {
+            var reactionCounts = entity.codable.reactionCounts ?? []
+            if let index = reactionCounts.firstIndex(where: { $0.sticker == reaction.reaction }) {
+                /// Update reaction count
+                reactionCounts[index].count = (reactionCounts[index].count ?? 0) + 1
             } else {
-                /// Insert reaction count for the first time
-                let newReactionEntity = Entity.insertEntity(viewContext)
-                let reactionCounts: [ReactionCount] = [.init(sticker: reaction.reaction, count: 1)]
-                newReactionEntity.update(.init(messageId: model.messageId, reactionCounts: reactionCounts, userReaction: isMyReaction ? reaction : nil))
+                /// There were other reactions in the list but there were not any reaction with this sticker so we add a new one
+                reactionCounts.append(.init(sticker: reaction.reaction, count: 1))
             }
-            saveViewContext()
+            
+            entity.update(.init(messageId: model.messageId,
+                                reactionCounts: reactionCounts,
+                                userReaction: isMyReaction ? reaction : entity.codable.userReaction))
+        } else {
+            /// Insert reaction count for the first time
+            let newReactionEntity = Entity.insertEntity(viewContext)
+            let reactionCounts: [ReactionCount] = [.init(sticker: reaction.reaction, count: 1)]
+            newReactionEntity.update(.init(messageId: model.messageId, reactionCounts: reactionCounts, userReaction: isMyReaction ? reaction : nil))
         }
+        saveViewContext()
     }
     
     @MainActor
     private func deleteReaction(_ model: CacheReactionCountModel, completion: (@Sendable () -> Void)? = nil) {
-        firstOnMain(with: model.messageId.nsValue, context: viewContext) { [weak self] entity in
-            guard
-                let self = self,
+        guard
+            let entity = firstOnMain(with: model.messageId.nsValue),
                 let reaction = model.reaction,
-                let entity = entity,
-                var reactionCounts = entity.codable.reactionCounts,
-                let index = reactionCounts.firstIndex(where: { $0.sticker == reaction.reaction })
-            else { return }
-            
-            /// Reduce current reaction count
-            let isMyReactionDeleted = reaction.participant?.id == model.myUserId
-            let currentCount = reactionCounts[index].count ?? 0
-            let newValue = max(0, currentCount - 1)
-            reactionCounts[index].count = newValue
-            
-            /// Remove reactionCount from array if it was zero
-            if newValue == 0 {
-                reactionCounts.remove(at: index)
-            }
-            
-            if reactionCounts.isEmpty {
-                viewContext.delete(entity)
-            } else {
-                entity.update(.init(messageId: model.messageId,
-                                    reactionCounts: reactionCounts,
-                                    userReaction: isMyReactionDeleted ? nil : entity.codable.userReaction))
-            }
-            
-            saveViewContext()
-            completion?()
+            var reactionCounts = entity.codable.reactionCounts,
+            let index = reactionCounts.firstIndex(where: { $0.sticker == reaction.reaction })
+        else { return }
+        
+        /// Reduce current reaction count
+        let isMyReactionDeleted = reaction.participant?.id == model.myUserId
+        let currentCount = reactionCounts[index].count ?? 0
+        let newValue = max(0, currentCount - 1)
+        reactionCounts[index].count = newValue
+        
+        /// Remove reactionCount from array if it was zero
+        if newValue == 0 {
+            reactionCounts.remove(at: index)
         }
+        
+        if reactionCounts.isEmpty {
+            viewContext.delete(entity)
+        } else {
+            entity.update(.init(messageId: model.messageId,
+                                reactionCounts: reactionCounts,
+                                userReaction: isMyReactionDeleted ? nil : entity.codable.userReaction))
+        }
+        
+        saveViewContext()
+        completion?()
     }
 }

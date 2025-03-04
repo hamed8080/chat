@@ -9,13 +9,8 @@ import Foundation
 import ChatModels
 
 public final class CacheImageManager: BaseCoreDataManager<CDImage>, @unchecked Sendable {
-    public func first(hashCode: String, completion: @escaping @Sendable (Entity.Model?) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.firstOnMain(with: hashCode, context: self.viewContext) { image in
-                let image = image?.codable
-                completion(image)
-            }
-        }
+    @MainActor
+    public func first(hashCode: String) -> Entity.Model? {
+        firstOnMain(with: hashCode)?.codable
     }
 }

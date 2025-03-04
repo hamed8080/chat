@@ -80,7 +80,9 @@ final class ThreadManager: ThreadProtocol {
     func onThreadsUnreadCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[String: Int]> = asyncMessage.toChatResponse()
         emitEvent(.thread(.unreadCount(response)))
-        cache?.conversation?.updateThreadsUnreadCount(response.result ?? [:])
+        Task {
+            await cache?.conversation?.updateThreadsUnreadCount(response.result ?? [:])
+        }
     }
 
     func get(_ request: ThreadsRequest) {
@@ -220,7 +222,9 @@ final class ThreadManager: ThreadProtocol {
         emitEvent(.thread(.lastSeenMessageUpdated(response)))
         if let tuple = response.toCacheLastSeenTuple() {
             cache?.conversation?.seen(tuple.cacheLastSeenReponse)
-            cache?.conversation?.updateThreadsUnreadCount(["\(tuple.threadId)": tuple.unreadCount])
+            Task {
+                await cache?.conversation?.updateThreadsUnreadCount(["\(tuple.threadId)": tuple.unreadCount])
+            }
         }
     }
 
