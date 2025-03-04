@@ -40,11 +40,11 @@ final class ContactManager: ContactProtocol {
     }
 
     private func syncWithCache(_ phoneContacts: [Contact]) {
-        chat.cache?.contact?.all { [weak self] contactEntities in
-            if let contactsToSync = contactEntities.toSyncContactsRequest(newContacts: phoneContacts) {
-                Task {
-                    await self?.addAll(contactsToSync)
-                }
+        let contactCache = chat.cache?.contact
+        Task { @MainActor in
+            let contactEntities = contactCache?.all().compactMap({$0.codable})
+            if let contactsToSync = contactEntities?.toSyncContactsRequest(newContacts: phoneContacts) {
+                await addAll(contactsToSync)
             }
         }
     }

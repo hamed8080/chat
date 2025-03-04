@@ -213,7 +213,8 @@ fileprivate extension HistoryStore {
 
     private func isCacheContainsTime(_ req: GetHistoryRequest) -> Bool {
         guard let time = req.fromTime ?? req.toTime else { return false }
-        return cache?.message?.isContains(time: time, threadId: req.threadId) == true
+        let messageCache = cache?.message
+        return DispatchQueue.main.sync { messageCache?.isContains(time: time, threadId: req.threadId) == true }
     }
 
     private func isTimeRequest(_ req: GetHistoryRequest) -> Bool {
@@ -222,7 +223,7 @@ fileprivate extension HistoryStore {
 
     private func isLastMessageTime(_ req: GetHistoryRequest) -> Bool {
         let lstMsg = lastMessageIn(threadId: req.threadId.nsValue)
-        return (req.toTime ?? req.fromTime) == lstMsg?.time?.uintValue
+        return (req.toTime ?? req.fromTime) == lstMsg?.time
     }
 
     private func isOffsetRequest(_ req: GetHistoryRequest) -> Bool {
@@ -240,21 +241,23 @@ fileprivate extension HistoryStore {
     private func hasLastMessageOfTheThread(threadId: NSNumber) -> Bool {
         guard
             let lstId = lastMessageIn(threadId: threadId)?.id,
-            let _ = messageWith(lstId)
+            messageWithFound(lstId as NSNumber) == true
         else { return false }
         return true
     }
 
-    private func lastMessageIn(threadId: NSNumber) -> CDMessage? {
-        conversationWith(threadId)?.lastMessageVO
+    private func lastMessageIn(threadId: NSNumber) -> Message? {
+        conversationWith(threadId)?.lastMessageVO?.toMessage
     }
 
-    private func conversationWith(_ id: NSNumber) -> CDConversation? {
-        cache?.conversation?.get(id: id)
+    private func conversationWith(_ id: NSNumber) -> Conversation? {
+        let conversationCache = cache?.conversation
+        return DispatchQueue.main.sync { conversationCache?.get(id: id)?.codable() }
     }
-
-    private func messageWith(_ id: NSNumber) -> CDMessage? {
-        cache?.message?.get(id: id)
+    
+    private func messageWithFound(_ id: NSNumber) -> Bool {
+        let messageCache = cache?.message
+        return DispatchQueue.main.sync { messageCache?.get( id: id) == nil }
     }
 
     private func offsetsAreExist(_ messages: [Message], _ startIndex: Int, _ endIndex: Int) -> Bool {
@@ -302,7 +305,7 @@ fileprivate extension HistoryStore {
     private func hasLastMessageOnOpenning(sorted: [Message]) -> Bool {
         let threadId = sorted.last?.conversation?.id ?? sorted.last?.threadId
         let lastMessage = lastMessageIn(threadId: threadId?.nsValue ?? -1)
-        if let threadId = threadId, let lastMessageId = lastMessage?.id?.intValue {
+        if let threadId = threadId, let lastMessageId = lastMessage?.id {
             return sorted.contains(where: { $0.id == lastMessageId })
         }
         return false
@@ -336,8 +339,9 @@ fileprivate extension HistoryStore {
             let bottomId = sorted.last?.id,
             let threadId = sorted.last?.conversation?.id ?? sorted.last?.threadId
         else { return false }
-        let next = cache?.message?.next(threadId: threadId, messageId: bottomId)
-        return next?.previousId?.intValue == bottomId
+        let messageCache = cache?.message
+        let next = DispatchQueue.main.sync { messageCache?.next(threadId: threadId, messageId: bottomId)?.codable() }
+        return next?.previousId == bottomId
     }
     
     private func isResponseTopChainBottomCurrent(_ sorted: [Message]) -> Bool {
@@ -345,7 +349,8 @@ fileprivate extension HistoryStore {
             let prevId = sorted.first?.previousId,
             let threadId = sorted.first?.conversation?.id ?? sorted.first?.threadId
         else { return false }
-        return cache?.message?.isContains(messageId: prevId, threadId: threadId) == true
+        let messageCache = cache?.message
+        return DispatchQueue.main.sync { messageCache?.isContains(messageId: prevId, threadId: threadId) == true }
     }
 }
 
