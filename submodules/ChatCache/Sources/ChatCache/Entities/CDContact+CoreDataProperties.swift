@@ -77,10 +77,4 @@ public extension CDContact {
                 time: time?.uintValue,
                 userId: userId?.intValue)
     }
-
-    func isContactChanged(contact: Contact) -> Bool {
-        (email != contact.email) ||
-            (firstName != contact.firstName) ||
-            (lastName != contact.lastName)
-    }
 }

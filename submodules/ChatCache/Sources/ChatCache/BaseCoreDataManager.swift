@@ -161,28 +161,11 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         }
     }
 
-    public func all(_ completion: @escaping @Sendable ([Entity]) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            viewContext.perform {
-                let req = Entity.fetchRequest()
-                let entities = try self.viewContext.fetch(req)
-                completion(entities)
-            }
-        }
-    }
-
-    public func fetchWithObjectIds(ids: [NSManagedObjectID], _ completion: @escaping @Sendable ([Entity]) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            viewContext.perform {
-                let req = Entity.fetchRequest()
-                let predicate = NSPredicate(format: "self IN %@", ids)
-                req.predicate = predicate
-                let entities = try self.viewContext.fetch(req)
-                completion(entities)
-            }
-        }
+    @MainActor
+    public func all() -> [Entity] {
+        let req = Entity.fetchRequest()
+        let entities = try? self.viewContext.fetch(req)
+        return entities ?? []
     }
 
     public func findOrCreate(_ id: Entity.Id, _ context: CacheManagedContext) -> Entity {
@@ -207,12 +190,11 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         }
     }
 
+    @MainActor
     public func get(id: Entity.Id) -> Entity? {
-        DispatchQueue.main.sync {
-            let req = Entity.fetchRequest()
-            req.predicate = idPredicate(id: id)
-            req.fetchLimit = 1
-            return try? viewContext.fetch(req).first
-        }
+        let req = Entity.fetchRequest()
+        req.predicate = idPredicate(id: id)
+        req.fetchLimit = 1
+        return try? viewContext.fetch(req).first
     }
 }

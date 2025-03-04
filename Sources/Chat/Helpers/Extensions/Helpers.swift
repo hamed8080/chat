@@ -162,7 +162,8 @@ extension ChatResponse where T == Int? {
 
 extension ChatInternalProtocol {
     func cachedUserRoles(_ request: GeneralSubjectIdRequest) -> ChatResponse<[Roles]> {
-        let roles = cache?.userRole?.roles(request.subjectId)
+        let userRoleCache = cache?.userRole
+        let roles = DispatchQueue.main.sync { userRoleCache?.roles(request.subjectId) }
         let typeCode = request.toTypeCode(self)
         return ChatResponse<[Roles]>(uniqueId: request.uniqueId, result: roles, cache: true, typeCode: typeCode)
     }
@@ -410,13 +411,12 @@ extension Array<CacheContactManager.Entity> {
     }
 }
 
-
-extension Array<CDContact> {
+extension Array<Contact> {
     func toSyncContactsRequest(newContacts: [Contact]) -> [AddContactRequest]? {
         var contactsToSync: [AddContactRequest] = []
         newContacts.forEach { phoneContact in
             if let findedContactchat = first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
-                if findedContactchat.isContactChanged(contact: phoneContact) {
+                if isContactChanged(findedContactchat, phoneContact) {
                     contactsToSync.append(phoneContact.request)
                 }
             } else {
@@ -429,6 +429,12 @@ extension Array<CDContact> {
         }
         if contactsToSync.count <= 0 { return nil }
         return contactsToSync
+    }
+    
+    func isContactChanged(_ cacheContact: Contact, _ newContact: Contact) -> Bool {
+        (cacheContact.email != newContact.email) ||
+        (cacheContact.firstName != newContact.firstName) ||
+        (cacheContact.lastName != newContact.lastName)
     }
 }
 

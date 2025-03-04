@@ -40,8 +40,8 @@ public protocol CoreDataProtocol {
     func batchDelete(_ ids: [Int])
     func batchDelete(predicate: NSPredicate)
     func fetchWithOffset(count: Int, offset: Int, predicate: SendableNSPredicate?, sortDescriptor: [SendableNSSortDescriptor]?, _ completion: @escaping @Sendable ([Entity], Int) -> Void)
-    func all(_ completion: @escaping @Sendable ([Entity]) -> Void)
-    func fetchWithObjectIds(ids: [NSManagedObjectID], _ completion: @escaping @Sendable ([Entity]) -> Void)
+    @MainActor
+    func all() -> [Entity]
     func findOrCreate(_ id: Entity.Id, _ context: CacheManagedContext) -> Entity
     func truncate()
 }

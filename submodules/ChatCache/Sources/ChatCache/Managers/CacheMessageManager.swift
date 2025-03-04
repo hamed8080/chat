@@ -154,24 +154,20 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         return NSCompoundPredicate(type: .and, subpredicates: predicateArray)
     }
     
-    public func find(_ threadId: Int, _ messageId: Int, _ completion: @escaping @Sendable (Entity?) -> Void) {
-        DispatchQueue.main.sync { [weak self] in
-            guard let self = self else { return }
-            viewContext.perform {
-                let req = Entity.fetchRequest()
-                req.predicate = self.joinPredicate(threadId.nsValue, messageId.nsValue)
-                let message = try self.viewContext.fetch(req).first
-                completion(message)
-            }
-        }
+    @MainActor
+    public func find(_ threadId: Int, _ messageId: Int) -> Entity? {
+        let req = Entity.fetchRequest()
+        req.predicate = self.joinPredicate(threadId.nsValue, messageId.nsValue)
+        let message = try? self.viewContext.fetch(req).first
+        return message
     }
     
+    @MainActor
     public func find(_ threadId: Int, _ messageId: Int) async -> Entity.Model? {
         typealias ResultType = CheckedContinuation<Entity.Model?, Never>
         return await withCheckedContinuation { [weak self] (continuation: ResultType) in
-            self?.find(threadId, messageId) { entity in
-                continuation.resume(with: .success(entity?.codable()))
-            }
+            let entity = self?.find(threadId, messageId)
+            continuation.resume(with: .success(entity?.codable()))
         }
     }
     
@@ -186,7 +182,8 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
     }
 
     public func fetch(_ req: FetchMessagesRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
-        DispatchQueue.main.sync {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             viewContext.perform {
                 let fetchRequest = Entity.fetchRequest()
                 let asc = (req.order == Ordering.asc.rawValue) ? true : false
@@ -225,37 +222,34 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         batchDelete(predicate: predicate)
     }
 
+    @MainActor
     public func next(threadId: Int, messageId: Int) -> Entity? {
-        DispatchQueue.main.sync {
-            let predicate = NSPredicate(format: "id > %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
-            let req = Entity.fetchRequest()
-            req.predicate = predicate
-            req.fetchLimit = 1
-            req.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
-            guard let message = (try? viewContext.fetch(req))?.first else { return nil }
-            return message
-        }
+        let predicate = NSPredicate(format: "id > %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
+        let req = Entity.fetchRequest()
+        req.predicate = predicate
+        req.fetchLimit = 1
+        req.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        guard let message = (try? viewContext.fetch(req))?.first else { return nil }
+        return message
     }
 
+    @MainActor
     public func isContains(time: UInt, threadId: Int) -> Bool {
-        DispatchQueue.main.sync {
-            let predicate = NSPredicate(format: "time == %@ && threadId == %@", Int(time).nsValue, threadId.nsValue)
-            let req = Entity.fetchRequest()
-            req.predicate = predicate
-            req.fetchLimit = 1
-            let result = try? viewContext.fetch(req)
-            return result?.count == 1
-        }
+        let predicate = NSPredicate(format: "time == %@ && threadId == %@", Int(time).nsValue, threadId.nsValue)
+        let req = Entity.fetchRequest()
+        req.predicate = predicate
+        req.fetchLimit = 1
+        let result = try? viewContext.fetch(req)
+        return result?.count == 1
     }
     
+    @MainActor
     public func isContains(messageId: Int, threadId: Int) -> Bool {
-        DispatchQueue.main.sync {
-            let predicate = NSPredicate(format: "id == %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
-            let req = Entity.fetchRequest()
-            req.predicate = predicate
-            req.fetchLimit = 1
-            let result = try? viewContext.fetch(req)
-            return result?.count == 1
-        }
+        let predicate = NSPredicate(format: "id == %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
+        let req = Entity.fetchRequest()
+        req.predicate = predicate
+        req.fetchLimit = 1
+        let result = try? viewContext.fetch(req)
+        return result?.count == 1
     }
 }
