@@ -15,9 +15,10 @@ public final class CacheQueueOfTextMessagesManager: BaseCoreDataManager<CDQueueO
         batchDelete(predicate: predicate)
     }
 
-    public func unsendForThread(_ threadId: Int, _ count: Int = 25, _ offset: Int = 0, _ completion: @Sendable @escaping ([Entity], Int) -> Void) {
+    @MainActor
+    public func unsendForThread(_ threadId: Int, _ count: Int = 25, _ offset: Int = 0) -> ([Entity]?, Int)? {
         let threadIdPredicate = NSPredicate(format: "threadId == \(CDConversation.queryIdSpecifier)", threadId.nsValue)
         let sPredicate = SendableNSPredicate(predicate: threadIdPredicate)
-        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
+        return fetchWithOffset(count: count, offset: offset, predicate: sPredicate)
     }
 }

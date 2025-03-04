@@ -211,10 +211,11 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         }
     }
 
-    public func getMentions(threadId: Int, offset: Int = 0, count: Int = 25, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func getMentions(threadId: Int, offset: Int = 0, count: Int = 25) -> ([Entity]?, Int)? {
         let predicate = NSPredicate(format: "threadId == \(CDConversation.queryIdSpecifier) AND mentioned == YES", threadId.nsValue)
         let sPredicate = SendableNSPredicate(predicate: predicate)
-        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
+        return fetchWithOffset(count: count, offset: offset, predicate: sPredicate)
     }
 
     public func clearHistory(threadId: Int) {

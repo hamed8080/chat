@@ -52,17 +52,12 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         req.fetchLimit = 1
         return try? viewContext.fetch(req).first
     }
-
-    public func find(predicate: SendableNSPredicate, completion: @escaping @MainActor @Sendable ([Entity]) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            viewContext.perform {
-                let req = Entity.fetchRequest()
-                req.predicate = predicate.predicate
-                let entities = try self.viewContext.fetch(req)
-                completion(entities)
-            }
-        }
+    
+    @MainActor
+    public func find(predicate: SendableNSPredicate) -> [Entity]? {
+        let req = Entity.fetchRequest()
+        req.predicate = predicate.predicate
+        return try? self.viewContext.fetch(req)
     }
 
     public func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
@@ -142,20 +137,16 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol, @unchecke
         }
     }
 
-    public func fetchWithOffset(count: Int = 25, offset: Int = 0, predicate: SendableNSPredicate? = nil, sortDescriptor: [SendableNSSortDescriptor]? = nil, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            viewContext.perform {
-                let req = NSFetchRequest<Entity>(entityName: Entity.name)
-                req.sortDescriptors = sortDescriptor?.compactMap {$0.sort}
-                req.predicate = predicate?.predicate
-                let totalCount = (try? self.viewContext.count(for: req)) ?? 0
-                req.fetchLimit = count
-                req.fetchOffset = offset
-                let objects = try self.viewContext.fetch(req)
-                completion(objects, totalCount)
-            }
-        }
+    @MainActor
+    public func fetchWithOffset(count: Int = 25, offset: Int = 0, predicate: SendableNSPredicate? = nil, sortDescriptor: [SendableNSSortDescriptor]? = nil) -> ([Entity]?, Int)? {
+        let req = NSFetchRequest<Entity>(entityName: Entity.name)
+        req.sortDescriptors = sortDescriptor?.compactMap {$0.sort}
+        req.predicate = predicate?.predicate
+        let totalCount = (try? self.viewContext.count(for: req)) ?? 0
+        req.fetchLimit = count
+        req.fetchOffset = offset
+        let objects = try? self.viewContext.fetch(req)
+        return (objects, totalCount)
     }
 
     @MainActor

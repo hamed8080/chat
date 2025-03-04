@@ -54,14 +54,19 @@ final class AssistantManager: AssistantProtocol {
         let copies = response.result?.compactMap{$0} ?? []
         let block = asyncMessage.chatMessage?.type == .blockAssistant
         emitEvent(.assistant(block ? .block(response) : .unblock(response)))
-        chat.cache?.assistant?.block(block: asyncMessage.chatMessage?.type == .blockAssistant, assistants: copies)
+        Task {
+            await chat.cache?.assistant?.block(block: asyncMessage.chatMessage?.type == .blockAssistant, assistants: copies)
+        }
     }
     
     func blockedList(_ request: BlockedAssistantsRequest) {
         chat.prepareToSendAsync(req: request, type: .blockedAssistnts)
         let typeCode = request.toTypeCode(chat)
-        chat.cache?.assistant?.getBlocked(request.count, request.offset) { [weak self] assistants, _ in
-            self?.emitEvent(event: assistants.toCachedBlockedAssistantsEvent(request, typeCode))
+        let assistantCache = chat.cache?.assistant
+        Task { @MainActor in
+            if let (assistants, _) = assistantCache?.getBlocked(request.count, request.offset), let assistants = assistants {
+                emitEvent(event: assistants.toCachedBlockedAssistantsEvent(request, typeCode))
+            }
         }
     }
     
@@ -80,7 +85,9 @@ final class AssistantManager: AssistantProtocol {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         let copies = response.result?.compactMap{$0} ?? []
         emitEvent(.assistant(.deactive(response)))
-        chat.cache?.assistant?.delete(copies)
+        Task {
+            await chat.cache?.assistant?.delete(copies)
+        }
     }
     
     func register(_ request: RegisterAssistantsRequest) {

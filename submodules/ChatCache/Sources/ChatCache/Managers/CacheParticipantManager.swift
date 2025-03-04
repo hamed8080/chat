@@ -41,10 +41,11 @@ public final class CacheParticipantManager: BaseCoreDataManager<CDParticipant>, 
         NSPredicate(format: "conversation.\(CDConversation.idName) == \(CDConversation.queryIdSpecifier) AND \(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue, participantId.nsValue)
     }
 
-    public func getThreadParticipants(_ threadId: Int, _ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func getThreadParticipants(_ threadId: Int, _ count: Int = 25, _ offset: Int = 0) -> ([Entity]?, Int)? {
         let predicate = NSPredicate(format: "conversation.\(CDConversation.idName) == \(CDConversation.queryIdSpecifier)", threadId.nsValue)
         let sPredicate = SendableNSPredicate(predicate: predicate)
-        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
+        return fetchWithOffset(count: count, offset: offset, predicate: sPredicate)
     }
 
     public func delete(_ models: [Entity.Model], _ threadId: Int) {

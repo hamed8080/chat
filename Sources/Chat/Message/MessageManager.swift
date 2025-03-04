@@ -86,29 +86,41 @@ final class MessageManager: MessageProtocol {
 
     func unsentTextMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
-        cache?.textQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsedTexts, _ in
-            self?.emitEvent(event: unsedTexts.toEvent(request, typeCode))
+        let unsentQueue = cache?.textQueue
+        Task { @MainActor in
+            if let (unsedTexts, _) = unsentQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset), let unsedTexts = unsedTexts {
+                emitEvent(event: unsedTexts.toEvent(request, typeCode))
+            }
         }
     }
 
     func unsentEditMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
-        cache?.editQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsendEdits, _ in
-            self?.emitEvent(event: unsendEdits.toEvent(request, typeCode))
+        let editQueueCache = cache?.editQueue
+        Task { @MainActor in
+            if let (unsendEdits, _) = editQueueCache?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset), let unsendEdits = unsendEdits {
+                emitEvent(event: unsendEdits.toEvent(request, typeCode))
+            }
         }
     }
 
     func unsentForwardMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
-        cache?.forwardQueue?.unsendForThread(request.threadId, request.count, 100) { [weak self] unsendForwards, _ in
-            self?.emitEvent(event: unsendForwards.toEvent(request, typeCode))
+        let forwardQueueCache = cache?.forwardQueue
+        Task { @MainActor in
+            if let (unsendForwards, _) = forwardQueueCache?.unsendForThread(request.threadId, request.count, 100), let unsendForwards = unsendForwards {
+                emitEvent(event: unsendForwards.toEvent(request, typeCode))
+            }
         }
     }
 
     func unsentFileMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
-        cache?.fileQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsendFiles, _ in
-            self?.emitEvent(event: unsendFiles.toEvent(request, typeCode))
+        let fileQueueCache = cache?.fileQueue
+        Task { @MainActor in
+            if let (unsendFiles, _) = fileQueueCache?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset), let unsendFiles = unsendFiles {
+                emitEvent(event: unsendFiles.toEvent(request, typeCode))
+            }
         }
     }
 
@@ -208,8 +220,11 @@ final class MessageManager: MessageProtocol {
     func mentions(_ request: MentionRequest) {
         chat.prepareToSendAsync(req: request, type: .getHistory)
         let typeCode = request.toTypeCode(chat)
-        cache?.message?.getMentions(threadId: request.threadId, offset: request.offset, count: request.count) { [weak self] messages, _ in
-            self?.emitEvent(event: messages.toMentionEvent(request, typeCode))
+        let messageCache = cache?.message
+        Task { @MainActor in
+            if let (messages, _) = messageCache?.getMentions(threadId: request.threadId, offset: request.offset, count: request.count), let messages = messages {
+                emitEvent(event: messages.toMentionEvent(request, typeCode))
+            }
         }
     }
 

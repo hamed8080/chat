@@ -28,8 +28,9 @@ public protocol CoreDataProtocol {
     func saveViewContext()
     @MainActor
     func firstOnMain(with id: Entity.Id) -> Entity?
-    func first(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void)
-    func find(predicate: SendableNSPredicate, completion: @escaping @MainActor @Sendable ([Entity]) -> Void)
+    func first(with id: Entity.Id, context: CacheManagedContext, completion: @escaping @Sendable (Entity?) -> Void)    
+    @MainActor
+    func find(predicate: SendableNSPredicate) -> [Entity]?
     func insert(model: Entity.Model, context: CacheManagedContext)
     func insert(models: [Entity.Model])
     func delete(entity: Entity)
@@ -40,7 +41,8 @@ public protocol CoreDataProtocol {
     func delete(_ id: Int)
     func batchDelete(_ ids: [Int])
     func batchDelete(predicate: NSPredicate)
-    func fetchWithOffset(count: Int, offset: Int, predicate: SendableNSPredicate?, sortDescriptor: [SendableNSSortDescriptor]?, _ completion: @escaping @Sendable ([Entity], Int) -> Void)
+    @MainActor
+    func fetchWithOffset(count: Int, offset: Int, predicate: SendableNSPredicate?, sortDescriptor: [SendableNSSortDescriptor]?) -> ([Entity]?, Int)?
     @MainActor
     func all() -> [Entity]
     func findOrCreate(_ id: Entity.Id, _ context: CacheManagedContext) -> Entity
