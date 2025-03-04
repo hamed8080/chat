@@ -43,10 +43,14 @@ final class ReactionManager: ReactionProtocol {
         chat.prepareToSendAsync(req: newRquest, type: .reactionCount)
         
         let typeCode = request.toTypeCode(chat)
-        cache?.reactionCount?.fetch(request.messageIds) { [weak self] models in
-            let reactionCounts = models.compactMap({$0.codable})
-            let response = request.toCountResponse(models: reactionCounts, typeCode: typeCode)
-            self?.emitEvent(event: .reaction(.count(response)))
+        
+        let reactionCache = cache?.reactionCount
+        Task { @MainActor in
+            if let models = reactionCache?.fetch(request.messageIds) {
+                let reactionCounts = models.compactMap({$0.codable})
+                let response = request.toCountResponse(models: reactionCounts, typeCode: typeCode)
+                emitEvent(event: .reaction(.count(response)))
+            }
         }
     }
     

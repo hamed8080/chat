@@ -10,40 +10,44 @@ import ChatModels
 
 public final class CacheAssistantManager: BaseCoreDataManager<CDAssistant>, @unchecked Sendable {
 
+    @MainActor
     public func block(block: Bool, assistants: [Entity.Model]) {
-        fetchWithIntIds(assistants) { [weak self] entities in
-            entities.forEach { assistant in
-                assistant.block = block as NSNumber
-            }
-            self?.saveViewContext()
+        let entities = fetchWithIntIds(assistants)
+        entities.forEach { assistant in
+            assistant.block = block as NSNumber
         }
+        saveViewContext()
     }
 
-    public func getBlocked(_ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func getBlocked(_ count: Int = 25, _ offset: Int = 0) -> ([Entity]?, Int)? {
         let predicate = NSPredicate(format: "%K == %@", #keyPath(CDAssistant.block), NSNumber(booleanLiteral: true))
         let sPredicate = SendableNSPredicate(predicate: predicate)
-        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
+        return fetchWithOffset(count: count, offset: offset, predicate: sPredicate)
     }
 
+    @MainActor
     public func delete(_ models: [Entity.Model]) {
-        fetchWithIntIds(models) { [weak self] entities in
-            entities.forEach { entity in
-                self?.viewContext.delete(entity)
-            }
-            self?.saveViewContext()
+        let entities = fetchWithIntIds(models)
+        entities.forEach { entity in
+            viewContext.delete(entity)
         }
+        saveViewContext()
     }
 
-    private func fetchWithIntIds(_ models: [Entity.Model], _ compeletion: @escaping @MainActor @Sendable ([Entity]) -> Void) {
+    @MainActor
+    private func fetchWithIntIds(_ models: [Entity.Model]) -> [Entity] {
+        var entities: [Entity] = []
         models.forEach { model in
             if let participantId = model.participant?.id {
                 let predicate = NSPredicate(format: "%K == %@", #keyPath(CDAssistant.participant.id), participantId.nsValue)
                 let sPredicate = SendableNSPredicate(predicate: predicate)
-                find(predicate: sPredicate) { entities in
-                    compeletion(entities)
+                if let entity = find(predicate: sPredicate)?.first {
+                    entities.append(entity)
                 }
             }
         }
+        return entities
     }
 
     public func fetch(_ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
