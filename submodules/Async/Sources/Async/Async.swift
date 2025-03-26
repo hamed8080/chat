@@ -28,11 +28,12 @@ public final class Async: AsyncInternalProtocol, WebSocketProviderDelegate {
 
     /// The initializer of async.
     ///
-    /// After creating this object you should call ``Async/Async/connect()`` to start connecting to the server unless it's not connected automatically.
+    /// After creating this object you should call ``Async/connect()`` to start connecting to the server unless it's not connected automatically.
     /// - Parameters:
     ///   - socket: A socket provider.
     ///   - config: Configuration of async ``AsyncConfig``.
     ///   - delegate: Delegate to notify events.
+    ///   - logger: A logger instance to log events.
     public init(socket: WebSocketProvider, config: AsyncConfig, delegate: AsyncDelegate? = nil, logger: Logger) async {
         self.logger = logger
         logger.delegate = delegate

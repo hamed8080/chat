@@ -16,7 +16,7 @@ public enum InviteeTypes: Int, Codable, CaseIterable, Sendable {
 
     /// Only when can't decode a type.
     ///
-    /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses ``SafeDecodable`` to decode the last item if no match found.
+    /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses **SafeDecodable** to decode the last item if no match found.
     case unknown
 
     public init(from decoder: Decoder) throws {

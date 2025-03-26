@@ -31,8 +31,10 @@ public struct AsyncConfig: Codable, Sendable {
     ///   - peerName: The peer name of the destination server.
     ///   - deviceId: Device id of the current device if you don't pass an id it generates an id with UUID.
     ///   - appId: The id of application that registered in server.
+    ///   - loggerConfig: A configuration to log events.
     ///   - peerId: Id of peer.
     ///   - messageTtl: Message TTL.
+    ///   - pingInterval: Interval time to ping the Async Server in seconds.
     ///   - connectionRetryInterval: The interval between fails to connect tries.
     ///   - connectionCheckTimeout: Time in seconds for checking connection status and try if disconnected or informing you through the delegate.
     ///   - reconnectCount: The amount of times when socket fail or disconnect if reconnectOnClose is enabled

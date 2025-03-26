@@ -72,7 +72,7 @@ ChatManager.activeInstance?.conversation.join(req)
 Admin of a thread can close a thread to prevent participants send a message. The Thread must be one of types: ``ThreadTypes/channel``, ``ThreadTypes/channelGroup``,  ``ThreadTypes/normal``.
 Use mehod ``Chat/ThreadProtocol/close(_:)`` like below:
 
->Tip: Keep in mine ``ThreadTypes/normal`` must be a group, not a P2P thread.
+>Tip: Keep in mind that ``ThreadTypes/normal`` must be a group, not a P2P conversation.
 
 ```swift
 let req = GeneralSubjectIdRequest(subjectId: threadId)
@@ -131,7 +131,7 @@ ChatManager.activeInstance?.conversation.delete(.init)
 ```
 
 ### All threads(Ids)
-Getting the list of all threads by itself is not useful, if you set the summary of this request to true you will receive only the list of thread ids  `[Int]`  so the only filed that will set is ``Conversation/id``. 
+Getting the list of all threads by itself is not useful, if you set the summary of this request to true you will receive only the list of thread ids `[Int]`  so the only filed that will set is ``Conversation/id``. 
 
 ```swift
 let req = init(summary: true)

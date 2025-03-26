@@ -7,7 +7,7 @@ How to configure the Chat SDK to integrate with your application.
 ## Configuration
 To configure the Chat SDK you have got to provide an AsyncConfig along with a ChatConfig and pass the AsyncConfig as a parameter in the config builder as the figure shows:
 >Note: The configuration for call and log is not required.
-
+ 
 
 ```swift
 let callConfig = CallConfigBuilder()
@@ -62,7 +62,7 @@ Chat SDK is not based on whether closures or completion handlers and notificatio
 When you initiate a request you should listen to an event by a delegate that we provided for you like:
 
 ```swift
-final class ChatDelegateImplementation: ChatDelegate  {
+final class ChatDelegateImplementation: ChatDelegate {
     func chatState(state: ChatState, currentUser: User?, error _: ChatError?) {
         print("chat status: \(state)")
     }
@@ -81,3 +81,23 @@ final class ChatDelegateImplementation: ChatDelegate  {
 >Tip: For the sake of brevity, we will not repeat the event types for the receive event delegate. You should know that there is a ThreadEventTypes enum where you can just receive the desired event.
 
 >Tip: Place the delegate in the initial lines of code in your application, and from there, post a notification to other parts of the system or use your own delegate mechanism.
+
+>Tip: Chat SDK requests and responses are designed to be value types, so when you pass them around, be careful about the mutations you have made to instances you received from the SDK.
+
+## Swift 6 and Concurrency
+Chat SDK version 3.0.0 is designed to work closely with Swift concurrency, so there is a learning curve when getting started with the new version.
+Firstly, you cannot directly touch the Chat SDK or Async SDK classes because they are built from the ground up with a specific Swift Actor.
+
+To call a method, you must explicitly switch to the Chat SDK context using ``ChatGlobalActor``. The code below demonstrates how to retrieve a list of conversations:
+
+```swift
+Task { @ChatGlobalActor in
+    ChatManager.activeInstance?.conversation.get(req)
+}
+```
+
+>Warning: Do not mark the class or method with ``ChatGlobalActor`` if it performs a heavy task or operation. 
+
+>Important: Chat SDK is not bound to the MainActor. However, in the ChatCache SDK (one of its dependencies), we must bind to the MainActor due to its interaction with Core Data.
+
+>Note: For brevity, we will show only the bare method call without wrapping the call site in a Task with @ChatGlobalActor.
