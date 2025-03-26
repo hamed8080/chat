@@ -29,6 +29,7 @@ git clone --branch 3.0.0 https://github.com/hamed8080/chat
 ```swift
 .package(path: "path_to_sdk_folder/Chat")
 ```
+The process is the same if you are using Xcode to manage Swift Packages. Simply go to the navigator, select the main project, and add the dependency locally.
 
 ## Update the Chat SDK
 Chat SDK uses tag versioning in Git to update the SDK. Make sure to clone it with the correct tag. First, switch to the main branch, then manually switch to the latest tag version.
