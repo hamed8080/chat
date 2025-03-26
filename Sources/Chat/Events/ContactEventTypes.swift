@@ -9,7 +9,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public enum ContactEventTypes {
+public enum ContactEventTypes: Sendable {
     case contacts(ChatResponse<[Contact]>)
     case add(ChatResponse<[Contact]>)
     case delete(ChatResponse<[Contact]>, deleted: Bool)

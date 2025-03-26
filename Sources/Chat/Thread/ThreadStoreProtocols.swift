@@ -9,6 +9,7 @@ import ChatDTO
 import ChatModels
 import ChatCore
 
+@ChatGlobalActor
 protocol InMemoryConversationOperations {
     associatedtype T: InMemoryConversation
 
@@ -32,6 +33,7 @@ protocol InMemoryConversationOperations {
     func fetchUnavailableSlots(request: ThreadsRequest)
 }
 
+@ChatGlobalActor
 protocol ServerConversationOperations {
     // Server operations
     func fetch(request: ThreadsRequest)
@@ -54,11 +56,13 @@ protocol ServerConversationOperations {
     func onRemovedParticipants(_ id: Conversation.ID, count: Int)
 }
 
+@ChatGlobalActor
 protocol DBConversationOPerations {
     // Core Data operations
     func storeInDB(_ conversations: [Conversation])
 }
 
+@ChatGlobalActor
 protocol ServerPinMessageOperations {
     func onPinUnPin(_ isPin: Bool, _ threadId: Int?, _ message: PinMessage?)
 }

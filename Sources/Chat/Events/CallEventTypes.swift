@@ -9,7 +9,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public enum CallEventTypes {
+public enum CallEventTypes: Sendable {
     case callCreate(ChatResponse<CreateCall>)
     case callStarted(ChatResponse<StartCall>)
     case callReceived(ChatResponse<CreateCall>)

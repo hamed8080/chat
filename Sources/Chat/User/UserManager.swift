@@ -32,34 +32,27 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     func currentUserRoles(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .getCurrentUserRoles)
-        let roles = chat.cache?.userRole?.roles(request.subjectId)
-        let typeCode = request.toTypeCode(chat)
-        chat.delegate?.chatEvent(event: .user(.currentUserRoles(ChatResponse(uniqueId: request.uniqueId, result: roles, cache: true, typeCode: typeCode))))
+        emitEvent(.user(.currentUserRoles(chat.cachedUserRoles(request))))
     }
 
     func onCurrentUserRoles(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse()
         let userRole = UserRole(threadId: response.subjectId, roles: response.result)
-        chat.delegate?.chatEvent(event: .user(.currentUserRoles(response)))
+        emitEvent(.user(.currentUserRoles(response)))
         chat.cache?.userRole?.insert(models: [userRole])
     }
 
     func onSetRolesToUser(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .user(.setRolesToUser(response)))
-        var userRoles = response.result ?? []
-        for (i, _) in userRoles.enumerated() {
-            userRoles[i].threadId = response.subjectId
-        }
-        chat.cache?.userRole?.insert(models: userRoles)
+        emitEvent(.user(.setRolesToUser(response)))
+        chat.cache?.userRole?.insert(models: response.fixUserRolesThreadId())
     }
 
     public func userInfo(_ request: UserInfoRequest) {
         chat.prepareToSendAsync(req: request, type: .userInfo)
         let typeCode = request.toTypeCode(chat)
         chat.cache?.user?.fetchCurrentUser { [weak self] userEntity in
-            let response = ChatResponse(uniqueId: request.uniqueId, result: userEntity?.codable, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .user(.user(response)))
+            self?.emitEvent(event: userEntity.toEvent(request, typeCode))
         }
     }
 
@@ -67,7 +60,9 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         if chat.userInfo == nil {
             fetchUserInfo()
             requestUserTimer = requestUserTimer.scheduledTimer(interval: 5, repeats: true) { [weak self] _ in
-                self?.fetchUserInfo()
+                Task { @ChatGlobalActor in
+                    self?.fetchUserInfo()
+                }
             }
         } else {
             // it mean chat was connected before and reconnected again
@@ -94,7 +89,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
             chat.cache?.user?.insertOnMain(user, isMe: true)
             chat.userInfo = user
             (chat as? ChatImplementation)?.state = .chatReady
-            chat.delegate?.chatEvent(event: .user(.user(.init(result: user, typeCode: response.typeCode))))
+            emitEvent(.user(.user(.init(result: user, typeCode: response.typeCode))))
             chat.delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
             chat.asyncManager.sendQueuesOnReconnect()
             requestUserTimer.invalidateTimer()
@@ -104,19 +99,15 @@ final class UserManager: UserProtocol, InternalUserProtocol {
             // reach to max retry
             requestUserTimer.invalidateTimer()
             let error = ChatError(type: .errorRaedyChat, message: "Reached max retry count!")
-            let errorResponse = ChatResponse(result: Any?.none, error: error, typeCode: response.typeCode)
-            chat.delegate?.chatEvent(event: .system(.error(errorResponse)))
+            let errorResponse = ChatResponse<Sendable>(error: error, typeCode: response.typeCode)
+            emitEvent(.system(.error(errorResponse)))
         }
     }
 
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
-        if let user = response.result {
-            chat.cache?.user?.insertOnMain(user)
-        }
         onInternalUser(response: response)
-        chat.delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time, typeCode: response.typeCode))))
-        chat.delegate?.chatEvent(event: .user(.user(response)))
+        emitEvent(.system(.serverTime(.init(userInfoRes: response))))
     }
 
     func set(_ request: UpdateChatProfile) {
@@ -125,7 +116,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     func onSetProfile(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Profile> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .user(.setProfile(response)))
+        emitEvent(.user(.setProfile(response)))
     }
 
     func remove(_ request: RolesRequest) {
@@ -138,21 +129,17 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     func onRemveUserRoles(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .user(.remove(response)))
+        emitEvent(.user(.remove(response)))
     }
 
     func logOut() {
         let req = BareChatSendableRequest(uniqueId: UUID().uuidString)
         chat.prepareToSendAsync(req: req, type: .logout)
         chat.cache?.delete()
-        if let docFoler = chat.cacheFileManager?.documentPath {
-            chat.cacheFileManager?.deleteFolder(url: docFoler)
+        chat.deleteDocumentFolders()
+        Task {
+            await chat.dispose()
         }
-
-        if let groupFoler = chat.cacheFileManager?.groupFolder {
-            chat.cacheFileManager?.deleteFolder(url: groupFoler)
-        }
-        chat.dispose()
     }
 
     func send(_ request: SendStatusPingRequest) {
@@ -160,4 +147,14 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     }
 
     func onStatusPing(_: AsyncMessage) {}
+    
+    private nonisolated func emitEvent(event: ChatEventType) {
+        Task { @ChatGlobalActor [weak self] in
+            self?.emitEvent(event)
+        }
+    }
+    
+    private func emitEvent(_ event: ChatEventType) {
+        chat.delegate?.chatEvent(event: event)
+    }
 }

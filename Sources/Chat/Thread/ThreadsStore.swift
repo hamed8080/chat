@@ -23,12 +23,13 @@ internal struct ThreadsRequestWrapper {
     let originalRequest: ThreadsRequest
 }
 
+@ChatGlobalActor
 internal final class ThreadsStore: ThreadStoreProtocol {
     var conversations = ContiguousArray<InMemoryConversation>()
     var serverSortedPins: [Int] = []
     var requests: [ThreadsRequestWrapper] = []
     var chat: ChatInternalProtocol
-    private var debug = ProcessInfo().environment["talk.pod.ir.chat.threadStore.debug"] == "1"
+    private var debug = ProcessInfo().environment["ENABLE_THREAD_STORE_LOGGING"] == "1"
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -106,6 +107,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     /// 0...24 offset = 0 count = 25
     /// 25...49 offset = 25 count = 25
     func store(_ conversations: [Conversation], request: ThreadsRequest) {
+        if conversations.count == 0 { return } // prevent crash at the last page
         let start = request.offset
         let end = start + (conversations.count - 1)
         let range = start...end
@@ -201,7 +203,9 @@ internal final class ThreadsStore: ThreadStoreProtocol {
             let threads = threads.map { $0.codable() }
             let hasNext = totalCount >= request.count
             let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
+            Task { @ChatGlobalActor [weak self] in
+                self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
+            }
         }
         chat.prepareToSendAsync(req: request, type: .getThreads)
     }
@@ -289,7 +293,8 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func onCreateConversation(_ conversation: Conversation?) {
-        if let copy = conversation {
+        // We have to check the array for duplicate insertion.
+        if let copy = conversation, !conversations.contains(where: { $0.id == conversation?.id}) {
             appendAndSortIntoInMemory(conversations: [copy])
         }
     }

@@ -1,42 +1,33 @@
-// swift-tools-version:5.6
+// swift-tools-version:6.0
 
 import PackageDescription
-
-let useLocalDependency = false
-
-let local: [Package.Dependency] = [
-    .package(path: "../ChatExtensions"),
-    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
-]
-
-let remote: [Package.Dependency] = [
-    .package(url: "https://pubgi.sandpod.ir/chat/ios/chat-extensions", from: "2.2.1"),
-    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
-]
 
 let package = Package(
     name: "Chat",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v10),
-        .macOS(.v12),
+        .iOS(.v13),
+        .macOS(.v10_15),
         .macCatalyst(.v13),
     ],
     products: [
         .library(name: "Chat", targets: ["Chat"]),
     ],
-    dependencies: useLocalDependency ? local : remote,
+    dependencies: [
+        .package(path: "submodules/ChatExtensions"),
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
+    ],
     targets: [
         .target(
             name: "Chat",
             dependencies: [
-                .product(name: "ChatExtensions", package: useLocalDependency ? "ChatExtensions" : "chat-extensions"),
+                .product(name: "ChatExtensions", package: "ChatExtensions"),
             ],
             resources: []
         ),
         .testTarget(name: "ChatTests", dependencies: [
             "Chat",
-            .product(name: "ChatExtensions", package: useLocalDependency ? "ChatExtensions" : "chat-extensions"),
+            .product(name: "ChatExtensions", package: "ChatExtensions"),
         ], path: "Tests"),
     ]
 )

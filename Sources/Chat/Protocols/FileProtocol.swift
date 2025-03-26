@@ -7,15 +7,16 @@
 import ChatDTO
 import Foundation
 
-public protocol FileProtocol {
+@ChatGlobalActor
+public protocol FileProtocol: AnyObject {
     /// Downloading or getting a file from the Server / cache?.
     /// - Parameters:
-    ///   - req: The request that contains Hashcode of file and a config to download from server or use cache?.
+    ///   - request: The request that contains Hashcode of a file and a config to either download from the server or cache.
     func get(_ request: FileRequest)
 
     /// Downloading or getting an image from the Server / cache?.
     /// - Parameters:
-    ///   - req: The request that contains Hashcode of image and a config to download from server or use cache?.
+    ///   - request: The request that contains Hashcode of a image and a config to eihter download from server or  cache.
     func get(_ request: ImageRequest)
 
     /// Manage a downloading file or an image.
@@ -32,12 +33,12 @@ public protocol FileProtocol {
 
     /// Upload a file.
     /// - Parameters:
-    ///   - req: The request that contains the data of file and other file properties.
+    ///   - request: The request that contains the data of a file and other file properties.
     func upload(_ request: UploadFileRequest)
 
     /// Upload an image.
     /// - Parameters:
-    ///   - req: The request that contains the data of an image and other image properties.
+    ///   - request: The request that contains the data of an image and other image properties.
     func upload(_ request: UploadImageRequest)
 
     /// Delete a file in cache with exact file url on the disk.
@@ -56,19 +57,20 @@ public protocol FileProtocol {
     func filePathInGroup(_ url: URL) -> URL?
 
     /// Get data of a cache file in the correspondent URL.
-    func getData(_ url: URL, completion: @escaping (Data?) -> Void)
+    func getData(_ url: URL, completion: @escaping @Sendable (Data?) -> Void)
 
     /// Get data of a cache file in the correspondent URL inside a shared group.
-    func getDataInGroup(_ url: URL, completion: @escaping (Data?) -> Void)
+    func getDataInGroup(_ url: URL, completion: @escaping @Sendable (Data?) -> Void)
 
     /// Save a file inside the sandbox of the Chat SDK.
-    func saveFile(url: URL, data: Data, completion: @escaping (URL?) -> Void)
+    func saveFile(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void)
 
     /// Save a file inside a shared group.
-    func saveFileInGroup(url: URL, data: Data, completion: @escaping (URL?) -> Void)
+    func saveFileInGroup(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void)
 }
 
-protocol InternalFileProtocol {
+@ChatGlobalActor
+protocol InternalFileProtocol: AnyObject {
     // Try to add the user to the user group then retry the download.
     func handleUserGroupAccessError(_ params: DownloadManagerParameters)
 }

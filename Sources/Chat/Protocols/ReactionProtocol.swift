@@ -7,8 +7,8 @@
 import ChatDTO
 import Foundation
 
-public protocol ReactionProtocol {
-    var inMemoryReaction: InMemoryReactionProtocol { get }
+@ChatGlobalActor
+public protocol ReactionProtocol: AnyObject {
     /// Get the user current reaction on a message.
     /// - Parameters:
     ///   - request: The request that contains a messageId and conversationId.
@@ -19,9 +19,9 @@ public protocol ReactionProtocol {
     ///   - request: The request that contains a messageIds and conversationId.
     func count(_ request: ReactionCountRequest)
 
-    /// Get list of reactions for a messsage with messageId.
+    /// Get list of participants and their reaction to a messsage with messageId.
     /// - Parameters:
-    ///   - uniqueId: The request that contains a messageId and offset and count.
+    ///   - request: The request that contains a messageId and offset and count.
     func get(_ request: ReactionListRequest)
 
     /// Add a reaction to a message.

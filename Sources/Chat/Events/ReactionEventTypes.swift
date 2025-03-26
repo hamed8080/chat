@@ -9,8 +9,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public enum ReactionEventTypes {
-    case inMemoryUpdate(messages: [ReactionInMemoryCopy])
+public enum ReactionEventTypes: Sendable {
     case reaction(ChatResponse<CurrentUserReaction>)
     case count(ChatResponse<[ReactionCountList]>)
     case list(ChatResponse<ReactionList>)

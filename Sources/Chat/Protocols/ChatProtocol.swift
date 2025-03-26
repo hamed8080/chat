@@ -15,6 +15,7 @@
 import Foundation
 import Logger
 
+@ChatGlobalActor
 public protocol Chat {
     init(
         config: ChatConfig,
@@ -56,13 +57,13 @@ public protocol Chat {
     /// - Parameters:
     ///   - newToken: The token string.
     ///   - reCreateObject: If you set it to true the chat object will recreate itself and will reconnect completely.
-    func setToken(newToken: String, reCreateObject: Bool)
+    func setToken(newToken: String, reCreateObject: Bool) async
 
     /// A method to destroy a chat object and release all strong reference objects.
-    func dispose()
+    func dispose() async
 
     /// A method that should be called by clients whenever they fill it is the right time to connect to the server.
-    func connect()
+    func connect() async
 }
 
 public protocol ChatInternalProtocol: Chat {
@@ -78,11 +79,11 @@ public protocol ChatInternalProtocol: Chat {
     /// An async manager to keep the socket connection live and deliver messages and also cache the requests if they need it.
     var asyncManager: AsyncManager { get set }
 
-    /// A logger to logs events if it is enabled in configuration ``ChatConfig/isDebuggingLogEnabled``.
+    /// A logger to logs events.
     var logger: Logger { get set }
 
     /// An array to manage a list of threads in the queue of exporting messages of a thread.
-    var exportMessageViewModels: [ExportMessagesProtocol] { get set }
+    var exportMessageViewModels: [ExportMessagesInternalProtocol] { get set }
 
     /// A url session to initiate a network call.
     var session: URLSessionProtocol { get set }
@@ -99,13 +100,16 @@ public protocol ChatInternalProtocol: Chat {
     /// It is a private method and only should used by the SDK to send data to ``AsyncManager`` and send to ``Async``.
     /// - Parameters:
     ///   - req: A object that conform to the ``ChatSendable``.
+    ///   - type: Chat server message type.
     func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes)
 
     /// A private method that will be called by the SDK to pass data that received from onMessage.
-    func invokeCallback(asyncMessage: AsyncMessage)
+    func invokeCallback(asyncMessage: AsyncMessage) async
 
     /// Dispose and close object.
-    func dispose()
+    func dispose() async
 
     var loggerUserInfo: [String: String] { get }
+    
+    var deviceInfo: DeviceInfo? { get set }
 }

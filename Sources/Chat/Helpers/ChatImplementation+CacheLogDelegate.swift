@@ -10,7 +10,9 @@ import Foundation
 extension ChatImplementation: CacheLogDelegate {}
 
 public extension ChatImplementation {
-    func log(message: String, persist: Bool, error _: Error?) {
-        logger.log(message: message, persist: persist, type: .internalLog)
+    nonisolated func log(message: String, persist: Bool, error _: Error?) {
+        Task { @ChatGlobalActor [weak self] in
+            self?.logger.log(message: message, persist: persist, type: .internalLog)
+        }
     }
 }

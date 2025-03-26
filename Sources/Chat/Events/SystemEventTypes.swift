@@ -8,8 +8,8 @@ import ChatCore
 import ChatDTO
 import Foundation
 
-public enum SystemEventTypes {
+public enum SystemEventTypes: Sendable {
     case systemMessage(ChatResponse<SystemEventMessageModel>)
     case serverTime(ChatResponse<Int?>)
-    case error(ChatResponse<Any>)
+    case error(ChatResponse<Sendable>)
 }

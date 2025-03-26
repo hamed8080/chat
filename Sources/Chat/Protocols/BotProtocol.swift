@@ -8,7 +8,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol BotProtocol {
+@ChatGlobalActor
+public protocol BotProtocol: AnyObject {
     /// Add commands to a bot.
     /// - Parameters:
     ///   - request: The request that contains the name bot and list of commands.

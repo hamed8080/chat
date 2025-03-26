@@ -12,17 +12,38 @@
 - [x] Downlaod / Upload File or Data or Image resumebble
 - [x] Manage threads and messages
 - [x] Manage multiple accounts at the same time
-- Not compatible with cocoapods
 
 ## Installation
 
 #### Swift Package Manager(SPM) 
-
-Add in `Package.swift` or directly in `Xcode Project dependencies` section:
+1- Go to your root project folder and clone the Chat SDK:
+```git
+git clone https://pubgi.sandpod.ir/chat/ios/chat
+```
+or
+```git
+git clone https://github.com/hamed8080/chat 
+```
+2- Add package path to your `Package.swift`:
 
 ```swift
-.package(url: "https://pubgi.sandpod.ir/chat/ios/chat.git", from: "2.2.1")
+.package(path: "path_to_sdk_folder/Chat")
 ```
+
+## Swicth to a version 
+To use the Chat SDK, it is **mandatory** to use a specific tagged version of the SDK. If this guideline is not followed, you might unintentionally download beta or test versions of the SDK, which could lead to unexpected issues or instability.
+How to Checkout a Tagged Version:
+```git
+git checkout 3.0.0
+```
+
+#### Xcode porject tab
+
+If you are using Xcode to manage SPM projects, you should either drag and drop the entire downloaded folder of the Chat SDK into your project or use a local package by providing the path to the cloned SDK.
+
+#### Cocoapods 
+
+For installing the SDK through the Cocoapods please read [this](https://github.com/hamed8080/Cocoapods.md).
 
 ## How to use? 
 
@@ -42,7 +63,7 @@ let chatConfig = ChatConfigBuilder(asyncConfig)
             .platformHost("platformHost")
             .fileServer("fileServer")
             .enableCache(true)
-            .msgTTL(800_000) // for integeration server need to be long time
+            .msgTTL(800_000)
             .persistLogsOnServer(true)
             .appGroup(AppGroup.group)
             .loggerConfig(chatLoggerConfig)

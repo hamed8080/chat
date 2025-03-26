@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "7D66A087-5122-4148-BD3D-10AEA2355FE7",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ChatDTOTests",
+        "name" : "ChatDTOTests"
+      }
+    }
+  ],
+  "version" : 1
+}

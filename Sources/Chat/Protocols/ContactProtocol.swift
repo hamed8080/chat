@@ -8,7 +8,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol ContactProtocol {
+@ChatGlobalActor
+public protocol ContactProtocol: AnyObject {
     /// Add a new contact.
     /// - Parameters:
     ///   - request: The request.

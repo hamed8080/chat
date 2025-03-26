@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "69257392-42A2-487B-A841-C267AC7C9800",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LoggerTests",
+        "name" : "LoggerTests"
+      }
+    }
+  ],
+  "version" : 1
+}

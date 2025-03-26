@@ -9,7 +9,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public enum BotEventTypes {
+public enum BotEventTypes: Sendable {
     case bots(ChatResponse<[BotInfo]>)
     case create(ChatResponse<BotInfo>)
     case message(ChatResponse<String?>)

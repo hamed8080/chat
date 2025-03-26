@@ -7,7 +7,7 @@
 import ChatCore
 import Foundation
 
-public struct ChatMessage: Decodable {
+public struct ChatMessage: Decodable, Sendable {
     public var code: Int?
     public let content: String?
     public let contentCount: Int?

@@ -8,7 +8,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol MessageProtocol {
+@ChatGlobalActor
+public protocol MessageProtocol: AnyObject {
     /// Cancel a message send.
     /// - Parameters:
     ///   - uniqueId: The uniqueId of a message to cancel and delete from cache.
@@ -116,13 +117,13 @@ public protocol MessageProtocol {
 
     /// Privately reply to a participant who is the same thread is you with a message and a file.
     /// - Parameters:
-    ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
+    ///   - replyMessage: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
     ///   - fileRequest: The request that contains the data of a file and other file properties.
     func replyPrivately(_ replyMessage: ReplyPrivatelyRequest, _ fileRequest: UploadFileRequest)
 
     /// Privately reply to a participant who is the same thread is you with a message and an image.
     /// - Parameters:
-    ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
+    ///   - replyMessage: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
     ///   - imageRequest: The request that contains the data of an image and other image properties.
     func replyPrivately(_ replyMessage: ReplyPrivatelyRequest, _ imageRequest: UploadImageRequest)
 

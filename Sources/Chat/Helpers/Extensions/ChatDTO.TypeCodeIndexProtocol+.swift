@@ -8,7 +8,7 @@
 import ChatDTO
 
 public extension ChatDTO.TypeCodeIndexProtocol {
-    func toTypeCode(_ chat: Chat) -> String? {
+    @ChatGlobalActor func toTypeCode(_ chat: Chat) -> String? {
         chat.config.typeCodes[typeCodeIndex].typeCode
     }
 }

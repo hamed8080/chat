@@ -18,6 +18,7 @@ private struct QueueableWithType {
 }
 
 /// AsyncManager intermediate between chat and async socket server.
+@ChatGlobalActor
 public final class AsyncManager: AsyncDelegate {
     private var config: ChatConfig? { chat?.config }
     private var logger: Logger? { chat?.logger }
@@ -25,7 +26,6 @@ public final class AsyncManager: AsyncDelegate {
     /// Async client.
     public var asyncClient: Async?
 
-    private var serialQueue = DispatchQueue(label: "CHAT_ASYNC_MANAGER_QUEUE", qos: .utility)
     /// A timer to check the connection status every 20 seconds.
     private(set) var pingTimer: SourceTimer
     private(set) var queueTimer: SourceTimer
@@ -43,18 +43,18 @@ public final class AsyncManager: AsyncDelegate {
     }
 
     /// Create an async connection.
-    public func createAsync() {
+    public func createAsync() async {
         if let asyncConfig = config?.asyncConfig {
-            asyncClient = SocketFactory.create(config: asyncConfig, delegate: self)
-            asyncClient?.connect()
+            asyncClient = await SocketFactory.create(config: asyncConfig, delegate: self)
+            await asyncClient?.connect()
         }
     }
 
     /// A delegate method that receives a message.
-    public func asyncMessage(asyncMessage: AsyncMessage) {
-        serialQueue.asyncWork { [weak self] in
+    nonisolated public func asyncMessage(asyncMessage: AsyncMessage) {
+        Task { @ChatGlobalActor [weak self] in
             guard let self = self else { return }
-            chat?.invokeCallback(asyncMessage: asyncMessage)
+            await chat?.invokeCallback(asyncMessage: asyncMessage)
             schedulePingTimer()
             if let ban = asyncMessage.banError {
                 scheduleForResendQueues(ban)
@@ -65,33 +65,39 @@ public final class AsyncManager: AsyncDelegate {
     }
 
     /// A delegate that tells the status of the async connection.
-    public func asyncStateChanged(asyncState: AsyncSocketState, error: AsyncError?) {
-        (chat as? ChatImplementation)?.state = asyncState.chatState
-        chat?.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
-        if asyncState == .asyncReady {
-            (chat?.user as? UserManager)?.getUserForChatReady()
-            // In the first time it won't clear the cache due to the all managers are null.
-            chat?.cache?.truncate()
-        } else if asyncState == .closed {
-            cancelPingTimer()
-            logger?.createLog(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
-            chat?.coordinator.invalidate()
+    nonisolated public func asyncStateChanged(asyncState: AsyncSocketState, error: AsyncError?) {
+        Task { @ChatGlobalActor [weak self] in
+            guard let self = self else { return }
+            (chat as? ChatImplementation)?.state = asyncState.chatState
+            chat?.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
+            if asyncState == .asyncReady {
+                (chat?.user as? UserManager)?.getUserForChatReady()
+                // In the first time it won't clear the cache due to the all managers are null.
+                chat?.cache?.truncate()
+                chat?.coordinator.invalidate()
+            } else if asyncState == .closed {
+                cancelPingTimer()
+                logger?.createLog(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
+            }
         }
     }
 
     /// It will be only used whenever a client implements a custom async class by itself.
-    public func asyncMessageSent(message _: Data?, error _: AsyncError?) {}
+    nonisolated public func asyncMessageSent(message _: Data?, error _: AsyncError?) {}
 
     /// A delegate to raise an error.
-    public func asyncError(error: AsyncError) {
-        let chatError = ChatError(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError)
-        let errorResponse = ChatResponse(result: Any?.none, error: chatError, typeCode: nil)
-        chat?.delegate?.chatEvent(event: .system(.error(errorResponse)))
+    nonisolated public func asyncError(error: AsyncError) {
+        Task { @ChatGlobalActor [weak self] in
+            guard let self = self else { return }
+            let chatError = ChatError(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError)
+            let errorResponse = ChatResponse<Sendable>(error: chatError, typeCode: nil)
+            chat?.delegate?.chatEvent(event: .system(.error(errorResponse)))
+        }
     }
 
     /// A public method to completely destroy the async object.
-    public func disposeObject() {
-        asyncClient?.disposeObject()
+    public func disposeObject() async {
+        await asyncClient?.disposeObject()
         asyncClient = nil
         cancelPingTimer()
         queueTimer.cancel()
@@ -99,17 +105,14 @@ public final class AsyncManager: AsyncDelegate {
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
     public func sendData(sendable: ChatSendable, type: ChatMessageVOTypes) {
-        serialQueue.asyncWork { [weak self] in
-            guard let self = self else { return }
-            guard let config = config else { return }
-            let typeCodeIndex = sendable.chatTypeCodeIndex
-            guard config.typeCodes.indices.contains(typeCodeIndex) else { fatalError("Type code index is not exist. Check if the index of the type is right.") }
-            let ownerTypeCode = config.typeCodes[typeCodeIndex]
-            let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: ownerTypeCode.typeCode, ownerId: ownerTypeCode.ownerId)
-            addToQueue(sendable: sendable, type: type)
-            addToPaginateable(sendable: sendable)
-            sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
-        }
+        let typeCodeIndex = sendable.chatTypeCodeIndex
+        guard let config = config else { return }
+        guard config.typeCodes.indices.contains(typeCodeIndex) else { fatalError("Type code index is not exist. Check if the index of the type is right.") }
+        let ownerTypeCode = config.typeCodes[typeCodeIndex]
+        let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: ownerTypeCode.typeCode, ownerId: ownerTypeCode.ownerId)
+        addToQueue(sendable: sendable, type: type)
+        addToPaginateable(sendable: sendable)
+        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
     }
 
     private func addToQueue(sendable: ChatSendable, type: ChatMessageVOTypes) {
@@ -143,7 +146,8 @@ public final class AsyncManager: AsyncDelegate {
 
     private func addToPaginateable(sendable: ChatSendable) {
         if let paginateable = sendable as? Paginateable {
-            paginateables[paginateable.uniqueId] = (count: paginateable.count, offset: paginateable.offset)
+            let offset = paginateable.offset == -1 ? 0 : paginateable.offset
+            paginateables[paginateable.uniqueId] = (count: paginateable.count, offset: offset)
         }
     }
 
@@ -159,8 +163,11 @@ public final class AsyncManager: AsyncDelegate {
         queue.sorted { $0.value.queueable.queueTime < $1.value.queueable.queueTime }.forEach { _, item in
             if let sendable = item.queueable as? ChatSendable {
                 queueTimer = SourceTimer()
+                let type = item.type
                 queueTimer.start(duration: interval + 2) { [weak self] in
-                    self?.sendData(sendable: sendable, type: item.type)
+                    Task { @ChatGlobalActor in
+                        self?.sendData(sendable: sendable, type: type)
+                    }
                 }
             }
             interval += 2
@@ -176,7 +183,9 @@ public final class AsyncManager: AsyncDelegate {
                                               uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
         guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
         logger?.logJSON(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", persist: false, type: .sent)
-        asyncClient?.send(message: asyncMessage)
+        Task {
+            await asyncClient?.send(message: asyncMessage)
+        }
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
@@ -185,7 +194,9 @@ public final class AsyncManager: AsyncDelegate {
         pingTimer = SourceTimer()
         pingTimer.start(duration: 20){ [weak self] in
             guard let self = self else { return }
-            sendChatServerPing()
+            Task { @ChatGlobalActor [weak self] in
+                self?.sendChatServerPing()
+            }
         }
     }
 
@@ -200,13 +211,18 @@ public final class AsyncManager: AsyncDelegate {
     /// Due to this matter, we should reschedule a timer to start sending all messages inside the queue.
     private func scheduleForResendQueues(_ ban: BanError) {
         chat?.banTimer.scheduledTimer(interval: TimeInterval((ban.duration ?? 5000) / 1000) + 1, repeats: false) { [weak self] _ in
-            self?.sendQueuesOnReconnect()
+            Task { @ChatGlobalActor in
+                self?.sendQueuesOnReconnect()
+            }
         }
     }
 
     /// On Async SDK log. It is needed for times that client applications need to collect logs of the async SDK.
-    public func onLog(log: Log) {
-        logger?.delegate?.onLog(log: log)
+    nonisolated public func onLog(log: Log) {
+        Task { @ChatGlobalActor [weak self] in
+            guard let self = self else { return }
+            logger?.delegate?.onLog(log: log)
+        }
     }
 
     private func cancelPingTimer() {

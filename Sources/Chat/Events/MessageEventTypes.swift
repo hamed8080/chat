@@ -9,10 +9,11 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public enum MessageEventTypes {
+public enum MessageEventTypes: Sendable {
     case history(ChatResponse<[Message]>)
     case messages(ChatResponse<[Message]>)
     case new(ChatResponse<Message>)
+    case forward(ChatResponse<Message>)
     case sent(ChatResponse<MessageResponse>)
     case delivered(ChatResponse<MessageResponse>)
     case seen(ChatResponse<MessageResponse>)

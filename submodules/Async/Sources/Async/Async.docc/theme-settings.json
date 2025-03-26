@@ -1,0 +1,7 @@
+{
+    "theme": {
+        "color": {
+            "documentation-intro-fill": "linear-gradient(to top right, #646dd9 0.42%, rgb(16, 235, 235))"
+        }
+    }
+}

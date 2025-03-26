@@ -13,7 +13,7 @@ import ChatModels
 import Foundation
 import Logger
 
-public final class ChatImplementation: ChatInternalProtocol, Identifiable {
+public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Identifiable {
     public lazy var contact: ContactProtocol = ContactManager(chat: self)
     public lazy var conversation: ThreadProtocol = ThreadManager(chat: self)
     public lazy var bot: BotProtocol = BotManager(chat: self)
@@ -39,13 +39,14 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
     public var asyncManager: AsyncManager
     public var logger: Logger
     public var banTimer: TimerProtocol
-    public var exportMessageViewModels: [ExportMessagesProtocol] = []
+    public var exportMessageViewModels: [ExportMessagesInternalProtocol] = []
     public var session: URLSessionProtocol
     public var cache: CacheManager?
     public var cacheFileManager: CacheFileManagerProtocol?
     public var state: ChatState = .uninitialized
     public var callMessageDeleaget: CallMessageProtocol?
     public var callDelegate: WebRTCClientDelegate?
+    public var deviceInfo: DeviceInfo?
 
     public init(config: ChatConfig,
                 pingTimer: SourceTimer = SourceTimer(),
@@ -62,23 +63,26 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
         self.callDelegate = callDelegate
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         if config.enableCache {
-            cacheFileManager = CacheFileManager()
+            cacheFileManager = CacheFileManager(logger: logger)
             cache = CacheManager(persistentManager: PersistentManager(logger: self))
+        }
+        Task { [weak self] in
+            await self?.setDeviceInfo()
         }
         asyncManager.chat = self
     }
 
-    public func connect() {
+    public func connect() async {
         if config.getDeviceIdFromToken == false {
-            asyncManager.createAsync()
+            await asyncManager.createAsync()
         } else {
             requestDeviceId()
         }
         DiskStatus.checkIfDeviceHasFreeSpace(needSpaceInMB: config.deviecLimitationSpaceMB, turnOffTheCache: true, delegate: delegate)
     }
 
-    public func dispose() {
-        asyncManager.disposeObject()
+    public func dispose() async {
+        await asyncManager.disposeObject()
         logger.dispose()
     }
 
@@ -86,28 +90,34 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
         asyncManager.sendData(sendable: req, type: type)
     }
 
-    public func setToken(newToken: String, reCreateObject: Bool = false) {
+    public func setToken(newToken: String, reCreateObject: Bool = false) async {
         config.updateToken(newToken)
         if state != .chatReady {
             (user as? UserManager)?.getUserForChatReady()
         }
         if reCreateObject {
-            asyncManager.createAsync()
+            await asyncManager.createAsync()
         }
     }
-
+    
     private func requestDeviceId() {
         let url = "\(config.ssoHost)\(Routes.ssoDevices.rawValue)"
         let headers = ["Authorization": "Bearer \(config.token)"]
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
-        session.dataTask(urlReq) { [weak self] data, response, error in
-            let result: ChatResponse<DevicesResposne>? = self?.session.decode(data, response, error, typeCode: nil)
-            if let device = result?.result?.devices?.first(where: { $0.current == true }) {
-                self?.config.asyncConfig.updateDeviceId(device.uid ?? UUID().uuidString)
-                self?.asyncManager.createAsync()
+        Task { [session] in
+            do {
+                let (data, response) = try await session.data(urlReq)
+                let result: ChatResponse<DevicesResposne>? = data.decode(response, nil, typeCode: nil)
+                if let device = result?.result?.devices?.first(where: { $0.current == true }) {
+                    self.config.asyncConfig.updateDeviceId(device.uid ?? UUID().uuidString)
+                    await self.asyncManager.createAsync()
+                }
+            } catch {
+#if DEBUG
+                print("Failed to request deviceId: \(error)")
+#endif                
             }
         }
-        .resume()
     }
 }

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum SignalingState: Codable {
+public enum SignalingState: Codable, Sendable {
     case stable
     case haveLocalOffer
     case haveLocalPrAnswer
@@ -36,7 +36,7 @@ public enum SignalingState: Codable {
     }
 }
 
-public enum IceConnectionState: Codable {
+public enum IceConnectionState: Codable, Sendable {
     case new
     case checking
     case connected
@@ -71,7 +71,7 @@ public enum IceConnectionState: Codable {
     }
 }
 
-public enum PeerConnectionState: Codable {
+public enum PeerConnectionState: Codable, Sendable {
     case new
     case connecting
     case connected
@@ -100,7 +100,7 @@ public enum PeerConnectionState: Codable {
     }
 }
 
-public enum IceGatheringState: Codable {
+public enum IceGatheringState: Codable, Sendable {
     case new
     case gathering
     case complete

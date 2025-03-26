@@ -8,7 +8,7 @@ import ChatCore
 import ChatTransceiver
 import Foundation
 
-public enum DownloadEventTypes {
+public enum DownloadEventTypes: Sendable {
     case file(ChatResponse<Data>, URL?)
     case image(ChatResponse<Data>, URL?)
     case canceled(uniqueId: String)

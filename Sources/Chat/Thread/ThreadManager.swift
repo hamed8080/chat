@@ -28,19 +28,24 @@ final class ThreadManager: ThreadProtocol {
         let typeCode = request.toTypeCode(chat)
         if let image = request.threadImage {
             saveThreadImageToCashe(req: request)
-            (chat.file as? ChatFileManager)?.upload(image, nil) { [weak self] _, fileMetaData, error in
-                // send update thread Info with new file
-                if let error = error {
-                    let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: error, typeCode: typeCode)
-                    self?.delegate?.chatEvent(event: .system(.error(response)))
-
-                } else {
-                    self?.updateThreadInfo(request, fileMetaData)
+            (chat.file as? ChatFileManager)?.upload(image, nil) { [weak self] resp in
+                Task {
+                    await self?.onUploadProfileImage(resp, request, typeCode)
                 }
             }
         } else {
             // update directly without metadata
             updateThreadInfo(request, nil)
+        }
+    }
+    
+    private func onUploadProfileImage(_ resp: UploadResult, _ request: UpdateThreadInfoRequest, _ typeCode: String?) {
+        // send update thread Info with new file
+        if let error = resp.error {
+            let response = ChatResponse<Sendable>(uniqueId: request.uniqueId, error: error, typeCode: typeCode)
+            emitEvent(.system(.error(response)))
+        } else {
+            updateThreadInfo(request, resp.metaData)
         }
     }
 
@@ -60,23 +65,21 @@ final class ThreadManager: ThreadProtocol {
 
     func onUpdateThreadInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        let copied = response.result
-        delegate?.chatEvent(event: .thread(.updatedInfo(response)))
-        cache?.conversation?.insert(models: [copied].compactMap { $0 })
+        emitEvent(.thread(.updatedInfo(response)))
+        cache?.conversation?.insert(models: [response.result].compactMap { $0 })
     }
 
     func unreadCount(_ request: ThreadsUnreadCountRequest) {
         chat.prepareToSendAsync(req: request, type: .threadsUnreadCount)
         let typeCode = request.toTypeCode(chat)
         cache?.conversation?.threadsUnreadcount(request.threadIds) { [weak self] unreadCount in
-            let response = ChatResponse(uniqueId: request.uniqueId, result: unreadCount, cache: true, typeCode: typeCode)
-            self?.delegate?.chatEvent(event: .thread(.unreadCount(response)))
+            self?.emitEvent(event: unreadCount.toCachedUnreadCountEvent(request, typeCode))
         }
     }
 
     func onThreadsUnreadCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[String: Int]> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .thread(.unreadCount(response)))
+        emitEvent(.thread(.unreadCount(response)))
         cache?.conversation?.updateThreadsUnreadCount(response.result ?? [:])
     }
 
@@ -95,16 +98,17 @@ final class ThreadManager: ThreadProtocol {
 
     func onIsThreadNamePublic(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<PublicThreadNameAvailableResponse> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .thread(.isNameAvailable(response)))
+        emitEvent(.thread(.isNameAvailable(response)))
     }
 
-    /// Update when a contact user updates his name or the contacts updated and the name of the thread accordingly updated.
+    /// Update once the user edit a contact or add the user as a contact.
     func onThreadNameContactUpdated(_ asyncMessage: AsyncMessage) {
         var response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        let copied = response.result
         response.result?.id = response.subjectId
-        delegate?.chatEvent(event: .thread(.updatedInfo(response)))
-        cache?.conversation?.insert(models: [copied].compactMap { $0 })
+        emitEvent(.thread(.updatedInfo(response)))
+        if let threadId = response.subjectId {
+            cache?.conversation?.updateTitle(id: threadId, title: response.result?.title)
+        }
     }
 
     func spam(_ request: GeneralSubjectIdRequest) {
@@ -113,7 +117,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onSpamThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Contact> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .thread(.spammed(response)))
+        emitEvent(.thread(.spammed(response)))
     }
 
     /// Step 1: to leave safely
@@ -126,15 +130,11 @@ final class ThreadManager: ThreadProtocol {
     /// Step 2: to leave safely
     func onCurrentUserRoles(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse()
-        guard let uniqueId = response.uniqueId, let request = requests[uniqueId] as? SafeLeaveThreadRequest else { return }
-        let isAdmin = response.result?.contains(.threadAdmin) ?? false || response.result?.contains(.addRuleToUser) ?? false
-        if isAdmin, let roles = response.result {
-            let roleRequest = request.roleRequest(roles: roles)
+        let tuple = response.safeLeaveRole(requests)
+        if let roleRequest = tuple.roleRequest {
             chat.user.set(roleRequest)
-        } else {
-            let chatError = ChatError(message: "Current User have no Permission to Change the ThreadAdmin", code: 6666, hasError: true)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: chatError, typeCode: response.typeCode)
-            delegate?.chatEvent(event: .system(.error(response)))
+        } else if let request = tuple.request {
+            emitEvent(toCurrentUserRoleErrorEvent(request, typeCode: response.typeCode))
         }
     }
 
@@ -150,7 +150,7 @@ final class ThreadManager: ThreadProtocol {
         /// Do not remove this line. In the server response, there is no Int value when the user is removed by the admin of a thread.
         response.result = response.subjectId
         chat.coordinator.conversation.onDeleteConversation(response.subjectId ?? response.result)
-        delegate?.chatEvent(event: .thread(.userRemoveFormThread(response)))
+        emitEvent(.thread(.userRemoveFormThread(response)))
         cache?.conversation?.delete(response.result ?? -1)
     }
 
@@ -163,13 +163,10 @@ final class ThreadManager: ThreadProtocol {
     }
 
     func onPinUnPinThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        let conversationId = response.result ?? -1
-        let threadResponse = ChatResponse(uniqueId: response.uniqueId, result: Conversation(id: conversationId), subjectId: response.subjectId, time: response.time, typeCode: response.typeCode)
-        let pinned = asyncMessage.chatMessage?.type == .pinThread
-        chat.coordinator.conversation.onPinUnPin(pin: pinned, conversationId)
-        delegate?.chatEvent(event: .thread(pinned ? .pin(threadResponse) : .unpin(threadResponse)))
-        cache?.conversation?.pin(asyncMessage.chatMessage?.type == .pinThread, conversationId)
+        let tuple = asyncMessage.pinUnpinTuple()
+        chat.coordinator.conversation.onPinUnPin(pin: tuple.pinned, tuple.conversationId)
+        emitEvent(tuple.event)
+        cache?.conversation?.pin(tuple.pinned, tuple.conversationId)
     }
 
     func mutual(_ request: MutualGroupsRequest) {
@@ -177,9 +174,7 @@ final class ThreadManager: ThreadProtocol {
         chat.prepareToSendAsync(req: request, type: .mutualGroups)
         let typeCode = request.toTypeCode(chat)
         cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id ?? "") { [weak self] mutuals in
-            let threads = mutuals.first?.conversations?.allObjects.compactMap { $0 as? CDConversation }.map { $0.codable() }
-            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: threads?.count ?? 0 >= request.count, cache: true, typeCode: typeCode)
-            self?.delegate?.chatEvent(event: .thread(.mutual(response)))
+            self?.emitEvent(event: mutuals.toCachedMutualGroupEvent(request, typeCode))
         }
     }
 
@@ -200,12 +195,10 @@ final class ThreadManager: ThreadProtocol {
     }
 
     func onMuteUnMuteThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        let conversationId = response.result ?? -1
-        let mute = asyncMessage.chatMessage?.type == .muteThread
-        chat.coordinator.conversation.onMuteOnMute(mute: mute, conversationId)
-        delegate?.chatEvent(event: .thread(mute ? .mute(response) : .unmute(response)))
-        cache?.conversation?.mute(asyncMessage.chatMessage?.type == .muteThread, response.subjectId ?? -1)
+        let tuple = asyncMessage.muteUnMuteTuple()
+        chat.coordinator.conversation.onMuteOnMute(mute: tuple.mute, tuple.conversationId)
+        emitEvent(tuple.event)
+        cache?.conversation?.mute(tuple.mute, tuple.conversationId)
     }
 
     func leave(_ request: LeaveThreadRequest) {
@@ -214,7 +207,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onLeaveThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .thread(.left(response)))
+        emitEvent(.thread(.left(response)))
         cache?.participant?.delete([Participant(id: response.result?.id)], response.subjectId ?? -1)
         if response.result?.id == chat.userInfo?.id, let threadId = response.subjectId {
             chat.coordinator.conversation.onDeleteConversation(threadId)
@@ -224,13 +217,10 @@ final class ThreadManager: ThreadProtocol {
 
     func onLastSeenUpdate(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<LastSeenMessageResponse> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .thread(.lastSeenMessageUpdated(response)))
-        if let threadId = response.result?.id, let unreadCount = response.result?.unreadCount {
-            cache?.conversation?.seen(threadId: threadId,
-                                      lastSeenMessageId: response.result?.lastSeenMessageId ?? -1,
-                                      lastSeenMessageTime: response.result?.lastSeenMessageTime,
-                                      lastSeenMessageNanos: response.result?.lastSeenMessageNanos)
-            cache?.conversation?.updateThreadsUnreadCount(["\(threadId)": unreadCount])           
+        emitEvent(.thread(.lastSeenMessageUpdated(response)))
+        if let tuple = response.toCacheLastSeenTuple() {
+            cache?.conversation?.seen(tuple.cacheLastSeenReponse)
+            cache?.conversation?.updateThreadsUnreadCount(["\(tuple.threadId)": tuple.unreadCount])
         }
     }
 
@@ -240,9 +230,8 @@ final class ThreadManager: ThreadProtocol {
 
     func onJoinThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        let copied = response.result
-        chat.coordinator.conversation.onJoined(conversation: copied)
-        delegate?.chatEvent(event: .thread(.joined(response)))
+        chat.coordinator.conversation.onJoined(conversation: response.result)
+        emitEvent(.thread(.joined(response)))
     }
 
     func delete(_ request: GeneralSubjectIdRequest) {
@@ -252,7 +241,7 @@ final class ThreadManager: ThreadProtocol {
     func onDeleteThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
         chat.coordinator.conversation.onDeleteConversation(response.subjectId)
-        delegate?.chatEvent(event: .thread(.deleted(response)))
+        emitEvent(.thread(.deleted(response)))
         cache?.conversation?.delete(response.subjectId ?? -1)
     }
 
@@ -279,7 +268,7 @@ final class ThreadManager: ThreadProtocol {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         let copied = response.result
         chat.coordinator.conversation.onCreateConversation(copied)
-        delegate?.chatEvent(event: .thread(.created(response)))
+        emitEvent(.thread(.created(response)))
         cache?.conversation?.insert(models: [copied].compactMap { $0 })
         sendTextMessage(response)
     }
@@ -294,8 +283,7 @@ final class ThreadManager: ThreadProtocol {
     /// Create thread and Send a text message and then upload a file.
     func onNewMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
-        let copied = response.result
-        chat.coordinator.conversation.onNewMessage(copied)
+        chat.coordinator.conversation.onNewMessage(response.result)
         if let uniqueId = response.uniqueId, let request = requests[uniqueId] as? UploadFileRequest {
             chat.file.upload(request)
         }
@@ -306,16 +294,11 @@ final class ThreadManager: ThreadProtocol {
     }
 
     func onCloseThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        let newResponse = ChatResponse<Int>(uniqueId: response.uniqueId,
-                                            result: response.subjectId,
-                                            error: response.error,
-                                            subjectId: response.subjectId,
-                                            time: response.time,
-                                            typeCode: response.typeCode)
-        chat.coordinator.conversation.onClosed(newResponse.result)
-        delegate?.chatEvent(event: .thread(.closed(newResponse)))
-        cache?.conversation?.close(true, newResponse.result ?? -1)
+        var response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        response.result = response.subjectId
+        chat.coordinator.conversation.onClosed(response.result)
+        emitEvent(.thread(.closed(response)))
+        cache?.conversation?.close(true, response.result ?? -1)
     }
 
     func changeType(_ request: ChangeThreadTypeRequest) {
@@ -324,10 +307,9 @@ final class ThreadManager: ThreadProtocol {
 
     func onChangeThreadType(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        let copied = response.result
-        cache?.conversation?.changeThreadType(copied?.id ?? -1, copied?.type ?? .unknown)
-        chat.coordinator.conversation.onChangeConversationType(copied)
-        delegate?.chatEvent(event: .thread(.changedType(response)))
+        cache?.conversation?.changeThreadType(response.result?.id ?? -1, response.result?.type ?? .unknown)
+        chat.coordinator.conversation.onChangeConversationType(response.result)
+        emitEvent(.thread(.changedType(response)))
     }
 
     func archive(_ request: GeneralSubjectIdRequest) {
@@ -343,21 +325,20 @@ final class ThreadManager: ThreadProtocol {
         let archived = asyncMessage.chatMessage?.type == .archiveThread
         cache?.conversation?.archive(archived, response.subjectId ?? -1)
         chat.coordinator.conversation.onArchiveUnArchive(archive: archived, id: response.result)
-        delegate?.chatEvent(event: .thread(archived ? .archive(response) : .unArchive(response)))
+        emitEvent(.thread(archived ? .archive(response) : .unArchive(response)))
     }
 
     func allUnreadCount(_ request: AllThreadsUnreadCountRequest) {
         chat.prepareToSendAsync(req: request, type: .allUnreadMessageCount)
         let typeCode = request.toTypeCode(chat)
         cache?.conversation?.allUnreadCount { [weak self] allUnreadCount in
-            let response = ChatResponse(uniqueId: request.uniqueId, result: allUnreadCount, cache: true, typeCode: typeCode)
-            self?.delegate?.chatEvent(event: .thread(.allUnreadCount(response)))
+            self?.emitEvent(event: allUnreadCount.toAllCachedUnreadCountEvent(request, typeCode))
         }
     }
 
     func onUnreadMessageCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .thread(.allUnreadCount(response)))
+        emitEvent(.thread(.allUnreadCount(response)))
     }
 
     func lastAction(_ request: LastActionInConversationRequest) {
@@ -366,6 +347,16 @@ final class ThreadManager: ThreadProtocol {
 
     func onLastActionInThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[LastActionInConversation]> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .thread(.lastActions(response)))
+        emitEvent(.thread(.lastActions(response)))
+    }
+    
+    private nonisolated func emitEvent(event: ChatEventType) {
+        Task { @ChatGlobalActor [weak self] in
+            self?.emitEvent(event)
+        }
+    }
+    
+    private func emitEvent(_ event: ChatEventType) {
+        chat.delegate?.chatEvent(event: event)
     }
 }

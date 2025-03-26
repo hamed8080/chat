@@ -24,7 +24,9 @@ final class ParticipantManager: ParticipantProtocol {
         chat.cache?.participant?.getThreadParticipants(request.threadId, request.count, request.offset) { [weak self] participants, totalCount in
             let participants = participants.map(\.codable)
             let response = ChatResponse(uniqueId: request.uniqueId, result: participants, hasNext: totalCount >= request.count, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .participant(.participants(response)))
+            Task { @ChatGlobalActor in
+                self?.chat.delegate?.chatEvent(event: .participant(.participants(response)))
+            }
         }
     }
 

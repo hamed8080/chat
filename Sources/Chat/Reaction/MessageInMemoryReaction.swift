@@ -6,6 +6,7 @@
 
 import Foundation
 import ChatModels
+import ChatDTO
 
 public class MessageInMemoryReaction {
     let messageId: Int
@@ -13,17 +14,44 @@ public class MessageInMemoryReaction {
     var summary: [ReactionCount] = []
     /// All participants reaction to a message.
     var details: [Reaction] = []
+    
+    /// All participants in all reactions tab of your app
+    ///
+    /// This will store only request count and offset with a nil value in ``ChatDTO/ReactionListRequest.sticker``.
+    /// We do this because getting right orders in all tab is different than other reaction tabs.
+    ///>Important: If a reaction has been added or removed, the offset is invalid, so we have to request it from the server.
+    ///
+    var allDetails: [String: [Reaction]] = [:]
 
-    public init(messageId: Int) {
+    public init(messageId: Int, currentUserReaction: Reaction? = nil) {
         self.messageId = messageId
+        self.currentUserReaction = currentUserReaction
     }
-
-    public func appendOrReplaceDetail(reactions: [Reaction]) {
-        reactions.forEach { reaction in
-            if let index = self.details.firstIndex(where: {$0.id == reaction.id}) {
-                details[index] = reaction
-            } else {
-                details.append(reaction)
+    
+    public func appendOrReplaceDetail(reactions: [Reaction], listRequest: ReactionListRequest) {
+        if listRequest.sticker == nil {
+            /// Add response to all details when the client requested all tabs without specifying the sticker.
+            let requestKey = key(for: listRequest)
+            allDetails[requestKey] = reactions
+            
+            /// Separate reactions by stickers and then append to nomarl sticker tabs
+            /// to prevent requesting if it has reactions inside a sticker
+            let groups = Dictionary(grouping: reactions, by: {$0.reaction?.rawValue})
+            groups.forEach { groupKey, groupValue in
+                groupValue.forEach { reaction in
+                    if !details.contains(where: {$0.participant?.id == reaction.participant?.id}) {
+                        details.append(reaction)
+                    }
+                }
+            }
+        } else {
+            /// Add reactions to nomarl reactios cache if the user requested with sitcker
+            reactions.forEach { reaction in
+                if let index = self.details.firstIndex(where: {$0.id == reaction.id}) {
+                    details[index] = reaction
+                } else {
+                    details.append(reaction)
+                }
             }
         }
     }
@@ -44,21 +72,13 @@ public class MessageInMemoryReaction {
             }
         }
     }
-
-    var copy: ReactionInMemoryCopy { .init(messageId: messageId, currentUserReaction: currentUserReaction, summary: summary, details: details) }
-}
-
-public struct ReactionInMemoryCopy {
-    public let messageId: Int
-    public var currentUserReaction: Reaction?
-    public var summary: [ReactionCount] = []
-    /// All participants reaction to a message.
-    public var details: [Reaction] = []
-
-    public init(messageId: Int, currentUserReaction: Reaction? = nil, summary: [ReactionCount] = [], details: [Reaction] = []) {
-        self.messageId = messageId
-        self.currentUserReaction = currentUserReaction
-        self.summary = summary
-        self.details = details
+    
+    public func containsAllOffset(_ request: ReactionListRequest) -> [Reaction]? {
+        let requestKey = key(for: request)
+        return allDetails.first(where: {$0.key == requestKey})?.value
+    }
+    
+    private func key(for request: ReactionListRequest) -> String {
+        "\(request.count)-\(request.offset)"
     }
 }

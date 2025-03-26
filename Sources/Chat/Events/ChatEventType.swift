@@ -6,7 +6,7 @@
 import ChatTransceiver
 import Foundation
 
-public enum ChatEventType {
+public enum ChatEventType: Sendable {
     case bot(BotEventTypes)
     case contact(ContactEventTypes)
     case download(DownloadEventTypes)
@@ -19,6 +19,5 @@ public enum ChatEventType {
     case tag(TagEventTypes)
     case call(CallEventTypes)
     case participant(ParticipantEventTypes)
-    case map(MapEventTypes)
     case reaction(ReactionEventTypes)
 }

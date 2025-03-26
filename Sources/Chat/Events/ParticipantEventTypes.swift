@@ -9,7 +9,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public enum ParticipantEventTypes {
+public enum ParticipantEventTypes: Sendable {
     case participants(ChatResponse<[Participant]>)
     case add(ChatResponse<Conversation>)
     case deleted(ChatResponse<[Participant]>)

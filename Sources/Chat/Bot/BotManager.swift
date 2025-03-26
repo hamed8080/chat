@@ -23,7 +23,7 @@ final class BotManager: BotProtocol {
 
     func onAddBotCommand(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<BotInfo> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .bot(.addCommand(response)))
+        emitEvent(.bot(.addCommand(response)))
     }
 
     func get(_ request: GetUserBotsRequest) {
@@ -32,12 +32,12 @@ final class BotManager: BotProtocol {
 
     func onBots(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[BotInfo]> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .bot(.bots(response)))
+        emitEvent(.bot(.bots(response)))
     }
 
     func onBotMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<String?> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .bot(.message(response)))
+        emitEvent(.bot(.message(response)))
     }
 
     func create(_ request: CreateBotRequest) {
@@ -46,7 +46,7 @@ final class BotManager: BotProtocol {
 
     func onCreateBot(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<BotInfo> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .bot(.create(response)))
+        emitEvent(.bot(.create(response)))
     }
 
     func remove(_ request: RemoveBotCommandRequest) {
@@ -55,7 +55,7 @@ final class BotManager: BotProtocol {
 
     func onRemoveBotCommand(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<BotInfo> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .bot(.removeCommand(response)))
+        emitEvent(.bot(.removeCommand(response)))
     }
 
     func start(_ request: StartStopBotRequest) {
@@ -69,6 +69,10 @@ final class BotManager: BotProtocol {
     func onStartStopBot(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<String> = asyncMessage.toChatResponse()
         let start = asyncMessage.chatMessage?.type == .startBot
-        chat.delegate?.chatEvent(event: .bot(start ? .start(response) : .stop(response)))
+        emitEvent(.bot(start ? .start(response) : .stop(response)))
+    }
+    
+    private func emitEvent(_ event: ChatEventType) {
+        chat.delegate?.chatEvent(event: event)
     }
 }

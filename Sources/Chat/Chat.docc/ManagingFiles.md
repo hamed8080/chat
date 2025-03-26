@@ -9,7 +9,6 @@ let req = FileRequest(hashCode: "XYZ...", checkUserGroupAccess: false, forceToDo
 ChatManager.activeInstance?.file.get(req)
 ```
 
-
 ### Get an Image
 To get an image from the cache or download it directly from the server. If you want to get an image from the cache just set ``FileRequest/forceToDownloadFromServer`` to false to search through a cache and if it has contained it, it will immediately back the image else it will download the image from the server. Call method ``Chat/FileProtocol/get(_:)-4v4sz`` like this:
 

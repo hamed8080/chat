@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "E87B77A8-502B-4F93-9379-5D182FE2D149",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ChatModelsTests",
+        "name" : "ChatModelsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

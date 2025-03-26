@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum DownloaUploadAction: Identifiable, CaseIterable {
+public enum DownloaUploadAction: Identifiable, CaseIterable, Sendable {
     public var id: Self { self }
     case cancel
     case suspend

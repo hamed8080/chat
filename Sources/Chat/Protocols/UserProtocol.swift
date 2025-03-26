@@ -9,7 +9,8 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-public protocol UserProtocol {
+@ChatGlobalActor
+public protocol UserProtocol: AnyObject {
     /// Tell the server user has logged out. This method wil **truncate and delete** all data inside the cache.
     func logOut()
 
@@ -53,7 +54,8 @@ public protocol UserProtocol {
     func currentUserRoles(_ request: GeneralSubjectIdRequest)
 }
 
-protocol InternalUserProtocol {
+@ChatGlobalActor
+protocol InternalUserProtocol: AnyObject {
     /// A timer for retrieving the ``User`` object to make the ``ChatState/chatReady``.
     var requestUserTimer: TimerProtocol { get set }
 

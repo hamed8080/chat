@@ -8,7 +8,7 @@ import ChatCore
 import ChatModels
 import Foundation
 
-public enum UserEventTypes {
+public enum UserEventTypes: Sendable {
     case currentUserRoles(ChatResponse<[Roles]>)
     case setRolesToUser(ChatResponse<[UserRole]>)
     case user(ChatResponse<User>)
