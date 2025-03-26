@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol\/chat",
         "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol\/fileManager",
@@ -97,6 +99,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol\/addMessagesToFile(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol\/convertMessageToStringRow(_:)",
@@ -1031,7 +1035,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

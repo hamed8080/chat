@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/add(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/deleted(_:)",
@@ -402,7 +404,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

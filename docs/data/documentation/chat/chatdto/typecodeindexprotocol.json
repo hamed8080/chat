@@ -89,6 +89,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatDTO\/TypeCodeIndexProtocol\/toTypeCode(_:)"
       ],
@@ -229,7 +231,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

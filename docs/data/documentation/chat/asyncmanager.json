@@ -107,18 +107,24 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/init(pingTimer:queueTimer:)"
       ],
       "title" : "Initializers"
     },
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncClient"
       ],
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncError(error:)",
         "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncMessage(asyncMessage:)",
@@ -790,7 +796,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

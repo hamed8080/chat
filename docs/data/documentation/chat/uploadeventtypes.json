@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/UploadEventTypes\/canceled(uniqueId:)",
         "doc:\/\/Chat\/documentation\/Chat\/UploadEventTypes\/completed(uniqueId:fileMetaData:data:error:)",
@@ -513,7 +515,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

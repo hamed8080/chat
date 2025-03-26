@@ -95,6 +95,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/complete",
         "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/gathering",
@@ -104,6 +106,8 @@
       "title" : "Enumeration Cases"
     },
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/init(from:)",
         "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/init(rawValue:)"
@@ -111,6 +115,7 @@
       "title" : "Initializers"
     },
     {
+      "anchor" : "Default-Implementations",
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/Encodable-Implementations",
@@ -416,7 +421,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

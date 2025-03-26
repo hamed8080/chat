@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol\/sendSignalMessage(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol\/sendStartTyping(threadId:)",
@@ -290,7 +292,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

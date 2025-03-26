@@ -82,12 +82,16 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/init(messageId:)"
       ],
       "title" : "Initializers"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/addOrReplaceSummaryCount(sticker:)",
         "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/appendOrReplaceDetail(reactions:)",
@@ -347,7 +351,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

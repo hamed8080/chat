@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/add(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/addAll(_:)",
@@ -584,7 +586,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/deleteCacheFile(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/filePath(_:)",
@@ -1039,7 +1041,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

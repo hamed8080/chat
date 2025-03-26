@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ParticipantProtocol\/add(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ParticipantProtocol\/addAdminRole(_:)",
@@ -377,7 +379,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

@@ -32,11 +32,13 @@
     ],
     "platforms" : [
       {
+        "beta" : false,
         "introducedAt" : "10.0",
         "name" : "iOS"
       },
       {
-        "introducedAt" : "12",
+        "beta" : false,
+        "introducedAt" : "12.0",
         "name" : "macOS"
       }
     ],
@@ -181,6 +183,7 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Essentials",
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
@@ -197,6 +200,7 @@
       "title" : "Essentials"
     },
     {
+      "anchor" : "Important-classes",
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/Chat",
         "doc:\/\/Chat\/documentation\/Chat\/ChatDelegate"
@@ -204,6 +208,7 @@
       "title" : "Important classes"
     },
     {
+      "anchor" : "Articles",
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem"
@@ -211,6 +216,8 @@
       "title" : "Articles"
     },
     {
+      "anchor" : "Classes",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager",
@@ -224,6 +231,8 @@
       "title" : "Classes"
     },
     {
+      "anchor" : "Protocols",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol",
         "doc:\/\/Chat\/documentation\/Chat\/BotProtocol",
@@ -246,6 +255,8 @@
       "title" : "Protocols"
     },
     {
+      "anchor" : "Structures",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatMessage",
         "doc:\/\/Chat\/documentation\/Chat\/DeviceInfo",
@@ -254,6 +265,8 @@
       "title" : "Structures"
     },
     {
+      "anchor" : "Type-Aliases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/CacheResponseType",
         "doc:\/\/Chat\/documentation\/Chat\/CompletionType",
@@ -268,6 +281,8 @@
       "title" : "Type Aliases"
     },
     {
+      "anchor" : "Enumerations",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/AssistantEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes",
@@ -293,6 +308,8 @@
       "title" : "Enumerations"
     },
     {
+      "anchor" : "Extended-Modules",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/Async",
         "doc:\/\/Chat\/documentation\/Chat\/ChatDTO",
@@ -325,7 +342,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/chat-flow.png"
+      "url" : "\/images\/Chat\/chat-flow.png"
     }
   ]
 },
@@ -2398,7 +2415,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/assistant(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/bot(_:)",
@@ -708,7 +710,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

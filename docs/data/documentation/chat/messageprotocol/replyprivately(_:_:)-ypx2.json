@@ -157,20 +157,6 @@
             {
               "inlineContent" : [
                 {
-                  "text" : "The request contains the id of the message you want to reply to, and id of the thread, and a text message.",
-                  "type" : "text"
-                }
-              ],
-              "type" : "paragraph"
-            }
-          ],
-          "name" : "request"
-        },
-        {
-          "content" : [
-            {
-              "inlineContent" : [
-                {
                   "text" : "The request that contains the data of a file and other file properties.",
                   "type" : "text"
                 }
@@ -317,7 +303,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

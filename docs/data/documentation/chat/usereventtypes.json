@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/currentUserRoles(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/remove(_:)",
@@ -402,7 +404,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

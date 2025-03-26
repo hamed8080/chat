@@ -1098,6 +1098,7 @@
   ],
   "seeAlsoSections" : [
     {
+      "anchor" : "Essentials",
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
@@ -2205,7 +2206,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 },
@@ -2219,7 +2220,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/message-flow.png"
+      "url" : "\/images\/Chat\/message-flow.png"
     }
   ]
 }

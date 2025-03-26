@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/cancel(uniqueId:)",
         "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/clear(_:)",
@@ -1503,7 +1505,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

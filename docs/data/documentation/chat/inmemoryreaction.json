@@ -106,6 +106,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/InMemoryReaction\/currentReaction(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/InMemoryReaction\/invalidate()",
@@ -357,7 +359,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

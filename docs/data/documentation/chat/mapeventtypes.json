@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/MapEventTypes\/image(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/MapEventTypes\/reverse(_:)",
@@ -354,7 +356,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

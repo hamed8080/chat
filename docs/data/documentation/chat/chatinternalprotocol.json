@@ -110,6 +110,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/asyncManager",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/banTimer",
@@ -126,6 +128,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/dispose()",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/invokeCallback(asyncMessage:)",
@@ -969,7 +973,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

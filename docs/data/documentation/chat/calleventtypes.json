@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callCanceled(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callClientError(_:)",
@@ -1266,7 +1268,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

@@ -1,4 +1,7 @@
 {
+  "includedArchiveIdentifiers" : [
+    "Chat"
+  ],
   "interfaceLanguages" : {
     "swift" : [
       {
@@ -3731,7 +3734,7 @@
             "1x",
             "light"
           ],
-          "url" : "\/images\/icon.png"
+          "url" : "\/images\/Chat\/icon.png"
         }
       ]
     }
@@ -3739,6 +3742,6 @@
   "schemaVersion" : {
     "major" : 0,
     "minor" : 1,
-    "patch" : 1
+    "patch" : 2
   }
 }

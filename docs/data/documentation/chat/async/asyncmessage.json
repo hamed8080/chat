@@ -89,6 +89,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/Async\/AsyncMessage\/banError",
         "doc:\/\/Chat\/documentation\/Chat\/Async\/AsyncMessage\/chatMessage",
@@ -97,6 +99,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/Async\/AsyncMessage\/messageResponse(state:)",
         "doc:\/\/Chat\/documentation\/Chat\/Async\/AsyncMessage\/toChatResponse()",
@@ -530,7 +534,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

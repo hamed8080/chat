@@ -100,12 +100,16 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/init(fileManager:group:queue:logger:)"
       ],
       "title" : "Initializers"
     },
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/documentPath",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/fm",
@@ -117,6 +121,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createDirectory()",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createGroupDirectory()",
@@ -1207,7 +1213,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

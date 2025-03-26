@@ -92,6 +92,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/InMemoryReactionProtocol\/currentReaction(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/InMemoryReactionProtocol\/summary(for:)"
@@ -318,7 +320,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

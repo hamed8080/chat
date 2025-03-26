@@ -244,6 +244,7 @@
   ],
   "seeAlsoSections" : [
     {
+      "anchor" : "Essentials",
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
@@ -444,7 +445,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

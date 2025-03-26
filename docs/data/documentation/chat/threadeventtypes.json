@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/allUnreadCount(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/archive(_:)",
@@ -1374,7 +1376,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

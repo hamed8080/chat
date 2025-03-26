@@ -100,6 +100,7 @@
   ],
   "seeAlsoSections" : [
     {
+      "anchor" : "Important-classes",
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatDelegate"
@@ -109,12 +110,16 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/Chat\/init(config:pingTimer:queueTimer:banTimer:session:callDelegate:)"
       ],
       "title" : "Initializers"
     },
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/Chat\/assistant",
         "doc:\/\/Chat\/documentation\/Chat\/Chat\/bot",
@@ -136,6 +141,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/Chat\/connect()",
         "doc:\/\/Chat\/documentation\/Chat\/Chat\/dispose()",
@@ -1200,7 +1207,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

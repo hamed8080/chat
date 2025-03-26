@@ -86,6 +86,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didConnectWebRTC()",
         "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didDisconnectWebRTC()",
@@ -372,7 +374,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

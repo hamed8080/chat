@@ -95,6 +95,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/PeerConnectionState\/closed",
         "doc:\/\/Chat\/documentation\/Chat\/PeerConnectionState\/connected",
@@ -107,6 +109,8 @@
       "title" : "Enumeration Cases"
     },
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/PeerConnectionState\/init(from:)",
         "doc:\/\/Chat\/documentation\/Chat\/PeerConnectionState\/init(rawValue:)"
@@ -114,6 +118,7 @@
       "title" : "Initializers"
     },
     {
+      "anchor" : "Default-Implementations",
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/PeerConnectionState\/Encodable-Implementations",
@@ -494,7 +499,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

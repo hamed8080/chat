@@ -86,6 +86,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/Chat",
         "doc:\/\/Chat\/9ChatCache0B11LogDelegateP",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
+        "doc:\/\/Chat\/s8CopyableP",
         "doc:\/\/Chat\/s12IdentifiableP"
       ],
       "kind" : "relationships",
@@ -103,12 +104,16 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/init(config:pingTimer:queueTimer:banTimer:session:callDelegate:)"
       ],
       "title" : "Initializers"
     },
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/assistant",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/asyncManager",
@@ -140,6 +145,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/connect()",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/dispose()",
@@ -149,6 +156,7 @@
       "title" : "Instance Methods"
     },
     {
+      "anchor" : "Default-Implementations",
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/CacheLogDelegate-Implementations",
@@ -1535,6 +1543,11 @@
   "title" : "Swift.Identifiable",
   "type" : "unresolvable"
 },
+"doc://Chat/s8CopyableP": {
+  "identifier" : "doc:\/\/Chat\/s8CopyableP",
+  "title" : "Swift.Copyable",
+  "type" : "unresolvable"
+},
 "icon.png": {
   "alt" : "App icon.",
   "identifier" : "icon.png",
@@ -1545,7 +1558,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

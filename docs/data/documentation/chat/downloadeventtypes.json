@@ -82,6 +82,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Enumeration-Cases",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/canceled(uniqueId:)",
         "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/failed(uniqueId:error:)",
@@ -545,7 +547,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }

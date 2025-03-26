@@ -82,12 +82,16 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/init(messageId:currentUserReaction:summary:details:)"
       ],
       "title" : "Initializers"
     },
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/currentUserReaction",
         "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/details",
@@ -412,7 +416,7 @@
         "1x",
         "light"
       ],
-      "url" : "\/images\/icon.png"
+      "url" : "\/images\/Chat\/icon.png"
     }
   ]
 }
