@@ -61,6 +61,11 @@
             "type" : "article"
           },
           {
+            "path" : "\/documentation\/chat\/managingsystem",
+            "title" : "Managing System",
+            "type" : "article"
+          },
+          {
             "path" : "\/documentation\/chat\/errorcodes",
             "title" : "Error Codes",
             "type" : "article"
@@ -170,17 +175,17 @@
               },
               {
                 "path" : "\/documentation\/chat\/chat\/connect()",
-                "title" : "func connect()",
+                "title" : "func connect() async",
                 "type" : "method"
               },
               {
                 "path" : "\/documentation\/chat\/chat\/dispose()",
-                "title" : "func dispose()",
+                "title" : "func dispose() async",
                 "type" : "method"
               },
               {
                 "path" : "\/documentation\/chat\/chat\/settoken(newtoken:recreateobject:)",
-                "title" : "func setToken(newToken: String, reCreateObject: Bool)",
+                "title" : "func setToken(newToken: String, reCreateObject: Bool) async",
                 "type" : "method"
               }
             ],
@@ -208,15 +213,6 @@
             "path" : "\/documentation\/chat\/chatdelegate",
             "title" : "ChatDelegate",
             "type" : "protocol"
-          },
-          {
-            "title" : "Articles",
-            "type" : "groupMarker"
-          },
-          {
-            "path" : "\/documentation\/chat\/managingsystem",
-            "title" : "Managing System",
-            "type" : "article"
           },
           {
             "title" : "Classes",
@@ -268,12 +264,12 @@
               },
               {
                 "path" : "\/documentation\/chat\/asyncmanager\/createasync()",
-                "title" : "func createAsync()",
+                "title" : "func createAsync() async",
                 "type" : "method"
               },
               {
                 "path" : "\/documentation\/chat\/asyncmanager\/disposeobject()",
-                "title" : "func disposeObject()",
+                "title" : "func disposeObject() async",
                 "type" : "method"
               },
               {
@@ -376,8 +372,18 @@
                 "type" : "method"
               },
               {
+                "path" : "\/documentation\/chat\/cachefilemanager\/getdata(url:)",
+                "title" : "func getData(url: URL) async -> Data?",
+                "type" : "method"
+              },
+              {
                 "path" : "\/documentation\/chat\/cachefilemanager\/getdata(url:completion:)",
                 "title" : "func getData(url: URL, completion: (Data?) -> Void)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/getdataingroup(url:)",
+                "title" : "func getDataInGroup(url: URL) async -> Data?",
                 "type" : "method"
               },
               {
@@ -396,13 +402,23 @@
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:savecompeletion:)",
-                "title" : "func saveFile(url: URL, data: Data, saveCompeletion: (URL?) -> Void)",
+                "path" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:)",
+                "title" : "func saveFile(url: URL, data: Data) async -> URL?",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:savecompeletion:)",
-                "title" : "func saveFileInGroup(url: URL, data: Data, saveCompeletion: (URL?) -> Void)",
+                "path" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:savecompletion:)",
+                "title" : "func saveFile(url: URL, data: Data, saveCompletion: (URL?) -> Void)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:)",
+                "title" : "func saveFileInGroup(url: URL, data: Data) async -> URL?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:savecompletion:)",
+                "title" : "func saveFileInGroup(url: URL, data: Data, saveCompletion: (URL?) -> Void)",
                 "type" : "method"
               }
             ],
@@ -413,6 +429,68 @@
           {
             "path" : "\/documentation\/chat\/chatcoordinator",
             "title" : "ChatCoordinator",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Type Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatglobalactor\/shared",
+                "title" : "static let shared: ChatGlobalActor",
+                "type" : "property"
+              },
+              {
+                "title" : "Default Implementations",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/chatglobalactor\/assertisolated(_:file:line:)",
+                    "title" : "func assertIsolated(@autoclosure () -> String, file: StaticString, line: UInt)",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/chatglobalactor\/assumeisolated(_:file:line:)",
+                    "title" : "func assumeIsolated<T>((isolated Self) throws -> T, file: StaticString, line: UInt) rethrows -> T",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/chatglobalactor\/preconditionisolated(_:file:line:)",
+                    "title" : "func preconditionIsolated(@autoclosure () -> String, file: StaticString, line: UInt)",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/chatglobalactor\/actor-implementations",
+                "title" : "Actor Implementations",
+                "type" : "symbol"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Type Properties",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/chatglobalactor\/sharedunownedexecutor",
+                    "title" : "static var sharedUnownedExecutor: UnownedSerialExecutor",
+                    "type" : "property"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/chatglobalactor\/globalactor-implementations",
+                "title" : "GlobalActor Implementations",
+                "type" : "symbol"
+              }
+            ],
+            "path" : "\/documentation\/chat\/chatglobalactor",
+            "title" : "ChatGlobalActor",
             "type" : "class"
           },
           {
@@ -496,8 +574,13 @@
                 "type" : "property"
               },
               {
+                "path" : "\/documentation\/chat\/chatimplementation\/deviceinfo",
+                "title" : "var deviceInfo: DeviceInfo?",
+                "type" : "property"
+              },
+              {
                 "path" : "\/documentation\/chat\/chatimplementation\/exportmessageviewmodels",
-                "title" : "var exportMessageViewModels: [any ExportMessagesProtocol]",
+                "title" : "var exportMessageViewModels: [any ExportMessagesInternalProtocol]",
                 "type" : "property"
               },
               {
@@ -566,12 +649,12 @@
               },
               {
                 "path" : "\/documentation\/chat\/chatimplementation\/connect()",
-                "title" : "func connect()",
+                "title" : "func connect() async",
                 "type" : "method"
               },
               {
                 "path" : "\/documentation\/chat\/chatimplementation\/dispose()",
-                "title" : "func dispose()",
+                "title" : "func dispose() async",
                 "type" : "method"
               },
               {
@@ -581,7 +664,7 @@
               },
               {
                 "path" : "\/documentation\/chat\/chatimplementation\/settoken(newtoken:recreateobject:)",
-                "title" : "func setToken(newToken: String, reCreateObject: Bool)",
+                "title" : "func setToken(newToken: String, reCreateObject: Bool) async",
                 "type" : "method"
               },
               {
@@ -621,7 +704,7 @@
                   },
                   {
                     "path" : "\/documentation\/chat\/chatimplementation\/invokecallback(asyncmessage:)",
-                    "title" : "func invokeCallback(asyncMessage: AsyncMessage)",
+                    "title" : "func invokeCallback(asyncMessage: AsyncMessage) async",
                     "type" : "method"
                   }
                 ],
@@ -741,38 +824,12 @@
           {
             "children" : [
               {
-                "title" : "Instance Methods",
-                "type" : "groupMarker"
-              },
-              {
-                "path" : "\/documentation\/chat\/inmemoryreaction\/currentreaction(_:)",
-                "title" : "func currentReaction(Int) -> Reaction?",
-                "type" : "method"
-              },
-              {
-                "path" : "\/documentation\/chat\/inmemoryreaction\/invalidate()",
-                "title" : "func invalidate()",
-                "type" : "method"
-              },
-              {
-                "path" : "\/documentation\/chat\/inmemoryreaction\/summary(for:)",
-                "title" : "func summary(for: Int) -> [ReactionCount]",
-                "type" : "method"
-              }
-            ],
-            "path" : "\/documentation\/chat\/inmemoryreaction",
-            "title" : "InMemoryReaction",
-            "type" : "class"
-          },
-          {
-            "children" : [
-              {
                 "title" : "Initializers",
                 "type" : "groupMarker"
               },
               {
-                "path" : "\/documentation\/chat\/messageinmemoryreaction\/init(messageid:)",
-                "title" : "init(messageId: Int)",
+                "path" : "\/documentation\/chat\/messageinmemoryreaction\/init(messageid:currentuserreaction:)",
+                "title" : "init(messageId: Int, currentUserReaction: Reaction?)",
                 "type" : "init"
               },
               {
@@ -785,8 +842,13 @@
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/messageinmemoryreaction\/appendorreplacedetail(reactions:)",
-                "title" : "func appendOrReplaceDetail(reactions: [Reaction])",
+                "path" : "\/documentation\/chat\/messageinmemoryreaction\/appendorreplacedetail(reactions:listrequest:)",
+                "title" : "func appendOrReplaceDetail(reactions: [Reaction], listRequest: ReactionListRequest)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/messageinmemoryreaction\/containsalloffset(_:)",
+                "title" : "func containsAllOffset(ReactionListRequest) -> [Reaction]?",
                 "type" : "method"
               },
               {
@@ -797,6 +859,27 @@
             ],
             "path" : "\/documentation\/chat\/messageinmemoryreaction",
             "title" : "MessageInMemoryReaction",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/reactionsstore\/invalidate()",
+                "title" : "func invalidate()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/reactionsstore\/summary(for:)",
+                "title" : "func summary(for: Int) -> [ReactionCount]",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/chat\/reactionsstore",
+            "title" : "ReactionsStore",
             "type" : "class"
           },
           {
@@ -943,8 +1026,13 @@
                 "type" : "property"
               },
               {
+                "path" : "\/documentation\/chat\/chatinternalprotocol\/deviceinfo",
+                "title" : "var deviceInfo: DeviceInfo?",
+                "type" : "property"
+              },
+              {
                 "path" : "\/documentation\/chat\/chatinternalprotocol\/exportmessageviewmodels",
-                "title" : "var exportMessageViewModels: [any ExportMessagesProtocol]",
+                "title" : "var exportMessageViewModels: [any ExportMessagesInternalProtocol]",
                 "type" : "property"
               },
               {
@@ -973,12 +1061,12 @@
               },
               {
                 "path" : "\/documentation\/chat\/chatinternalprotocol\/dispose()",
-                "title" : "func dispose()",
+                "title" : "func dispose() async",
                 "type" : "method"
               },
               {
                 "path" : "\/documentation\/chat\/chatinternalprotocol\/invokecallback(asyncmessage:)",
-                "title" : "func invokeCallback(asyncMessage: AsyncMessage)",
+                "title" : "func invokeCallback(asyncMessage: AsyncMessage) async",
                 "type" : "method"
               },
               {
@@ -1072,52 +1160,52 @@
                 "type" : "groupMarker"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/chat",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/chat",
                 "title" : "var chat: ChatImplementation",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/filemanager",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/filemanager",
                 "title" : "var fileManager: FileManager",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/filename",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/filename",
                 "title" : "var fileName: String",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/filepath",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/filepath",
                 "title" : "var filePath: URL",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/maxavailablecount",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/maxavailablecount",
                 "title" : "var maxAvailableCount: Int",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/maxsize",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/maxsize",
                 "title" : "var maxSize: Int",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/request",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/request",
                 "title" : "var request: GetHistoryRequest",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/rootpath",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/rootpath",
                 "title" : "var rootPath: URL",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/threadid",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/threadid",
                 "title" : "var threadId: Int",
                 "type" : "property"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/titles",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/titles",
                 "title" : "var titles: String",
                 "type" : "property"
               },
@@ -1126,63 +1214,63 @@
                 "type" : "groupMarker"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/addmessagestofile(_:)",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/addmessagestofile(_:)",
                 "title" : "func addMessagesToFile([Message])",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/convertmessagetostringrow(_:)",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/convertmessagetostringrow(_:)",
                 "title" : "func convertMessageToStringRow(Message) -> String",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/createfile()",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/createfile()",
                 "title" : "func createFile()",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/deletefileifexist()",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/deletefileifexist()",
                 "title" : "func deleteFileIfExist()",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/finished(success:uniqueid:error:typecode:)",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/finished(success:uniqueid:error:typecode:)",
                 "title" : "func finished(success: Bool, uniqueId: String?, error: ChatError?, typeCode: String?)",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/hasnext(response:)",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/hasnext(response:)",
                 "title" : "func hasNext(response: ChatResponse<[Message]>) -> Bool",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/onreceive(_:)",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/onreceive(_:)",
                 "title" : "func onReceive(ChatResponse<[Message]>)",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/sanitize(_:)",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/sanitize(_:)",
                 "title" : "func sanitize(String) -> String",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/setnextoffest()",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/setnextoffest()",
                 "title" : "func setNextOffest()",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/start()",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/start()",
                 "title" : "func start()",
                 "type" : "method"
               },
               {
-                "path" : "\/documentation\/chat\/exportmessagesprotocol\/writetofile(_:)",
+                "path" : "\/documentation\/chat\/exportmessagesinternalprotocol\/writetofile(_:)",
                 "title" : "func writeToFile(Data?)",
                 "type" : "method"
               }
             ],
-            "path" : "\/documentation\/chat\/exportmessagesprotocol",
-            "title" : "ExportMessagesProtocol",
+            "path" : "\/documentation\/chat\/exportmessagesinternalprotocol",
+            "title" : "ExportMessagesInternalProtocol",
             "type" : "protocol"
           },
           {
@@ -1278,44 +1366,23 @@
                 "type" : "groupMarker"
               },
               {
-                "path" : "\/documentation\/chat\/inmemoryreactionprotocol\/currentreaction(_:)",
-                "title" : "func currentReaction(Int) -> Reaction?",
-                "type" : "method"
-              },
-              {
-                "path" : "\/documentation\/chat\/inmemoryreactionprotocol\/summary(for:)",
-                "title" : "func summary(for: Int) -> [ReactionCount]",
-                "type" : "method"
-              }
-            ],
-            "path" : "\/documentation\/chat\/inmemoryreactionprotocol",
-            "title" : "InMemoryReactionProtocol",
-            "type" : "protocol"
-          },
-          {
-            "children" : [
-              {
-                "title" : "Instance Methods",
-                "type" : "groupMarker"
-              },
-              {
                 "path" : "\/documentation\/chat\/mapprotocol\/image(_:)",
-                "title" : "func image(MapStaticImageRequest)",
+                "title" : "func image(MapStaticImageRequest) async throws -> Data?",
                 "type" : "method"
               },
               {
                 "path" : "\/documentation\/chat\/mapprotocol\/reverse(_:)",
-                "title" : "func reverse(MapReverseRequest)",
+                "title" : "func reverse(MapReverseRequest) async throws -> MapReverse?",
                 "type" : "method"
               },
               {
                 "path" : "\/documentation\/chat\/mapprotocol\/routes(_:)",
-                "title" : "func routes(MapRoutingRequest)",
+                "title" : "func routes(MapRoutingRequest) async throws -> [Route]?",
                 "type" : "method"
               },
               {
                 "path" : "\/documentation\/chat\/mapprotocol\/search(_:)",
-                "title" : "func search(MapSearchRequest)",
+                "title" : "func search(MapSearchRequest) async throws -> [MapItem]?",
                 "type" : "method"
               }
             ],
@@ -1517,15 +1584,6 @@
           },
           {
             "children" : [
-              {
-                "title" : "Instance Properties",
-                "type" : "groupMarker"
-              },
-              {
-                "path" : "\/documentation\/chat\/reactionprotocol\/inmemoryreaction",
-                "title" : "var inMemoryReaction: any InMemoryReactionProtocol",
-                "type" : "property"
-              },
               {
                 "title" : "Instance Methods",
                 "type" : "groupMarker"
@@ -2017,6 +2075,11 @@
                     "path" : "\/documentation\/chat\/deviceinfo\/asdictionarynuallable()",
                     "title" : "func asDictionaryNuallable() throws -> [String : Any?]",
                     "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/deviceinfo\/assendabledictionary()",
+                    "title" : "func asSendableDictionary() throws -> [String : any Sendable]",
+                    "type" : "method"
                   }
                 ],
                 "path" : "\/documentation\/chat\/deviceinfo\/encodable-implementations",
@@ -2026,46 +2089,6 @@
             ],
             "path" : "\/documentation\/chat\/deviceinfo",
             "title" : "DeviceInfo",
-            "type" : "struct"
-          },
-          {
-            "children" : [
-              {
-                "title" : "Initializers",
-                "type" : "groupMarker"
-              },
-              {
-                "path" : "\/documentation\/chat\/reactioninmemorycopy\/init(messageid:currentuserreaction:summary:details:)",
-                "title" : "init(messageId: Int, currentUserReaction: Reaction?, summary: [ReactionCount], details: [Reaction])",
-                "type" : "init"
-              },
-              {
-                "title" : "Instance Properties",
-                "type" : "groupMarker"
-              },
-              {
-                "path" : "\/documentation\/chat\/reactioninmemorycopy\/currentuserreaction",
-                "title" : "var currentUserReaction: Reaction?",
-                "type" : "property"
-              },
-              {
-                "path" : "\/documentation\/chat\/reactioninmemorycopy\/details",
-                "title" : "var details: [Reaction]",
-                "type" : "property"
-              },
-              {
-                "path" : "\/documentation\/chat\/reactioninmemorycopy\/messageid",
-                "title" : "let messageId: Int",
-                "type" : "property"
-              },
-              {
-                "path" : "\/documentation\/chat\/reactioninmemorycopy\/summary",
-                "title" : "var summary: [ReactionCount]",
-                "type" : "property"
-              }
-            ],
-            "path" : "\/documentation\/chat\/reactioninmemorycopy",
-            "title" : "ReactionInMemoryCopy",
             "type" : "struct"
           },
           {
@@ -2368,11 +2391,6 @@
               {
                 "path" : "\/documentation\/chat\/chateventtype\/download(_:)",
                 "title" : "case download(DownloadEventTypes)",
-                "type" : "case"
-              },
-              {
-                "path" : "\/documentation\/chat\/chateventtype\/map(_:)",
-                "title" : "case map(MapEventTypes)",
                 "type" : "case"
               },
               {
@@ -2690,6 +2708,11 @@
                     "path" : "\/documentation\/chat\/iceconnectionstate\/asdictionarynuallable()",
                     "title" : "func asDictionaryNuallable() throws -> [String : Any?]",
                     "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/iceconnectionstate\/assendabledictionary()",
+                    "title" : "func asSendableDictionary() throws -> [String : any Sendable]",
+                    "type" : "method"
                   }
                 ],
                 "path" : "\/documentation\/chat\/iceconnectionstate\/encodable-implementations",
@@ -2805,6 +2828,11 @@
                     "path" : "\/documentation\/chat\/icegatheringstate\/asdictionarynuallable()",
                     "title" : "func asDictionaryNuallable() throws -> [String : Any?]",
                     "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/icegatheringstate\/assendabledictionary()",
+                    "title" : "func asSendableDictionary() throws -> [String : any Sendable]",
+                    "type" : "method"
                   }
                 ],
                 "path" : "\/documentation\/chat\/icegatheringstate\/encodable-implementations",
@@ -2830,37 +2858,6 @@
             ],
             "path" : "\/documentation\/chat\/icegatheringstate",
             "title" : "IceGatheringState",
-            "type" : "enum"
-          },
-          {
-            "children" : [
-              {
-                "title" : "Enumeration Cases",
-                "type" : "groupMarker"
-              },
-              {
-                "path" : "\/documentation\/chat\/mapeventtypes\/image(_:)",
-                "title" : "case image(ChatResponse<Data>)",
-                "type" : "case"
-              },
-              {
-                "path" : "\/documentation\/chat\/mapeventtypes\/reverse(_:)",
-                "title" : "case reverse(ChatResponse<MapReverse>)",
-                "type" : "case"
-              },
-              {
-                "path" : "\/documentation\/chat\/mapeventtypes\/routes(_:)",
-                "title" : "case routes(ChatResponse<[Route]>)",
-                "type" : "case"
-              },
-              {
-                "path" : "\/documentation\/chat\/mapeventtypes\/search(_:)",
-                "title" : "case search(ChatResponse<[MapItem]>)",
-                "type" : "case"
-              }
-            ],
-            "path" : "\/documentation\/chat\/mapeventtypes",
-            "title" : "MapEventTypes",
             "type" : "enum"
           },
           {
@@ -2897,6 +2894,11 @@
               {
                 "path" : "\/documentation\/chat\/messageeventtypes\/export(_:)",
                 "title" : "case export(ChatResponse<URL>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/messageeventtypes\/forward(_:)",
+                "title" : "case forward(ChatResponse<Message>)",
                 "type" : "case"
               },
               {
@@ -3103,6 +3105,11 @@
                     "path" : "\/documentation\/chat\/peerconnectionstate\/asdictionarynuallable()",
                     "title" : "func asDictionaryNuallable() throws -> [String : Any?]",
                     "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/peerconnectionstate\/assendabledictionary()",
+                    "title" : "func asSendableDictionary() throws -> [String : any Sendable]",
+                    "type" : "method"
                   }
                 ],
                 "path" : "\/documentation\/chat\/peerconnectionstate\/encodable-implementations",
@@ -3159,11 +3166,6 @@
               {
                 "path" : "\/documentation\/chat\/reactioneventtypes\/delete(_:)",
                 "title" : "case delete(ChatResponse<ReactionMessageResponse>)",
-                "type" : "case"
-              },
-              {
-                "path" : "\/documentation\/chat\/reactioneventtypes\/inmemoryupdate(messages:)",
-                "title" : "case inMemoryUpdate(messages: [ReactionInMemoryCopy])",
                 "type" : "case"
               },
               {
@@ -3289,6 +3291,11 @@
                     "path" : "\/documentation\/chat\/signalingstate\/asdictionarynuallable()",
                     "title" : "func asDictionaryNuallable() throws -> [String : Any?]",
                     "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/signalingstate\/assendabledictionary()",
+                    "title" : "func asSendableDictionary() throws -> [String : any Sendable]",
+                    "type" : "method"
                   }
                 ],
                 "path" : "\/documentation\/chat\/signalingstate\/encodable-implementations",
@@ -3324,7 +3331,7 @@
               },
               {
                 "path" : "\/documentation\/chat\/systemeventtypes\/error(_:)",
-                "title" : "case error(ChatResponse<Any>)",
+                "title" : "case error(ChatResponse<any Sendable>)",
                 "type" : "case"
               },
               {
@@ -3600,120 +3607,6 @@
             "path" : "\/documentation\/chat\/usereventtypes",
             "title" : "UserEventTypes",
             "type" : "enum"
-          },
-          {
-            "title" : "Extended Modules",
-            "type" : "groupMarker"
-          },
-          {
-            "children" : [
-              {
-                "title" : "Extended Structures",
-                "type" : "groupMarker"
-              },
-              {
-                "children" : [
-                  {
-                    "title" : "Instance Properties",
-                    "type" : "groupMarker"
-                  },
-                  {
-                    "path" : "\/documentation\/chat\/async\/asyncmessage\/banerror",
-                    "title" : "var banError: BanError?",
-                    "type" : "property"
-                  },
-                  {
-                    "path" : "\/documentation\/chat\/async\/asyncmessage\/chatmessage",
-                    "title" : "var chatMessage: ChatMessage?",
-                    "type" : "property"
-                  },
-                  {
-                    "path" : "\/documentation\/chat\/async\/asyncmessage\/subjectid",
-                    "title" : "var subjectId: Int?",
-                    "type" : "property"
-                  },
-                  {
-                    "title" : "Instance Methods",
-                    "type" : "groupMarker"
-                  },
-                  {
-                    "path" : "\/documentation\/chat\/async\/asyncmessage\/messageresponse(state:)",
-                    "title" : "func messageResponse(state: MessageResponseState) -> ChatResponse<MessageResponse>?",
-                    "type" : "method"
-                  },
-                  {
-                    "path" : "\/documentation\/chat\/async\/asyncmessage\/tochatresponse()",
-                    "title" : "func toChatResponse<T>() -> ChatResponse<T>",
-                    "type" : "method"
-                  },
-                  {
-                    "path" : "\/documentation\/chat\/async\/asyncmessage\/tochatresponse(asyncmanager:)",
-                    "title" : "func toChatResponse<T>(asyncManager: AsyncManager) -> ChatResponse<T>",
-                    "type" : "method"
-                  }
-                ],
-                "path" : "\/documentation\/chat\/async\/asyncmessage",
-                "title" : "AsyncMessage",
-                "type" : "extension"
-              }
-            ],
-            "path" : "\/documentation\/chat\/async",
-            "title" : "Async",
-            "type" : "extension"
-          },
-          {
-            "children" : [
-              {
-                "title" : "Extended Protocols",
-                "type" : "groupMarker"
-              },
-              {
-                "children" : [
-                  {
-                    "title" : "Instance Methods",
-                    "type" : "groupMarker"
-                  },
-                  {
-                    "path" : "\/documentation\/chat\/chatdto\/typecodeindexprotocol\/totypecode(_:)",
-                    "title" : "func toTypeCode(any Chat) -> String?",
-                    "type" : "method"
-                  }
-                ],
-                "path" : "\/documentation\/chat\/chatdto\/typecodeindexprotocol",
-                "title" : "TypeCodeIndexProtocol",
-                "type" : "extension"
-              }
-            ],
-            "path" : "\/documentation\/chat\/chatdto",
-            "title" : "ChatDTO",
-            "type" : "extension"
-          },
-          {
-            "children" : [
-              {
-                "title" : "Extended Classes",
-                "type" : "groupMarker"
-              },
-              {
-                "children" : [
-                  {
-                    "title" : "Instance Methods",
-                    "type" : "groupMarker"
-                  },
-                  {
-                    "path" : "\/documentation\/chat\/foundation\/filemanager\/allocatedsizeofdirectory(at:)",
-                    "title" : "func allocatedSizeOfDirectory(at: URL) throws -> UInt64",
-                    "type" : "method"
-                  }
-                ],
-                "path" : "\/documentation\/chat\/foundation\/filemanager",
-                "title" : "FileManager",
-                "type" : "extension"
-              }
-            ],
-            "path" : "\/documentation\/chat\/foundation",
-            "title" : "Foundation",
-            "type" : "extension"
           }
         ],
         "icon" : "icon.png",

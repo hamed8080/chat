@@ -392,7 +392,7 @@
             {
               "inlineContent" : [
                 {
-                  "text" : "Keep in mine ",
+                  "text" : "Keep in mind that ",
                   "type" : "text"
                 },
                 {
@@ -400,7 +400,7 @@
                   "type" : "codeVoice"
                 },
                 {
-                  "text" : " must be a group, not a P2P thread.",
+                  "text" : " must be a group, not a P2P conversation.",
                   "type" : "text"
                 }
               ],
@@ -735,7 +735,7 @@
         {
           "inlineContent" : [
             {
-              "text" : "Getting the list of all threads by itself is not useful, if you set the summary of this request to true you will receive only the list of thread ids  ",
+              "text" : "Getting the list of all threads by itself is not useful, if you set the summary of this request to true you will receive only the list of thread ids ",
               "type" : "text"
             },
             {
@@ -1088,6 +1088,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem",
         "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
@@ -1238,6 +1239,20 @@
   "title" : "Managing Messages",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmessages"
+},
+"doc://Chat/documentation/Chat/ManagingSystem": {
+  "abstract" : [
+    {
+      "text" : "Manage system events.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing System",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingsystem"
 },
 "doc://Chat/documentation/Chat/ManagingTags": {
   "abstract" : [

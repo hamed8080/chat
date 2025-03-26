@@ -89,6 +89,20 @@
           ],
           "tokens" : [
             {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
               "kind" : "keyword",
               "text" : "func"
             },
@@ -284,6 +298,37 @@
   "title" : "onCallMessageDelegate(asyncMessage:chat:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/callmessageprotocol\/oncallmessagedelegate(asyncmessage:chat:)"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "doc://Chat/documentation/Chat/ChatImplementation": {
   "abstract" : [

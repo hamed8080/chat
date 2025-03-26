@@ -27,7 +27,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat0A14ImplementationC8setToken03newD014reCreateObjectySS_SbtF",
+    "externalID" : "s:4Chat0A14ImplementationC8setToken03newD014reCreateObjectySS_SbtYaF",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -77,7 +77,11 @@
       },
       {
         "kind" : "text",
-        "text" : ")"
+        "text" : ") "
+      },
+      {
+        "kind" : "keyword",
+        "text" : "async"
       }
     ],
     "modules" : [
@@ -101,6 +105,20 @@
             "macOS"
           ],
           "tokens" : [
+            {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
             {
               "kind" : "keyword",
               "text" : "func"
@@ -149,7 +167,11 @@
             },
             {
               "kind" : "text",
-              "text" : " = false)"
+              "text" : " = false) "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "async"
             }
           ]
         }
@@ -198,6 +220,37 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "doc://Chat/documentation/Chat/ChatImplementation": {
   "abstract" : [
@@ -283,7 +336,11 @@
     },
     {
       "kind" : "text",
-      "text" : ")"
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/setToken(newToken:reCreateObject:)",

@@ -1110,6 +1110,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem",
         "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
@@ -1246,6 +1247,20 @@
   "title" : "Managing Maps",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmaps"
+},
+"doc://Chat/documentation/Chat/ManagingSystem": {
+  "abstract" : [
+    {
+      "text" : "Manage system events.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing System",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingsystem"
 },
 "doc://Chat/documentation/Chat/ManagingTags": {
   "abstract" : [

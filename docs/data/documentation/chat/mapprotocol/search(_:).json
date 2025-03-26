@@ -19,7 +19,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat11MapProtocolP6searchyy0A3DTO0B13SearchRequestVF",
+    "externalID" : "s:4Chat11MapProtocolP6searchySay0A3DTO0B4ItemVGSgAE0B13SearchRequestVYaKF",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -44,7 +44,32 @@
       },
       {
         "kind" : "text",
-        "text" : ")"
+        "text" : ") "
+      },
+      {
+        "kind" : "keyword",
+        "text" : "async"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "keyword",
+        "text" : "throws"
+      },
+      {
+        "kind" : "text",
+        "text" : " -> ["
+      },
+      {
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "s:7ChatDTO7MapItemV",
+        "text" : "MapItem"
+      },
+      {
+        "kind" : "text",
+        "text" : "]?"
       }
     ],
     "modules" : [
@@ -69,6 +94,20 @@
             "macOS"
           ],
           "tokens" : [
+            {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
             {
               "kind" : "keyword",
               "text" : "func"
@@ -108,7 +147,32 @@
             },
             {
               "kind" : "text",
-              "text" : ")"
+              "text" : ") "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "async"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "throws"
+            },
+            {
+              "kind" : "text",
+              "text" : " -> ["
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:7ChatDTO7MapItemV",
+              "text" : "MapItem"
+            },
+            {
+              "kind" : "text",
+              "text" : "]?"
             }
           ]
         }
@@ -177,6 +241,37 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
+},
 "doc://Chat/documentation/Chat/MapProtocol": {
   "abstract" : [
 
@@ -239,7 +334,32 @@
     },
     {
       "kind" : "text",
-      "text" : ")"
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    },
+    {
+      "kind" : "text",
+      "text" : " -> ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO7MapItemV",
+      "text" : "MapItem"
+    },
+    {
+      "kind" : "text",
+      "text" : "]?"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MapProtocol\/search(_:)",

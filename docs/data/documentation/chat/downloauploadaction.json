@@ -78,7 +78,8 @@
         "doc:\/\/Chat\/s12CaseIterableP",
         "doc:\/\/Chat\/SQ",
         "doc:\/\/Chat\/SH",
-        "doc:\/\/Chat\/s12IdentifiableP"
+        "doc:\/\/Chat\/s12IdentifiableP",
+        "doc:\/\/Chat\/s8SendableP"
       ],
       "kind" : "relationships",
       "title" : "Conforms To",
@@ -324,6 +325,11 @@
 "doc://Chat/s12IdentifiableP": {
   "identifier" : "doc:\/\/Chat\/s12IdentifiableP",
   "title" : "Swift.Identifiable",
+  "type" : "unresolvable"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
   "type" : "unresolvable"
 },
 "icon.png": {

@@ -14,9 +14,8 @@
       "type" : "text"
     },
     {
-      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-      "isActive" : true,
-      "type" : "reference"
+      "code" : "Async",
+      "type" : "codeVoice"
     },
     {
       "text" : ".",
@@ -113,6 +112,20 @@
           ],
           "tokens" : [
             {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
               "kind" : "keyword",
               "text" : "func"
             },
@@ -191,6 +204,20 @@
             }
           ],
           "name" : "req"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Chat server message type.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "type"
         }
       ]
     }
@@ -237,17 +264,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
-"doc://Chat/documentation/Chat/Async": {
-  "abstract" : [
-
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-  "kind" : "symbol",
-  "role" : "collection",
-  "title" : "Async",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/async"
-},
 "doc://Chat/documentation/Chat/AsyncManager": {
   "abstract" : [
     {
@@ -281,6 +297,37 @@
   "title" : "AsyncManager",
   "type" : "topic",
   "url" : "\/documentation\/chat\/asyncmanager"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "doc://Chat/documentation/Chat/ChatInternalProtocol": {
   "abstract" : [
@@ -329,9 +376,8 @@
       "type" : "text"
     },
     {
-      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-      "isActive" : true,
-      "type" : "reference"
+      "code" : "Async",
+      "type" : "codeVoice"
     },
     {
       "text" : ".",

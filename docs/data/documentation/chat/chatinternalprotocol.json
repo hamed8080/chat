@@ -55,6 +55,20 @@
           ],
           "tokens" : [
             {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
               "kind" : "keyword",
               "text" : "protocol"
             },
@@ -119,6 +133,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/cacheFileManager",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/callMessageDeleaget",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/coordinator",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/deviceInfo",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/exportMessageViewModels",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/logger",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/loggerUserInfo",
@@ -171,17 +186,6 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat"
-},
-"doc://Chat/documentation/Chat/Async": {
-  "abstract" : [
-
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-  "kind" : "symbol",
-  "role" : "collection",
-  "title" : "Async",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/async"
 },
 "doc://Chat/documentation/Chat/AsyncManager": {
   "abstract" : [
@@ -247,6 +251,37 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chat"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "doc://Chat/documentation/Chat/ChatImplementation": {
   "abstract" : [
@@ -555,6 +590,45 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatinternalprotocol\/coordinator"
 },
+"doc://Chat/documentation/Chat/ChatInternalProtocol/deviceInfo": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deviceInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10DeviceInfoV",
+      "text" : "DeviceInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/deviceInfo",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "deviceInfo",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/deviceinfo"
+},
 "doc://Chat/documentation/Chat/ChatInternalProtocol/dispose()": {
   "abstract" : [
     {
@@ -577,7 +651,11 @@
     },
     {
       "kind" : "text",
-      "text" : "()"
+      "text" : "() "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/dispose()",
@@ -614,8 +692,8 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat22ExportMessagesProtocolP",
-      "text" : "ExportMessagesProtocol"
+      "preciseIdentifier" : "s:4Chat30ExportMessagesInternalProtocolP",
+      "text" : "ExportMessagesInternalProtocol"
     },
     {
       "kind" : "text",
@@ -669,7 +747,11 @@
     },
     {
       "kind" : "text",
-      "text" : ")"
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/invokeCallback(asyncMessage:)",
@@ -683,15 +765,7 @@
 "doc://Chat/documentation/Chat/ChatInternalProtocol/logger": {
   "abstract" : [
     {
-      "text" : "A logger to logs events if it is enabled in configuration ",
-      "type" : "text"
-    },
-    {
-      "code" : "ChatConfig\/isDebuggingLogEnabled",
-      "type" : "codeVoice"
-    },
-    {
-      "text" : ".",
+      "text" : "A logger to logs events.",
       "type" : "text"
     }
   ],
@@ -790,9 +864,8 @@
       "type" : "text"
     },
     {
-      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-      "isActive" : true,
-      "type" : "reference"
+      "code" : "Async",
+      "type" : "codeVoice"
     },
     {
       "text" : ".",

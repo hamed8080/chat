@@ -74,6 +74,15 @@
               "kind" : "typeIdentifier",
               "preciseIdentifier" : "s:6Logger11LogDelegateP",
               "text" : "LogDelegate"
+            },
+            {
+              "kind" : "text",
+              "text" : ", "
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:s8SendableP",
+              "text" : "Sendable"
             }
           ]
         }
@@ -84,7 +93,8 @@
   "relationshipsSections" : [
     {
       "identifiers" : [
-        "doc:\/\/Chat\/6Logger11LogDelegateP"
+        "doc:\/\/Chat\/6Logger11LogDelegateP",
+        "doc:\/\/Chat\/s8SendableP"
       ],
       "kind" : "relationships",
       "title" : "Inherits From",
@@ -348,6 +358,11 @@
   "title" : "chatState(state:currentUser:error:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatdelegate\/chatstate(state:currentuser:error:)"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

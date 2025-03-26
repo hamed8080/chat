@@ -55,6 +55,20 @@
           ],
           "tokens" : [
             {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
               "kind" : "keyword",
               "text" : "final"
             },
@@ -87,7 +101,8 @@
         "doc:\/\/Chat\/9ChatCache0B11LogDelegateP",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
         "doc:\/\/Chat\/s8CopyableP",
-        "doc:\/\/Chat\/s12IdentifiableP"
+        "doc:\/\/Chat\/s12IdentifiableP",
+        "doc:\/\/Chat\/s8SendableP"
       ],
       "kind" : "relationships",
       "title" : "Conforms To",
@@ -128,6 +143,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/conversation",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/coordinator",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/delegate",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/deviceInfo",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/exportMessageViewModels",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/file",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/id",
@@ -234,6 +250,37 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chat"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "doc://Chat/documentation/Chat/ChatImplementation": {
   "abstract" : [
@@ -629,7 +676,11 @@
     },
     {
       "kind" : "text",
-      "text" : "()"
+      "text" : "() "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/connect()",
@@ -779,6 +830,44 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatimplementation\/delegate"
 },
+"doc://Chat/documentation/Chat/ChatImplementation/deviceInfo": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deviceInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10DeviceInfoV",
+      "text" : "DeviceInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/deviceInfo",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "deviceInfo",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/deviceinfo"
+},
 "doc://Chat/documentation/Chat/ChatImplementation/dispose()": {
   "abstract" : [
 
@@ -798,7 +887,11 @@
     },
     {
       "kind" : "text",
-      "text" : "()"
+      "text" : "() "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/dispose()",
@@ -831,8 +924,8 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat22ExportMessagesProtocolP",
-      "text" : "ExportMessagesProtocol"
+      "preciseIdentifier" : "s:4Chat30ExportMessagesInternalProtocolP",
+      "text" : "ExportMessagesInternalProtocol"
     },
     {
       "kind" : "text",
@@ -1323,7 +1416,11 @@
     },
     {
       "kind" : "text",
-      "text" : ")"
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/setToken(newToken:reCreateObject:)",
@@ -1546,6 +1643,11 @@
 "doc://Chat/s8CopyableP": {
   "identifier" : "doc:\/\/Chat\/s8CopyableP",
   "title" : "Swift.Copyable",
+  "type" : "unresolvable"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
   "type" : "unresolvable"
 },
 "icon.png": {

@@ -72,6 +72,16 @@
       "kind" : "declarations"
     }
   ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/s8SendableP"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
   "schemaVersion" : {
     "major" : 0,
     "minor" : 3,
@@ -90,7 +100,6 @@
         "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/count(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/customizeReactions(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/delete(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/inMemoryUpdate(messages:)",
         "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/list(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/reaction(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/replace(_:)"
@@ -398,52 +407,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/reactioneventtypes\/delete(_:)"
 },
-"doc://Chat/documentation/Chat/ReactionEventTypes/inMemoryUpdate(messages:)": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "case"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "inMemoryUpdate"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "messages"
-    },
-    {
-      "kind" : "text",
-      "text" : ": ["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat20ReactionInMemoryCopyV",
-      "text" : "ReactionInMemoryCopy"
-    },
-    {
-      "kind" : "text",
-      "text" : "])"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/inMemoryUpdate(messages:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "ReactionEventTypes.inMemoryUpdate(messages:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/reactioneventtypes\/inmemoryupdate(messages:)"
-},
 "doc://Chat/documentation/Chat/ReactionEventTypes/list(_:)": {
   "abstract" : [
 
@@ -584,6 +547,11 @@
   "title" : "ReactionEventTypes.replace(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/reactioneventtypes\/replace(_:)"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

@@ -75,7 +75,8 @@
   "relationshipsSections" : [
     {
       "identifiers" : [
-        "doc:\/\/Chat\/Se"
+        "doc:\/\/Chat\/Se",
+        "doc:\/\/Chat\/s8SendableP"
       ],
       "kind" : "relationships",
       "title" : "Conforms To",
@@ -674,6 +675,11 @@
   "title" : "uniqueId",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatmessage\/uniqueid"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

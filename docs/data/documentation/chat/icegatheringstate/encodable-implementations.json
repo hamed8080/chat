@@ -48,7 +48,8 @@
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/asDictionary()",
-        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/asDictionaryNuallable()"
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/asDictionaryNuallable()",
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/asSendableDictionary()"
       ],
       "title" : "Instance Methods"
     }
@@ -225,6 +226,61 @@
   "title" : "asDictionaryNuallable()",
   "type" : "topic",
   "url" : "\/documentation\/chat\/icegatheringstate\/asdictionarynuallable()"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/asSendableDictionary()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asSendableDictionary"
+    },
+    {
+      "kind" : "text",
+      "text" : "() "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    },
+    {
+      "kind" : "text",
+      "text" : " -> ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : " : any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s8SendableP",
+      "text" : "Sendable"
+    },
+    {
+      "kind" : "text",
+      "text" : "]"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/asSendableDictionary()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asSendableDictionary()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/assendabledictionary()"
 },
 "doc://Chat/documentation/Chat/IceGatheringState/data": {
   "abstract" : [

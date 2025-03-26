@@ -83,7 +83,8 @@
   "relationshipsSections" : [
     {
       "identifiers" : [
-        "doc:\/\/Chat\/8ChatCore24CacheFileManagerProtocolP"
+        "doc:\/\/Chat\/8ChatCore24CacheFileManagerProtocolP",
+        "doc:\/\/Chat\/s8SendableP"
       ],
       "kind" : "relationships",
       "title" : "Conforms To",
@@ -130,12 +131,16 @@
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/deleteFolder(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePath(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePathInGroup(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:completion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:completion:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExist(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExistInGroup(url:)",
-        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:saveCompeletion:)",
-        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:saveCompeletion:)"
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:saveCompletion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:saveCompletion:)"
       ],
       "title" : "Instance Methods"
     }
@@ -542,6 +547,69 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/fm"
 },
+"doc://Chat/documentation/Chat/CacheFileManager/getData(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getData"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
+    },
+    {
+      "kind" : "text",
+      "text" : " -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getData(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/getdata(url:)"
+},
 "doc://Chat/documentation/Chat/CacheFileManager/getData(url:completion:)": {
   "abstract" : [
 
@@ -613,6 +681,69 @@
   "title" : "getData(url:completion:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/getdata(url:completion:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/getDataInGroup(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getDataInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
+    },
+    {
+      "kind" : "text",
+      "text" : " -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getDataInGroup(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/getdataingroup(url:)"
 },
 "doc://Chat/documentation/Chat/CacheFileManager/getDataInGroup(url:completion:)": {
   "abstract" : [
@@ -1025,7 +1156,87 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/queue"
 },
-"doc://Chat/documentation/Chat/CacheFileManager/saveFile(url:data:saveCompeletion:)": {
+"doc://Chat/documentation/Chat/CacheFileManager/saveFile(url:data:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "saveFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "data"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
+    },
+    {
+      "kind" : "text",
+      "text" : " -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "saveFile(url:data:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/saveFile(url:data:saveCompletion:)": {
   "abstract" : [
 
   ],
@@ -1082,7 +1293,7 @@
     },
     {
       "kind" : "externalParam",
-      "text" : "saveCompeletion"
+      "text" : "saveCompletion"
     },
     {
       "kind" : "text",
@@ -1107,14 +1318,94 @@
       "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:saveCompeletion:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:saveCompletion:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "saveFile(url:data:saveCompeletion:)",
+  "title" : "saveFile(url:data:saveCompletion:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:savecompeletion:)"
+  "url" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:savecompletion:)"
 },
-"doc://Chat/documentation/Chat/CacheFileManager/saveFileInGroup(url:data:saveCompeletion:)": {
+"doc://Chat/documentation/Chat/CacheFileManager/saveFileInGroup(url:data:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "saveFileInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "data"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
+    },
+    {
+      "kind" : "text",
+      "text" : " -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "saveFileInGroup(url:data:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/saveFileInGroup(url:data:saveCompletion:)": {
   "abstract" : [
 
   ],
@@ -1171,7 +1462,7 @@
     },
     {
       "kind" : "externalParam",
-      "text" : "saveCompeletion"
+      "text" : "saveCompletion"
     },
     {
       "kind" : "text",
@@ -1196,12 +1487,17 @@
       "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:saveCompeletion:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:saveCompletion:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "saveFileInGroup(url:data:saveCompeletion:)",
+  "title" : "saveFileInGroup(url:data:saveCompletion:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:savecompeletion:)"
+  "url" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:savecompletion:)"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

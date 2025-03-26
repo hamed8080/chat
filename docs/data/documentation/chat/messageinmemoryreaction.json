@@ -85,7 +85,7 @@
       "anchor" : "Initializers",
       "generated" : true,
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/init(messageId:)"
+        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/init(messageId:currentUserReaction:)"
       ],
       "title" : "Initializers"
     },
@@ -94,7 +94,8 @@
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/addOrReplaceSummaryCount(sticker:)",
-        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/appendOrReplaceDetail(reactions:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/appendOrReplaceDetail(reactions:listRequest:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/containsAllOffset(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/deleteSummaryCount(sticker:)"
       ],
       "title" : "Instance Methods"
@@ -211,7 +212,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/messageinmemoryreaction\/addorreplacesummarycount(sticker:)"
 },
-"doc://Chat/documentation/Chat/MessageInMemoryReaction/appendOrReplaceDetail(reactions:)": {
+"doc://Chat/documentation/Chat/MessageInMemoryReaction/appendOrReplaceDetail(reactions:listRequest:)": {
   "abstract" : [
 
   ],
@@ -247,15 +248,79 @@
     },
     {
       "kind" : "text",
-      "text" : "])"
+      "text" : "], "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "listRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19ReactionListRequestV",
+      "text" : "ReactionListRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/appendOrReplaceDetail(reactions:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/appendOrReplaceDetail(reactions:listRequest:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "appendOrReplaceDetail(reactions:)",
+  "title" : "appendOrReplaceDetail(reactions:listRequest:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/messageinmemoryreaction\/appendorreplacedetail(reactions:)"
+  "url" : "\/documentation\/chat\/messageinmemoryreaction\/appendorreplacedetail(reactions:listrequest:)"
+},
+"doc://Chat/documentation/Chat/MessageInMemoryReaction/containsAllOffset(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "containsAllOffset"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19ReactionListRequestV",
+      "text" : "ReactionListRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8ReactionV",
+      "text" : "Reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : "]?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/containsAllOffset(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "containsAllOffset(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageinmemoryreaction\/containsalloffset(_:)"
 },
 "doc://Chat/documentation/Chat/MessageInMemoryReaction/deleteSummaryCount(sticker:)": {
   "abstract" : [
@@ -303,7 +368,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/messageinmemoryreaction\/deletesummarycount(sticker:)"
 },
-"doc://Chat/documentation/Chat/MessageInMemoryReaction/init(messageId:)": {
+"doc://Chat/documentation/Chat/MessageInMemoryReaction/init(messageId:currentUserReaction:)": {
   "abstract" : [
 
   ],
@@ -331,15 +396,32 @@
     },
     {
       "kind" : "text",
-      "text" : ")"
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "currentUserReaction"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8ReactionV",
+      "text" : "Reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/init(messageId:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/init(messageId:currentUserReaction:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "init(messageId:)",
+  "title" : "init(messageId:currentUserReaction:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/messageinmemoryreaction\/init(messageid:)"
+  "url" : "\/documentation\/chat\/messageinmemoryreaction\/init(messageid:currentuserreaction:)"
 },
 "icon.png": {
   "alt" : "App icon.",

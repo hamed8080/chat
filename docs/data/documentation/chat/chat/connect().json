@@ -19,7 +19,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4ChatAAP7connectyyF",
+    "externalID" : "s:4ChatAAP7connectyyYaF",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -35,7 +35,11 @@
       },
       {
         "kind" : "text",
-        "text" : "()"
+        "text" : "() "
+      },
+      {
+        "kind" : "keyword",
+        "text" : "async"
       }
     ],
     "modules" : [
@@ -61,6 +65,20 @@
           ],
           "tokens" : [
             {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
               "kind" : "keyword",
               "text" : "func"
             },
@@ -74,7 +92,11 @@
             },
             {
               "kind" : "text",
-              "text" : "()"
+              "text" : "() "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "async"
             }
           ]
         }
@@ -177,7 +199,11 @@
     },
     {
       "kind" : "text",
-      "text" : "()"
+      "text" : "() "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "async"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/connect()",
@@ -187,6 +213,37 @@
   "title" : "connect()",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chat\/connect()"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "icon.png": {
   "alt" : "App icon.",

@@ -1,7 +1,7 @@
 {
   "abstract" : [
     {
-      "text" : "Get list of reactions for a messsage with messageId.",
+      "text" : "Get list of participants and their reaction to a messsage with messageId.",
       "type" : "text"
     }
   ],
@@ -70,6 +70,20 @@
           ],
           "tokens" : [
             {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
               "kind" : "keyword",
               "text" : "func"
             },
@@ -114,6 +128,25 @@
         }
       ],
       "kind" : "declarations"
+    },
+    {
+      "kind" : "parameters",
+      "parameters" : [
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "The request that contains a messageId and offset and count.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "request"
+        }
+      ]
     }
   ],
   "schemaVersion" : {
@@ -158,6 +191,37 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
+},
 "doc://Chat/documentation/Chat/ReactionProtocol": {
   "abstract" : [
 
@@ -192,7 +256,7 @@
 "doc://Chat/documentation/Chat/ReactionProtocol/get(_:)": {
   "abstract" : [
     {
-      "text" : "Get list of reactions for a messsage with messageId.",
+      "text" : "Get list of participants and their reaction to a messsage with messageId.",
       "type" : "text"
     }
   ],

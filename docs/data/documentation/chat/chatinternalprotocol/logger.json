@@ -1,15 +1,7 @@
 {
   "abstract" : [
     {
-      "text" : "A logger to logs events if it is enabled in configuration ",
-      "type" : "text"
-    },
-    {
-      "code" : "ChatConfig\/isDebuggingLogEnabled",
-      "type" : "codeVoice"
-    },
-    {
-      "text" : ".",
+      "text" : "A logger to logs events.",
       "type" : "text"
     }
   ],
@@ -73,6 +65,20 @@
             "macOS"
           ],
           "tokens" : [
+            {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
             {
               "kind" : "keyword",
               "text" : "var"
@@ -162,6 +168,37 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
+},
 "doc://Chat/documentation/Chat/ChatInternalProtocol": {
   "abstract" : [
 
@@ -196,15 +233,7 @@
 "doc://Chat/documentation/Chat/ChatInternalProtocol/logger": {
   "abstract" : [
     {
-      "text" : "A logger to logs events if it is enabled in configuration ",
-      "type" : "text"
-    },
-    {
-      "code" : "ChatConfig\/isDebuggingLogEnabled",
-      "type" : "codeVoice"
-    },
-    {
-      "text" : ".",
+      "text" : "A logger to logs events.",
       "type" : "text"
     }
   ],

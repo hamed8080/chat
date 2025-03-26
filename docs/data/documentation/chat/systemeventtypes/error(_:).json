@@ -13,7 +13,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat16SystemEventTypesO5erroryAC0A4Core0A8ResponseVyypGcACmF",
+    "externalID" : "s:4Chat16SystemEventTypesO5erroryAC0A4Core0A8ResponseVys8Sendable_pGcACmF",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -38,11 +38,12 @@
       },
       {
         "kind" : "text",
-        "text" : "<"
+        "text" : "<any "
       },
       {
-        "kind" : "keyword",
-        "text" : "Any"
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "s:s8SendableP",
+        "text" : "Sendable"
       },
       {
         "kind" : "text",
@@ -93,11 +94,12 @@
             },
             {
               "kind" : "text",
-              "text" : "<"
+              "text" : "<any "
             },
             {
-              "kind" : "keyword",
-              "text" : "Any"
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:s8SendableP",
+              "text" : "Sendable"
             },
             {
               "kind" : "text",
@@ -210,11 +212,12 @@
     },
     {
       "kind" : "text",
-      "text" : "<"
+      "text" : "<any "
     },
     {
-      "kind" : "keyword",
-      "text" : "Any"
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s8SendableP",
+      "text" : "Sendable"
     },
     {
       "kind" : "text",

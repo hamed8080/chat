@@ -27,7 +27,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat0A14ImplementationC23exportMessageViewModelsSayAA22ExportMessagesProtocol_pGvp",
+    "externalID" : "s:4Chat0A14ImplementationC23exportMessageViewModelsSayAA30ExportMessagesInternalProtocol_pGvp",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -47,8 +47,8 @@
       },
       {
         "kind" : "typeIdentifier",
-        "preciseIdentifier" : "s:4Chat22ExportMessagesProtocolP",
-        "text" : "ExportMessagesProtocol"
+        "preciseIdentifier" : "s:4Chat30ExportMessagesInternalProtocolP",
+        "text" : "ExportMessagesInternalProtocol"
       },
       {
         "kind" : "text",
@@ -77,6 +77,20 @@
           ],
           "tokens" : [
             {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
               "kind" : "keyword",
               "text" : "var"
             },
@@ -93,10 +107,10 @@
               "text" : ": [any "
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol",
               "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:4Chat22ExportMessagesProtocolP",
-              "text" : "ExportMessagesProtocol"
+              "preciseIdentifier" : "s:4Chat30ExportMessagesInternalProtocolP",
+              "text" : "ExportMessagesInternalProtocol"
             },
             {
               "kind" : "text",
@@ -149,6 +163,37 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "doc://Chat/documentation/Chat/ChatImplementation": {
   "abstract" : [
@@ -204,8 +249,8 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat22ExportMessagesProtocolP",
-      "text" : "ExportMessagesProtocol"
+      "preciseIdentifier" : "s:4Chat30ExportMessagesInternalProtocolP",
+      "text" : "ExportMessagesInternalProtocol"
     },
     {
       "kind" : "text",
@@ -219,7 +264,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatimplementation\/exportmessageviewmodels"
 },
-"doc://Chat/documentation/Chat/ExportMessagesProtocol": {
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol": {
   "abstract" : [
 
   ],
@@ -234,21 +279,21 @@
     },
     {
       "kind" : "identifier",
-      "text" : "ExportMessagesProtocol"
+      "text" : "ExportMessagesInternalProtocol"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol",
   "kind" : "symbol",
   "navigatorTitle" : [
     {
       "kind" : "identifier",
-      "text" : "ExportMessagesProtocol"
+      "text" : "ExportMessagesInternalProtocol"
     }
   ],
   "role" : "symbol",
-  "title" : "ExportMessagesProtocol",
+  "title" : "ExportMessagesInternalProtocol",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/exportmessagesprotocol"
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol"
 },
 "icon.png": {
   "alt" : "App icon.",

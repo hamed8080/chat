@@ -1,0 +1,1092 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat30ExportMessagesInternalProtocolP",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "protocol"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ExportMessagesInternalProtocol"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ExportMessagesInternalProtocol"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Protocol",
+    "symbolKind" : "protocol",
+    "title" : "ExportMessagesInternalProtocol"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "attribute",
+              "text" : "@"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "kind" : "attribute",
+              "preciseIdentifier" : "s:4Chat0A11GlobalActorC",
+              "text" : "ChatGlobalActor"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "protocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ExportMessagesInternalProtocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " : AnyObject"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/chat",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/fileManager",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/fileName",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/filePath",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/maxAvailableCount",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/maxSize",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/request",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/rootPath",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/threadId",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/titles"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/addMessagesToFile(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/convertMessageToStringRow(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/createFile()",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/deleteFileIfExist()",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/finished(success:uniqueId:error:typeCode:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/hasNext(response:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/onReceive(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/sanitize(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/setNextOffest()",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/start()",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/writeToFile(_:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/exportmessagesinternalprotocol"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ExportMessagesInternalProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ExportMessagesInternalProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ExportMessagesInternalProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/addMessagesToFile(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "addMessagesToFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "(["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "])"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/addMessagesToFile(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "addMessagesToFile(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/addmessagestofile(_:)"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/chat": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "chat"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat0A14ImplementationC",
+      "text" : "ChatImplementation"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/chat",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/chat"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/convertMessageToStringRow(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "convertMessageToStringRow"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/convertMessageToStringRow(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "convertMessageToStringRow(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/convertmessagetostringrow(_:)"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/createFile()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "createFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/createFile()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "createFile()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/createfile()"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/deleteFileIfExist()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleteFileIfExist"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/deleteFileIfExist()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "deleteFileIfExist()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/deletefileifexist()"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/fileManager": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "fileManager"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "c:objc(cs)NSFileManager",
+      "text" : "FileManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/fileManager",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "fileManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/filemanager"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/fileName": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "fileName"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/fileName",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "fileName",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/filename"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/filePath": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "filePath"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/filePath",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "filePath",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/filepath"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/finished(success:uniqueId:error:typeCode:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "finished"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "success"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "error"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A5ErrorV",
+      "text" : "ChatError"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "typeCode"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/finished(success:uniqueId:error:typeCode:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "finished(success:uniqueId:error:typeCode:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/finished(success:uniqueid:error:typecode:)"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/hasNext(response:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "hasNext"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "response"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/hasNext(response:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "hasNext(response:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/hasnext(response:)"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/maxAvailableCount": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "maxAvailableCount"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/maxAvailableCount",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "maxAvailableCount",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/maxavailablecount"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/maxSize": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "maxSize"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/maxSize",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "maxSize",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/maxsize"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/onReceive(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "onReceive"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/onReceive(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "onReceive(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/onreceive(_:)"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/request": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "request"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestV",
+      "text" : "GetHistoryRequest"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/request",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "request",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/request"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/rootPath": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "rootPath"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/rootPath",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "rootPath",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/rootpath"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/sanitize(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sanitize"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/sanitize(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "sanitize(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/sanitize(_:)"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/setNextOffest()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "setNextOffest"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/setNextOffest()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "setNextOffest()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/setnextoffest()"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/start()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "start"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/start()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "start()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/start()"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/threadId": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/threadId",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "threadId",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/threadid"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/titles": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "titles"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/titles",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "titles",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/titles"
+},
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol/writeToFile(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "writeToFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol\/writeToFile(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "writeToFile(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol\/writetofile(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/Chat\/icon.png"
+    }
+  ]
+}
+}
+}

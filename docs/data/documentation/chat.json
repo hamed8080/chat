@@ -33,7 +33,7 @@
     "platforms" : [
       {
         "beta" : false,
-        "introducedAt" : "10.0",
+        "introducedAt" : "13.0",
         "name" : "iOS"
       },
       {
@@ -195,6 +195,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem",
         "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
@@ -208,25 +209,18 @@
       "title" : "Important classes"
     },
     {
-      "anchor" : "Articles",
-      "generated" : true,
-      "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem"
-      ],
-      "title" : "Articles"
-    },
-    {
       "anchor" : "Classes",
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager",
         "doc:\/\/Chat\/documentation\/Chat\/ChatCoordinator",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation",
         "doc:\/\/Chat\/documentation\/Chat\/ChatManager",
         "doc:\/\/Chat\/documentation\/Chat\/DiskStatus",
-        "doc:\/\/Chat\/documentation\/Chat\/InMemoryReaction",
-        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction"
+        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore"
       ],
       "title" : "Classes"
     },
@@ -239,9 +233,8 @@
         "doc:\/\/Chat\/documentation\/Chat\/CallMessageProtocol",
         "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
         "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol",
-        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol",
-        "doc:\/\/Chat\/documentation\/Chat\/InMemoryReactionProtocol",
         "doc:\/\/Chat\/documentation\/Chat\/MapProtocol",
         "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol",
         "doc:\/\/Chat\/documentation\/Chat\/ParticipantProtocol",
@@ -259,8 +252,7 @@
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatMessage",
-        "doc:\/\/Chat\/documentation\/Chat\/DeviceInfo",
-        "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy"
+        "doc:\/\/Chat\/documentation\/Chat\/DeviceInfo"
       ],
       "title" : "Structures"
     },
@@ -293,7 +285,6 @@
         "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState",
         "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState",
-        "doc:\/\/Chat\/documentation\/Chat\/MapEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/PeerConnectionState",
@@ -306,16 +297,6 @@
         "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes"
       ],
       "title" : "Enumerations"
-    },
-    {
-      "anchor" : "Extended-Modules",
-      "generated" : true,
-      "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/Async",
-        "doc:\/\/Chat\/documentation\/Chat\/ChatDTO",
-        "doc:\/\/Chat\/documentation\/Chat\/Foundation"
-      ],
-      "title" : "Extended Modules"
     }
   ],
   "variants" : [
@@ -427,17 +408,6 @@
   "title" : "AssistantProtocol",
   "type" : "topic",
   "url" : "\/documentation\/chat\/assistantprotocol"
-},
-"doc://Chat/documentation/Chat/Async": {
-  "abstract" : [
-
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-  "kind" : "symbol",
-  "role" : "collection",
-  "title" : "Async",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/async"
 },
 "doc://Chat/documentation/Chat/AsyncManager": {
   "abstract" : [
@@ -724,17 +694,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatcoordinator"
 },
-"doc://Chat/documentation/Chat/ChatDTO": {
-  "abstract" : [
-
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatDTO",
-  "kind" : "symbol",
-  "role" : "collection",
-  "title" : "ChatDTO",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chatdto"
-},
 "doc://Chat/documentation/Chat/ChatDelegate": {
   "abstract" : [
 
@@ -796,6 +755,37 @@
   "title" : "ChatEventType",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "doc://Chat/documentation/Chat/ChatImplementation": {
   "abstract" : [
@@ -1214,7 +1204,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/errorcodes"
 },
-"doc://Chat/documentation/Chat/ExportMessagesProtocol": {
+"doc://Chat/documentation/Chat/ExportMessagesInternalProtocol": {
   "abstract" : [
 
   ],
@@ -1229,21 +1219,21 @@
     },
     {
       "kind" : "identifier",
-      "text" : "ExportMessagesProtocol"
+      "text" : "ExportMessagesInternalProtocol"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesInternalProtocol",
   "kind" : "symbol",
   "navigatorTitle" : [
     {
       "kind" : "identifier",
-      "text" : "ExportMessagesProtocol"
+      "text" : "ExportMessagesInternalProtocol"
     }
   ],
   "role" : "symbol",
-  "title" : "ExportMessagesProtocol",
+  "title" : "ExportMessagesInternalProtocol",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/exportmessagesprotocol"
+  "url" : "\/documentation\/chat\/exportmessagesinternalprotocol"
 },
 "doc://Chat/documentation/Chat/FileProtocol": {
   "abstract" : [
@@ -1275,17 +1265,6 @@
   "title" : "FileProtocol",
   "type" : "topic",
   "url" : "\/documentation\/chat\/fileprotocol"
-},
-"doc://Chat/documentation/Chat/Foundation": {
-  "abstract" : [
-
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Foundation",
-  "kind" : "symbol",
-  "role" : "collection",
-  "title" : "Foundation",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/foundation"
 },
 "doc://Chat/documentation/Chat/GettingStarted": {
   "abstract" : [
@@ -1362,71 +1341,6 @@
   "title" : "IceGatheringState",
   "type" : "topic",
   "url" : "\/documentation\/chat\/icegatheringstate"
-},
-"doc://Chat/documentation/Chat/InMemoryReaction": {
-  "abstract" : [
-    {
-      "text" : "In Memory reactions.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "class"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "InMemoryReaction"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/InMemoryReaction",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "InMemoryReaction"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "InMemoryReaction",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/inmemoryreaction"
-},
-"doc://Chat/documentation/Chat/InMemoryReactionProtocol": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "protocol"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "InMemoryReactionProtocol"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/InMemoryReactionProtocol",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "InMemoryReactionProtocol"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "InMemoryReactionProtocol",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/inmemoryreactionprotocol"
 },
 "doc://Chat/documentation/Chat/ManagingAssistants": {
   "abstract" : [
@@ -1567,37 +1481,6 @@
   "title" : "Managing Users",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingusers"
-},
-"doc://Chat/documentation/Chat/MapEventTypes": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "enum"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "MapEventTypes"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MapEventTypes",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "MapEventTypes"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "MapEventTypes",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/mapeventtypes"
 },
 "doc://Chat/documentation/Chat/MapProtocol": {
   "abstract" : [
@@ -1940,37 +1823,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/reactioneventtypes"
 },
-"doc://Chat/documentation/Chat/ReactionInMemoryCopy": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "struct"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "ReactionInMemoryCopy"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "ReactionInMemoryCopy"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "ReactionInMemoryCopy",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/reactioninmemorycopy"
-},
 "doc://Chat/documentation/Chat/ReactionProtocol": {
   "abstract" : [
 
@@ -2001,6 +1853,37 @@
   "title" : "ReactionProtocol",
   "type" : "topic",
   "url" : "\/documentation\/chat\/reactionprotocol"
+},
+"doc://Chat/documentation/Chat/ReactionsStore": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ReactionsStore"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ReactionsStore"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ReactionsStore",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactionsstore"
 },
 "doc://Chat/documentation/Chat/SignalingState": {
   "abstract" : [

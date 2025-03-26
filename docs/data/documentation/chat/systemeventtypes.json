@@ -72,6 +72,16 @@
       "kind" : "declarations"
     }
   ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/s8SendableP"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
   "schemaVersion" : {
     "major" : 0,
     "minor" : 3,
@@ -185,11 +195,12 @@
     },
     {
       "kind" : "text",
-      "text" : "<"
+      "text" : "<any "
     },
     {
-      "kind" : "keyword",
-      "text" : "Any"
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s8SendableP",
+      "text" : "Sendable"
     },
     {
       "kind" : "text",
@@ -296,6 +307,11 @@
   "title" : "SystemEventTypes.systemMessage(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/systemeventtypes\/systemmessage(_:)"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

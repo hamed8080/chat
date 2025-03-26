@@ -78,7 +78,8 @@
         "doc:\/\/Chat\/Se",
         "doc:\/\/Chat\/SE",
         "doc:\/\/Chat\/SQ",
-        "doc:\/\/Chat\/SH"
+        "doc:\/\/Chat\/SH",
+        "doc:\/\/Chat\/s8SendableP"
       ],
       "kind" : "relationships",
       "title" : "Conforms To",
@@ -488,6 +489,11 @@
   "title" : "SignalingState.unknown",
   "type" : "topic",
   "url" : "\/documentation\/chat\/signalingstate\/unknown"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

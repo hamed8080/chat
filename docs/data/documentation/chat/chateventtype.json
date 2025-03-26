@@ -72,6 +72,16 @@
       "kind" : "declarations"
     }
   ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/s8SendableP"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
   "schemaVersion" : {
     "major" : 0,
     "minor" : 3,
@@ -90,7 +100,6 @@
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/call(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/contact(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/download(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/map(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/message(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/participant(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/reaction(_:)",
@@ -357,44 +366,6 @@
   "title" : "ChatEventType.download(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype\/download(_:)"
-},
-"doc://Chat/documentation/Chat/ChatEventType/map(_:)": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "case"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "map"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat13MapEventTypesO",
-      "text" : "MapEventTypes"
-    },
-    {
-      "kind" : "text",
-      "text" : ")"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/map(_:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "ChatEventType.map(_:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chateventtype\/map(_:)"
 },
 "doc://Chat/documentation/Chat/ChatEventType/message(_:)": {
   "abstract" : [
@@ -699,6 +670,11 @@
   "title" : "ChatEventType.user(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype\/user(_:)"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

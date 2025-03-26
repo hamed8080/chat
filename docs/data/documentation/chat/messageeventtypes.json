@@ -72,6 +72,16 @@
       "kind" : "declarations"
     }
   ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/s8SendableP"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
   "schemaVersion" : {
     "major" : 0,
     "minor" : 3,
@@ -91,6 +101,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/deliveredToParticipants(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/edited(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/export(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/forward(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/history(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messages(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/new(_:)",
@@ -453,6 +464,53 @@
   "title" : "MessageEventTypes.export(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/messageeventtypes\/export(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/forward(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "forward"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/forward(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.forward(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/forward(_:)"
 },
 "doc://Chat/documentation/Chat/MessageEventTypes/history(_:)": {
   "abstract" : [
@@ -1026,6 +1084,11 @@
   "title" : "MessageEventTypes.unpin(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/messageeventtypes\/unpin(_:)"
+},
+"doc://Chat/s8SendableP": {
+  "identifier" : "doc:\/\/Chat\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

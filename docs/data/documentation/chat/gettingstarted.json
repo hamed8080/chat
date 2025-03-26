@@ -152,7 +152,7 @@
         },
         {
           "code" : [
-            "final class ChatDelegateImplementation: ChatDelegate  {",
+            "final class ChatDelegateImplementation: ChatDelegate {",
             "    func chatState(state: ChatState, currentUser: User?, error _: ChatError?) {",
             "        print(\"chat status: \\(state)\")",
             "    }",
@@ -229,6 +229,129 @@
           "name" : "Tip",
           "style" : "tip",
           "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Chat SDK requests and responses are designed to be value types, so when you pass them around, be careful about the mutations you have made to instances you received from the SDK.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Tip",
+          "style" : "tip",
+          "type" : "aside"
+        },
+        {
+          "anchor" : "Swift-6-and-Concurrency",
+          "level" : 2,
+          "text" : "Swift 6 and Concurrency",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Chat SDK version 3.0.0 is designed to work closely with Swift concurrency, so there is a learning curve when getting started with the new version.",
+              "type" : "text"
+            },
+            {
+              "text" : " ",
+              "type" : "text"
+            },
+            {
+              "text" : "Firstly, you cannot directly touch the Chat SDK or Async SDK classes because they are built from the ground up with a specific Swift Actor.",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To call a method, you must explicitly switch to the Chat SDK context using ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : ". The code below demonstrates how to retrieve a list of conversations:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Task { @ChatGlobalActor in",
+            "    ChatManager.activeInstance?.conversation.get(req)",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Do not mark the class or method with ",
+                  "type" : "text"
+                },
+                {
+                  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+                  "isActive" : true,
+                  "type" : "reference"
+                },
+                {
+                  "text" : " if it performs a heavy task or operation.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Warning",
+          "style" : "warning",
+          "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Chat SDK is not bound to the MainActor. However, in the ChatCache SDK (one of its dependencies), we must bind to the MainActor due to its interaction with Core Data.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "For brevity, we will show only the bare method call without wrapping the call site in a Task with @ChatGlobalActor.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Note",
+          "style" : "note",
+          "type" : "aside"
         }
       ],
       "kind" : "content"
@@ -256,6 +379,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem",
         "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
@@ -294,6 +418,37 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ChatGlobalActor": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatGlobalActor",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatGlobalActor"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatGlobalActor",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatglobalactor"
 },
 "doc://Chat/documentation/Chat/ErrorCodes": {
   "abstract" : [
@@ -392,6 +547,20 @@
   "title" : "Managing Messages",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmessages"
+},
+"doc://Chat/documentation/Chat/ManagingSystem": {
+  "abstract" : [
+    {
+      "text" : "Manage system events.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing System",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingsystem"
 },
 "doc://Chat/documentation/Chat/ManagingTags": {
   "abstract" : [
