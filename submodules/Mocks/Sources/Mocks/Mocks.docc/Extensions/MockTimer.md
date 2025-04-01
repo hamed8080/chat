@@ -1,9 +1,5 @@
 # ``Mocks/MockTimer``
 
-@Metadata {
-    @DocumentationExtension(mergeBehavior: append)
-}
-
 ## MockTimer
 
 For mocking the timer class just inject an instance of type `Additive.TimerProtocol` like code below:

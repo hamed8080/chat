@@ -32,57 +32,85 @@ public protocol CacheFileManagerProtocol: Sendable {
     /// - Parameters:
     ///   - url: The real HttpURL of the file.
     ///   - data: The data of the file to be saved.
-    /// - Returns: Throw an exception if something went wrong and saving has failed.
+    ///   - saveCompletion: Completion with url of the file on the disk, nil if something went wrong and saving has failed.
     func saveFile(url: URL, data: Data, saveCompletion: @escaping @Sendable (URL?) -> Void)
+    
+    /// Save the file asynchronously into the disk.
+    /// - Parameters:
+    ///   - url: The real HttpURL of the file.
+    ///   - data: The data of the file to be saved.
+    /// - Returns: Url of the file on the disk, nil if something went wrong and saving has failed.
     func saveFile(url: URL, data: Data) async -> URL?
 
     /// Save the file asynchronously into the disk by making an md5 hash name for the uniqueness of the path.
     /// - Parameters:
     ///   - url: The string real HttpURL string.
     ///   - data: The data of the file to be saved.
-    /// - Returns: Throw an exception if something went wrong and saving has failed.
+    ///   - saveCompletion: Completion with url of the file on the disk for a group.
     func saveFileInGroup(url: URL, data: Data, saveCompletion: @escaping @Sendable (URL?) -> Void)
+    
+    /// Save the file asynchronously into the disk by making an md5 hash name for the uniqueness of the path.
+    /// - Parameters:
+    ///   - url: The string real HttpURL string.
+    ///   - data: The data of the file to be saved.
+    /// - Returns: Url of the file for the group on the disk, nil if something went wrong and saving has failed.
     func saveFileInGroup(url: URL, data: Data) async -> URL?
 
     /// Return the data of the file if it exists. Get data of the file asynchronously on the background thread.
-    /// - Returns: Data of the file.
-    /// - Parameter url: The HttpURL of the file.
+    /// - Parameters:
+    ///   - url: The HttpURL of the file.
+    ///   - completion: Completion with url of the file on the disk.
     func getData(url: URL, completion: @escaping @Sendable (Data?) -> Void)
+    
+    /// Return the data of the file if it exists. Get data of the file asynchronously on the background thread.
+    /// - Parameters:
+    ///   - url: The HttpURL of the file.
+    /// - Returns: Data of the file, or nil if something went wrong.
     func getData(url: URL) async -> Data?
 
     /// Return the data of the file a file in group if it exists. Get data of the a file in a group asynchronously on the background thread.
-    /// - Returns: Data of the file.
-    /// - Parameter url: The HttpURL of the file.
+    /// - Parameters:
+    ///   - url: The HttpURL of the file.
+    ///   - completion: Completion with data of the file on the disk.
     func getDataInGroup(url: URL, completion: @escaping @Sendable (Data?) -> Void)
+    
+    /// Return the data of the file a file in group if it exists. Get data of the a file in a group asynchronously on the background thread.
+    /// - Parameters:
+    ///   - url: The HttpURL of the file.
+    /// - Returns: Data of the file in the group, or nil if something went wrong.
     func getDataInGroup(url: URL) async -> Data?
 
     /// Return crosspondent file url for a HttpURL.
-    /// - Parameter url: The HttpURL of the file.
+    /// - Parameters:
+    ///   - url: The HttpURL of the file.
     /// - Returns: Return the filePath on the disk.
     func filePath(url: URL) -> URL?
 
     /// Return crosspondent file url for a HttpURL.
-    /// - Parameter url: The HttpURL of the file in a group containter.
+    /// - Parameters:
+    ///   - url: The HttpURL of the file in a group containter.
     /// - Returns: Return the filePath on the disk container.
     func filePathInGroup(url: URL) -> URL?
 
     /// Delete a file at path.
-    /// - Parameter at: Path of the file or directory to delete.
+    /// - Parameters:
+    ///   - url: Path of the file or directory to delete.
     func deleteFile(at url: URL)
 
     /// Delete a folder at a path.
-    /// - Parameter url: Path to delete.
+    /// - Parameters:
+    ///   - url: Path to delete.
     func deleteFolder(url: URL)
 
     /// Check if the file exist in the path.
-    /// - Parameter url: The HttpUrl of the file.
-    /// - Parameter isDirectory: If you are checking to see if it is a directory pass this true.
+    /// - Parameters:
+    ///   - url: The HttpUrl of the file.
     /// - Returns: True if the file exist on the disk.
     func isFileExist(url: URL) -> Bool
 
     /// Check if the file exist in the container path.
-    /// - Parameter url: The HttpUrl of the file.
-    /// - Parameter isDirectory: If you are checking to see if it is a directory pass this true.
+    /// - Parameters:
+    ///   - url: The HttpUrl of the file.
     /// - Returns: True if the file exist on the disk.
     func isFileExistInGroup(url: URL) -> Bool
 

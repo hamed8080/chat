@@ -21,7 +21,7 @@ public protocol ReactionProtocol: AnyObject {
 
     /// Get list of participants and their reaction to a messsage with messageId.
     /// - Parameters:
-    ///   - uniqueId: The request that contains a messageId and offset and count.
+    ///   - request: The request that contains a messageId and offset and count.
     func get(_ request: ReactionListRequest)
 
     /// Add a reaction to a message.
