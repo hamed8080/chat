@@ -240,7 +240,7 @@ fileprivate extension HistoryStore {
     private func hasLastMessageOfTheThread(threadId: NSNumber) async -> Bool {
         guard
             let lstId = await lastMessageIn(threadId: threadId)?.id,
-            await messageWithFound(lstId as NSNumber) == true
+            await messageExist(lstId as NSNumber) == true
         else { return false }
         return true
     }
@@ -254,11 +254,11 @@ fileprivate extension HistoryStore {
         let conversationCache = await cache?.conversation
         return await conversationCache?.get(id: id)?.codable()
     }
-    
+
     @MainActor
-    private func messageWithFound(_ id: NSNumber) async -> Bool {
+    private func messageExist(_ id: NSNumber) async -> Bool {
         let messageCache = await cache?.message
-        return await messageCache?.get( id: id) == nil
+        return await messageCache?.get( id: id) != nil
     }
 
     private func offsetsAreExist(_ messages: [Message], _ startIndex: Int, _ endIndex: Int) -> Bool {

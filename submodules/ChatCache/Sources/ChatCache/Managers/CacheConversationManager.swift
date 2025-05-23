@@ -9,26 +9,6 @@ import Foundation
 import ChatModels
 
 public final class CacheConversationManager: BaseCoreDataManager<CDConversation>, @unchecked Sendable {
-    
-    public func insertConversations(model: Entity.Model, context: CacheManagedContext) async {
-        guard let threadId = model.id else { return }
-        let req = Entity.fetchRequest()
-        req.predicate = NSPredicate(format: "\(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue)
-        let entity = (try? context.fetch(req).first) ?? Entity.insertEntity(context)
-        entity.update(model)
-        
-        if model.lastMessageVO != nil {
-            try? await replaceLastMessage(model, context)
-        }
-        
-        model.participants?.forEach { participnat in
-            if let participantId = participnat.id {
-                let participantEntity = CDParticipant.findOrCreate(threadId: threadId, participantId: participantId, context: context)
-                participantEntity.update(participnat)
-                participantEntity.conversation = entity
-            }
-        }
-    }
 
     /// It will update, the last message seen when the owner of the message is not me I just saw the partner message.
     public func seen(_ seen: CacheLastSeenMessageResponse) {
