@@ -252,13 +252,13 @@ fileprivate extension HistoryStore {
     @MainActor
     private func conversationWith(_ id: NSNumber) async -> Conversation? {
         let conversationCache = await cache?.conversation
-        return await conversationCache?.get(id: id)?.codable()
+        return conversationCache?.get(id: id)?.codable()
     }
 
     @MainActor
     private func messageExist(_ id: NSNumber) async -> Bool {
         let messageCache = await cache?.message
-        return await messageCache?.get( id: id) != nil
+        return messageCache?.get( id: id) != nil
     }
 
     private func offsetsAreExist(_ messages: [Message], _ startIndex: Int, _ endIndex: Int) -> Bool {
@@ -291,7 +291,7 @@ fileprivate extension HistoryStore {
         let endIndex = (req.offset + req.count) - 1
         let req = FetchMessagesRequest(threadId: req.threadId, count: endIndex + 1)
         let messageCache = await cache?.message
-        if let (messages, totalCount) = await messageCache?.fetch(req) {
+        if let (messages, _) = messageCache?.fetch(req) {
             let reversed = Array(messages.reversed()).compactMap{$0.codable(fillConversation: false)}
             return await chunk(reversed, startIndex, endIndex)
         }
@@ -310,7 +310,7 @@ fileprivate extension HistoryStore {
     private func hasLastMessageOnOpenning(sorted: [Message]) async -> Bool {
         let threadId = sorted.last?.conversation?.id ?? sorted.last?.threadId
         let lastMessage = await lastMessageIn(threadId: threadId?.nsValue ?? -1)
-        if let threadId = threadId, let lastMessageId = lastMessage?.id {
+        if let _ = threadId, let lastMessageId = lastMessage?.id {
             return sorted.contains(where: { $0.id == lastMessageId })
         }
         return false
