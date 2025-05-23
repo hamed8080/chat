@@ -114,7 +114,7 @@ public final class Logger: @unchecked Sendable {
         req.httpBody = try? JSONEncoder().encode(log.codable)
         req.allHTTPHeaderFields = config.logServerRequestheaders
         do {
-            let (data, response) = await try urlSession.data(req)
+            let (_, response) = try await urlSession.data(req)
             if (response as? HTTPURLResponse)?.statusCode == 200 {
                 deleteLogFromCache(log: log, context: sendable.context)
             }

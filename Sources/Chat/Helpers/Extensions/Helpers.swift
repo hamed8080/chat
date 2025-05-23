@@ -130,7 +130,7 @@ extension ChatResponse<Message> {
     }
     
     func toUnreadAction(myId: Int?) -> CacheUnreadCountAction? {
-        guard var copiedMessage = result else { return nil }
+        guard let copiedMessage = result else { return nil }
         /// If we were sender of the message therfore we have seen all the messages inside the thread.
         let isMe = copiedMessage.participant?.id == myId
         return isMe ? .set(0) : .increase

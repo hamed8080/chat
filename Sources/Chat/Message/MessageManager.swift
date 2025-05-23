@@ -143,7 +143,7 @@ final class MessageManager: MessageProtocol {
     func send(_ request: SendTextMessageRequest) {
         chat.prepareToSendAsync(req: request, type: .message)
         Task {
-            await try? cache?.conversation?.replaceLastMessage(toConversation(request: request))
+            try? await cache?.conversation?.replaceLastMessage(toConversation(request: request))
         }
         cache?.textQueue?.insert(models: [request.queueOfTextMessages])
     }
@@ -246,27 +246,25 @@ final class MessageManager: MessageProtocol {
 
     func onNewMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
-        let copiedMessage = response.result
         emitEvent(.message(.new(response)))
         guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
         Task {
-            await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+            _ = await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
             /// It will insert a new message into the Message table if the sender is not me
             /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
-            await try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
+            try? await cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
         }
     }
     
     func onForwardMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
-        let copiedMessage = response.result
         emitEvent(.message(.forward(response)))
         guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
         Task {
-            await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
+            _ = await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
             /// It will insert a new message into the Message table if the sender is not me
             /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
-            await try? cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
+            try? await cache?.conversation?.replaceLastMessage(tuple.message.messageToConversation())
         }
     }
 
@@ -299,7 +297,7 @@ final class MessageManager: MessageProtocol {
         emitEvent(.thread(.lastMessageEdited(response)))
         if let thread = copied {
             Task {
-                await try? cache?.conversation?.replaceLastMessage(thread)
+                try? await cache?.conversation?.replaceLastMessage(thread)
             }
         }
     }
@@ -310,8 +308,7 @@ final class MessageManager: MessageProtocol {
         emitEvent(.thread(.lastMessageDeleted(response)))
         if let thread = copied {
             Task {
-                await
-                try? cache?.conversation?.replaceLastMessage(lastMessageToConversation(thread: thread))
+                try? await cache?.conversation?.replaceLastMessage(lastMessageToConversation(thread: thread))
             }
         }
     }

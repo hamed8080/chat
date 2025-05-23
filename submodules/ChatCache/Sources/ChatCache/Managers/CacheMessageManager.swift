@@ -167,7 +167,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         if let entity = await find(threadId, messageId) {
             if entity.ownerId != userId, entity.seen == nil {
                 let cm = CacheConversationManager(container: container, logger: logger)
-                await cm.setUnreadCount(action: .decrease, threadId: threadId)
+                 _ = cm.setUnreadCount(action: .decrease, threadId: threadId)
             }
             delete(threadId, messageId)
         }

@@ -221,7 +221,7 @@ public final class CacheConversationManager: BaseCoreDataManager<CDConversation>
     public func updateThreadsUnreadCount(_ resp: [String: Int]) {
         for (key, value) in resp {
             if let threadId = Int(key) {
-                setUnreadCount(action: .set(value), threadId: threadId)
+                _ = setUnreadCount(action: .set(value), threadId: threadId)
             }
         }
     }

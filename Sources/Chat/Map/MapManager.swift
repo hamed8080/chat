@@ -24,7 +24,7 @@ final class MapManager: MapProtocol {
         let params = DownloadManagerParameters(url: URL(string: url)!, token: chat.config.token, params: try? request.asSendableDictionary(), typeCodeIndex: request.typeCodeIndex, uniqueId: request.uniqueId)
         let session = chat.session
         let req = DownloadManager.urlRequest(params: params)
-        let (data, response) = try await session.data(req)
+        let (data, _) = try await session.data(req)
         return data
     }
     

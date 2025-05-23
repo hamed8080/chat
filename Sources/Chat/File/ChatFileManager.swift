@@ -233,7 +233,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 
     private func fetchFromCache(_ params: DownloadManagerParameters) async throws {
         guard let filePath = fm?.filePath(url: params.url),
-              let hashCode = params.hashCode,
+              let _ = params.hashCode,
               fm?.isFileExist(url: params.url) == true || fm?.isFileExistInGroup(url: params.url) == true
         else { throw URLError(.fileDoesNotExist) }
         let data = await fm?.getData(url: params.url)

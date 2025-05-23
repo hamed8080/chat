@@ -208,7 +208,7 @@ fileprivate extension ReactionsStore {
     
     func noStickerTabCacheReactions(_ request: ReactionListRequest, _ inMemoryReaction: MessageInMemoryReaction) -> ChatResponse<ReactionList>? {
         if let reactions = inMemoryReaction.containsAllOffset(request) {
-            request.toListResponse(reactions: reactions, typeCode: request.toTypeCode(chat))
+            _ = request.toListResponse(reactions: reactions, typeCode: request.toTypeCode(chat))
         }
         return nil
     }
