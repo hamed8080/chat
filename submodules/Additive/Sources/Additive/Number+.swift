@@ -12,6 +12,7 @@ extension UInt: Arritmatic {}
 extension Float: Arritmatic {}
 extension Double: Arritmatic {
     static let unit: [String] = { ["General.KB", "General.MB", "General.GB"] }()
+    static let shorUnits: [String] = { ["KB", "MB", "GB"] }()
 }
 
 nonisolated(unsafe) private var nf = NumberFormatter()
@@ -49,6 +50,25 @@ public extension Numeric {
             return nil
         }
     }
+    
+    func toSizeStringShort(locale: Locale = .current) -> String? {
+        if let number = self as? NSNumber {
+            let value = Double(truncating: number)
+            if value < 1024 { 
+                let localizedNumber = value.localNumber(locale: locale) ?? ""
+                return "\(localizedNumber) B"
+            }
+            let exp = Int(log2(value) / log2(1024.0))
+            let unitIndex = max(0, exp - 1)
+            let unit: String
+            unit = Double.shorUnits[unitIndex]
+            let number = value / pow(1024, Double(exp))
+            let localizedNumber = number.localNumber(locale: locale, maximumFractionDigit: 1) ?? ""
+            return "\(localizedNumber) \(unit)"
+        } else {
+            return nil
+        }
+    }
 
     func timerString(locale: Locale = .current) -> String? {
         guard let seconds = self as? NSNumber else { return nil }
@@ -68,9 +88,10 @@ public extension Numeric {
         return dateFormatterComp.string(from: TimeInterval(Int(truncating: seconds)))
     }
 
-    func localNumber(locale: Locale = .current) -> String? {
+    func localNumber(locale: Locale = .current, maximumFractionDigit: Int = 0) -> String? {
         guard let nsNumber = self as? NSNumber else { return nil }
         nf.locale = locale
+        nf.maximumFractionDigits = maximumFractionDigit
         return nf.string(from: nsNumber)
     }
 }
