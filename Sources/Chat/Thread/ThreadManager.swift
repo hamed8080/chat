@@ -301,6 +301,12 @@ final class ThreadManager: ThreadProtocol {
         }
     }
 
+    /// Create thread and Send a text message.
+    func onForwardMessage(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        chat.coordinator.conversation.onNewMessage(response.result)
+    }
+    
     func close(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .closeThread)
     }

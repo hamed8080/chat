@@ -307,6 +307,8 @@ internal final class ThreadsStore: ThreadStoreProtocol {
             if contains(conversationId), let index = indexOf(conversationId) {
                 conversations[index].conversation?.lastMessageVO = message.toLastMessageVO
                 conversations[index].conversation?.lastMessage = message.message
+                conversations[index].conversation?.time = message.conversation?.time
+                sort()
             } else {
                 // Insert empty slot at the top
                 appendAndSortIntoInMemory(conversations: [.init(id: conversationId)])
