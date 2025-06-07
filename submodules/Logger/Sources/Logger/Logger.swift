@@ -7,6 +7,9 @@
 import Additive
 import CoreData
 import Foundation
+#if canImport(OSLog)
+import OSLog
+#endif
 
 public final class Logger: @unchecked Sendable {
     public weak var delegate: LogDelegate?
@@ -14,6 +17,9 @@ public final class Logger: @unchecked Sendable {
     private var timer: TimerProtocol
     private var urlSession: URLSessionProtocol
     internal let persistentManager = PersistentManager()
+    
+    /// Persistent manager only for all logs.
+    nonisolated(unsafe) private static var pms: [String: PersistentManager] = [:]
 
     public init(config: LoggerConfig, delegate: LogDelegate? = nil, timer: TimerProtocol = Timer(), urlSession: URLSessionProtocol = URLSession.shared) {
         self.config = config
@@ -78,9 +84,20 @@ public final class Logger: @unchecked Sendable {
             userInfo: userInfo
         )
         delegate?.onLog(log: log)
-        if persist, config.persistLogsOnServer {
+#if canImport(OSLog)
+        if config.isDebuggingLogEnabled {
+            if #available(iOS 14.0, *) {
+                let logger = os.Logger(subsystem: config.prefix, category: config.prefix)
+                logger.info("\(message)")
+            }
+        }
+#endif
+        /// Persist it in CDLog entity, whether send it to the server or not.
+        if persist {
             addLogToCache(log)
-            if !timer.isValid {
+            
+            /// We don't send new request if there is an active timer or valid timer.
+            if config.persistLogsOnServer, !timer.isValid {
                 startSending()
             }
         }
@@ -99,14 +116,14 @@ public final class Logger: @unchecked Sendable {
         if let bgTask = self.persistentManager.newBgTask, timer.isValid {
             let log = await CDLog.firstLog(self, bgTask)
             if let log = log {
-                await sendLog(log: log, context: bgTask)
+                await sendToLogServer(log: log, context: bgTask)
             } else {
                 timer.invalidateTimer()
             }
         }
     }
 
-    private func sendLog(log: CDLog, context: NSManagedObjectContext) async {
+    private func sendToLogServer(log: CDLog, context: NSManagedObjectContext) async {
         let sendable = context.sendable
         guard let url = URL(string: config.spec.server.log) else { return }
         var req = URLRequest(url: url)
@@ -133,7 +150,6 @@ public final class Logger: @unchecked Sendable {
         }
     }
 
-    
     private func addLogToCache(_ log: Log) {
         Task { @MainActor in
             guard let context = persistentManager.context else { return }
@@ -147,5 +163,31 @@ public final class Logger: @unchecked Sendable {
 
     public func dispose() {
         timer.invalidateTimer()
+    }
+    
+    public class func allLogs(completion: @escaping ([Log]) -> Void) {
+        let uniqueId = UUID().uuidString
+        let pm = PersistentManager(autoLoadContainer: false)
+        pms[uniqueId] = pm
+        try? pm.loadContainer { _ in
+            guard let context = pm.context else { return }
+            CDLog.logs(context) { logs in
+                completion(logs)
+                pms.removeValue(forKey: uniqueId)
+            }
+        }
+    }
+    
+    public static func allLogs(fromTime: Date, completion: @escaping ([Log]) -> Void) {
+        let uniqueId = UUID().uuidString
+        let pm = PersistentManager(autoLoadContainer: false)
+        pms[uniqueId] = pm
+        try? pm.loadContainer { _ in
+            guard let context = pm.context else { return }
+            CDLog.allLogs(fromTime, context) { logs in
+                completion(logs)
+                pms.removeValue(forKey: uniqueId)
+            }
+        }
     }
 }

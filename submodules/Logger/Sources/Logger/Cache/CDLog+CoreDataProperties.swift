@@ -106,4 +106,26 @@ public extension CDLog {
             completion?()
         }
     }
+    
+    class func logs(_ context: NSManagedObjectContext, _ completion: @escaping ([Log]) -> Void) {
+        context.perform {
+            let req = CDLog.fetchRequest()
+            let sortByTime = NSSortDescriptor(key: "time", ascending: true)
+            req.sortDescriptors = [sortByTime]
+            let result = (try? context.fetch(req).compactMap({$0.codable})) ?? []
+            completion(result)
+        }
+    }
+    
+    class func allLogs(_ fromTime: Date, _ context: NSManagedObjectContext, _ completion: @escaping ([Log]) -> Void) {
+        context.perform {
+            let req = CDLog.fetchRequest()
+            let fromTimeNumber = NSNumber(value: fromTime.timeIntervalSince1970)
+            req.predicate = NSPredicate(format: "time > %@", fromTimeNumber)
+            let sortByTime = NSSortDescriptor(key: "time", ascending: true)
+            req.sortDescriptors = [sortByTime]
+            let result = (try? context.fetch(req).compactMap({$0.codable})) ?? []
+            completion(result)
+        }
+    }
 }

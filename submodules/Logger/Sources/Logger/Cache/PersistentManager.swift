@@ -11,9 +11,11 @@ public final class PersistentManager {
     let baseModelFileName = "Logger"
     var container: NSPersistentContainer?
 
-    init() {
+    init(autoLoadContainer: Bool = true) {
         do {
-            try loadContainer()
+            if autoLoadContainer {
+                try loadContainer()
+            }
         } catch {
 #if DEBUG
             print(error)
@@ -52,6 +54,22 @@ public final class PersistentManager {
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
         self.container = container
+    }
+    
+    func loadContainer(completion: @escaping ((Error?) -> Void)) throws {
+        let container = NSPersistentContainer(name: "\(baseModelFileName)", managedObjectModel: try modelFile())
+        self.container = container
+        container.loadPersistentStores { desc, error in
+            if let error = error {
+#if DEBUG
+                print("error load CoreData persistentstore des:\(desc) error: \(error)")
+                completion(error)
+#endif
+            } else {
+                completion(nil)
+            }
+        }
+        container.viewContext.automaticallyMergesChangesFromParent = true
     }
 
     func delete() throws {
