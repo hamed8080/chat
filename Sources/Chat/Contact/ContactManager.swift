@@ -135,8 +135,14 @@ final class ContactManager: ContactProtocol {
     }
 
     func onContactNotSeen(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[ContactNotSeenDurationRespoonse]> = asyncMessage.toChatResponse()
-        emitEvent(.contact(.notSeen(response)))
+        var arr: ChatResponse<[ContactNotSeenDurationRespoonse]> = asyncMessage.toChatResponse()
+        if arr.result == nil {
+            let singleResponse: ChatResponse<ContactNotSeenDurationRespoonse> = asyncMessage.toChatResponse()
+            if let singleResult = singleResponse.result {
+                arr.result = [singleResult]
+            }
+        }
+        emitEvent(.contact(.notSeen(arr)))
     }
 
     func getBlockedList(_ request: BlockedListRequest) {
