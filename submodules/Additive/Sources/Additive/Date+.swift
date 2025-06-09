@@ -14,6 +14,7 @@ public extension Date {
         let formatter = Date.formatter
         formatter.dateStyle = .none
         formatter.timeStyle = .short
+        formatter.dateFormat = "HH:mm"
         formatter.locale = Locale(identifier: localIdentifire)
         if let withAbbrevation = withAbbrevation {
             formatter.timeZone = .init(abbreviation: withAbbrevation)
