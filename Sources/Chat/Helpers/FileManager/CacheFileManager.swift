@@ -230,3 +230,74 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
 #endif
     }
 }
+
+/// Resumeable upload/download folder
+extension CacheFileManager {
+    public func saveFile(url: URL, tempDownloadFileURL: URL) async -> URL? {
+        typealias Result = CheckedContinuation<URL?, Never>
+        return await withCheckedContinuation { [weak self] (continuation: Result) in
+            self?.saveFile(url: url, tempDownloadFileURL: tempDownloadFileURL) { url in
+                continuation.resume(with: .success(url))
+            }
+        }
+    }
+    
+    public func saveFile(url: URL, tempDownloadFileURL: URL, saveCompletion: @escaping @Sendable (URL?) -> Void) {
+        queue.asyncWork { [weak self] in
+            guard let self = self else { return }
+            guard let filePath = filePath(url: url) else {
+                saveCompletion(nil)
+                log("File URL was nil for url: \(url.absoluteString)")
+                return
+            }
+            createDirectory()
+            do {
+                try (fm as? FileManager)?.moveItem(at: tempDownloadFileURL, to: filePath)
+                saveCompletion(filePath)
+                log("File Saved at: \(filePath.absoluteString) for url: \(url.absoluteString)")
+            } catch {
+                log("Error saving the file at file path: \(filePath.absoluteString) for url: \(url.absoluteString) error: \(error.localizedDescription)")
+                saveCompletion(nil)
+            }
+        }
+    }
+    
+    public func storeInResumeableFolder(_ resumeData: Data, _ hashCode: String) throws {
+        if let resumableFilePath = resumeableFilePaht(hashCode: hashCode) {
+            /// Create resumable directory
+            try createResumeableDirectory()
+            
+            /// Write resumable to the disk
+            try resumeData.write(to: resumableFilePath)
+        }
+    }
+    
+    public func resumeableData(for hashCode: String) -> Data? {
+        if let resumableFilePath = resumeableFilePaht(hashCode: hashCode) {
+            return try? Data(contentsOf: resumableFilePath)
+        }
+        return nil
+    }
+    
+    public func deleteResumeDataFile(hashCode: String) throws {
+        if let resumableFilePath = resumeableFilePaht(hashCode: hashCode) {
+            try fm.removeItem(at: resumableFilePath)
+        }
+    }
+    
+    private func resumeableFilePaht(hashCode: String) -> URL? {
+        let resumableFilePath = resumeableDIR?.appendingPathComponent(hashCode)
+        return resumableFilePath
+    }
+    
+    private func createResumeableDirectory() throws {
+        if let resumableDIR = resumeableDIR {
+            try fm.createDirectory(at: resumableDIR, withIntermediateDirectories: true, attributes: nil)
+        }
+    }
+    
+    private var resumeableDIR: URL? {
+        let docDIR = fm.urls(for: .documentDirectory, in: .userDomainMask).first
+        return docDIR?.appendingPathComponent("resumable", isDirectory: true)
+    }
+}

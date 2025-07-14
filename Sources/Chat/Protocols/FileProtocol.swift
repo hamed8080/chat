@@ -67,6 +67,12 @@ public protocol FileProtocol: AnyObject {
 
     /// Save a file inside a shared group.
     func saveFileInGroup(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void)
+    
+    
+    func download(_ request: FileRequest) throws 
+    func pauseResumableDownload(uniqueId: String) async throws
+    func resumeDownload(uniqueId: String) throws
+    func cancel(hashCode: String) throws
 }
 
 @ChatGlobalActor

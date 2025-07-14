@@ -14,8 +14,9 @@ import ChatModels
 import ChatTransceiver
 import Foundation
 
-final class ChatFileManager: FileProtocol, InternalFileProtocol {
+final class ChatFileManager: NSObject, FileProtocol, InternalFileProtocol {
     let chat: ChatInternalProtocol
+    private var resumableDownlaods: [Int: ResumeableModel] = [:]
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
     typealias SessionAndTask = (session: URLSession, task: URLSessionDataTaskProtocol?)
@@ -417,5 +418,142 @@ extension ChatFileManager {
             return ChatResponse(uniqueId: uniqueId, error: error, typeCode: typeCode)
         }
         return nil
+    }
+}
+
+/// Download Methods
+extension ChatFileManager {
+    func download(_ request: FileRequest) throws {
+        let params = DownloadManagerParameters(request, chat.config, fm)
+        if let resumeData = fm?.resumeableData(for: params.hashCode ?? "") {
+            try? resumeAtStartDownloading(params: params)
+            return
+        }
+        let req = DownloadManager.urlRequest(params: params)
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+        let task = session.downloadTask(with: req)
+        resumableDownlaods[task.taskIdentifier] = .init(task: task, params: params)
+        task.resume()
+    }
+    
+    /// The function ``cancelByProducingResumeData`` will produce a Data object where not only it contains
+    /// real file content, but also it will attach Etag, bytes-ranges and other fields.
+    /// You can not mix this data with the end data file content, that's the reason why they call it a **produce** function.
+    /// - Parameter uniqueId: Pause a download and stores resumeData if possible
+    func pauseResumableDownload(uniqueId: String) async throws {
+        guard let model = model(for: uniqueId), let resumeData = await model.task.cancelByProducingResumeData() else {
+            throw NSError(domain: "Pausing download has failed", code: 0)
+        }
+
+        /// Store the resumeData inside the resumeable directory with hashCode.
+        try fm?.storeInResumeableFolder(resumeData, model.params.hashCode ?? "")
+        
+        /// Notify that the download has been paused.
+        delegate?.chatEvent(event: .download(.suspended(uniqueId: uniqueId)))
+    }
+    
+    func resumeDownload(uniqueId: String) throws {
+        guard let model = model(for: uniqueId),
+              let resumeData = fm?.resumeableData(for: model.params.hashCode ?? "")
+        else {
+            throw NSError(domain: "Failed to find the task to resume with uniqueId: \(uniqueId)", code: 0)
+        }
+        
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+        let newResumeTask = session.downloadTask(withResumeData: resumeData)
+        resumableDownlaods[newResumeTask.taskIdentifier] = .init(task: newResumeTask, params: model.params)
+        newResumeTask.resume()
+        delegate?.chatEvent(event: .download(.resumed(uniqueId: uniqueId)))
+    }
+    
+    func resumeAtStartDownloading(params: DownloadManagerParameters) throws {
+        guard let resumeData = fm?.resumeableData(for: params.hashCode ?? "") else {
+            throw NSError(domain: "Failed to find a resumeData file with hashCode: \(params.hashCode ?? "")", code: 0)
+        }
+        
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+        let newResumeTask = session.downloadTask(withResumeData: resumeData)
+        resumableDownlaods[newResumeTask.taskIdentifier] = .init(task: newResumeTask, params: params)
+        newResumeTask.resume()
+        delegate?.chatEvent(event: .download(.resumed(uniqueId: params.uniqueId)))
+    }
+    
+    func cancel(hashCode: String) throws {
+        guard let model = model(for: hashCode) else { return }
+        try fm?.deleteResumeDataFile(hashCode: hashCode)
+    }
+}
+
+/// Resumeable Download Tasks delegate
+extension ChatFileManager: URLSessionDownloadDelegate {
+    
+    struct ResumeableModel {
+        let task: URLSessionDownloadTask
+        let params: DownloadManagerParameters
+    }
+    
+    nonisolated func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        /// Move the tmpe file before moving to the Task
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let newLocation = documentsDirectory.appendingPathComponent(UUID().uuidString)
+        try? FileManager.default.moveItem(at: location, to: newLocation)
+        
+        Task { @ChatGlobalActor in
+            if let model = model(for: downloadTask.taskIdentifier), !model.params.thumbnail {
+                let params = model.params
+                
+                /// Store it in Core data.
+                let file = File(hashCode: params.hashCode ?? "", headers: params.headers)
+                cache?.file?.insert(models: [file])
+                
+                /// Store and move it permanently inside documents folder.
+                guard let filePath = await fm?.saveFile(url: params.url, tempDownloadFileURL: newLocation) else { return }
+                
+                /// Create a response with file path on the disk, and notify the delegate.
+                let response = ChatResponse(uniqueId: params.uniqueId, result: filePath, typeCode: nil)
+                delegate?.chatEvent(event: .download(params.isImage ? .downloadImage(response) : .downloadFile(response)))
+                
+                /// Clean up the reference.
+                resumableDownlaods.removeValue(forKey: model.task.taskIdentifier)
+                
+                /// Delete the resumeData file if there is any.
+                try? fm?.deleteResumeDataFile(hashCode: params.hashCode ?? "")
+            }
+        }
+    }
+    
+    nonisolated func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
+        Task { @ChatGlobalActor in
+            guard let error = error as? URLError else {
+                log("Download cannot be resumed: no resume data available or task not found.")
+                return
+            }
+            // Handle errors specific to URL loading
+            if let resumeData = error.downloadTaskResumeData {
+                try? fm?.storeInResumeableFolder(resumeData, resumableDownlaods[task.taskIdentifier]?.params.hashCode ?? "")
+                log("Resumable download data saved for task ID \(task.taskIdentifier)")
+            }
+        }
+    }
+    
+    nonisolated func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        Task { @ChatGlobalActor in
+            guard let model = model(for: downloadTask.taskIdentifier) else {
+                log("Could not find the task \(downloadTask.taskIdentifier)")
+                return
+            }
+            let percent = (Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)) * 100
+            let progress = DownloadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToWrite, bytesRecivied: bytesWritten)
+            print("Resumable download progress in file manager progress: \(percent)")
+            delegate?.chatEvent(event: .download(.progress(uniqueId: model.params.uniqueId, progress: progress)))
+        }
+    }
+    
+    private func model(for taskIdentifier: Int) -> ResumeableModel? {
+        resumableDownlaods.first(where: {$0.key == taskIdentifier})?.value
+    }
+    
+    private func model(for uniqueId: String) -> ResumeableModel? {
+        resumableDownlaods.first(where: {$0.value.params.uniqueId == uniqueId})?.value
     }
 }
