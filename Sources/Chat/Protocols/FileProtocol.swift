@@ -68,10 +68,22 @@ public protocol FileProtocol: AnyObject {
     /// Save a file inside a shared group.
     func saveFileInGroup(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void)
     
+    /// Resumable downloader.
+    /// - Parameter request: A request that contains hashcode of a flag to either download from the server or fetch it from the local disk cache.
+    ///
+    /// It will automatically resume the download if there is a buffer of the file on the disk.
+    func download(_ request: FileRequest) throws
     
-    func download(_ request: FileRequest) throws 
-    func pauseResumableDownload(uniqueId: String) async throws
-    func resumeDownload(uniqueId: String) throws
+    /// Pause a resumable download.
+    /// - Parameter hashCode: HashCode of the FileRequest you send to the download method ``FileReqeust.hashCode``.
+    func pauseResumableDownload(hashCode: String) throws
+    
+    /// Resume an pauesed download.
+    /// - Parameter hashCode: HashCode that you pass to the ``download`` method ``FileReqeust.hashCode``.
+    func resumeDownload(hashCode: String) throws
+    
+    /// Cancel a resumable download file.
+    /// - Parameter hashCode: Hashcode that you pass to the ``download`` method ``FileReqeust.hashCode``.
     func cancel(hashCode: String) throws
 }
 

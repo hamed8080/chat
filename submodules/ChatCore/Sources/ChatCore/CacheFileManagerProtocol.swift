@@ -49,11 +49,9 @@ public protocol CacheFileManagerProtocol: Sendable {
     /// - Returns: Moved file disk url like: /Talk/documents/myfile.jpg
     func saveFile(url: URL, tempDownloadFileURL: URL) async -> URL?
     
-    func storeInResumeableFolder(_ resumeData: Data, _ hashCode: String) throws
-    
     func deleteResumeDataFile(hashCode: String) throws
     
-    func resumeableData(for: String) -> Data?
+    func resumableData(for: String) -> Data?
 
     /// Save the file asynchronously into the disk by making an md5 hash name for the uniqueness of the path.
     /// - Parameters:
