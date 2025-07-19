@@ -52,6 +52,8 @@ public protocol CacheFileManagerProtocol: Sendable {
     func deleteResumeDataFile(hashCode: String) throws
     
     func resumableData(for: String) -> Data?
+    
+    func moveAndSave(url: URL, fromPath: URL, saveCompletion: @escaping @Sendable (URL?) -> Void)
 
     /// Save the file asynchronously into the disk by making an md5 hash name for the uniqueness of the path.
     /// - Parameters:

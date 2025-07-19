@@ -63,6 +63,12 @@ open class MockURLSession: @preconcurrency URLSessionProtocol {
         self.uploadCompleitonHandler = completion
         return nextDataTask
     }
+    
+    public func uploadTask(_ request: URLRequest, _ filePath: URL, _ completion: @escaping UploadCompletionType) -> URLSessionDataTaskProtocol {
+        self.request = request
+        self.uploadCompleitonHandler = completion
+        return nextDataTask
+    }
 
     public func callDownloadResponse(lenght: Int = 2048) {
         let response = HTTPURLResponse(url: URL(string: "www.test.com")!, mimeType: nil, expectedContentLength: lenght, textEncodingName: nil)

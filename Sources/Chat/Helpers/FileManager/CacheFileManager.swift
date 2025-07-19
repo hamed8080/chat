@@ -288,3 +288,19 @@ extension CacheFileManager {
         return docDIR?.appendingPathComponent("resumable", isDirectory: true) ?? FileManager.default.temporaryDirectory
     }
 }
+
+extension CacheFileManager {
+    public func moveAndSave(url: URL, fromPath: URL, saveCompletion: @escaping @Sendable (URL?) -> Void) {
+        queue.asyncWork { [weak self] in
+            guard let self = self, let newDiskFilePath = filePath(url: url) else { return }
+            do {
+                try FileManager.default.moveItem(atPath: fromPath.path, toPath: newDiskFilePath.path)
+                try FileManager.default.removeItem(at: fromPath)
+                saveCompletion(newDiskFilePath)
+            } catch {
+                log("Error moving the file from: \(fromPath.absoluteString) to url: \(newDiskFilePath.absoluteString) error: \(error.localizedDescription)")
+                saveCompletion(nil)
+            }
+        }
+    }
+}

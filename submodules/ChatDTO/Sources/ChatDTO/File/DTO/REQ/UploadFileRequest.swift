@@ -14,7 +14,7 @@ import Foundation
 
 public struct UploadFileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var data: Data
-    public var url: URL?
+    public var filePath: URL?
     public var fileExtension: String?
     public var fileName: String = ""
     public var fileSize: Int64 = 0
@@ -40,7 +40,7 @@ public struct UploadFileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
     )
     {
         self.data = data
-        self.url = nil
+        self.filePath = nil
         self.fileExtension = fileExtension
         let fileName = fileName ?? "\(NSUUID().uuidString)"
         self.fileName = fileName
@@ -54,7 +54,8 @@ public struct UploadFileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
         self.typeCodeIndex = typeCodeIndex
     }
     
-    public init(url: URL,
+    public init(filePath: URL,
+                fileSize: Int64,
                 fileExtension: String? = nil,
                 fileName: String? = nil,
                 description: String? = nil,
@@ -66,11 +67,11 @@ public struct UploadFileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
     )
     {
         self.data = Data()
-        self.url = url
+        self.filePath = filePath
         self.fileExtension = fileExtension
         let fileName = fileName ?? "\(NSUUID().uuidString)"
         self.fileName = fileName
-        fileSize = Int64(data.count)
+        self.fileSize = fileSize
         self.mimeType = mimeType ?? UploadFileRequest.guessMimeType(fileExtension, fileName)
         self.userGroupHash = userGroupHash
         self.originalName = originalName ?? fileName + (fileExtension ?? "")

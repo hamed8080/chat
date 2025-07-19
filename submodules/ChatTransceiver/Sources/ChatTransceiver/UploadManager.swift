@@ -27,6 +27,20 @@ public final class UploadManager {
         uploadTask.resume()
         return uploadTask
     }
+    
+    public func upload(_ req: UploadManagerParameters, _ filePath: URL, _ urlSession: URLSessionProtocol, completion: @escaping @Sendable Additive.URLSessionProtocol.UploadCompletionType) -> URLSessionDataTaskProtocol? {
+        let boundary = "Boundary-\(UUID().uuidString)"
+        let multipartFile = try? MultiPartFileStreamURL(filePath: filePath, boundary: boundary, fieldName: "file", mimeType: req.mimeType ?? "")
+        guard let streamURL = multipartFile?.createMultipartFile() else { return nil }
+        var request = URLRequest(url: URL(string: req.url)!)
+        req.headers.forEach { request.addValue($1, forHTTPHeaderField: $0) }
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        let uploadTask = urlSession.uploadTask(request, streamURL, completion)
+        uploadTask.resume()
+        return uploadTask
+    }
 
     private func multipartFormDatas(_ req: UploadManagerParameters, _ data: Data, boundary: String) -> NSMutableData {
         let httpBody = NSMutableData()
