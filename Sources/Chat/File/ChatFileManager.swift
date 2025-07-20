@@ -51,8 +51,8 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     internal func upload(_ request: UploadFileRequest, _ progress: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
         let url = url(fileRequest: request, fileServer: chat.config.spec.server.file)
         let params = UploadManagerParameters(url: url, request, token: chat.config.token)
-        if let filePath = request.filePath {
-            upload(params, filePath, progress, completion)
+        if request.filePath != nil {
+            upload(params, progress, completion)
         } else {
             upload(params, request.data, progress, completion)
         }
@@ -85,7 +85,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         addTask(uniqueId: req.uniqueId, session: session, task: task)
     }
     
-    private func upload(_ req: UploadManagerParameters, _ filePath: URL, _ progressCompletion: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
+    private func upload(_ req: UploadManagerParameters, _ progressCompletion: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
         let uploadProgress: UploadProgressType = { [weak self] progress in
             Task {
                 await self?.onUploadProgress(progress, req, progressCompletion)
@@ -93,12 +93,16 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         }
         let delegate = ProgressImplementation(uniqueId: req.uniqueId, uploadProgress: uploadProgress)
         let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
-        let task = UploadManager().upload(req, filePath, session) { [weak self] respData, response, error in
-            Task {
-                await self?.onUploadCompleted(req, respData, error, filePath, nil, completion)
+        
+        Task {
+            let task = await UploadManager().upload(req) { progress in
+                /// Progress completion
+            } completion: { data, response, error in
+                /// On completionWith Error
+                var i = error
             }
+//            addTask(uniqueId: req.uniqueId, session: session, task: task)
         }
-        addTask(uniqueId: req.uniqueId, session: session, task: task)
     }
     
     private func onUploadProgress(_ progress: UploadFileProgress?, _ req: UploadManagerParameters, _ progressCompletion: UploadProgressType? = nil) {

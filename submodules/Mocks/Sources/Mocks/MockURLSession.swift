@@ -19,6 +19,10 @@ public extension HTTPURLResponse {
 
 @MainActor
 open class MockURLSession: @preconcurrency URLSessionProtocol {
+    public func uploadTask(streamRequest request: URLRequest) -> URLSessionUploadTask {
+        fatalError("")
+    }
+    
     public func data(_ request: URLRequest) async throws -> (Data, URLResponse) {
         throw URLError(.badURL)
     }
