@@ -17,7 +17,7 @@ public struct GetHistoryRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
     public var count: Int
     
     /// The start time of fetching messages in milliseconds.
-    public let fromTime: UInt?
+    public var fromTime: UInt?
     
     /// The start time of fetching messages in nanoseconds.
     public let fromTimeNanos: UInt?
@@ -38,7 +38,7 @@ public struct GetHistoryRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
     public let query: String?
     
     /// The end time of fetching messages in milliseconds.
-    public let toTime: UInt?
+    public var toTime: UInt?
     
     /// Fetching messages by hashtag string.
     public let hashtag: String?
