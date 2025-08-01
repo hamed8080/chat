@@ -263,19 +263,19 @@ extension CacheFileManager {
     }
     
     public func resumableData(for hashCode: String) -> Data? {
-        if let resumableFilePath = resumableFilePaht(hashCode: hashCode) {
+        if let resumableFilePath = resumableFilePath(hashCode: hashCode) {
             return try? Data(contentsOf: resumableFilePath)
         }
         return nil
     }
     
     public func deleteResumeDataFile(hashCode: String) throws {
-        if let resumableFilePath = resumableFilePaht(hashCode: hashCode) {
+        if let resumableFilePath = resumableFilePath(hashCode: hashCode) {
             try fm.removeItem(at: resumableFilePath)
         }
     }
     
-    private func resumableFilePaht(hashCode: String) -> URL? {
+    private func resumableFilePath(hashCode: String) -> URL? {
         return resumableDIR.appendingPathComponent(hashCode)
     }
     

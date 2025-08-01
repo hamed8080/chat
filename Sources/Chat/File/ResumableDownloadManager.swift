@@ -137,8 +137,10 @@ extension ResumableDownloadManager: URLSessionDataDelegate {
     nonisolated func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
         Task { @ChatGlobalActor in
             guard let model = model(taskIdentifier: task.taskIdentifier) else { return }
-            if let error = error as? URLError, let resumeData = error.downloadTaskResumeData {
-                log("Resumable download data saved for task ID \(task.taskIdentifier)")
+            if let error = error as? URLError {
+                log("Resumable download failed with taskId: \(task.taskIdentifier) with error: \(error.localizedDescription)")
+                let error = ChatError(rawError: error)
+                delegate?.chatEvent(event: .download(.failed(uniqueId: model.params.uniqueId, error: error)))
             } else if !model.params.thumbnail {
                 /// Handle download completion without any error.
                 model.outputsStream?.close()
