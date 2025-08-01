@@ -483,4 +483,8 @@ extension ChatFileManager {
     func cancel(hashCode: String) throws {
         try resumableDownlaodManager.cancel(hashCode: hashCode)
     }
+    
+    func deleteResumableFile(hashCode: String) throws {
+        try fm?.deleteResumeDataFile(hashCode: hashCode)
+    }
 }

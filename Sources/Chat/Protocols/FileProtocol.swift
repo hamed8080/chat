@@ -85,6 +85,11 @@ public protocol FileProtocol: AnyObject {
     /// Cancel a resumable download file.
     /// - Parameter hashCode: Hashcode that you pass to the ``download`` method ``FileReqeust.hashCode``.
     func cancel(hashCode: String) throws
+    
+    
+    /// Delete cached resumable file from the disk.
+    /// - Parameter hashCode: HashCode that you have passed druing the download process.
+    func deleteResumableFile(hashCode: String) throws
 }
 
 @ChatGlobalActor
