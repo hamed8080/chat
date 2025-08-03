@@ -64,8 +64,8 @@ class MultiPartFileStreamURL {
     /// Initiates the file upload to the specified URL.
     /// - Parameters:
     ///   - params: Parameters to upload a file like mimetype, file size,...
-    func upload() {
-        guard let uploadURL = URL(string: params.url) else { return }
+    func upload() -> (URLSessionUploadTask, URLSession)? {
+        guard let uploadURL = URL(string: params.url) else { return nil }
         
         var req = URLRequest(url: uploadURL)
         req.httpMethod = "POST"
@@ -76,10 +76,12 @@ class MultiPartFileStreamURL {
         // Add any extra headers provided by the caller.
         params.headers.forEach { req.setValue($1, forHTTPHeaderField: $0) }
     
-        // Create and resume the upload task with streamed request.
+        // Create an task the upload task with streamed request.
         // This tells URLSession to ask the delegate for an InputStream for the body.
         let task = session?.uploadTask(withStreamedRequest: req)
         task?.resume()
+        guard let session = session, let task = task else { return nil }
+        return (task, session)
     }
     
     // MARK: - Actor-internal mutation from delegate (called by SessionDelegate)
@@ -118,6 +120,15 @@ class MultiPartFileStreamURL {
     class func footer(boundary: String) -> Data {
         Data("\r\n--\(boundary)--\r\n".utf8)
     }
+    
+    func cancel() {
+        if let delegate = session?.delegate as? SessionDelegate {
+            delegate.task?.cancel()
+        }
+        session?.invalidateAndCancel()
+        session = nil
+        strongSelf = nil
+    }
 }
 
 /// A pure ObjC-compatible delegate for URLSession that manages the streamed multipart body.
@@ -133,6 +144,7 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
     private let headerData: Data
     private let footerData: Data
     private let fileURL: URL
+    public var task: Task<Void, Never>?
     
     // Stream management properties.
     private var currentOffset: Int = 0      // Current offset in the file for reading.
@@ -183,9 +195,10 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
         completionHandler(inStream)
         
         // Start writing data to the outputStream in a background Task.
-        Task {
+        let task = Task {
             await writeAllStreams(outStream)
         }
+        self.task = task
     }
     
     private func writeAllStreams(_ outStream: OutputStream) async {
@@ -257,12 +270,22 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
         try fh.seek(toOffset: UInt64(currentOffset))
         
         while true {
+            // ⛔️ Check for cancellation before proceeding
+            if Task.isCancelled {
+                throw CancellationError()
+            }
+            
             // Crucial for flow control: wait until the output stream has space available.
             // This prevents overwhelming the stream's buffer and ensures data is written
             // only when URLSession is ready to consume it.
             while !outStream.hasSpaceAvailable {
+                if Task.isCancelled {
+                    throw CancellationError()
+                }
+                
                 // Yield the task to allow other tasks (including URLSession's reading) to run.
                 await Task.yield()
+                try? await Task.sleep(nanoseconds: 1_000_000) // 1ms
             }
             
             // Safely unwrap the optional Data returned by read(upToCount:).
@@ -295,9 +318,17 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
         guard let base = rawBuf.baseAddress else { return false }
         
         while offset < data.count {
+            if Task.isCancelled {
+                return false
+            }
+            
             // Again, check for space available before attempting to write.
             while !outStream.hasSpaceAvailable {
+                if Task.isCancelled {
+                    return false
+                }
                 await Task.yield()
+                try? await Task.sleep(nanoseconds: 1_000_000) // 1ms
             }
             let written = outStream.write(base.advanced(by: offset),
                                           maxLength: data.count - offset)

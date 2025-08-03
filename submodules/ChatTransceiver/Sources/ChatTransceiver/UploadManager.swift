@@ -9,11 +9,15 @@ import Additive
 import Mocks
 
 public final class UploadManager {
+    public var session: URLSessionProtocol?
+    public var dataUploadTask: URLSessionDataTaskProtocol?
+    private var mp: MultiPartFileStreamURL?
+    
     public init() {
     }
 
-    public func upload(_ req: UploadManagerParameters, _ data: Data, _ urlSession: URLSessionProtocol, completion: @escaping @Sendable Additive.URLSessionProtocol.UploadCompletionType) -> URLSessionDataTaskProtocol? {
-        guard let url = URL(string: req.url) else { return nil }
+    public func upload(_ req: UploadManagerParameters, _ data: Data, _ urlSession: URLSessionProtocol, completion: @escaping @Sendable Additive.URLSessionProtocol.UploadCompletionType) {
+        guard let url = URL(string: req.url) else { return }
         var request = URLRequest(url: url)
         let boundary = "Boundary-\(UUID().uuidString)"
         let body = multipartFormDatas(req, data, boundary: boundary)
@@ -23,14 +27,13 @@ public final class UploadManager {
         }
         request.method = .post
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        let uploadTask = urlSession.uploadTask(request, completion)
-        uploadTask.resume()
-        return uploadTask
+        dataUploadTask = urlSession.uploadTask(request, completion)
+        dataUploadTask?.resume()
+        session = urlSession
     }
     
-    @MainActor
-    public func upload(_ params: UploadManagerParameters, progressCompletion: @escaping UploadProgressType, completion: @escaping @Sendable Additive.URLSessionProtocol.UploadCompletionType) {
-        let mp = MultiPartFileStreamURL(params: params) { result in
+    public func upload(_ params: UploadManagerParameters, progressComp: @escaping UploadProgressType, completion: @escaping @Sendable Additive.URLSessionProtocol.UploadCompletionType) {
+        mp = MultiPartFileStreamURL(params: params) { result in
             switch result {
             case .success(let data):
                 completion(data, nil, nil)
@@ -38,9 +41,12 @@ public final class UploadManager {
                 completion(nil, nil, error)
             }
         } progressCompletion: { progressResult in
-            progressCompletion(progressResult)
+            progressComp(progressResult)
         }
-        mp?.upload() // POST default
+        let tuple = mp?.upload() // POST default
+        
+        session = tuple?.1
+        dataUploadTask = tuple?.0
     }
 
     private func multipartFormDatas(_ req: UploadManagerParameters, _ data: Data, boundary: String) -> NSMutableData {
@@ -75,6 +81,11 @@ public final class UploadManager {
         fieldString += "Content-Disposition: form-data; name=\"\(name)\"\(lineBreak + lineBreak)"
         fieldString += value + lineBreak
         return fieldString.data(using: .utf8)
+    }
+    
+    public func cancelMultipart() {
+        mp?.cancel()
+        mp = nil
     }
 }
 

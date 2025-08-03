@@ -19,6 +19,10 @@ public extension HTTPURLResponse {
 
 @MainActor
 open class MockURLSession: @preconcurrency URLSessionProtocol {
+    public func canelAndInvalidate() {
+        
+    }
+    
     public func uploadTask(streamRequest request: URLRequest) -> URLSessionUploadTask {
         fatalError("")
     }

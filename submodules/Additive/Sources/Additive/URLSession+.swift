@@ -19,6 +19,7 @@ public protocol URLSessionProtocol: Sendable {
     func uploadTask(_ request: URLRequest, _ completion: @escaping @Sendable UploadCompletionType) -> URLSessionDataTaskProtocol
     func uploadTask(_ request: URLRequest, _ filePath: URL, _ completion: @escaping @Sendable UploadCompletionType) -> URLSessionDataTaskProtocol
     func uploadTask(streamRequest request: URLRequest) -> URLSessionUploadTask
+    func canelAndInvalidate()
 }
 
 extension URLSession: URLSessionProtocol {
@@ -48,5 +49,9 @@ extension URLSession: URLSessionProtocol {
     
     public func uploadTask(streamRequest request: URLRequest) -> URLSessionUploadTask {
         uploadTask(withStreamedRequest: request)
+    }
+    
+    public func canelAndInvalidate() {
+        invalidateAndCancel()
     }
 }
