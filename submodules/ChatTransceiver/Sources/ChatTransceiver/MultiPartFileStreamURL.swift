@@ -202,19 +202,15 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
     }
     
     private func writeAllStreams(_ outStream: OutputStream) async {
-        // fileHandle is now created and managed locally within this Task.
-        guard let fileHandle = try? FileHandle(forReadingFrom: fileURL) else {
-            owner?.finished(error: NSError(domain: "MultipartUploaderError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to open file handle for reading"]))
-            outStream.close() // Close output stream on error
-            return
-        }
-        
+        var fileHandle: FileHandle?
         do {
+            fileHandle = try FileHandle(forReadingFrom: fileURL)
+            
             // Write the multipart header.
             _ = await writeAll(outStream, headerData)
             
             // Write the file bytes in chunks.
-            if #available(iOS 13.4, *) {
+            if #available(iOS 13.4, *), let fileHandle = fileHandle {
                 try await writeFileStream(outStream, fileHandle)
             }
             
@@ -223,13 +219,13 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
             
             // Close the output stream and file handle once all data has been written.
             outStream.close()
-            try? fileHandle.close()
+            try? fileHandle?.close()
         } catch {
             print("Error writing to output stream: \(error.localizedDescription)")
             owner?.finished(error: error)
             // Ensure streams are closed on error to prevent resource leaks.
             outStream.close()
-            try? fileHandle.close()
+            try? fileHandle?.close()
         }
     }
     
