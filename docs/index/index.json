@@ -338,6 +338,11 @@
                 "type" : "property"
               },
               {
+                "path" : "\/documentation\/chat\/cachefilemanager\/resumabledir",
+                "title" : "var resumableDIR: URL",
+                "type" : "property"
+              },
+              {
                 "title" : "Instance Methods",
                 "type" : "groupMarker"
               },
@@ -349,6 +354,11 @@
               {
                 "path" : "\/documentation\/chat\/cachefilemanager\/creategroupdirectory()",
                 "title" : "func createGroupDirectory()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/createresumabledirectory()",
+                "title" : "func createResumableDirectory() throws",
                 "type" : "method"
               },
               {
@@ -412,6 +422,11 @@
                 "type" : "method"
               },
               {
+                "path" : "\/documentation\/chat\/cachefilemanager\/savefile(url:tempdownloadfileurl:savecompletion:)",
+                "title" : "func saveFile(url: URL, tempDownloadFileURL: URL, saveCompletion: (URL?) -> Void)",
+                "type" : "method"
+              },
+              {
                 "path" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:)",
                 "title" : "func saveFileInGroup(url: URL, data: Data) async -> URL?",
                 "type" : "method"
@@ -420,6 +435,41 @@
                 "path" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:savecompletion:)",
                 "title" : "func saveFileInGroup(url: URL, data: Data, saveCompletion: (URL?) -> Void)",
                 "type" : "method"
+              },
+              {
+                "title" : "Default Implementations",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/cachefilemanager\/deleteresumedatafile(hashcode:)",
+                    "title" : "func deleteResumeDataFile(hashCode: String) throws",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/cachefilemanager\/moveandsave(url:frompath:savecompletion:)",
+                    "title" : "func moveAndSave(url: URL, fromPath: URL, saveCompletion: (URL?) -> Void)",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/cachefilemanager\/resumabledata(for:)",
+                    "title" : "func resumableData(for: String) -> Data?",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/cachefilemanager\/savefile(url:tempdownloadfileurl:)",
+                    "title" : "func saveFile(url: URL, tempDownloadFileURL: URL) async -> URL?",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/cachefilemanager\/cachefilemanagerprotocol-implementations",
+                "title" : "CacheFileManagerProtocol Implementations",
+                "type" : "symbol"
               }
             ],
             "path" : "\/documentation\/chat\/cachefilemanager",
@@ -1280,8 +1330,23 @@
                 "type" : "groupMarker"
               },
               {
+                "path" : "\/documentation\/chat\/fileprotocol\/cancelresumabledownload(hashcode:)",
+                "title" : "func cancelResumableDownload(hashCode: String) throws",
+                "type" : "method"
+              },
+              {
                 "path" : "\/documentation\/chat\/fileprotocol\/deletecachefile(_:)",
                 "title" : "func deleteCacheFile(URL)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileprotocol\/deleteresumablefile(hashcode:)",
+                "title" : "func deleteResumableFile(hashCode: String) throws",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileprotocol\/download(_:)",
+                "title" : "func download(FileRequest) throws",
                 "type" : "method"
               },
               {
@@ -1332,6 +1397,16 @@
               {
                 "path" : "\/documentation\/chat\/fileprotocol\/manageupload(uniqueid:action:)",
                 "title" : "func manageUpload(uniqueId: String, action: DownloaUploadAction)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileprotocol\/pauseresumabledownload(hashcode:)",
+                "title" : "func pauseResumableDownload(hashCode: String) throws",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileprotocol\/resumedownload(hashcode:)",
+                "title" : "func resumeDownload(hashCode: String) throws",
                 "type" : "method"
               },
               {
@@ -2561,6 +2636,16 @@
                 "type" : "case"
               },
               {
+                "path" : "\/documentation\/chat\/downloadeventtypes\/downloadfile(_:)",
+                "title" : "case downloadFile(ChatResponse<URL>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/downloadeventtypes\/downloadimage(_:)",
+                "title" : "case downloadImage(ChatResponse<URL>)",
+                "type" : "case"
+              },
+              {
                 "path" : "\/documentation\/chat\/downloadeventtypes\/failed(uniqueid:error:)",
                 "title" : "case failed(uniqueId: String, error: ChatError?)",
                 "type" : "case"
@@ -3607,6 +3692,147 @@
             "path" : "\/documentation\/chat\/usereventtypes",
             "title" : "UserEventTypes",
             "type" : "enum"
+          },
+          {
+            "title" : "Extended Modules",
+            "type" : "groupMarker"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Extended Structures",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Properties",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/async\/asyncmessage\/banerror",
+                    "title" : "var banError: BanError?",
+                    "type" : "property"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/async\/asyncmessage\/chatmessage",
+                    "title" : "var chatMessage: ChatMessage?",
+                    "type" : "property"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/async\/asyncmessage\/subjectid",
+                    "title" : "var subjectId: Int?",
+                    "type" : "property"
+                  },
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/async\/asyncmessage\/messageresponse(state:)",
+                    "title" : "func messageResponse(state: MessageResponseState) -> ChatResponse<MessageResponse>?",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/async\/asyncmessage\/tochatresponse()",
+                    "title" : "func toChatResponse<T>() -> ChatResponse<T>",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/async\/asyncmessage\/tochatresponse(asyncmanager:)",
+                    "title" : "func toChatResponse<T>(asyncManager: AsyncManager) -> ChatResponse<T>",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/async\/asyncmessage",
+                "title" : "AsyncMessage",
+                "type" : "extension"
+              }
+            ],
+            "path" : "\/documentation\/chat\/async",
+            "title" : "Async",
+            "type" : "extension"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Extended Protocols",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/chatdto\/typecodeindexprotocol\/totypecode(_:)",
+                    "title" : "func toTypeCode(any Chat) -> String?",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/chatdto\/typecodeindexprotocol",
+                "title" : "TypeCodeIndexProtocol",
+                "type" : "extension"
+              }
+            ],
+            "path" : "\/documentation\/chat\/chatdto",
+            "title" : "ChatDTO",
+            "type" : "extension"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Extended Structures",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/chatextensions\/uploadresult\/tomapmetadata(config:_:)",
+                    "title" : "func toMapMetaData(config: ChatConfig, Coordinate) -> UploadResult",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/chatextensions\/uploadresult",
+                "title" : "UploadResult",
+                "type" : "extension"
+              }
+            ],
+            "path" : "\/documentation\/chat\/chatextensions",
+            "title" : "ChatExtensions",
+            "type" : "extension"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Extended Classes",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/foundation\/filemanager\/allocatedsizeofdirectory(at:)",
+                    "title" : "func allocatedSizeOfDirectory(at: URL) throws -> UInt64",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/foundation\/filemanager",
+                "title" : "FileManager",
+                "type" : "extension"
+              }
+            ],
+            "path" : "\/documentation\/chat\/foundation",
+            "title" : "Foundation",
+            "type" : "extension"
           }
         ],
         "icon" : "icon.png",

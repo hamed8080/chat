@@ -78,6 +78,8 @@
         },
         {
           "code" : [
+            "let spec = getSpec()",
+            "",
             "let callConfig = CallConfigBuilder()",
             "    .callTimeout(20)",
             "    .targetVideoWidth(640)",
@@ -104,7 +106,7 @@
             "    logServerRequestheaders: [\"Authorization\": \"Basic \\(LOG_SERVER_TOKEN)\", \"Content-Type\": \"application\/json\"]",
             ")",
             "",
-            "let asyncConfig = try! AsyncConfigBuilder()",
+            "let asyncConfig = try! AsyncConfigBuilder(spec: spec)",
             "    .socketAddress(\"SOCKET_ADDRESS\")",
             "    .reconnectCount(Int.max)",
             "    .reconnectOnClose(true)",
@@ -113,7 +115,7 @@
             "    .loggerConfig(asyncLoggerConfig)",
             "    .build()",
             "",
-            "let chatConfig = ChatConfigBuilder(asyncConfig)",
+            "let chatConfig = ChatConfigBuilder(spec: spec, asyncConfig)",
             "    .callConfig(callConfig)",
             "    .token(\"SSO_TOKEN\")",
             "    .ssoHost(\"SSERVER_ADDRESS\")",
@@ -165,6 +167,27 @@
           ],
           "syntax" : "swift",
           "type" : "codeListing"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "To get Chat SDK up and running you should provide a spec. Spec is a speccification where it contains URLS and paths to the API resources. The best way to create a one is to decode the original sample spec json file at this ",
+                  "type" : "text"
+                },
+                {
+                  "identifier" : "https:\/\/github.com\/hamed8080\/bundle\/blob\/main\/Spec.json",
+                  "isActive" : true,
+                  "type" : "reference"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Tip",
+          "style" : "tip",
+          "type" : "aside"
         },
         {
           "content" : [
@@ -603,6 +626,18 @@
   "title" : "Managing Users",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingusers"
+},
+"https://github.com/hamed8080/bundle/blob/main/Spec.json": {
+  "identifier" : "https:\/\/github.com\/hamed8080\/bundle\/blob\/main\/Spec.json",
+  "title" : "link",
+  "titleInlineContent" : [
+    {
+      "text" : "link",
+      "type" : "text"
+    }
+  ],
+  "type" : "link",
+  "url" : "https:\/\/github.com\/hamed8080\/bundle\/blob\/main\/Spec.json"
 },
 "icon.png": {
   "alt" : "App icon.",

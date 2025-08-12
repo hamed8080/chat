@@ -297,6 +297,17 @@
         "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes"
       ],
       "title" : "Enumerations"
+    },
+    {
+      "anchor" : "Extended-Modules",
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/Async",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatDTO",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatExtensions",
+        "doc:\/\/Chat\/documentation\/Chat\/Foundation"
+      ],
+      "title" : "Extended Modules"
     }
   ],
   "variants" : [
@@ -408,6 +419,17 @@
   "title" : "AssistantProtocol",
   "type" : "topic",
   "url" : "\/documentation\/chat\/assistantprotocol"
+},
+"doc://Chat/documentation/Chat/Async": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Async",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/async"
 },
 "doc://Chat/documentation/Chat/AsyncManager": {
   "abstract" : [
@@ -694,6 +716,17 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatcoordinator"
 },
+"doc://Chat/documentation/Chat/ChatDTO": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatDTO",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "ChatDTO",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatdto"
+},
 "doc://Chat/documentation/Chat/ChatDelegate": {
   "abstract" : [
 
@@ -755,6 +788,17 @@
   "title" : "ChatEventType",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype"
+},
+"doc://Chat/documentation/Chat/ChatExtensions": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatExtensions",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "ChatExtensions",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatextensions"
 },
 "doc://Chat/documentation/Chat/ChatGlobalActor": {
   "abstract" : [
@@ -1265,6 +1309,17 @@
   "title" : "FileProtocol",
   "type" : "topic",
   "url" : "\/documentation\/chat\/fileprotocol"
+},
+"doc://Chat/documentation/Chat/Foundation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Foundation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Foundation",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/foundation"
 },
 "doc://Chat/documentation/Chat/GettingStarted": {
   "abstract" : [

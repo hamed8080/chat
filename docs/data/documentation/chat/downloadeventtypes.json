@@ -96,6 +96,8 @@
       "generated" : true,
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/canceled(uniqueId:)",
+        "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/downloadFile(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/downloadImage(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/failed(uniqueId:error:)",
         "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/file(_:_:)",
         "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/image(_:_:)",
@@ -216,6 +218,106 @@
   "title" : "DownloadEventTypes.canceled(uniqueId:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/downloadeventtypes\/canceled(uniqueid:)"
+},
+"doc://Chat/documentation/Chat/DownloadEventTypes/downloadFile(_:)": {
+  "abstract" : [
+    {
+      "text" : "New version of of on download completion without data.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "downloadFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/downloadFile(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "DownloadEventTypes.downloadFile(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/downloadeventtypes\/downloadfile(_:)"
+},
+"doc://Chat/documentation/Chat/DownloadEventTypes/downloadImage(_:)": {
+  "abstract" : [
+    {
+      "text" : "New version of of on image completion without data.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "downloadImage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes\/downloadImage(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "DownloadEventTypes.downloadImage(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/downloadeventtypes\/downloadimage(_:)"
 },
 "doc://Chat/documentation/Chat/DownloadEventTypes/failed(uniqueId:error:)": {
   "abstract" : [

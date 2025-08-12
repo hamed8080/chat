@@ -1,25 +1,7 @@
 {
   "abstract" : [
     {
-      "text" : "It is a private method and only should used by the SDK to send data to ",
-      "type" : "text"
-    },
-    {
-      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
-      "isActive" : true,
-      "type" : "reference"
-    },
-    {
-      "text" : " and send to ",
-      "type" : "text"
-    },
-    {
-      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-      "isActive" : true,
-      "type" : "reference"
-    },
-    {
-      "text" : ".",
+      "text" : "Cancel a resumable download file.",
       "type" : "text"
     }
   ],
@@ -27,17 +9,17 @@
     "paths" : [
       [
         "doc:\/\/Chat\/documentation\/Chat",
-        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol"
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol"
       ]
     ]
   },
   "identifier" : {
     "interfaceLanguage" : "swift",
-    "url" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/prepareToSendAsync(req:type:)"
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/cancelResumableDownload(hashCode:)"
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat0A16InternalProtocolP18prepareToSendAsync3req4typey0A4Core0A8Sendable_p_AG0A14MessageVOTypesOtF",
+    "externalID" : "s:4Chat12FileProtocolP23cancelResumableDownload8hashCodeySS_tKF",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -49,7 +31,7 @@
       },
       {
         "kind" : "identifier",
-        "text" : "prepareToSendAsync"
+        "text" : "cancelResumableDownload"
       },
       {
         "kind" : "text",
@@ -57,24 +39,7 @@
       },
       {
         "kind" : "externalParam",
-        "text" : "req"
-      },
-      {
-        "kind" : "text",
-        "text" : ": any "
-      },
-      {
-        "kind" : "typeIdentifier",
-        "preciseIdentifier" : "s:8ChatCore0A8SendableP",
-        "text" : "ChatSendable"
-      },
-      {
-        "kind" : "text",
-        "text" : ", "
-      },
-      {
-        "kind" : "externalParam",
-        "text" : "type"
+        "text" : "hashCode"
       },
       {
         "kind" : "text",
@@ -82,12 +47,16 @@
       },
       {
         "kind" : "typeIdentifier",
-        "preciseIdentifier" : "s:8ChatCore0A14MessageVOTypesO",
-        "text" : "ChatMessageVOTypes"
+        "preciseIdentifier" : "s:SS",
+        "text" : "String"
       },
       {
         "kind" : "text",
-        "text" : ")"
+        "text" : ") "
+      },
+      {
+        "kind" : "keyword",
+        "text" : "throws"
       }
     ],
     "modules" : [
@@ -99,7 +68,7 @@
     "role" : "symbol",
     "roleHeading" : "Instance Method",
     "symbolKind" : "method",
-    "title" : "prepareToSendAsync(req:type:)"
+    "title" : "cancelResumableDownload(hashCode:)"
   },
   "primaryContentSections" : [
     {
@@ -136,7 +105,7 @@
             },
             {
               "kind" : "identifier",
-              "text" : "prepareToSendAsync"
+              "text" : "cancelResumableDownload"
             },
             {
               "kind" : "text",
@@ -144,24 +113,7 @@
             },
             {
               "kind" : "externalParam",
-              "text" : "req"
-            },
-            {
-              "kind" : "text",
-              "text" : ": any "
-            },
-            {
-              "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:8ChatCore0A8SendableP",
-              "text" : "ChatSendable"
-            },
-            {
-              "kind" : "text",
-              "text" : ", "
-            },
-            {
-              "kind" : "externalParam",
-              "text" : "type"
+              "text" : "hashCode"
             },
             {
               "kind" : "text",
@@ -169,12 +121,16 @@
             },
             {
               "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:8ChatCore0A14MessageVOTypesO",
-              "text" : "ChatMessageVOTypes"
+              "preciseIdentifier" : "s:SS",
+              "text" : "String"
             },
             {
               "kind" : "text",
-              "text" : ")"
+              "text" : ") "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "throws"
             }
           ]
         }
@@ -189,11 +145,20 @@
             {
               "inlineContent" : [
                 {
-                  "text" : "A object that conform to the ",
+                  "text" : "Hashcode that you pass to the ",
                   "type" : "text"
                 },
                 {
-                  "code" : "ChatSendable",
+                  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/download(_:)",
+                  "isActive" : true,
+                  "type" : "reference"
+                },
+                {
+                  "text" : " method ",
+                  "type" : "text"
+                },
+                {
+                  "code" : "FileRequest.hashCode",
                   "type" : "codeVoice"
                 },
                 {
@@ -204,21 +169,7 @@
               "type" : "paragraph"
             }
           ],
-          "name" : "req"
-        },
-        {
-          "content" : [
-            {
-              "inlineContent" : [
-                {
-                  "text" : "Chat server message type.",
-                  "type" : "text"
-                }
-              ],
-              "type" : "paragraph"
-            }
-          ],
-          "name" : "type"
+          "name" : "hashCode"
         }
       ]
     }
@@ -234,7 +185,7 @@
   "variants" : [
     {
       "paths" : [
-        "\/documentation\/chat\/chatinternalprotocol\/preparetosendasync(req:type:)"
+        "\/documentation\/chat\/fileprotocol\/cancelresumabledownload(hashcode:)"
       ],
       "traits" : [
         {
@@ -264,51 +215,6 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat"
-},
-"doc://Chat/documentation/Chat/Async": {
-  "abstract" : [
-
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-  "kind" : "symbol",
-  "role" : "collection",
-  "title" : "Async",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/async"
-},
-"doc://Chat/documentation/Chat/AsyncManager": {
-  "abstract" : [
-    {
-      "text" : "AsyncManager intermediate between chat and async socket server.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "class"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "AsyncManager"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "AsyncManager"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "AsyncManager",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/asyncmanager"
 },
 "doc://Chat/documentation/Chat/ChatGlobalActor": {
   "abstract" : [
@@ -341,7 +247,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatglobalactor"
 },
-"doc://Chat/documentation/Chat/ChatInternalProtocol": {
+"doc://Chat/documentation/Chat/FileProtocol": {
   "abstract" : [
 
   ],
@@ -356,44 +262,26 @@
     },
     {
       "kind" : "identifier",
-      "text" : "ChatInternalProtocol"
+      "text" : "FileProtocol"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol",
   "kind" : "symbol",
   "navigatorTitle" : [
     {
       "kind" : "identifier",
-      "text" : "ChatInternalProtocol"
+      "text" : "FileProtocol"
     }
   ],
   "role" : "symbol",
-  "title" : "ChatInternalProtocol",
+  "title" : "FileProtocol",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chatinternalprotocol"
+  "url" : "\/documentation\/chat\/fileprotocol"
 },
-"doc://Chat/documentation/Chat/ChatInternalProtocol/prepareToSendAsync(req:type:)": {
+"doc://Chat/documentation/Chat/FileProtocol/cancelResumableDownload(hashCode:)": {
   "abstract" : [
     {
-      "text" : "It is a private method and only should used by the SDK to send data to ",
-      "type" : "text"
-    },
-    {
-      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
-      "isActive" : true,
-      "type" : "reference"
-    },
-    {
-      "text" : " and send to ",
-      "type" : "text"
-    },
-    {
-      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
-      "isActive" : true,
-      "type" : "reference"
-    },
-    {
-      "text" : ".",
+      "text" : "Cancel a resumable download file.",
       "type" : "text"
     }
   ],
@@ -408,7 +296,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "prepareToSendAsync"
+      "text" : "cancelResumableDownload"
     },
     {
       "kind" : "text",
@@ -416,24 +304,7 @@
     },
     {
       "kind" : "externalParam",
-      "text" : "req"
-    },
-    {
-      "kind" : "text",
-      "text" : ": any "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:8ChatCore0A8SendableP",
-      "text" : "ChatSendable"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "type"
+      "text" : "hashCode"
     },
     {
       "kind" : "text",
@@ -441,21 +312,71 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:8ChatCore0A14MessageVOTypesO",
-      "text" : "ChatMessageVOTypes"
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
     },
     {
       "kind" : "text",
-      "text" : ")"
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/prepareToSendAsync(req:type:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/cancelResumableDownload(hashCode:)",
   "kind" : "symbol",
   "required" : true,
   "role" : "symbol",
-  "title" : "prepareToSendAsync(req:type:)",
+  "title" : "cancelResumableDownload(hashCode:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chatinternalprotocol\/preparetosendasync(req:type:)"
+  "url" : "\/documentation\/chat\/fileprotocol\/cancelresumabledownload(hashcode:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/download(_:)": {
+  "abstract" : [
+    {
+      "text" : "Resumable downloader.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "download"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO11FileRequestV",
+      "text" : "FileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/download(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "download(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/download(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

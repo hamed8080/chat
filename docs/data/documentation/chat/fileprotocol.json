@@ -103,7 +103,10 @@
       "anchor" : "Instance-Methods",
       "generated" : true,
       "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/cancelResumableDownload(hashCode:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/deleteCacheFile(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/deleteResumableFile(hashCode:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/download(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/filePath(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/filePathInGroup(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-4v4sz",
@@ -114,6 +117,8 @@
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/isFileExistInGroup(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageDownload(uniqueId:action:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageUpload(uniqueId:action:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/pauseResumableDownload(hashCode:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/resumeDownload(hashCode:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/saveFile(url:data:completion:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/saveFileInGroup(url:data:completion:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-1sy1h",
@@ -218,6 +223,60 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/fileprotocol"
 },
+"doc://Chat/documentation/Chat/FileProtocol/cancelResumableDownload(hashCode:)": {
+  "abstract" : [
+    {
+      "text" : "Cancel a resumable download file.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "cancelResumableDownload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "hashCode"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/cancelResumableDownload(hashCode:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "cancelResumableDownload(hashCode:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/cancelresumabledownload(hashcode:)"
+},
 "doc://Chat/documentation/Chat/FileProtocol/deleteCacheFile(_:)": {
   "abstract" : [
     {
@@ -259,6 +318,106 @@
   "title" : "deleteCacheFile(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/fileprotocol\/deletecachefile(_:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/deleteResumableFile(hashCode:)": {
+  "abstract" : [
+    {
+      "text" : "Delete cached resumable file from the disk.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleteResumableFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "hashCode"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/deleteResumableFile(hashCode:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "deleteResumableFile(hashCode:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/deleteresumablefile(hashcode:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/download(_:)": {
+  "abstract" : [
+    {
+      "text" : "Resumable downloader.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "download"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO11FileRequestV",
+      "text" : "FileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/download(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "download(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/download(_:)"
 },
 "doc://Chat/documentation/Chat/FileProtocol/filePath(_:)": {
   "abstract" : [
@@ -809,6 +968,114 @@
   "title" : "manageUpload(uniqueId:action:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/fileprotocol\/manageupload(uniqueid:action:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/pauseResumableDownload(hashCode:)": {
+  "abstract" : [
+    {
+      "text" : "Pause a resumable download.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "pauseResumableDownload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "hashCode"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/pauseResumableDownload(hashCode:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "pauseResumableDownload(hashCode:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/pauseresumabledownload(hashcode:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/resumeDownload(hashCode:)": {
+  "abstract" : [
+    {
+      "text" : "Resume an pauesed download.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "resumeDownload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "hashCode"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/resumeDownload(hashCode:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "resumeDownload(hashCode:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/resumedownload(hashcode:)"
 },
 "doc://Chat/documentation/Chat/FileProtocol/saveFile(url:data:completion:)": {
   "abstract" : [

@@ -187,6 +187,17 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
+"doc://Chat/documentation/Chat/Async": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Async",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/async"
+},
 "doc://Chat/documentation/Chat/AsyncManager": {
   "abstract" : [
     {
@@ -864,8 +875,9 @@
       "type" : "text"
     },
     {
-      "code" : "Async",
-      "type" : "codeVoice"
+      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
+      "isActive" : true,
+      "type" : "reference"
     },
     {
       "text" : ".",

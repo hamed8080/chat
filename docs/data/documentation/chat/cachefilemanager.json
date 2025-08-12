@@ -117,7 +117,8 @@
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/group",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/groupFolder",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/logger",
-        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/queue"
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/queue",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/resumableDIR"
       ],
       "title" : "Instance Properties"
     },
@@ -127,6 +128,7 @@
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createDirectory()",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createGroupDirectory()",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createResumableDirectory()",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/deleteFile(at:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/deleteFolder(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePath(url:)",
@@ -139,10 +141,19 @@
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExistInGroup(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:saveCompletion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:tempDownloadFileURL:saveCompletion:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:saveCompletion:)"
       ],
       "title" : "Instance Methods"
+    },
+    {
+      "anchor" : "Default-Implementations",
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/CacheFileManagerProtocol-Implementations"
+      ],
+      "title" : "Default Implementations"
     }
   ],
   "variants" : [
@@ -215,6 +226,17 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager"
 },
+"doc://Chat/documentation/Chat/CacheFileManager/CacheFileManagerProtocol-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/CacheFileManagerProtocol-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "CacheFileManagerProtocol Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/cachefilemanagerprotocol-implementations"
+},
 "doc://Chat/documentation/Chat/CacheFileManager/createDirectory()": {
   "abstract" : [
 
@@ -272,6 +294,39 @@
   "title" : "createGroupDirectory()",
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/creategroupdirectory()"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/createResumableDirectory()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "createResumableDirectory"
+    },
+    {
+      "kind" : "text",
+      "text" : "() "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createResumableDirectory()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "createResumableDirectory()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/createresumabledirectory()"
 },
 "doc://Chat/documentation/Chat/CacheFileManager/deleteFile(at:)": {
   "abstract" : [
@@ -1156,6 +1211,40 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/queue"
 },
+"doc://Chat/documentation/Chat/CacheFileManager/resumableDIR": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "resumableDIR"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/resumableDIR",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "resumableDIR",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/resumabledir"
+},
 "doc://Chat/documentation/Chat/CacheFileManager/saveFile(url:data:)": {
   "abstract" : [
 
@@ -1324,6 +1413,95 @@
   "title" : "saveFile(url:data:saveCompletion:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:savecompletion:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/saveFile(url:tempDownloadFileURL:saveCompletion:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "saveFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "tempDownloadFileURL"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "saveCompletion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:tempDownloadFileURL:saveCompletion:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "saveFile(url:tempDownloadFileURL:saveCompletion:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/savefile(url:tempdownloadfileurl:savecompletion:)"
 },
 "doc://Chat/documentation/Chat/CacheFileManager/saveFileInGroup(url:data:)": {
   "abstract" : [
