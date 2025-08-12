@@ -8,6 +8,6 @@ import Foundation
 
 class Constants {
     private init() {}
-    public static let version: String = "3.0.0"
+    public static let version: String = "3.0.5"
     public static let name: String = "iOS-SDK"
 }
