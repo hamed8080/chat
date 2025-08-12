@@ -10,6 +10,7 @@ import ChatModels
 
 public final class CacheCurrentUserRoleManager: BaseCoreDataManager<CDCurrentUserRole>, @unchecked Sendable {
 
+    @MainActor
     public func roles(_ threadId: Int) -> [Roles] {
         let req = Entity.fetchRequest()
         req.predicate = NSPredicate(format: "%K == %@", #keyPath(CDCurrentUserRole.threadId), threadId.nsValue )

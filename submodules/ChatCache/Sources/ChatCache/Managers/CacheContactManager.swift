@@ -10,7 +10,8 @@ import ChatModels
 
 public final class CacheContactManager: BaseCoreDataManager<CDContact>, @unchecked Sendable {
 
-    public override func insert(models: [Contact]) {
+    @MainActor
+    public func insertContacts(models: [Contact]) {
         models.forEach { contact in
             let req = Entity.fetchRequest()
             req.fetchLimit = 1
@@ -23,7 +24,7 @@ public final class CacheContactManager: BaseCoreDataManager<CDContact>, @uncheck
                 cdContact.cellphoneNumber = contact.cellphoneNumber
                 saveViewContext()
             } else {
-                super.insert(models: [contact])
+                insert(models: [contact])
             }
         }
     }
@@ -34,7 +35,8 @@ public final class CacheContactManager: BaseCoreDataManager<CDContact>, @uncheck
         update(propertiesToUpdate, predicate)
     }
 
-    public func getContacts(_ req: FetchContactsRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func getContacts(_ req: FetchContactsRequest) -> ([Entity], Int) {
         let fetchRequest = Entity.fetchRequest()
         let ascending = req.order != Ordering.desc.rawValue
         if let id = req.id {
@@ -70,14 +72,11 @@ public final class CacheContactManager: BaseCoreDataManager<CDContact>, @uncheck
         let firstNameSort = NSSortDescriptor(key: "firstName", ascending: ascending)
         let lastNameSort = NSSortDescriptor(key: "lastName", ascending: ascending)
         fetchRequest.sortDescriptors = [notSeenDurationSort, hasUserSort, lastNameSort, firstNameSort]
-        DispatchQueue.main.async {
-            self.viewContext.perform {
-                let count = try self.viewContext.count(for: Entity.fetchRequest())
-                fetchRequest.fetchLimit = req.size
-                fetchRequest.fetchOffset = req.offset
-                let contacts = try self.viewContext.fetch(fetchRequest)
-                completion(contacts, count)
-            }
-        }
+        
+        let count = try? self.viewContext.count(for: Entity.fetchRequest())
+        fetchRequest.fetchLimit = req.size
+        fetchRequest.fetchOffset = req.offset
+        let contacts = try? self.viewContext.fetch(fetchRequest)
+        return (contacts ?? [], count ?? 0)
     }
 }

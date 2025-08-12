@@ -9,7 +9,7 @@ import ChatCore
 import Foundation
 
 public extension MapStaticImageRequest {
-    public init(request: LocationMessageRequest) {
+     init(request: LocationMessageRequest) {
         let mapStaticReq = MapStaticImageRequest(center: request.mapCenter,
                                                  key: nil,
                                                  height: request.mapHeight,

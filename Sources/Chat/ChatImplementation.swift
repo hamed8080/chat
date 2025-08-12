@@ -101,7 +101,7 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
     }
     
     private func requestDeviceId() {
-        let url = "\(config.ssoHost)\(Routes.ssoDevices.rawValue)"
+        let url = "\(config.spec.server.sso)\(config.spec.paths.sso.devices)"
         let headers = ["Authorization": "Bearer \(config.token)"]
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers

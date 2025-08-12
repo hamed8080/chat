@@ -18,17 +18,21 @@
 #### Swift Package Manager(SPM) 
 1- Go to your root project folder and clone the Chat SDK:
 ```git
-git clone https://pubgi.sandpod.ir/chat/ios/chat
+git clone --branch 3.0.0 https://pubgi.sandpod.ir/chat/ios/chat
 ```
 or
 ```git
-git clone https://github.com/hamed8080/chat 
+git clone --branch 3.0.0 https://github.com/hamed8080/chat 
 ```
 2- Add package path to your `Package.swift`:
 
 ```swift
 .package(path: "path_to_sdk_folder/Chat")
 ```
+The process is the same if you are using Xcode to manage Swift Packages. Simply go to the navigator, select the main project, and add the dependency locally.
+
+## Update the Chat SDK
+Chat SDK uses tag versioning in Git to update the SDK. Make sure to clone it with the correct tag. First, switch to the main branch, then manually switch to the latest tag version.
 
 ## Swicth to a version 
 To use the Chat SDK, it is **mandatory** to use a specific tagged version of the SDK. If this guideline is not followed, you might unintentionally download beta or test versions of the SDK, which could lead to unexpected issues or instability.
@@ -78,7 +82,9 @@ ChatManager.activeInstance?.connect()
 ## Send a Request to the server
 ```swift
 let req = ThreadsRequest(count: 10, offset: 0, cache: false)
-ChatManager.activeInstance?.conversation.get(req);
+Task { @ChatGlobalActor in
+    ChatManager.activeInstance?.conversation.get(req);
+}
 ```
 ## Receive events for a specific group center
 ```swift
@@ -110,4 +116,4 @@ For more example and usage you can use [developer implementation app](https://pu
 ## Contributing to Chat
 Please see the [contributing guide](/CONTRIBUTING.md) for more information.
 
-<!-- Copyright (c) 2021-2022 Apple Inc and the Swift Project authors. All Rights Reserved. -->
+<!-- Copyright (c) 2021-2022 Dotin Inc and the Swift Project authors. All Rights Reserved. -->

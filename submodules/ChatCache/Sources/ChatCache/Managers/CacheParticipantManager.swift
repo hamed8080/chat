@@ -25,23 +25,15 @@ public final class CacheParticipantManager: BaseCoreDataManager<CDParticipant>, 
         }
     }
 
-    public func first(_ threadId: Int, _ participantId: Int, _ completion: @escaping @Sendable (CDParticipant?) -> Void) {
-        viewContext.perform {
-            let req = CDParticipant.fetchRequest()
-            req.predicate = self.predicate(threadId, participantId)
-            let participant = try self.viewContext.fetch(req).first
-            completion(participant)
-        }
-    }
-
     func predicate(_ threadId: Int, _ participantId: Int) -> NSPredicate {
         NSPredicate(format: "conversation.\(CDConversation.idName) == \(CDConversation.queryIdSpecifier) AND \(Entity.idName) == \(Entity.queryIdSpecifier)", threadId.nsValue, participantId.nsValue)
     }
 
-    public func getThreadParticipants(_ threadId: Int, _ count: Int = 25, _ offset: Int = 0, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func getThreadParticipants(_ threadId: Int, _ count: Int = 25, _ offset: Int = 0) -> ([Entity]?, Int)? {
         let predicate = NSPredicate(format: "conversation.\(CDConversation.idName) == \(CDConversation.queryIdSpecifier)", threadId.nsValue)
         let sPredicate = SendableNSPredicate(predicate: predicate)
-        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
+        return fetchWithOffset(count: count, offset: offset, predicate: sPredicate)
     }
 
     public func delete(_ models: [Entity.Model], _ threadId: Int) {

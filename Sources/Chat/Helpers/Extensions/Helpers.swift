@@ -59,9 +59,9 @@ internal extension Message {
 }
 
 internal extension FileMetaData {
-    func toMapMetaData(coordinate: Coordinate) -> FileMetaData {
+    func toMapMetaData(config: ChatConfig, coordinate: Coordinate) -> FileMetaData {
         var metaData = self
-        let mapLink = "\(Routes.baseMapLink.rawValue)\(coordinate.lat),\(coordinate.lng)"
+        let mapLink = "\(config.spec.server.neshan)/@\(coordinate.lat),\(coordinate.lng)"
         metaData.latitude = coordinate.lat
         metaData.longitude = coordinate.lng
         metaData.reverse = reverse.string
@@ -130,7 +130,7 @@ extension ChatResponse<Message> {
     }
     
     func toUnreadAction(myId: Int?) -> CacheUnreadCountAction? {
-        guard var copiedMessage = result else { return nil }
+        guard let copiedMessage = result else { return nil }
         /// If we were sender of the message therfore we have seen all the messages inside the thread.
         let isMe = copiedMessage.participant?.id == myId
         return isMe ? .set(0) : .increase
@@ -144,8 +144,8 @@ typealias ReplyPrivatelyResponse = (uploadedRes: UploadResult?,
                                     uniqueId: String)
 
 public extension UploadResult {
-    func toMapMetaData(_ coordinate: Coordinate) -> UploadResult {
-        let mapMetaData = metaData?.toMapMetaData(coordinate: coordinate)
+    func toMapMetaData(config: ChatConfig, _ coordinate: Coordinate) -> UploadResult {
+        let mapMetaData = metaData?.toMapMetaData(config: config, coordinate: coordinate)
         var resp = self
         resp.metaData = mapMetaData
         return resp
@@ -161,8 +161,9 @@ extension ChatResponse where T == Int? {
 }
 
 extension ChatInternalProtocol {
-    func cachedUserRoles(_ request: GeneralSubjectIdRequest) -> ChatResponse<[Roles]> {
-        let roles = cache?.userRole?.roles(request.subjectId)
+    func cachedUserRoles(_ request: GeneralSubjectIdRequest) async -> ChatResponse<[Roles]> {
+        let userRoleCache = cache?.userRole
+        let roles = await userRoleCache?.roles(request.subjectId)
         let typeCode = request.toTypeCode(self)
         return ChatResponse<[Roles]>(uniqueId: request.uniqueId, result: roles, cache: true, typeCode: typeCode)
     }
@@ -188,9 +189,9 @@ extension ChatResponse where T == [UserRole] {
     }
 }
 
-extension CacheUserManager.Entity? {
+extension CDUser {
     func toEvent(_ request: UserInfoRequest, _ typeCode: String?) -> ChatEventType {
-        let response = ChatResponse<User>(uniqueId: request.uniqueId, result: self?.codable, cache: true, typeCode: typeCode)
+        let response = ChatResponse<User>(uniqueId: request.uniqueId, result: codable, cache: true, typeCode: typeCode)
         return .user(.user(response))
     }
 }
@@ -410,13 +411,12 @@ extension Array<CacheContactManager.Entity> {
     }
 }
 
-
-extension Array<CDContact> {
+extension Array<Contact> {
     func toSyncContactsRequest(newContacts: [Contact]) -> [AddContactRequest]? {
         var contactsToSync: [AddContactRequest] = []
         newContacts.forEach { phoneContact in
             if let findedContactchat = first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
-                if findedContactchat.isContactChanged(contact: phoneContact) {
+                if isContactChanged(findedContactchat, phoneContact) {
                     contactsToSync.append(phoneContact.request)
                 }
             } else {
@@ -429,6 +429,12 @@ extension Array<CDContact> {
         }
         if contactsToSync.count <= 0 { return nil }
         return contactsToSync
+    }
+    
+    func isContactChanged(_ cacheContact: Contact, _ newContact: Contact) -> Bool {
+        (cacheContact.email != newContact.email) ||
+        (cacheContact.firstName != newContact.firstName) ||
+        (cacheContact.lastName != newContact.lastName)
     }
 }
 

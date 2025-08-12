@@ -230,3 +230,77 @@ public final class CacheFileManager: CacheFileManagerProtocol, @unchecked Sendab
 #endif
     }
 }
+
+/// Resumable upload/download folder
+extension CacheFileManager {
+    public func saveFile(url: URL, tempDownloadFileURL: URL) async -> URL? {
+        typealias Result = CheckedContinuation<URL?, Never>
+        return await withCheckedContinuation { [weak self] (continuation: Result) in
+            self?.saveFile(url: url, tempDownloadFileURL: tempDownloadFileURL) { url in
+                continuation.resume(with: .success(url))
+            }
+        }
+    }
+    
+    public func saveFile(url: URL, tempDownloadFileURL: URL, saveCompletion: @escaping @Sendable (URL?) -> Void) {
+        queue.asyncWork { [weak self] in
+            guard let self = self else { return }
+            guard let filePath = filePath(url: url) else {
+                saveCompletion(nil)
+                log("File URL was nil for url: \(url.absoluteString)")
+                return
+            }
+            do {
+                try createResumableDirectory()
+                try (fm as? FileManager)?.moveItem(at: tempDownloadFileURL, to: filePath)
+                saveCompletion(filePath)
+                log("File Saved at: \(filePath.absoluteString) for url: \(url.absoluteString)")
+            } catch {
+                log("Error saving the file at file path: \(filePath.absoluteString) for url: \(url.absoluteString) error: \(error.localizedDescription)")
+                saveCompletion(nil)
+            }
+        }
+    }
+    
+    public func resumableData(for hashCode: String) -> Data? {
+        if let resumableFilePath = resumableFilePath(hashCode: hashCode) {
+            return try? Data(contentsOf: resumableFilePath)
+        }
+        return nil
+    }
+    
+    public func deleteResumeDataFile(hashCode: String) throws {
+        if let resumableFilePath = resumableFilePath(hashCode: hashCode) {
+            try fm.removeItem(at: resumableFilePath)
+        }
+    }
+    
+    private func resumableFilePath(hashCode: String) -> URL? {
+        return resumableDIR.appendingPathComponent(hashCode)
+    }
+    
+    public func createResumableDirectory() throws {
+        try fm.createDirectory(at: resumableDIR, withIntermediateDirectories: true, attributes: nil)
+    }
+    
+    public var resumableDIR: URL {
+        let docDIR = fm.urls(for: .documentDirectory, in: .userDomainMask).first
+        return docDIR?.appendingPathComponent("resumable", isDirectory: true) ?? FileManager.default.temporaryDirectory
+    }
+}
+
+extension CacheFileManager {
+    public func moveAndSave(url: URL, fromPath: URL, saveCompletion: @escaping @Sendable (URL?) -> Void) {
+        queue.asyncWork { [weak self] in
+            guard let self = self, let newDiskFilePath = filePath(url: url) else { return }
+            do {
+                try FileManager.default.moveItem(atPath: fromPath.path, toPath: newDiskFilePath.path)
+                try FileManager.default.removeItem(at: fromPath)
+                saveCompletion(newDiskFilePath)
+            } catch {
+                log("Error moving the file from: \(fromPath.absoluteString) to url: \(newDiskFilePath.absoluteString) error: \(error.localizedDescription)")
+                saveCompletion(nil)
+            }
+        }
+    }
+}

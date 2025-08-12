@@ -43,10 +43,14 @@ final class ReactionManager: ReactionProtocol {
         chat.prepareToSendAsync(req: newRquest, type: .reactionCount)
         
         let typeCode = request.toTypeCode(chat)
-        cache?.reactionCount?.fetch(request.messageIds) { [weak self] models in
-            let reactionCounts = models.compactMap({$0.codable})
-            let response = request.toCountResponse(models: reactionCounts, typeCode: typeCode)
-            self?.emitEvent(event: .reaction(.count(response)))
+        
+        let reactionCache = cache?.reactionCount
+        Task { @MainActor in
+            if let models = reactionCache?.fetch(request.messageIds), !models.isEmpty {
+                let reactionCounts = models.compactMap({$0.codable})
+                let response = request.toCountResponse(models: reactionCounts, typeCode: typeCode)
+                emitEvent(event: .reaction(.count(response)))
+            }
         }
     }
     
@@ -116,23 +120,23 @@ final class ReactionManager: ReactionProtocol {
         store?.onReactionList(response)
     }
     
-    func onAddReaction(_ asyncMessage: AsyncMessage) {
+    func onAddReaction(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
-        cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .add, myId: chat.userInfo?.id))
+        await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .add, myId: chat.userInfo?.id))
         emitEvent(.reaction(.add(response)))
         store?.onAdd(response)
     }
     
-    func onReplaceReaction(_ asyncMessage: AsyncMessage) {
+    func onReplaceReaction(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         emitEvent(.reaction(.replace(response)))
-        cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .replace, myId: chat.userInfo?.id))
+        await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .replace, myId: chat.userInfo?.id))
         store?.onReplace(response)
     }
     
-    func onDeleteReaction(_ asyncMessage: AsyncMessage) {
+    func onDeleteReaction(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
-        cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .delete, myId: chat.userInfo?.id))
+        await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .delete, myId: chat.userInfo?.id))
         emitEvent(.reaction(.delete(response)))
         store?.onDelete(response)
     }

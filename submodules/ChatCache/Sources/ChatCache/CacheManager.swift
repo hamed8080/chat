@@ -61,12 +61,6 @@ public final class CacheManager: @unchecked Sendable {
         forwardQueue?.delete(uniqueIds)
     }
 
-    public func switchToContainerOnMain(userId: Int, completion: (@Sendable () ->Void)? = nil) {
-        DispatchQueue.main.async { [weak self] in
-            self?.switchToContainer(userId: userId, completion: completion)
-        }
-    }
-
     public func switchToContainer(userId: Int, completion: (() ->Void)? = nil) {
         persistentManager.switchToContainer(userId: userId) { [weak self] in
             self?.setupManangers()

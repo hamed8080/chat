@@ -199,12 +199,15 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func fetch(request: ThreadsRequest) {
         let typeCode = request.toTypeCode(chat)
-        chat.cache?.conversation?.fetch(request.fetchRequest) { [weak self] threads, totalCount in
-            let threads = threads.map { $0.codable() }
-            let hasNext = totalCount >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true, typeCode: typeCode)
-            Task { @ChatGlobalActor [weak self] in
-                self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
+        let conversationCache = chat.cache?.conversation
+        Task { @MainActor in
+            if let (threads, totalCount) = conversationCache?.fetch(request.fetchRequest) {
+                let threads = threads.map { $0.codable() }
+                let hasNext = totalCount >= request.count
+                let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true, typeCode: typeCode)
+                Task { @ChatGlobalActor [weak self] in
+                    self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
+                }
             }
         }
         chat.prepareToSendAsync(req: request, type: .getThreads)
@@ -304,6 +307,8 @@ internal final class ThreadsStore: ThreadStoreProtocol {
             if contains(conversationId), let index = indexOf(conversationId) {
                 conversations[index].conversation?.lastMessageVO = message.toLastMessageVO
                 conversations[index].conversation?.lastMessage = message.message
+                conversations[index].conversation?.time = message.conversation?.time
+                sort()
             } else {
                 // Insert empty slot at the top
                 appendAndSortIntoInMemory(conversations: [.init(id: conversationId)])

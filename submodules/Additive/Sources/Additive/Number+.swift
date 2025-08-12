@@ -12,21 +12,22 @@ extension UInt: Arritmatic {}
 extension Float: Arritmatic {}
 extension Double: Arritmatic {
     static let unit: [String] = { ["General.KB", "General.MB", "General.GB"] }()
+    static let shorUnits: [String] = { ["KB", "MB", "GB"] }()
 }
 
 nonisolated(unsafe) private var nf = NumberFormatter()
 let dateFormatterComp = DateComponentsFormatter()
 
 public extension Numeric {
-    func toSizeString(locale: Locale = .current) -> String? {
+    func toSizeString(locale: Locale = .current, bundle: Bundle) -> String? {
         if let number = self as? NSNumber {
             let value = Double(truncating: number)
             if value < 1024 {
                 let locaizedByte: String
                 if #available(macOS 12, iOS 15, tvOS 15, watchOS 8, *) {
-                    locaizedByte = String(localized: .init("General.Byte"))
+                    locaizedByte = String(localized: .init("General.Byte"), bundle: bundle)
                 } else {
-                    locaizedByte = "General.Byte".localized(bundle: .main)
+                    locaizedByte = "General.Byte".localized(bundle: bundle)
                 }
                 return "\(value) \(locaizedByte)"
             }
@@ -34,9 +35,9 @@ public extension Numeric {
             let unitIndex = max(0, exp - 1)
             let unit: String
             if #available(macOS 12, iOS 15, tvOS 15, watchOS 8, *) {
-                unit = String(localized: .init(Double.unit[unitIndex]))
+                unit = String(localized: .init(Double.unit[unitIndex]), bundle: bundle)
             } else {
-                unit = Double.unit[unitIndex].localized(bundle: .main)
+                unit = Double.unit[unitIndex].localized(bundle: bundle)
             }
             let number = value / pow(1024, Double(exp))
             if #available(macOS 12, iOS 15, tvOS 15, watchOS 8, *) {
@@ -45,6 +46,25 @@ public extension Numeric {
                 let localizedNumber = number.localNumber(locale: locale) ?? ""
                 return "\(String(format: "%.1f", localizedNumber)) \(unit)"
             }
+        } else {
+            return nil
+        }
+    }
+    
+    func toSizeStringShort(locale: Locale = .current) -> String? {
+        if let number = self as? NSNumber {
+            let value = Double(truncating: number)
+            if value < 1024 { 
+                let localizedNumber = value.localNumber(locale: locale) ?? ""
+                return "\(localizedNumber) B"
+            }
+            let exp = Int(log2(value) / log2(1024.0))
+            let unitIndex = max(0, exp - 1)
+            let unit: String
+            unit = Double.shorUnits[unitIndex]
+            let number = value / pow(1024, Double(exp))
+            let localizedNumber = number.localNumber(locale: locale, maximumFractionDigit: 1) ?? ""
+            return "\(localizedNumber) \(unit)"
         } else {
             return nil
         }
@@ -68,9 +88,10 @@ public extension Numeric {
         return dateFormatterComp.string(from: TimeInterval(Int(truncating: seconds)))
     }
 
-    func localNumber(locale: Locale = .current) -> String? {
+    func localNumber(locale: Locale = .current, maximumFractionDigit: Int = 0) -> String? {
         guard let nsNumber = self as? NSNumber else { return nil }
         nf.locale = locale
+        nf.maximumFractionDigits = maximumFractionDigit
         return nf.string(from: nsNumber)
     }
 }

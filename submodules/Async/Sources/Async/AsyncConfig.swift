@@ -6,12 +6,13 @@
 
 import Foundation
 import Logger
+import Spec
 
 /// Configuration data that needs to prepare to use SDK.
 ///
 /// To work with SDK this struct must be passed to ``Async`` initializer.
 public struct AsyncConfig: Codable, Sendable {
-    public private(set) var socketAddress: String
+    public let spec: Spec
     public private(set) var peerName: String
     public private(set) var deviceId: String = UUID().uuidString
     public private(set) var appId: String = "POD-Chat"
@@ -27,7 +28,6 @@ public struct AsyncConfig: Codable, Sendable {
     /// Configuration data that needs to prepare to use SDK.
     ///
     /// - Parameters:
-    ///   - socketAddress: The server address of socket.
     ///   - peerName: The peer name of the destination server.
     ///   - deviceId: Device id of the current device if you don't pass an id it generates an id with UUID.
     ///   - appId: The id of application that registered in server.
@@ -39,11 +39,11 @@ public struct AsyncConfig: Codable, Sendable {
     ///   - connectionCheckTimeout: Time in seconds for checking connection status and try if disconnected or informing you through the delegate.
     ///   - reconnectCount: The amount of times when socket fail or disconnect if reconnectOnClose is enabled
     ///   - reconnectOnClose: If it is true it tries to connect again depending on how many times you've set reconnectCount.
-    public init(socketAddress: String,
+    public init(spec: Spec,
                 peerName: String,
                 deviceId: String = UUID().uuidString,
                 appId: String = "POD-Chat",
-                loggerConfig: LoggerConfig = LoggerConfig(prefix: "ASYNC_SDK"),
+                loggerConfig: LoggerConfig? = nil,
                 peerId: Int? = nil,
                 messageTtl: Int = 10000,
                 pingInterval: TimeInterval = 10,
@@ -53,7 +53,14 @@ public struct AsyncConfig: Codable, Sendable {
                 reconnectOnClose: Bool = false)
         throws
     {
-        try self.init(socketAddress: socketAddress, peerName: peerName, appId: appId, loggerConfig: loggerConfig)
+        
+        self.spec = spec
+        if !(spec.server.socket.contains("wss://") || spec.server.socket.contains("ws://")) {
+            throw AsyncError(code: .socketAddressShouldStartWithWSS, message: "Async socket address should start with wss")
+        }
+        self.peerName = peerName
+        self.appId = appId
+        self.loggerConfig = loggerConfig ?? LoggerConfig(spec: spec, prefix: "ASYNC_SDK")
         self.deviceId = deviceId
         self.peerId = peerId
         self.messageTtl = messageTtl
@@ -64,30 +71,13 @@ public struct AsyncConfig: Codable, Sendable {
         self.reconnectOnClose = reconnectOnClose
     }
 
-    /// Configuration data that needs to prepare to use SDK.
-    ///
-    /// - Parameters:
-    ///   - socketAddress: The server address of socket.
-    ///   - peerName: The peer name of the destination server.
-    ///   - appId: The id of application that registered in server.
-    ///   - loggerConfig: The id of application that registered in server.
-    public init(socketAddress: String, peerName: String, appId: String, loggerConfig: LoggerConfig) throws {
-        if !(socketAddress.contains("wss://") || socketAddress.contains("ws://")) {
-            throw AsyncError(code: .socketAddressShouldStartWithWSS, message: "Async socket address should start with wss")
-        }
-        self.socketAddress = socketAddress
-        self.peerName = peerName
-        self.appId = appId
-        self.loggerConfig = loggerConfig
-    }
-
     public mutating func updateDeviceId(_ deviceId: String) {
         self.deviceId = deviceId
     }
 }
 
 public final class AsyncConfigBuilder {
-    private(set) var socketAddress: String = ""
+    private(set) var spec: Spec
     private(set) var peerName: String = ""
     private(set) var deviceId: String = UUID().uuidString
     private(set) var appId: String = "POD-Chat"
@@ -98,13 +88,10 @@ public final class AsyncConfigBuilder {
     private(set) var connectionCheckTimeout: TimeInterval = 20
     private(set) var reconnectCount: Int = 5
     private(set) var reconnectOnClose: Bool = false
-    private(set) var loggerConfig: LoggerConfig = .init(prefix: "ASYNC_SDK")
-    public init() {}
-
-    @discardableResult
-    public func socketAddress(_ socketAddress: String) -> AsyncConfigBuilder {
-        self.socketAddress = socketAddress
-        return self
+    private(set) var loggerConfig: LoggerConfig?
+    
+    public init(spec: Spec) {
+        self.spec = spec
     }
 
     @discardableResult
@@ -174,11 +161,11 @@ public final class AsyncConfigBuilder {
     }
 
     public func build() throws -> AsyncConfig {
-        try AsyncConfig(socketAddress: socketAddress,
+        try AsyncConfig(spec: spec,
                         peerName: peerName,
                         deviceId: deviceId,
                         appId: appId,
-                        loggerConfig: loggerConfig,
+                        loggerConfig: loggerConfig ?? LoggerConfig(spec: spec, prefix: "ASYNC_SDK"),
                         peerId: peerId,
                         messageTtl: messageTtl,
                         pingInterval: pingInterval,

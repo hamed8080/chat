@@ -15,7 +15,7 @@ public enum SocketFactory {
 
     public static func create(config: AsyncConfig, delegate: AsyncDelegate) async -> Async {
         let logger = Logger(config: config.loggerConfig)
-        let url = URL(string: config.socketAddress)!
+        let url = URL(string: config.spec.server.socket)!
         let socket = createSocket(url: url, timeout: config.connectionRetryInterval, logger: logger)
         return await Async(socket: socket, config: config, delegate: delegate, logger: logger)
     }

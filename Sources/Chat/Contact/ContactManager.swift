@@ -40,11 +40,11 @@ final class ContactManager: ContactProtocol {
     }
 
     private func syncWithCache(_ phoneContacts: [Contact]) {
-        chat.cache?.contact?.all { [weak self] contactEntities in
-            if let contactsToSync = contactEntities.toSyncContactsRequest(newContacts: phoneContacts) {
-                Task {
-                    await self?.addAll(contactsToSync)
-                }
+        let contactCache = chat.cache?.contact
+        Task { @MainActor in
+            let contactEntities = contactCache?.all().compactMap({$0.codable})
+            if let contactsToSync = contactEntities?.toSyncContactsRequest(newContacts: phoneContacts) {
+                await addAll(contactsToSync)
             }
         }
     }
@@ -80,7 +80,7 @@ final class ContactManager: ContactProtocol {
     }
 
     func remove(_ request: RemoveContactsRequest) {
-        let url = "\(chat.config.platformHost)\(Routes.removeContacts.rawValue)"
+        let url = "\(chat.config.spec.server.social)\(chat.config.spec.paths.social.removeContacts)"
         let removeRequest = request
         let typeCode = request.toTypeCode(chat)
         let urlReq = request.toURLReq(url, chat.config.token, typeCode)
@@ -111,8 +111,11 @@ final class ContactManager: ContactProtocol {
     func get(_ request: ContactsRequest) {
         chat.prepareToSendAsync(req: request, type: .getContacts)
         let typeCode = request.toTypeCode(chat)
-        chat.cache?.contact?.getContacts(request.fetchRequest) { [weak self] contacts, _ in
-            self?.emitEvent(event: contacts.toCachedContactsEvent(request, typeCode))
+        let contactCache = chat.cache?.contact
+        Task { @MainActor in
+            if let (contacts, _) = contactCache?.getContacts(request.fetchRequest) {
+                emitEvent(event: contacts.toCachedContactsEvent(request, typeCode))
+            }
         }
     }
 
@@ -120,10 +123,10 @@ final class ContactManager: ContactProtocol {
         get(request)
     }
 
-    func onContacts(_ asyncMessage: AsyncMessage) {
+    func onContacts(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<[Contact]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         let copies = response.result?.compactMap{$0} ?? []
-        chat.cache?.contact?.insert(models: copies)
+        await chat.cache?.contact?.insertContacts(models: copies)
         emitEvent(.contact(.contacts(response)))
     }
 
@@ -132,17 +135,23 @@ final class ContactManager: ContactProtocol {
     }
 
     func onContactNotSeen(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[ContactNotSeenDurationRespoonse]> = asyncMessage.toChatResponse()
-        emitEvent(.contact(.notSeen(response)))
+        var arr: ChatResponse<[ContactNotSeenDurationRespoonse]> = asyncMessage.toChatResponse()
+        if arr.result == nil {
+            let singleResponse: ChatResponse<ContactNotSeenDurationRespoonse> = asyncMessage.toChatResponse()
+            if let singleResult = singleResponse.result {
+                arr.result = [singleResult]
+            }
+        }
+        emitEvent(.contact(.notSeen(arr)))
     }
 
     func getBlockedList(_ request: BlockedListRequest) {
         chat.prepareToSendAsync(req: request, type: .getBlocked)
     }
 
-    func onBlockedContacts(_ asyncMessage: AsyncMessage) {
+    func onBlockedContacts(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<[BlockedContactResponse]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        chat.cache?.contact?.insert(models: response.result?.compactMap(\.contact) ?? [])
+        await chat.cache?.contact?.insertContacts(models: response.result?.compactMap(\.contact) ?? [])
         emitEvent(.contact(.blockedList(response)))
     }
 
@@ -162,7 +171,7 @@ final class ContactManager: ContactProtocol {
     }
 
     func add(_ request: AddContactRequest) {
-        let url = "\(chat.config.platformHost)\(Routes.addContacts.rawValue)"
+        let url = "\(chat.config.spec.server.social)\(chat.config.spec.paths.social.addContacts)"
         let typeCode = chat.config.typeCodes[request.typeCodeIndex].typeCode
         let urlReq = request.toAddReq(url, chat.config.token, typeCode)
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
@@ -175,7 +184,7 @@ final class ContactManager: ContactProtocol {
     }
 
     func addAll(_ request: [AddContactRequest]) {
-        let url = "\(chat.config.platformHost)\(Routes.addContacts.rawValue)"
+        let url = "\(chat.config.spec.server.social)\(chat.config.spec.paths.social.addContacts)"
         guard let urlReq = request.toAddAllReq(url: url, token: chat.config.token) else { return }
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
@@ -186,12 +195,12 @@ final class ContactManager: ContactProtocol {
         .resume()
     }
 
-    private func onAddContacts(uniqueId: String?, data: Data?, response: URLResponse?, error: Error?) {
+    private func onAddContacts(uniqueId: String?, data: Data?, response: URLResponse?, error: Error?) async {
         let result: ChatResponse<ContactResponse>? = data?.decode(response, error, typeCode: nil)
         chat.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: chat.loggerUserInfo)
         let response = ChatResponse(uniqueId: uniqueId, result: result?.result?.contacts, error: result?.error, typeCode: result?.typeCode)
         emitEvent(.contact(.add(response)))
-        chat.cache?.contact?.insert(models: result?.result?.contacts ?? [])
+        await chat.cache?.contact?.insertContacts(models: result?.result?.contacts ?? [])
     }
     
     private nonisolated func emitEvent(event: ChatEventType) {

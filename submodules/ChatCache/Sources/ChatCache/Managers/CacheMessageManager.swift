@@ -25,29 +25,28 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         }
     }
     
+    @MainActor
     public func delete(_ threadId: Int, _ messageId: Int) {
         let predicate = predicate(threadId, messageId)
         let req = Entity.fetchRequest()
         req.predicate = predicate
-        guard let message = (try? viewContext.fetch(req))?.first else { return }
-        viewContext.perform { [weak self] in
-            guard let self = self else { return }
-            if let next = next(threadId: threadId, messageId: messageId) {
-                next.previousId = message.previousId
-            }
-            setNilReplyReferences(for: messageId)
-            viewContext.delete(message)
-            saveViewContext()
+        guard let message = (try? self.viewContext.fetch(req))?.first else { return }
+        if let next = next(threadId: threadId, messageId: messageId) {
+            next.previousId = message.previousId
         }
+        setNilReplyReferences(for: messageId)
+        viewContext.delete(message)
+        saveViewContext()
     }
     
+    @MainActor
     private func setNilReplyReferences(for messageId: Int) {
         // Fetch all reply referencecs to this message
         let replyMessagesPredicate = NSPredicate(format: "replyToMessageId == %@", messageId.nsValue)
         let replyReq = Entity.fetchRequest()
         replyReq.predicate = replyMessagesPredicate
         
-        let referencingMessages = (try? viewContext.fetch(replyReq)) ?? []
+        let referencingMessages = (try? self.viewContext.fetch(replyReq)) ?? []
         for referencingMessage in referencingMessages {
             // Update replyInfo to set as deleted
             referencingMessage.replyInfo = ReplyInfoClass(deleted: true)
@@ -60,21 +59,22 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         update(propertiesToUpdate, predicate)
     }
     
+    @MainActor
     public func addOrRemoveThreadPinMessages(_ pin: Bool, _ threadId: Int, _ messageId: Int) {
         let req = CDConversation.fetchRequest()
         req.predicate = NSPredicate(format: "id == %@", threadId.nsValue)
-        guard let threadEntity = try? viewContext.fetch(req).first else { return }
+        guard let threadEntity = try? self.viewContext.fetch(req).first else { return }
         if pin == false {
             threadEntity.pinMessage = nil
-            saveViewContext()
+            self.saveViewContext()
         }
         
         if pin == true {
             let messageReq = Entity.fetchRequest()
-            messageReq.predicate = predicate(threadId, messageId)
-            if let entity = try? viewContext.fetch(messageReq).first {
+            messageReq.predicate = self.predicate(threadId, messageId)
+            if let entity = try? self.viewContext.fetch(messageReq).first {
                 threadEntity.pinMessage = PinMessageClass(message: entity.codable())
-                saveViewContext()
+                self.saveViewContext()
             }
         }
     }
@@ -145,47 +145,46 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         return NSCompoundPredicate(type: .and, subpredicates: predicateArray)
     }
     
-    public func find(_ threadId: Int, _ messageId: Int, _ completion: @escaping @Sendable (Entity?) -> Void) {
-        viewContext.perform {
-            let req = Entity.fetchRequest()
-            req.predicate = self.joinPredicate(threadId.nsValue, messageId.nsValue)
-            let message = try self.viewContext.fetch(req).first
-            completion(message)
-        }
+    @MainActor
+    public func find(_ threadId: Int, _ messageId: Int) -> Entity? {
+        let req = Entity.fetchRequest()
+        req.predicate = self.joinPredicate(threadId.nsValue, messageId.nsValue)
+        let message = try? self.viewContext.fetch(req).first
+        return message
     }
     
+    @MainActor
     public func find(_ threadId: Int, _ messageId: Int) async -> Entity.Model? {
         typealias ResultType = CheckedContinuation<Entity.Model?, Never>
         return await withCheckedContinuation { [weak self] (continuation: ResultType) in
-            self?.find(threadId, messageId) { entity in
-                continuation.resume(with: .success(entity?.codable()))
-            }
+            let entity = self?.find(threadId, messageId)
+            continuation.resume(with: .success(entity?.codable()))
         }
     }
     
+    @MainActor
     public func deleteAndReduceUnreadCountIfNeeded(_ threadId: Int, _ messageId: Int, _ userId: Int) async {
         if let entity = await find(threadId, messageId) {
             if entity.ownerId != userId, entity.seen == nil {
                 let cm = CacheConversationManager(container: container, logger: logger)
-                cm.setUnreadCount(action: .decrease, threadId: threadId)
+                 _ = cm.setUnreadCount(action: .decrease, threadId: threadId)
             }
             delete(threadId, messageId)
         }
     }
 
-    public func fetch(_ req: FetchMessagesRequest, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
-        viewContext.perform {
-            let fetchRequest = Entity.fetchRequest()
-            let asc = (req.order == Ordering.asc.rawValue) ? true : false
-            let sortByTime = NSSortDescriptor(key: "time", ascending: asc)
-            fetchRequest.sortDescriptors = [sortByTime]
-            fetchRequest.predicate = self.predicateArray(req)
-            let totalCount = try self.viewContext.count(for: fetchRequest)
-            fetchRequest.fetchOffset = req.offset
-            fetchRequest.fetchLimit = req.count
-            let messages = try self.viewContext.fetch(fetchRequest).sorted(by: { self.compare(asc, $0, $1) })
-            completion(messages, totalCount)
-        }
+    @MainActor
+    public func fetch(_ req: FetchMessagesRequest) -> ([Entity], Int)? {
+        let fetchRequest = Entity.fetchRequest()
+        let asc = (req.order == Ordering.asc.rawValue) ? true : false
+        let sortByTime = NSSortDescriptor(key: "time", ascending: asc)
+        fetchRequest.sortDescriptors = [sortByTime]
+        fetchRequest.predicate = self.predicateArray(req)
+        let totalCount = (try? viewContext.count(for: fetchRequest)) ?? 0
+        fetchRequest.fetchOffset = req.offset
+        fetchRequest.fetchLimit = req.count
+        let messages = (try? viewContext.fetch(fetchRequest).sorted(by: { self.compare(asc, $0, $1) })) ?? []
+        return (messages, totalCount)
     }
 
     private func compare(_ ascending: Bool, _ message1: CDMessage, _ message2: CDMessage) -> Bool {
@@ -200,10 +199,11 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         }
     }
 
-    public func getMentions(threadId: Int, offset: Int = 0, count: Int = 25, _ completion: @escaping @Sendable ([Entity], Int) -> Void) {
+    @MainActor
+    public func getMentions(threadId: Int, offset: Int = 0, count: Int = 25) -> ([Entity]?, Int)? {
         let predicate = NSPredicate(format: "threadId == \(CDConversation.queryIdSpecifier) AND mentioned == YES", threadId.nsValue)
         let sPredicate = SendableNSPredicate(predicate: predicate)
-        fetchWithOffset(count: count, offset: offset, predicate: sPredicate, completion)
+        return fetchWithOffset(count: count, offset: offset, predicate: sPredicate)
     }
 
     public func clearHistory(threadId: Int) {
@@ -211,6 +211,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         batchDelete(predicate: predicate)
     }
 
+    @MainActor
     public func next(threadId: Int, messageId: Int) -> Entity? {
         let predicate = NSPredicate(format: "id > %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
         let req = Entity.fetchRequest()
@@ -221,6 +222,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         return message
     }
 
+    @MainActor
     public func isContains(time: UInt, threadId: Int) -> Bool {
         let predicate = NSPredicate(format: "time == %@ && threadId == %@", Int(time).nsValue, threadId.nsValue)
         let req = Entity.fetchRequest()
@@ -230,6 +232,7 @@ public final class CacheMessageManager: BaseCoreDataManager<CDMessage>, @uncheck
         return result?.count == 1
     }
     
+    @MainActor
     public func isContains(messageId: Int, threadId: Int) -> Bool {
         let predicate = NSPredicate(format: "id == %@ && threadId == %@", messageId.nsValue, threadId.nsValue)
         let req = Entity.fetchRequest()

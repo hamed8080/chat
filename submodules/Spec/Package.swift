@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Additive",
+    name: "Spec",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v13),
@@ -12,23 +12,20 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Additive",
-            targets: ["Additive"]),
+            name: "Spec",
+            targets: ["Spec"]),
     ],
     dependencies: [
       .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
         .target(
-            name: "Additive",
+            name: "Spec",
             dependencies: []
         ),
         .testTarget(
-            name: "AdditiveTests",
-            dependencies: ["Additive"],
-            resources: [
-                .copy("Resources/Localizable.strings")
-            ]
+            name: "SpecTests",
+            dependencies: ["Spec"]
         ),
     ]
 )

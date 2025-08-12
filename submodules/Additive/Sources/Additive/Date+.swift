@@ -14,6 +14,7 @@ public extension Date {
         let formatter = Date.formatter
         formatter.dateStyle = .none
         formatter.timeStyle = .short
+        formatter.dateFormat = "HH:mm"
         formatter.locale = Locale(identifier: localIdentifire)
         if let withAbbrevation = withAbbrevation {
             formatter.timeZone = .init(abbreviation: withAbbrevation)
@@ -41,7 +42,7 @@ public extension Date {
     /// MMM: Name of the month = November
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *) func timeAgoSinceDateCondense(local: Locale = .current) -> String? {
         Date.formatter.locale = local
-        let isPersian = local.identifier == "fa_IR"
+        let isPersian = local.identifier == "ZmFfSVI=".fromBase64()
         let cal = isPersian ? Date.pCal : Calendar.current
 
         if cal.isDateInToday(self) {
@@ -62,7 +63,7 @@ public extension Date {
     private static let dtf = DateFormatter()
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *) func timeOrDate(local: Locale = .current) -> String? {
         Date.dtf.locale = local
-        let isPersian = local.identifier == "fa_IR"
+        let isPersian = local.identifier == "ZmFfSVI=".fromBase64()
         var cal = isPersian ? Date.pCal : Calendar.current
         cal.locale = local
         if cal.isDateInToday(self) {
@@ -80,7 +81,7 @@ public extension Date {
     // It will return "15 October 2024"
     func dayMonthNameYear(local: Locale = .current) -> String? {
         Date.dtf.locale = local
-        let isPersian = local.identifier == "fa_IR"
+        let isPersian = local.identifier == "ZmFfSVI=".fromBase64()
         var cal = isPersian ? Date.pCal : Calendar.current
         cal.locale = local
 

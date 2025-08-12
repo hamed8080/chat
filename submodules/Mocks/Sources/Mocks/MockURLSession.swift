@@ -19,6 +19,14 @@ public extension HTTPURLResponse {
 
 @MainActor
 open class MockURLSession: @preconcurrency URLSessionProtocol {
+    public func canelAndInvalidate() {
+        
+    }
+    
+    public func uploadTask(streamRequest request: URLRequest) -> URLSessionUploadTask {
+        fatalError("")
+    }
+    
     public func data(_ request: URLRequest) async throws -> (Data, URLResponse) {
         throw URLError(.badURL)
     }
@@ -59,6 +67,12 @@ open class MockURLSession: @preconcurrency URLSessionProtocol {
     }
     
     public func uploadTask(_ request: URLRequest, _ completion: @escaping ((Data?, URLResponse?, Error?) -> Void)) -> URLSessionDataTaskProtocol {
+        self.request = request
+        self.uploadCompleitonHandler = completion
+        return nextDataTask
+    }
+    
+    public func uploadTask(_ request: URLRequest, _ filePath: URL, _ completion: @escaping UploadCompletionType) -> URLSessionDataTaskProtocol {
         self.request = request
         self.uploadCompleitonHandler = completion
         return nextDataTask

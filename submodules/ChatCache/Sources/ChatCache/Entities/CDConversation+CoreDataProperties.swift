@@ -164,6 +164,21 @@ public extension CDConversation {
         userGroupHash = model.userGroupHash ?? userGroupHash
         isArchive = model.isArchive as NSNumber? ?? isArchive
         pinMessage = model.pinMessage?.toClass ?? pinMessage
+        
+        if let context = managedObjectContext, let lastMessageVOModel = model.lastMessageVO, let messageId = lastMessageVOModel.id {
+            let cacheCOntext = CacheManagedContext(context: context)
+            let req = CDMessage.fetchRequest()
+            req.predicate = NSPredicate(format: "%K == %@", #keyPath(CDMessage.id), messageId.nsValue)
+            
+            /// Fetch existing last messageVO or create a new entity
+            let entity = (try? context.fetch(req).first) ?? CDMessage.insertEntity(cacheCOntext)
+            
+            /// Update lastMessageVO properties
+            entity.update(lastMessageVOModel.toMessage)
+            
+            /// Set updated or created lastMessageVOEntity to the current CDConversation Entity
+            self.lastMessageVO = entity
+        }
     }
 
     class func findOrCreate(threadId: Int, context: CacheManagedContext) -> CDConversation {

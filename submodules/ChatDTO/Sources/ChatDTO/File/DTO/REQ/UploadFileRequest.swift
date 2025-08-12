@@ -14,6 +14,7 @@ import Foundation
 
 public struct UploadFileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public var data: Data
+    public var filePath: URL?
     public var fileExtension: String?
     public var fileName: String = ""
     public var fileSize: Int64 = 0
@@ -39,10 +40,38 @@ public struct UploadFileRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProto
     )
     {
         self.data = data
+        self.filePath = nil
         self.fileExtension = fileExtension
         let fileName = fileName ?? "\(NSUUID().uuidString)"
         self.fileName = fileName
         fileSize = Int64(data.count)
+        self.mimeType = mimeType ?? UploadFileRequest.guessMimeType(fileExtension, fileName)
+        self.userGroupHash = userGroupHash
+        self.originalName = originalName ?? fileName + (fileExtension ?? "")
+        self.isPublic = userGroupHash != nil ? false : isPublic // if send file iniside the thread we need to set is isPublic to false
+        self.uniqueId = UUID().uuidString
+        self.description = description
+        self.typeCodeIndex = typeCodeIndex
+    }
+    
+    public init(filePath: URL,
+                fileSize: Int64,
+                fileExtension: String? = nil,
+                fileName: String? = nil,
+                description: String? = nil,
+                isPublic: Bool? = nil,
+                mimeType: String? = nil,
+                originalName: String? = nil,
+                userGroupHash: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0
+    )
+    {
+        self.data = Data()
+        self.filePath = filePath
+        self.fileExtension = fileExtension
+        let fileName = fileName ?? "\(NSUUID().uuidString)"
+        self.fileName = fileName
+        self.fileSize = fileSize
         self.mimeType = mimeType ?? UploadFileRequest.guessMimeType(fileExtension, fileName)
         self.userGroupHash = userGroupHash
         self.originalName = originalName ?? fileName + (fileExtension ?? "")

@@ -15,8 +15,9 @@ public extension PodspaceFileUploadResponse {
         guard let hash = result?.hash else { return nil }
         let ext = result?.extension
         let isImage = ["png", "jpg", "jpeg"].map{$0.lowercased()}.contains(ext)
-        let path = isImage ? Routes.images.rawValue : Routes.files.rawValue
-        let link = "\(config.fileServer)\(path)/\(hash)"
+         let downloadPath = config.spec.paths.podspace.download
+         let path = isImage ? downloadPath.images : downloadPath.files
+         let link = "\(config.spec.server.file)\(path)/\(hash)"
         let fileDetail = FileDetail(fileExtension: result?.extension,
                    link: link,
                    mimeType: result?.type,

@@ -10,12 +10,10 @@ import ChatModels
 
 public final class CacheTagManager: BaseCoreDataManager<CDTag>, @unchecked Sendable {
     
-    public func getTags(_ completion: @escaping @Sendable ([Entity]) -> Void) {
-        viewContext.perform {
-            let req = Entity.fetchRequest()
-            req.relationshipKeyPathsForPrefetching = ["tagParticipants"]
-            let tags = try self.viewContext.fetch(req)
-            completion(tags)
-        }
+    @MainActor
+    public func getTags() -> [Entity] {
+        let req = Entity.fetchRequest()
+        req.relationshipKeyPathsForPrefetching = ["tagParticipants"]
+        return (try? self.viewContext.fetch(req)) ?? []
     }
 }
