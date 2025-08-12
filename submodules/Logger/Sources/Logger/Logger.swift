@@ -86,7 +86,7 @@ public final class Logger: @unchecked Sendable {
         delegate?.onLog(log: log)
 #if canImport(OSLog)
         if config.isDebuggingLogEnabled {
-            if #available(iOS 14.0, *) {
+            if #available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
                 let logger = os.Logger(subsystem: config.prefix, category: config.prefix)
                 logger.info("\(message)")
             }

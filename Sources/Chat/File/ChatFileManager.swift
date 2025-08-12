@@ -194,20 +194,20 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         }
 
         guard chat.config.saveOnUpload == true else {
-            complete()
+            _ = complete()
             return
         }
 
         if let data = fileData {
             saveUploadedFile(req, response, data) { _ in
-                Task { @ChatGlobalActor in complete() }
+                Task { @ChatGlobalActor in _ = complete() }
             }
         } else if let path = req.fileRequest?.filePath {
             saveUploadedFile(req, response, path) { _ in
-                Task { @ChatGlobalActor in complete() }
+                Task { @ChatGlobalActor in _ = complete() }
             }
         } else {
-            complete()
+            _ = complete()
         }
     }
 

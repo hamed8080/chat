@@ -210,7 +210,7 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
             _ = await writeAll(outStream, headerData)
             
             // Write the file bytes in chunks.
-            if #available(iOS 13.4, *), let fileHandle = fileHandle {
+            if #available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *), let fileHandle = fileHandle {
                 try await writeFileStream(outStream, fileHandle)
             }
             
@@ -260,7 +260,7 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
     ///   - outStream: The OutputStream to write to.
     ///   - fh: The FileHandle for reading the file.
     /// - Throws: An error if writing fails.
-    @available(iOS 13.4, *)
+    @available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *)
     func writeFileStream(_ outStream: OutputStream, _ fh: FileHandle) async throws {
         // Seek to the current offset. This is important for retries or if `needNewBodyStream` is called again.
         try fh.seek(toOffset: UInt64(currentOffset))

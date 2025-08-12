@@ -102,9 +102,9 @@ internal final class HistoryStore {
         var req = request
         req.count = max(0, request.count - messages.count)
         /// To get remaining messages we shift toTime/fromTime to the first/last message exist in the cache.
-        if let toTime = req.toTime {
+        if let _ = req.toTime {
             req.toTime = messages.first?.time ?? 0
-        } else if let fromTime = req.fromTime {
+        } else if let _ = req.fromTime {
             req.fromTime = messages.last?.time?.advanced(by: 1) ?? 0
         }
         requestMissedPart(req, messages)
