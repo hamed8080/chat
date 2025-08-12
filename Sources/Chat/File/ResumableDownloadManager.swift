@@ -70,7 +70,7 @@ extension ResumableDownloadManager {
         
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
         var req = DownloadManager.urlRequest(params: params)
-        req.addValue("bytes=\(size.intValue))-", forHTTPHeaderField: "Range")
+        req.addValue("bytes=\(size.intValue)-", forHTTPHeaderField: "Range")
         let newResumeTask = session.dataTask(with: req)
         let model = ResumableModel(task: newResumeTask, params: params, resumableDIR: resumableDIR)
         model.downloadedBytes = size.intValue
