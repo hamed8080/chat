@@ -8,7 +8,7 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension SendStatusPingRequest: ChatSendable {}
+extension SendStatusPingRequest: @retroactive ChatSendable {}
 
 public extension SendStatusPingRequest {
     var content: String? { jsonString }

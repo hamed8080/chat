@@ -17,8 +17,7 @@ public extension HTTPURLResponse {
     }
 }
 
-@MainActor
-open class MockURLSession: @preconcurrency URLSessionProtocol {
+open class MockURLSession: @unchecked Sendable, URLSessionProtocol {
     public func canelAndInvalidate() {
         
     }

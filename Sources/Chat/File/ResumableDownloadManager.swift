@@ -33,7 +33,7 @@ final class ResumableDownloadManager: NSObject {
 extension ResumableDownloadManager {
     func download(_ request: FileRequest) throws {
         let params = DownloadManagerParameters(request, chat.config, fm)
-        if let resumeData = fm?.resumableData(for: params.hashCode ?? "") {
+        if let _ = fm?.resumableData(for: params.hashCode ?? "") {
             try resumeDownloading(params: params)
             return
         }
@@ -70,9 +70,9 @@ extension ResumableDownloadManager {
         
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
         var req = DownloadManager.urlRequest(params: params)
-        req.addValue("bytes=\(Int64(size))-", forHTTPHeaderField: "Range")
+        req.addValue("bytes=\(size.intValue))-", forHTTPHeaderField: "Range")
         let newResumeTask = session.dataTask(with: req)
-        var model = ResumableModel(task: newResumeTask, params: params, resumableDIR: resumableDIR)
+        let model = ResumableModel(task: newResumeTask, params: params, resumableDIR: resumableDIR)
         model.downloadedBytes = size.intValue
         resumableDownloads[newResumeTask.taskIdentifier] = model
         
@@ -119,7 +119,7 @@ extension ResumableDownloadManager: URLSessionDataDelegate {
             }
             
             /// Append new data buffer to the outputStream.
-            data.withUnsafeBytes { pointer in
+            _ = data.withUnsafeBytes { pointer in
                 model.outputsStream?.write(pointer.bindMemory(to: Int8.self).baseAddress!, maxLength: data.count)
             }
             
