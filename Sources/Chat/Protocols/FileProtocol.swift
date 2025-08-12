@@ -75,17 +75,16 @@ public protocol FileProtocol: AnyObject {
     func download(_ request: FileRequest) throws
     
     /// Pause a resumable download.
-    /// - Parameter hashCode: HashCode of the FileRequest you send to the download method ``FileReqeust.hashCode``.
+    /// - Parameter hashCode: HashCode of the FileRequest you send to the ``download(_:)`` method ``FileRequest.hashCode``.
     func pauseResumableDownload(hashCode: String) throws
     
     /// Resume an pauesed download.
-    /// - Parameter hashCode: HashCode that you pass to the ``download`` method ``FileReqeust.hashCode``.
+    /// - Parameter hashCode: HashCode that you pass to the ``download(_:)`` method ``FileRequest.hashCode``.
     func resumeDownload(hashCode: String) throws
     
     /// Cancel a resumable download file.
-    /// - Parameter hashCode: Hashcode that you pass to the ``download`` method ``FileReqeust.hashCode``.
-    func cancel(hashCode: String) throws
-    
+    /// - Parameter hashCode: Hashcode that you pass to the ``download(_:)`` method ``FileRequest.hashCode``.
+    func cancelResumableDownload(hashCode: String) throws
     
     /// Delete cached resumable file from the disk.
     /// - Parameter hashCode: HashCode that you have passed druing the download process.

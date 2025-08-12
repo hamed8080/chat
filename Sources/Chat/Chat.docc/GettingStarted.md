@@ -10,6 +10,8 @@ To configure the Chat SDK you have got to provide an AsyncConfig along with a Ch
  
 
 ```swift
+let spec = getSpec()
+
 let callConfig = CallConfigBuilder()
     .callTimeout(20)
     .targetVideoWidth(640)
@@ -36,7 +38,7 @@ let chatLoggerConfig = LoggerConfig(
     logServerRequestheaders: ["Authorization": "Basic \(LOG_SERVER_TOKEN)", "Content-Type": "application/json"]
 )
 
-let asyncConfig = try! AsyncConfigBuilder()
+let asyncConfig = try! AsyncConfigBuilder(spec: spec)
     .socketAddress("SOCKET_ADDRESS")
     .reconnectCount(Int.max)
     .reconnectOnClose(true)
@@ -45,7 +47,7 @@ let asyncConfig = try! AsyncConfigBuilder()
     .loggerConfig(asyncLoggerConfig)
     .build()
 
-let chatConfig = ChatConfigBuilder(asyncConfig)
+let chatConfig = ChatConfigBuilder(spec: spec, asyncConfig)
     .callConfig(callConfig)
     .token("SSO_TOKEN")
     .ssoHost("SSERVER_ADDRESS")
@@ -73,6 +75,8 @@ final class ChatDelegateImplementation: ChatDelegate {
     }
 }
 ```
+
+>Tip: To get Chat SDK up and running you should provide a spec. Spec is a speccification where it contains URLS and paths to the API resources. The best way to create a one is to decode the original sample spec json file at this [link](https://github.com/hamed8080/bundle/blob/main/Spec.json)
 
 >Tip: Each request you make implicitly generates a unique ID, and upon receiving a response from the Chat Server, you will get a corresponding unique ID.
 

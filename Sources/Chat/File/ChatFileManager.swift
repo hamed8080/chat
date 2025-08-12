@@ -538,7 +538,7 @@ extension ChatFileManager {
         try resumableDownlaodManager.resumeDownloading(hashCode: hashCode)
     }
     
-    func cancel(hashCode: String) throws {
+    func cancelResumableDownload(hashCode: String) throws {
         try resumableDownlaodManager.cancel(hashCode: hashCode)
     }
     
