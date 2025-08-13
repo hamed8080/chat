@@ -417,3 +417,13 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 #endif
     }
 }
+
+extension ThreadsStore {
+    func onLastMessageChanged(_ conversation: Conversation) {
+        if let index = indexOf(conversation.id) {
+            conversations[index].conversation?.lastMessageVO = conversation.lastMessageVO
+            conversations[index].conversation?.lastMessage = conversation.lastMessage
+            conversations[index].conversation?.unreadCount = conversation.unreadCount
+        }
+    }
+}

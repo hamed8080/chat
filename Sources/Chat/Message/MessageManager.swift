@@ -297,6 +297,10 @@ final class MessageManager: MessageProtocol {
         emitEvent(.thread(.lastMessageEdited(response)))
         if let thread = copied {
             Task {
+                /// Update conversation store.
+                chat.coordinator.conversation.onLastMessageChanged(thread)
+                
+                /// Update CoreData
                 try? await cache?.conversation?.replaceLastMessage(thread)
             }
         }
@@ -308,6 +312,10 @@ final class MessageManager: MessageProtocol {
         emitEvent(.thread(.lastMessageDeleted(response)))
         if let thread = copied {
             Task {
+                /// Update conversation store.
+                chat.coordinator.conversation.onLastMessageChanged(thread)
+                
+                /// Update CoreData
                 try? await cache?.conversation?.replaceLastMessage(lastMessageToConversation(thread: thread))
             }
         }
