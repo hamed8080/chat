@@ -120,4 +120,8 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
             }
         }
     }
+
+    public func bind(call: CallMessageProtocol) {
+        callMessageDeleaget = call
+    }
 }

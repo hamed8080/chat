@@ -65,6 +65,9 @@ public protocol Chat {
 
     /// A method that should be called by clients whenever they fill it is the right time to connect to the server.
     func connect() async
+
+    /// A method to bind an object of type `CallMessageProtocol` to Chat SDK for intercommunications.
+    func bind(call: CallMessageProtocol)
 }
 
 public protocol ChatInternalProtocol: Chat {
