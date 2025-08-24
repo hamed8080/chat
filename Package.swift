@@ -16,12 +16,14 @@ let package = Package(
     dependencies: [
         .package(path: "submodules/ChatExtensions"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
+        .package(url: "https://github.com/stasel/WebRTC.git", .upToNextMajor(from: "107.0.0")),
     ],
     targets: [
         .target(
             name: "Chat",
             dependencies: [
                 .product(name: "ChatExtensions", package: "ChatExtensions"),
+                "WebRTC"
             ],
             resources: []
         ),
@@ -30,6 +32,7 @@ let package = Package(
             dependencies: [
                 "Chat",
                 .product(name: "ChatExtensions", package: "ChatExtensions"),
+                "WebRTC"
             ],
             path: "Tests"
         ),

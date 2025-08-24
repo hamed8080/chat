@@ -41,6 +41,7 @@ public protocol Chat {
     var assistant: AssistantProtocol { get set }
     var system: SystemProtocol { get set }
     var reaction: ReactionProtocol { get set }
+    var call: CallProtocol { get set }
 
     /// The current userInfo is set by the SDK after the connection gets ready.
     var userInfo: User? { get }

@@ -26,6 +26,7 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
     public lazy var system: SystemProtocol = SystemManager(chat: self)
     public lazy var reaction: ReactionProtocol = ReactionManager(chat: self)
     public lazy var coordinator: ChatCoordinator = ChatCoordinator(chat: self)
+    public lazy var call: CallProtocol = CallManager(chat: self)
 
     public var id: UUID = .init()
     public var config: ChatConfig

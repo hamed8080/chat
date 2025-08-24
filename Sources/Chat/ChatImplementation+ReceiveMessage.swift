@@ -183,35 +183,6 @@ public extension ChatImplementation {
              (conversation as? ThreadManager)?.onThreadsUnreadCount(asyncMessage)
         case .threadContactNameUpdated:
              (conversation as? ThreadManager)?.onThreadNameContactUpdated(asyncMessage)
-        case .startCallRequest,
-             .acceptCall,
-             .cancelCall,
-             .deliveredCallRequest,
-             .callStarted,
-             .endCallRequest,
-             .endCall,
-             .getCalls,
-             .groupCallRequest,
-             .leaveCall,
-             .addCallParticipant,
-             .callParticipantJoined,
-             .removeCallParticipant,
-             .terminateCall,
-             .muteCallParticipant,
-             .unmuteCallParticipant,
-             .cancelGroupCall,
-             .activeCallParticipants,
-             .callSessionCreated,
-             .turnOnVideoCall,
-             .turnOffVideoCall,
-             .startRecording,
-             .stopRecording,
-             .getCallsToJoin,
-             .callClientErrors,
-             .callStickerSystemMessage,
-             .renewCallRequest,
-             .callInquiry:
-             callMessageDeleaget?.onCallMessageDelegate(asyncMessage: asyncMessage, chat: self)
         case .getReaction:
              (reaction as? ReactionManager)?.onUserReaction(asyncMessage)
         case .reactionList:
@@ -239,6 +210,78 @@ public extension ChatImplementation {
              ((conversation as? ThreadManager)?.participant as? ParticipantManager)?.onRemoveAdminRoleFromUser(asyncMessage)
         case .addUserToUserGroup:
              (file as? ChatFileManager)?.onAddUserToUserGroup(asyncMessage)
+            
+        case .acceptCall, .endCallRequest, .addCallParticipant, .terminateCall:
+            // - TODO: Not impelemented by the ChatCall SDK
+            break
+        case .startCallRequest, .groupCallRequest:
+            (call as? CallManager)?.onStartCall(asyncMessage)
+            break
+        case .cancelCall:
+            (call as? CallManager)?.onCancelCall(asyncMessage)
+            break
+        case .deliveredCallRequest:
+            (call as? CallManager)?.onDeliverCall(asyncMessage)
+            break
+        case .callStarted:
+            (call as? CallManager)?.onCallStarted(asyncMessage)
+            break
+        case .endCall:
+            (call as? CallManager)?.onCallEnded(asyncMessage)
+            break
+        case .getCalls:
+            (call as? CallManager)?.onCallsHistory(asyncMessage)
+            break
+        case .leaveCall:
+            (call as? CallManager)?.onCallParticipantLeft(asyncMessage)
+            break
+        case .callParticipantJoined:
+            (call as? CallManager)?.onJoinCallParticipant(asyncMessage)
+            break
+        case .removeCallParticipant:
+            (call as? CallManager)?.onRemoveCallParticipant(asyncMessage)
+            break
+        case .muteCallParticipant:
+            (call as? CallManager)?.onMute(asyncMessage)
+            break
+        case .unmuteCallParticipant:
+            (call as? CallManager)?.onUNMute(asyncMessage)
+            break
+        case .cancelGroupCall:
+            (call as? CallManager)?.onGroupCallCanceled(asyncMessage)
+            break
+        case .activeCallParticipants:
+            (call as? CallManager)?.onActiveCallParticipants(asyncMessage)
+            break
+        case .callSessionCreated:
+            (call as? CallManager)?.onCallSessionCreated(asyncMessage)
+            break
+        case .turnOnVideoCall:
+            (call as? CallManager)?.onVideoTurnedOn(asyncMessage)
+        case .turnOffVideoCall:
+            (call as? CallManager)?.onVideoTurnedOff(asyncMessage)
+            break
+        case .startRecording:
+            (call as? CallManager)?.onCallRecordingStarted(asyncMessage)
+            break
+        case .stopRecording:
+            (call as? CallManager)?.onCallRecordingStopped(asyncMessage)
+            break
+        case .getCallsToJoin:
+            (call as? CallManager)?.onJoinCalls(asyncMessage)
+            break
+        case .callClientErrors:
+            (call as? CallManager)?.onCallError(asyncMessage)
+            break
+        case .callStickerSystemMessage:
+            (call as? CallManager)?.onCallSticker(asyncMessage)
+            break
+        case .renewCallRequest:
+            (call as? CallManager)?.onRenewCall(asyncMessage)
+            break
+        case .callInquiry:
+            (call as? CallManager)?.onCallInquiry(asyncMessage)
+            break
         case .error:
              (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:
