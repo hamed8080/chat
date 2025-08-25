@@ -20,7 +20,6 @@ public struct WebRTCConfig {
     public let customFrameCapturer: Bool
     public let userName: String?
     public let password: String?
-    public let callId: Int?
 
     /// File for simulator
     public let fileName: String?
@@ -35,13 +34,12 @@ public struct WebRTCConfig {
 
     public init(callConfig: CallConfig, startCall: StartCall, isSendVideoEnabled _: Bool, fileName: String? = nil) {
         self.callConfig = callConfig
-        callId = startCall.callId
-        peerName = startCall.chatDataDto.kurentoAddress
+        peerName = startCall.chatDataDto.kurentoAddress.first ?? ""
         iceServers = ["turn:\(startCall.chatDataDto.turnAddress)?transport=udp", "turn:\(startCall.chatDataDto.turnAddress)?transport=tcp"] // "stun:46.32.6.188:3478"
-        turnAddress = startCall.chatDataDto.turnAddress
+        turnAddress = startCall.chatDataDto.turnAddress.first ?? ""
         topicSend = startCall.clientDTO.topicSend
         topicReceive = startCall.clientDTO.topicReceive
-        brokerAddressWeb = startCall.chatDataDto.brokerAddressWeb
+        brokerAddressWeb = startCall.chatDataDto.brokerAddressWeb.first ?? ""
         dataChannel = false
         customFrameCapturer = false
         userName = "mkhorrami"

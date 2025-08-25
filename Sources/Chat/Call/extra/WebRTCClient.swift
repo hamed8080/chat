@@ -11,26 +11,6 @@ import ChatCore
 import ChatModels
 import Async
 
-@ChatGlobalActor
-public protocol CallParticipantUserRTCProtocol {
-    init(chatDelegate: ChatDelegate?, userId: Int?, callParticipant: CallParticipant, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate)
-    var callParticipant: CallParticipant { get set }
-    var audioRTC: AudioRTC { get set }
-    var videoRTC: VideoRTC { get set }
-    var userId: Int? { get set }
-    var isMe: Bool { get }
-    func peerConnectionForTopic(topic: String) -> RTCPeerConnection?
-    func uerRTC(topic: String) -> UserRTCProtocol?
-    func createMediaSenderTracks(_ fileName: String?)
-    func addStreams()
-    func toggleMute()
-    func toggleCamera()
-    func switchCameraPosition()
-    func addIceCandidate(_ candidate: RemoteCandidateRes)
-    func setRemoteDescription(_ remoteSDP: RemoteSDPRes)
-    func close()
-}
-
 // MARK: - Pay attention, this class use many extensions inside a files not be here.
 @ChatGlobalActor
 public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDelegate {
@@ -43,9 +23,11 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
     private let audioQueue = DispatchQueue(label: "audio")
     private var isPassedMaxVideoLimit: Bool { callParticipantsUserRTC.filter { $0.callParticipant.video == true }.count > config.callConfig.maxActiveVideoSessions }
+    private let callId: Int
 
-    public init(chat: ChatInternalProtocol, config: WebRTCConfig, delegate: WebRTCClientDelegate? = nil) {
+    public init(chat: ChatInternalProtocol, config: WebRTCConfig, callId: Int, delegate: WebRTCClientDelegate? = nil) {
         self.chat = chat
+        self.callId = callId
         self.config = config
         self.delegate = delegate
         RTCInitializeSSL()
@@ -61,7 +43,12 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
 
     public func createSession() {
         configureAudioSession()
-        let session = CreateSessionReq(peerName: config.peerName, turnAddress: config.turnAddress, brokerAddress: config.brokerAddressWeb, token: chat?.config.token ?? "")
+        let session = CreateSessionReq(
+            peerName: config.peerName,
+            turnAddress: config.turnAddress,
+            brokerAddress: config.brokerAddressWeb,
+            token: chat?.config.token ?? ""
+        )
         send(session)
     }
 
@@ -73,8 +60,9 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
         if let callParticipantUserRTC = callParticipantsUserRTC.first(where: { $0.callParticipant == callParticipant }) {
             callParticipantUserRTC.createMediaSenderTracks(config.fileName)
             callParticipantUserRTC.addStreams()
-            callParticipantUserRTC.getAudioOffer(sendOfferToPeer)
-            callParticipantUserRTC.getVideoOffer(sendOfferToPeer)
+            Task {
+                try? await sendSDPOffers(callParticipantUserRTC: callParticipantUserRTC)
+            }
         }
     }
 
@@ -139,7 +127,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
         callParticipantsUserRTC = []
     }
 
-    public func sendOfferToPeer(idType: String, _ sdp: RTCSessionDescription, topic: String, mediaType: Mediatype) {
+    public func sendOfferToPeer(idType: String, sdp: RTCSessionDescription, topic: String, mediaType: Mediatype) {
         let sendSDPOffer = SendOfferSDPReq(peerName: config.peerName,
                                            id: idType,
                                            brokerAddress: config.firstBorokerAddressWeb,
@@ -147,7 +135,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
                                            topic: topic,
                                            sdpOffer: sdp.sdp,
                                            mediaType: mediaType,
-                                           chatId: config.callId)
+                                           chatId: callId)
         send(sendSDPOffer)
     }
 
@@ -160,8 +148,10 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
                                               uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
         guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
         chat?.logger.logJSON(title: "ChatCall", jsonString: asyncMessage.string ?? "", persist: false, type: .sent)
-        
-//        chat?.asyncManager.asyncClient?.send(message: asyncMessage)
+        let async = chat?.asyncManager.asyncClient
+        Task { @AsyncGlobalActor in
+            await async?.send(message: asyncMessage)
+        }
     }
 
     deinit {
@@ -207,7 +197,7 @@ public extension WebRTCClient {
                 
                 if let audioTrack = stream.audioTracks.first, let topic = getTopicForPeerConnection(peerConnection) {
                     customPrint("\(getPCName(peerConnection)) did add stream audio track topic: \(topic)")
-                    callParticipntUserRCT.audioRTC.pc?.add(audioTrack, streamIds: [topic])
+                    callParticipntUserRCT.audioRTC.pc.add(audioTrack, streamIds: [topic])
                 }
             }
         }
@@ -468,8 +458,10 @@ public extension WebRTCClient {
 public extension WebRTCClient {
     func setOffers() {
         callParticipantsUserRTC.forEach { callParticipantUserRTC in
-            callParticipantUserRTC.getAudioOffer(sendOfferToPeer)
-            callParticipantUserRTC.getVideoOffer(sendOfferToPeer)
+            let isMe = callParticipantUserRTC.isMe
+            Task {
+                try? await sendSDPOffers(callParticipantUserRTC: callParticipantUserRTC)
+            }
         }
     }
 
@@ -478,8 +470,29 @@ public extension WebRTCClient {
             customPrint("can't find topic to reconnect peerconnection", isGuardNil: true)
             return
         }
-        callParticipantuserRTC.getVideoOffer(sendOfferToPeer)
-        callParticipantuserRTC.getAudioOffer(sendOfferToPeer)
+        Task {
+            try? await sendSDPOffers(callParticipantUserRTC: callParticipantuserRTC)
+        }
+    }
+    
+    internal func sendSDPOffers(callParticipantUserRTC: CallParticipantUserRTC) async throws {
+        let isMe = callParticipantUserRTC.isMe
+        
+        let adudioSdp = try await callParticipantUserRTC.getOfferSDP(video: false)
+        sendOfferToPeer(
+            idType: isMe ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER",
+            sdp: adudioSdp,
+            topic: callParticipantUserRTC.audioRTC.topic,
+            mediaType: .audio
+        )
+        
+        let videoSdp = try await callParticipantUserRTC.getOfferSDP(video: true)
+        sendOfferToPeer(
+            idType: isMe ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER",
+            sdp: videoSdp,
+            topic: callParticipantUserRTC.videoRTC.topic,
+            mediaType: .video
+        )
     }
 }
 

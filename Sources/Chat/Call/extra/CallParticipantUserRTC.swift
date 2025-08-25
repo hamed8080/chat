@@ -8,15 +8,15 @@ import ChatModels
 import WebRTC
 
 @ChatGlobalActor
-open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable, Equatable {
+open class CallParticipantUserRTC: Identifiable, Equatable {
     nonisolated public static func == (lhs: CallParticipantUserRTC, rhs: CallParticipantUserRTC) -> Bool {
         lhs.id == rhs.id
     }
 
     public let id: Int
     public var callParticipant: CallParticipant
-    public var audioRTC: AudioRTC
-    public var videoRTC: VideoRTC
+    public let audioRTC: AudioRTC
+    public let videoRTC: VideoRTC
     public var userId: Int?
     public var isMe: Bool { callParticipant.userId == userId }
 
@@ -26,7 +26,7 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
         self.callParticipant = callParticipant
         let direction: RTCDirection = callParticipant.userId == userId ? .send : .receive
         audioRTC = AudioRTC(chatDelegate: chatDelegate, direction: direction, topic: callParticipant.topics.topicAudio, config: config, delegate: delegate)
-        videoRTC = VideoRTC(direction: direction, topic: callParticipant.topics.topicVideo, config: config, delegate: delegate)
+        videoRTC = VideoRTC(renderer: nil, direction: direction, topic: callParticipant.topics.topicVideo, config: config, delegate: delegate)
     }
 
     public func peerConnectionForTopic(topic: String) -> RTCPeerConnection? {
@@ -39,7 +39,7 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
         }
     }
 
-    public func uerRTC(topic: String) -> UserRTCProtocol? {
+    public func uerRTC(topic: String) -> UserRTC? {
         if audioRTC.topic == topic {
             return audioRTC
         } else if videoRTC.topic == topic {
@@ -56,19 +56,9 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
             videoRTC.addReceiveStream()
         }
     }
-
-    func getAudioOffer(_ completion: ((String, RTCSessionDescription, String, Mediatype) -> Void)?) {
-        audioRTC.getLocalSDPWithOffer { [weak self] rtcSession in
-            guard let self = self else { return }
-            completion?(self.isMe ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER", rtcSession, self.audioRTC.topic, .audio)
-        }
-    }
-
-    func getVideoOffer(_ completion: ((String, RTCSessionDescription, String, Mediatype) -> Void)?) {
-        videoRTC.getLocalSDPWithOffer { [weak self] rtcSession in
-            guard let self = self else { return }
-            completion?(self.isMe ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER", rtcSession, self.videoRTC.topic, .video)
-        }
+   
+    func getOfferSDP(video: Bool) async throws -> RTCSessionDescription {
+        video ? try await videoRTC.getLocalSDPWithOffer() : try await audioRTC.getLocalSDPWithOffer()
     }
 
     public func createMediaSenderTracks(_ fileName: String? = nil) {
@@ -125,3 +115,5 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
         videoRTC.close()
     }
 }
+
+extension RTCSessionDescription: @unchecked Sendable {}

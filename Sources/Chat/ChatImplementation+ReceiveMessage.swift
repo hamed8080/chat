@@ -215,7 +215,7 @@ public extension ChatImplementation {
             // - TODO: Not impelemented by the ChatCall SDK
             break
         case .startCallRequest, .groupCallRequest:
-            (call as? CallManager)?.onStartCall(asyncMessage)
+            (call as? CallManager)?.onCallRequest(asyncMessage)
             break
         case .cancelCall:
             (call as? CallManager)?.onCancelCall(asyncMessage)

@@ -34,11 +34,11 @@ public struct SendClient: Codable, Sendable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
+        try container.encodeIfPresent(id, forKey: .id)
         try container.encode(type, forKey: .type)
-        try container.encode(deviceId, forKey: .deviceId)
+        try container.encodeIfPresent(deviceId, forKey: .deviceId)
         try container.encode(mute, forKey: .mute)
         try container.encode(video, forKey: .video)
-        try container.encode(desc, forKey: .desc)
+        try container.encodeIfPresent(desc, forKey: .desc)
     }
 }

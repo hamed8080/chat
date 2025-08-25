@@ -16,7 +16,7 @@ public struct StartCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtoc
     public let uniqueId: String
     public var thread: Conversation?
     public var contacts: [Contact]?
-    public var isVideoOn: Bool { type == .videoCall }
+    public var isVideoOn: Bool { type == .video }
     public var groupName: String = "group"
     public var isThreadCall: Bool { thread != nil }
     public var isContactCall: Bool { contacts != nil }

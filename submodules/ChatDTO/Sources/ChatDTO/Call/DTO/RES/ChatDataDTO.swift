@@ -7,46 +7,68 @@
 import Foundation
 
 public struct ChatDataDTO: Codable, Sendable {
+    public let metaData: String
+    public let kurentoAddress: [String]
+    public let turnAddress: [String]
+    public let internalTurnAddress: [String]
+    public let brokerAddress: [String]
+    public let brokerAddressWeb: [String]
     public let screenShare: String
-    public let turnAddress: String
-    public let brokerAddressWeb: String
-    public let kurentoAddress: String
+    public let screenShareUser: String
+    public let recordingUser: String
 
-    public init(sendMetaData _: String, screenShare: String, reciveMetaData _: String, turnAddress: String, brokerAddressWeb: String, kurentoAddress: String) {
-        self.screenShare = screenShare
-        self.turnAddress = turnAddress
-        self.brokerAddressWeb = brokerAddressWeb
+    public init(
+        metaData: String, kurentoAddress: [String], turnAddress: [String],
+        internalTurnAddress: [String], brokerAddress: [String],
+        brokerAddressWeb: [String], screenShare: String, screenShareUser: String,
+        recordingUser: String
+    ) {
+        self.metaData = metaData
         self.kurentoAddress = kurentoAddress
+        self.turnAddress = turnAddress
+        self.internalTurnAddress = internalTurnAddress
+        self.brokerAddress = brokerAddress
+        self.brokerAddressWeb = brokerAddressWeb
+        self.screenShare = screenShare
+        self.screenShareUser = screenShareUser
+        self.recordingUser = recordingUser
     }
 
     private enum CodingKeys: String, CodingKey {
-        case screenShare
-        case turnAddress
-        case brokerAddressWeb
-        case kurentoAddress
+        case metaData = "metaData"
+        case kurentoAddress = "kurentoAddress"
+        case turnAddress = "turnAddress"
+        case internalTurnAddress = "internalTurnAddress"
+        case brokerAddress = "brokerAddress"
+        case brokerAddressWeb = "brokerAddressWeb"
+        case screenShare = "screenShare"
+        case screenShareUser = "screenShareUser"
+        case recordingUser = "recordingUser"
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        metaData = try container.decode(String.self, forKey: .metaData)
+        
+        let kurentoAddressString = try container.decode(String.self, forKey: .kurentoAddress)
+        kurentoAddress = Array(kurentoAddressString.split(separator: ",").compactMap{ String($0) })
+        
+        let turnAddressString = try container.decode(String.self, forKey: .turnAddress)
+        turnAddress = Array(turnAddressString.split(separator: ",").compactMap{ String($0) })
+        
+        let internalTurnAddressString = try container.decode(String.self, forKey: .internalTurnAddress)
+        internalTurnAddress = Array(internalTurnAddressString.split(separator: ",").compactMap{ String($0) })
+        
+        let brokerAddressString = try container.decode(String.self, forKey: .brokerAddress)
+        brokerAddress = Array(brokerAddressString.split(separator: ",").compactMap{ String($0) })
+        
+        let brokerAddressWebString = try container.decode(String.self, forKey: .brokerAddressWeb)
+        brokerAddressWeb = Array(brokerAddressWebString.split(separator: ",").compactMap{ String($0) })
+        
         screenShare = try container.decode(String.self, forKey: .screenShare)
-
-        if let firstTurnAddress = try container.decode(String.self, forKey: .turnAddress).split(separator: ",").first {
-            turnAddress = String(firstTurnAddress)
-        } else {
-            turnAddress = ""
-        }
-
-        if let brokerAddressWeb = try? container.decode(String.self, forKey: .brokerAddressWeb) {
-            self.brokerAddressWeb = brokerAddressWeb
-        } else {
-            brokerAddressWeb = ""
-        }
-
-        if let firstKurentoAddress = try container.decode(String.self, forKey: .kurentoAddress).split(separator: ",").first {
-            kurentoAddress = String(firstKurentoAddress)
-        } else {
-            kurentoAddress = ""
-        }
+        screenShareUser = try container.decode(String.self, forKey: .screenShareUser)
+        recordingUser = try container.decode(String.self, forKey: .recordingUser)
     }
 
     public func encode(to encoder: Encoder) throws {
