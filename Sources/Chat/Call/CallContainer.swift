@@ -89,6 +89,10 @@ extension CallContainer {
     func processSDPAnswer(res: RemoteSDPRes) {
         webRTC?.callParticipntUserRCT(res.topic)?.setRemoteDescription(res)
     }
+    
+    func processRemoteIceCandidate(res: RemoteCandidateRes) {
+        webRTC?.callParticipntUserRCT(res.topic)?.setRemoteIceCandidate(res)
+    }
 }
 
 extension CallContainer: WebRTCClientDelegate {

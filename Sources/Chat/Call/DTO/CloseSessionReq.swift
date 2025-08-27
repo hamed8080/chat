@@ -10,11 +10,11 @@ import Async
 import ChatCore
 
 struct CloseSessionReq: Codable, AsyncSnedable {
-    var id: String = "CLOSE"
-    var token: String
+    let id: CallMessageType = .close
+    let token: String
     var content: String? { jsonString }
     var asyncMessageType: AsyncMessageTypes? = .message
-    var peerName: String?
+    let peerName: String?
 
     public init(peerName: String, token: String) {
         self.token = token

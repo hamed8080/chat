@@ -115,9 +115,9 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
         callParticipantsUserRTC = []
     }
 
-    public func sendOfferToPeer(idType: String, sdp: RTCSessionDescription, topic: String, mediaType: Mediatype) {
-        let sendSDPOffer = SendOfferSDPReq(peerName: config.peerName,
-                                           id: idType,
+    public func sendOfferToPeer(idType: CallMessageType, sdp: RTCSessionDescription, topic: String, mediaType: Mediatype) {
+        let sendSDPOffer = SendOfferSDPReq(id: idType,
+                                           peerName: config.peerName,
                                            brokerAddress: config.firstBorokerAddressWeb,
                                            token: chat?.config.token ?? "",
                                            topic: topic,
@@ -419,7 +419,7 @@ public extension WebRTCClient {
         
         let adudioSdp = try await callParticipantUserRTC.getOfferSDP(video: false)
         sendOfferToPeer(
-            idType: isMe ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER",
+            idType: isMe ? .sendSdpOffer : .receiveSdpOffer,
             sdp: adudioSdp,
             topic: callParticipantUserRTC.audioRTC.topic,
             mediaType: .audio
@@ -427,7 +427,7 @@ public extension WebRTCClient {
         
         let videoSdp = try await callParticipantUserRTC.getOfferSDP(video: true)
         sendOfferToPeer(
-            idType: isMe ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER",
+            idType: isMe ? .sendSdpOffer : .receiveSdpOffer,
             sdp: videoSdp,
             topic: callParticipantUserRTC.videoRTC.topic,
             mediaType: .video

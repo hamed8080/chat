@@ -313,6 +313,12 @@ extension CallManager {
             container.processSDPAnswer(res: res)
         }
     }
+    
+    func processRemoteIceCandidate(_ res: RemoteCandidateRes) {
+        if let container = callContainer(callId: 0) {
+            container.processRemoteIceCandidate(res: res)
+        }
+    }
 }
 
 extension CallManager {

@@ -10,7 +10,7 @@ import Async
 import ChatCore
 
 struct SendOfferSDPReq: Codable, AsyncSnedable {
-    var id: String = "RECIVE_SDP_OFFER"
+    let id: CallMessageType
     var brokerAddress: String
     var token: String
     var topic: String
@@ -23,9 +23,9 @@ struct SendOfferSDPReq: Codable, AsyncSnedable {
     var content: String? { jsonString }
     var asyncMessageType: AsyncMessageTypes? = .message
 
-    public init(peerName: String, id: String = "RECIVE_SDP_OFFER", brokerAddress: String, token: String, topic: String, sdpOffer: String, mediaType: Mediatype, chatId: Int?) {
-        self.peerName = peerName
+    public init(id: CallMessageType, peerName: String, brokerAddress: String, token: String, topic: String, sdpOffer: String, mediaType: Mediatype, chatId: Int?) {
         self.id = id
+        self.peerName = peerName
         self.brokerAddress = brokerAddress
         self.token = token
         self.topic = topic

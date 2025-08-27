@@ -10,9 +10,6 @@ import ChatCore
 import ChatDTO
 import ChatModels
 import Foundation
-#if canImport(UIKit)
-    import UIKit
-#endif
 
 final class MessageManager: MessageProtocol {
     let chat: ChatInternalProtocol

@@ -10,7 +10,7 @@ import Async
 import ChatCore
 
 struct StopAllSessionReq: Codable, AsyncSnedable {
-    var id: String = "STOPALL"
+    var id: CallMessageType = .stopAll
     var token: String
     var peerName: String?
     var content: String? { jsonString }

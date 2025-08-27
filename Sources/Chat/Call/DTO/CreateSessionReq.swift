@@ -10,7 +10,7 @@ import Async
 import ChatCore
 
 class CreateSessionReq: UniqueIdManagerRequest, AsyncSnedable {
-    var id: String = "CREATE_SESSION"
+    let id: CallMessageType = .createSession
     var brokerAddress: String
     var turnAddress: String
     var token: String
@@ -19,8 +19,7 @@ class CreateSessionReq: UniqueIdManagerRequest, AsyncSnedable {
     var content: String? { jsonString }
     var asyncMessageType: AsyncMessageTypes? = .message
 
-    public init(peerName: String, id: String = "CREATE_SESSION", turnAddress: String, brokerAddress: String, chatId: Int, token: String, uniqueId: String? = nil) {
-        self.id = id
+    public init(peerName: String, turnAddress: String, brokerAddress: String, chatId: Int, token: String, uniqueId: String? = nil) {
         self.chatId = chatId
         self.peerName = peerName
         self.turnAddress = turnAddress

@@ -10,17 +10,16 @@ import Async
 import ChatCore
 
 struct SendCandidateReq: Codable, AsyncSnedable {
-    var id: String = "ADD_ICE_CANDIDATE"
-    var token: String
-    var topic: String
-    var candidate: IceCandidate
+    let id: CallMessageType = .addIceCandidate
+    let token: String
+    let topic: String
+    let candidate: IceCandidate
     var asyncMessageType: AsyncMessageTypes? = .message
     var content: String? { jsonString }
     var peerName: String?
 
-    public init(peerName: String, id: String = "ADD_ICE_CANDIDATE", token: String, topic: String, candidate: IceCandidate) {
+    public init(peerName: String, token: String, topic: String, candidate: IceCandidate) {
         self.peerName = peerName
-        self.id = id
         self.token = token
         self.topic = topic
         self.candidate = candidate

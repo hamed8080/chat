@@ -62,11 +62,11 @@ open class CallParticipantUserRTC: Identifiable, Equatable {
         }
     }
 
-    public func addIceCandidate(_ candidate: RemoteCandidateRes) {
-        if isVideoTopic(topic: candidate.topic) {
-            videoRTC.addIceToPeerConnection(candidate)
+    public func setRemoteIceCandidate(_ res: RemoteCandidateRes) {
+        if isVideoTopic(topic: res.topic) {
+            videoRTC.addIceToPeerConnection(res)
         } else {
-            audioRTC.addIceToPeerConnection(candidate)
+            audioRTC.addIceToPeerConnection(res)
         }
     }
 
