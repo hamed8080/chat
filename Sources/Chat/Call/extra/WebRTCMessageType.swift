@@ -16,6 +16,7 @@ enum WebRTCMessageType: String, Decodable {
     case close = "CLOSE"
     case stopAll = "STOPALL"
     case stop = "STOP"
+    case receivingMedia = "RECEIVING_MEDIA"
     case unkown
 
     // prevent crash when new case added from server side

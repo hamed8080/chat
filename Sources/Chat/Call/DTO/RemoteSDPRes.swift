@@ -8,9 +8,9 @@ import Foundation
 import WebRTC
 
 public struct RemoteSDPRes: Codable {
-    var id: String = "PROCESS_SDP_ANSWER"
-    var topic: String
-    var sdpAnswer: String
+    let id: String = "PROCESS_SDP_ANSWER"
+    let topic: String
+    let sdpAnswer: String
 
     var rtcSDP: RTCSessionDescription {
         RTCSessionDescription(type: .answer, sdp: sdpAnswer)

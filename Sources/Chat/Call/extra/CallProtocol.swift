@@ -1,6 +1,5 @@
 @ChatGlobalActor
 public protocol WebRTCActions: AnyObject {
-    var callParticipantsUserRTC: [CallParticipantUserRTC] { get }
     func switchCamera()
     func unmuteCall(_ req: UNMuteCallRequest)
     func muteCall(_ req: MuteCallRequest)
@@ -120,4 +119,10 @@ public protocol CallProtocol: WebRTCActions {
 
     /// Only for previewing the current state of the application in swiftUI.
     func preview(startCall: StartCall)
+}
+
+@ChatGlobalActor
+internal protocol InternalCallProtocol {
+    func onReceivedMessage(_ asyncMessage: AsyncMessage)
+    func send(_ asyncMessage: AsyncSnedable)
 }

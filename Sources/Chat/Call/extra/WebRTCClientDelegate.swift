@@ -8,8 +8,8 @@ import Foundation
 
 public protocol WebRTCClientDelegate: AnyObject {
     func didIceConnectionStateChanged(iceConnectionState: IceConnectionState)
-    func didReceiveData(data: Data)
-    func didReceiveMessage(message: String)
+    func dataChannelDidReceive(data: Data)
+    func dataChannelDidReceive(message: String)
     func didConnectWebRTC()
     func didDisconnectWebRTC()
 }

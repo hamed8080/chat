@@ -25,7 +25,6 @@ public class UserRTC: Hashable, Identifiable {
     public var iceTimer: Timer?
     public var track: RTCMediaStreamTrack?
     public var constraints: [String: String] = [kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueFalse, kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueFalse]
-    private let lock = NSLock()
 
     nonisolated public static func == (lhs: UserRTC, rhs: UserRTC) -> Bool {
         lhs.id == rhs.id

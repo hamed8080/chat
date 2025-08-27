@@ -55,6 +55,7 @@ public final class AsyncManager: AsyncDelegate {
         Task { @ChatGlobalActor [weak self] in
             guard let self = self else { return }
             await chat?.invokeCallback(asyncMessage: asyncMessage)
+            await (chat?.call as? InternalCallProtocol)?.onReceivedMessage(asyncMessage)
             schedulePingTimer()
             if let ban = asyncMessage.banError {
                 scheduleForResendQueues(ban)

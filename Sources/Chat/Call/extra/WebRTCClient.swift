@@ -11,7 +11,6 @@ import ChatCore
 import ChatModels
 import Async
 
-// MARK: - Pay attention, this class use many extensions inside a files not be here.
 @ChatGlobalActor
 public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDelegate {
     private var chat: ChatInternalProtocol?
@@ -41,20 +40,9 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
         }
     }
 
-    public func createSession() {
-        configureAudioSession()
-        let session = CreateSessionReq(
-            peerName: config.peerName,
-            turnAddress: config.turnAddress,
-            brokerAddress: config.brokerAddressWeb,
-            token: chat?.config.token ?? ""
-        )
-        send(session)
-    }
-
     /// Ordering is matter in this function.
     public func addCallParticipant(_ callParticipant: CallParticipant) {
-        callParticipantsUserRTC.append(.init(chatDelegate: chat?.delegate, userId: chat?.userInfo?.id, callParticipant: callParticipant, config: config, delegate: self))
+        callParticipantsUserRTC.append(.init(chatDelegate: chat?.delegate, myUserId: chat?.userInfo?.id, callParticipant: callParticipant, config: config, delegate: self))
         // create media senders for both audio and video senders
 
         if let callParticipantUserRTC = callParticipantsUserRTC.first(where: { $0.callParticipant == callParticipant }) {
@@ -122,7 +110,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
         }
         destroyAudioSession()
         let close = CloseSessionReq(peerName: config.peerName, token: chat?.config.token ?? "")
-        send(close)
+        (chat?.call as? InternalCallProtocol)?.send(close)
         logFile?.stop()
         callParticipantsUserRTC = []
     }
@@ -136,22 +124,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
                                            sdpOffer: sdp.sdp,
                                            mediaType: mediaType,
                                            chatId: callId)
-        send(sendSDPOffer)
-    }
-
-    func send(_ asyncMessage: AsyncSnedable) {
-        guard let config = chat?.config, let content = asyncMessage.content else { return }
-        let asyncMessage = SendAsyncMessageVO(content: content,
-                                              ttl: config.msgTTL,
-                                              peerName: asyncMessage.peerName ?? config.asyncConfig.peerName,
-                                              priority: config.msgPriority,
-                                              uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
-        guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
-        chat?.logger.logJSON(title: "ChatCall", jsonString: asyncMessage.string ?? "", persist: false, type: .sent)
-        let async = chat?.asyncManager.asyncClient
-        Task { @AsyncGlobalActor in
-            await async?.send(message: asyncMessage)
-        }
+        (chat?.call as? InternalCallProtocol)?.send(sendSDPOffer)
     }
 
     deinit {
@@ -267,7 +240,7 @@ public extension WebRTCClient {
                                                             topic: topicName,
                                                             candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
                     self.customPrint("ice sended to server")
-                    self.send(sendIceCandidate)
+                    (self.chat?.call as? InternalCallProtocol)?.send(sendIceCandidate)
                 } else {
                     self.recursiveTimerForRemoteSDP(nextInterval, topicName, candidate, peerConnection, retryCount + 1)
                     let pcName = self.getPCName(peerConnection)
@@ -342,9 +315,9 @@ public extension WebRTCClient {
     nonisolated func dataChannel(_: RTCDataChannel, didReceiveMessageWith buffer: RTCDataBuffer) {
         Task { @ChatGlobalActor in
             if buffer.isBinary {
-                self.delegate?.didReceiveData(data: buffer.data)
+                self.delegate?.dataChannelDidReceive(data: buffer.data)
             } else {
-                self.delegate?.didReceiveMessage(message: String(data: buffer.data, encoding: String.Encoding.utf8)!)
+                self.delegate?.dataChannelDidReceive(message: String(data: buffer.data, encoding: String.Encoding.utf8)!)
             }
         }
     }
@@ -359,49 +332,15 @@ public extension WebRTCClient {
 // MARK: - OnReceive Message from Async Server
 
 extension WebRTCClient {
-    func onCallMessageReceived(_ message: AsyncMessage) {
-        guard let content = message.content, let data = content.data(using: .utf8), let ms = try? JSONDecoder().decode(WebRTCAsyncMessage.self, from: data) else {
-            customPrint("can't decode data from webrtc servers", isGuardNil: true)
-            return
-        }
-        customPrint("on Call message received\n\(String(data: data, encoding: .utf8) ?? "")")
-        switch ms.id {
-        case .sessionRefresh, .createSession, .sessionNewCreated:
-            stopAllSessions()
-        case .addIceCandidate:
-            guard let candidate = try? JSONDecoder().decode(RemoteCandidateRes.self, from: data) else {
-                print("error decode ice candidate")
-                return
-            }
-            callParticipntUserRCT(candidate.topic)?.addIceCandidate(candidate)
-        case .processSdpAnswer:
-            guard let remoteSDP = try? JSONDecoder().decode(RemoteSDPRes.self, from: data) else {
-                print("error decode prosessAnswer")
-                return
-            }
-            callParticipntUserRCT(remoteSDP.topic)?.setRemoteDescription(remoteSDP)
-        case .getKeyFrame:
-            break
-        case .close:
-            break
-        case .stopAll:
-            setOffers()
-        case .stop:
-            break
-        case .unkown:
-            customPrint("a message received from unkown type form webrtc server" + (message.content ?? ""), isGuardNil: true)
-        }
-    }
-    
     func stopAllSessions() {
         let stop = StopAllSessionReq(peerName: self.config.peerName, token: self.chat?.config.token ?? "")
-        self.send(stop)
+        (chat?.call as? InternalCallProtocol)?.send(stop)
     }
 }
 
 // configure audio session
 public extension WebRTCClient {
-    private func configureAudioSession() {
+    func configureAudioSession() {
         customPrint("configure audio session")
         rtcAudioSession.lockForConfiguration()
         do {
