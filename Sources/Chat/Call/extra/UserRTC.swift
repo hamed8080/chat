@@ -108,7 +108,8 @@ public class UserRTC: Hashable, Identifiable {
     }
 
     func setRemoteDescription(_ remoteSDP: RemoteSDPRes) {
-        pc.setRemoteDescription(remoteSDP.rtcSDP) { error in
+        guard let sdp = remoteSDP.rtcSDP else { return }
+        pc.setRemoteDescription(sdp) { error in
             if let error = error {
                 print("error in setRemoteDescroptoin with for topic:\(remoteSDP.topic) sdp: \(remoteSDP.rtcSDP) with error: \(error)")
             }

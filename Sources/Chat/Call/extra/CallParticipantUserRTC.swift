@@ -71,8 +71,8 @@ open class CallParticipantUserRTC: Identifiable, Equatable {
     }
 
     public func setRemoteDescription(_ remoteSDP: RemoteSDPRes) {
-        print("recieve remote SDP for user:\(callParticipant.participant?.name ?? "") topic:\(remoteSDP.topic) sdp:\(remoteSDP)")
-        if isVideoTopic(topic: remoteSDP.topic) {
+        guard let topic = remoteSDP.topic else { return }
+        if isVideoTopic(topic: topic) {
             videoRTC.setRemoteDescription(remoteSDP)
         } else {
             audioRTC.setRemoteDescription(remoteSDP)

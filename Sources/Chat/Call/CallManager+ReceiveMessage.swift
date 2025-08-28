@@ -37,23 +37,20 @@ extension CallManager {
                 break
             case .stop:
                 break
-            case .receiveSdpOffer:
-                break
-            case .sendSdpOffer:
+            case .receiveSdpOffer, .sendSdpOffer, .sdpAnswerReceived:
                 break
             case .error:
                 break
             case .freezed:
                 break
             case .recieveMetadata:
-                break
-            case .sdpAnswerReceived:
-                break
+                let metadata = try JSONDecoder.instance.decode(ReceiveCallMetadata.self, from: data)
+                processReceiveMetadata(metadata)
             case .unkown:
                 log("An unkown message has been received with id: decoded type in it's content in CallManager: " + (message.content ?? ""))
             }
         } catch {
-            log("Failed to decode Call Server Message: " + (message.content ?? ""))
+            log("Failed to decode Call Server with error: \(error.localizedDescription) for Message: " + (message.content ?? ""))
         }
     }
 }

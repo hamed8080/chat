@@ -319,6 +319,10 @@ extension CallManager {
             container.processRemoteIceCandidate(res: res)
         }
     }
+    
+    func processReceiveMetadata(_ metadata: ReceiveCallMetadata) {
+        
+    }
 }
 
 extension CallManager {
