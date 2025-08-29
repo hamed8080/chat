@@ -46,6 +46,36 @@ extension CallManager {
             case .recieveMetadata:
                 let metadata = try JSONDecoder.instance.decode(ReceiveCallMetadata.self, from: data)
                 processReceiveMetadata(metadata)
+            case .sendIceCandidate:
+                break
+            case .receiveAddIceCandidate:
+                break
+            case .prcessSdpNegotiate:
+                break
+            case .processLatestSdpOffer:
+                break
+            case .sendMetadata:
+                break
+            case .requestReceivingMedia:
+                break
+            case .joinAdditionComplete:
+                break
+            case .joinDeletionComplete:
+                break
+            case .subscriptionFailed:
+                break
+            case .updateFailed:
+                break
+            case .releaseResources:
+                break
+            case .slowLink:
+                break
+            case .exitClient:
+                break
+            case .sendComplete:
+                break
+            case .unpublished:
+                break
             case .unkown:
                 log("An unkown message has been received with id: decoded type in it's content in CallManager: " + (message.content ?? ""))
             }

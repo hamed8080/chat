@@ -11,18 +11,43 @@ public enum CallMessageType: String, Codable {
     case sessionNewCreated = "SESSION_NEW_CREATED"
     case sessionRefresh = "SESSION_REFRESH"
     case getKeyFrame = "GET_KEY_FRAME"
-    case sendSdpOffer = "SEND_SDP_OFFER"
+    
+    // MARK: Ice candidate
     case addIceCandidate = "ADD_ICE_CANDIDATE"
+    case sendIceCandidate = "SEND_ADD_ICE_CANDIDATE"
+    case receiveAddIceCandidate = "RECIVE_ADD_ICE_CANDIDATE"
+    
+    // MARK: SDP
+    case sendSdpOffer = "SEND_SDP_OFFER"
     case processSdpAnswer = "PROCESS_SDP_ANSWER"
     case processSdpUpdate = "PROCESS_SDP_UPDATE"
     case receiveSdpOffer = "RECIVE_SDP_OFFER"
+    case prcessSdpNegotiate = "PROCESS_SDP_NEGOTIATE"
+    case processLatestSdpOffer = "PROCESS_LATEST_SDP_OFFER"
+    case sdpAnswerReceived = "SDP_ANSWER_RECEIVED"
+    
+    // MARK: Metadata
+    case receivingMedia = "RECEIVING_MEDIA"
+    case recieveMetadata = "RECEIVEMETADATA"
+    case sendMetadata = "SENDMETADATA"
+    case requestReceivingMedia = "REQUEST_RECEIVING_MEDIA"
+    
+    // MARK: Subscription / Publisher
+    case joinAdditionComplete = "JOIN_AADDITIONN_COMPLETE"
+    case joinDeletionComplete = "JOIN_DELETION_COMPLETE"
+    case subscriptionFailed = "SUB_FAILED"
+    case updateFailed = "UPDATE_FAILED"
+    case releaseResources = "RELEASE_RESOURCES"
+    
     case close = "CLOSE"
+    case slowLink = "SLOW_LINK"
     case stopAll = "STOPALL"
     case stop = "STOP"
     case freezed = "FREEZED"
-    case receivingMedia = "RECEIVING_MEDIA"
-    case recieveMetadata = "RECEIVEMETADATA"
-    case sdpAnswerReceived = "SDP_ANSWER_RECEIVED"
+    
+    case exitClient = "EXIT_CLIENT"
+    case sendComplete = "SEND_COMPLETE"
+    case unpublished = "UNPUBLISHED"
     case error = "ERROR"
     case unkown
 
