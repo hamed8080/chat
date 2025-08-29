@@ -120,6 +120,7 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable, Sendable {
     case endCallRequest = 75
     case endCall = 76
     case getCalls = 77
+    case reconnect = 78
     case groupCallRequest = 91
     case leaveCall = 92
     case addCallParticipant = 93
@@ -135,11 +136,19 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable, Sendable {
     case turnOffVideoCall = 114
     case startRecording = 121
     case stopRecording = 122
+    case startScreenShare = 123
+    case endScreenShare = 124
+    case deleteFromCallHistory = 125
     case getCallsToJoin = 129
     case callClientErrors = 153
+    case switchToGroupCallRequest = 221
+    case recordCallStarted = 222
     case callStickerSystemMessage = 225
     case renewCallRequest = 227
     case callInquiry = 228
+    case callRecordingFailed = 230
+    case raiseHand = 257
+    case lowerHand = 258
 
     case error = 999
 

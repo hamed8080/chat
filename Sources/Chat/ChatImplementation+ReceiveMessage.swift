@@ -282,6 +282,24 @@ public extension ChatImplementation {
         case .callInquiry:
             (call as? CallManager)?.onCallInquiry(asyncMessage)
             break
+        case .reconnect:
+            break
+        case .startScreenShare:
+            break
+        case .endScreenShare:
+            break
+        case .deleteFromCallHistory:
+            break
+        case .switchToGroupCallRequest:
+            break
+        case .recordCallStarted:
+            break
+        case .callRecordingFailed:
+            break
+        case .raiseHand:
+            break
+        case .lowerHand:
+            break
         case .error:
              (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:

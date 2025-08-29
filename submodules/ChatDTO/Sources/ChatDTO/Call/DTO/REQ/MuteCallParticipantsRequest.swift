@@ -1,5 +1,5 @@
 //
-// MuteCallRequest.swift
+// MuteCallParticipantsRequest.swift
 // Copyright (c) 2022 ChatDTO
 //
 // Created by Hamed Hosseini on 12/16/22
@@ -7,7 +7,7 @@
 import Foundation
 import ChatModels
 
-public struct MuteCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
+public struct MuteCallParticipantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let callId: Int
     public let userIds: [Int]
     public let uniqueId: String

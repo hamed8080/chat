@@ -8,9 +8,9 @@ import ChatDTO
 import ChatCore
 import Foundation
 
-extension MuteCallRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
+extension MuteCallParticipantsRequest: @retroactive ChatSendable, @retroactive SubjectProtocol {}
 
-public extension MuteCallRequest {
+public extension MuteCallParticipantsRequest {
     var subjectId: Int { callId }
     var content: String? { userIds.jsonString }
     var chatTypeCodeIndex: Index { typeCodeIndex }

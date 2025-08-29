@@ -1,12 +1,12 @@
 //
-// UNMuteCallRequest.swift
+// UNMuteCallParitcipantsRequest.swift
 // Copyright (c) 2022 ChatDTO
 //
 // Created by Hamed Hosseini on 12/16/22
 
 import Foundation
 
-public struct UNMuteCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
+public struct UNMuteCallParitcipantsRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol, Sendable {
     public let callId: Int
     public let userIds: [Int]
     public let uniqueId: String

@@ -11,7 +11,6 @@ import ChatDTO
 import ChatModels
 import Foundation
 import ChatExtensions
-import WebRTC
 
 final class CallManager: CallProtocol, InternalCallProtocol {
     let chat: ChatInternalProtocol
@@ -23,75 +22,75 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     }
     
     func acceptCall(_ request: AcceptCallRequest) {
-        
+        chat.prepareToSendAsync(req: request, type: .acceptCall)
     }
     
     func activeCallParticipants(_ request: GeneralSubjectIdRequest) {
-       
+        chat.prepareToSendAsync(req: request, type: .activeCallParticipants)
     }
     
     func addCallPartcipant(_ request: AddCallParticipantsRequest) {
-        
-    }
-    
-    func callInquery(_ request: GeneralSubjectIdRequest) {
-        
-    }
-    
-    func startRecording(_ request: GeneralSubjectIdRequest) {
-        
-    }
-    
-    func stopRecording(_ request: GeneralSubjectIdRequest) {
-        
-    }
-    
-    func callsHistory(_ request: CallsHistoryRequest) {
-        
-    }
-    
-    func sendCallSticker(_ request: CallStickerRequest) {
-        
-    }
-    
-    func getCallsToJoin(_ request: GetJoinCallsRequest) {
-        
-    }
-    
-    func cancelCall(_ request: CancelCallRequest) {
-        
-    }
-    
-    func muteCall(_ request: MuteCallRequest) {
-        
-    }
-    
-    func unmuteCall(_ request: UNMuteCallRequest) {
-        
-    }
-    
-    func turnOnVideoCall(_ request: GeneralSubjectIdRequest) {
-        
-    }
-    
-    func turnOffVideoCall(_ request: GeneralSubjectIdRequest) {
-        
-    }
-    
-    func endCall(_ request: ChatDTO.GeneralSubjectIdRequest) {
-        
+        chat.prepareToSendAsync(req: request, type: .addCallParticipant)
     }
     
     func removeCallPartcipant(_ request: RemoveCallParticipantsRequest) {
-        
+        chat.prepareToSendAsync(req: request, type: .removeCallParticipant)
+    }
+    
+    func callInquery(_ request: GeneralSubjectIdRequest) {
+        chat.prepareToSendAsync(req: request, type: .callInquiry)
+    }
+    
+    func startRecording(_ request: GeneralSubjectIdRequest) {
+        chat.prepareToSendAsync(req: request, type: .startRecording)
+    }
+    
+    func stopRecording(_ request: GeneralSubjectIdRequest) {
+        chat.prepareToSendAsync(req: request, type: .stopRecording)
+    }
+    
+    func callsHistory(_ request: CallsHistoryRequest) {
+        chat.prepareToSendAsync(req: request, type: .getCalls)
+    }
+    
+    func sendCallSticker(_ request: CallStickerRequest) {
+        chat.prepareToSendAsync(req: request, type: .callStickerSystemMessage)
+    }
+    
+    func getCallsToJoin(_ request: GetJoinCallsRequest) {
+        chat.prepareToSendAsync(req: request, type: .getCallsToJoin)
+    }
+    
+    func cancelCall(_ request: CancelCallRequest) {
+        chat.prepareToSendAsync(req: request, type: .cancelCall)
+    }
+    
+    func muteCallParticipants(_ request: MuteCallParticipantsRequest) {
+        chat.prepareToSendAsync(req: request, type: .muteCallParticipant)
+    }
+    
+    func unmuteCallParticipants(_ request: UNMuteCallParitcipantsRequest) {
+        chat.prepareToSendAsync(req: request, type: .unmuteCallParticipant)
+    }
+    
+    func turnOnVideoCall(_ request: GeneralSubjectIdRequest) {
+        chat.prepareToSendAsync(req: request, type: .turnOnVideoCall)
+    }
+    
+    func turnOffVideoCall(_ request: GeneralSubjectIdRequest) {
+        chat.prepareToSendAsync(req: request, type: .turnOffVideoCall)
+    }
+    
+    func endCall(_ request: ChatDTO.GeneralSubjectIdRequest) {
+        chat.prepareToSendAsync(req: request, type: .endCall)
     }
     
     func renewCallRequest(_ request: RenewCallRequest) {
-        
+        chat.prepareToSendAsync(req: request, type: .renewCallRequest)
     }
     
     func sendCallClientError(_ request: CallClientErrorRequest) {
-        
+        chat.prepareToSendAsync(req: request, type: .callClientErrors)
     }
     
     func requestCall(_ request: StartCallRequest) {
@@ -99,16 +98,14 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     }
     
     func requestGroupCall(_ request: StartCallRequest) {
-        
+        chat.prepareToSendAsync(req: request, type: .groupCallRequest)
     }
     
     func terminateCall(_ request: GeneralSubjectIdRequest) {
-        
+        chat.prepareToSendAsync(req: request, type: .terminateCall)
     }
     
-    func preview(startCall: ChatDTO.StartCall) {
-        
-    }
+    func preview(startCall: StartCall) {}
     
     func switchCamera() {
         
@@ -156,16 +153,16 @@ extension CallManager {
         let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.startCallRecording(response)))
     }
-
+    
     func onCallRecordingStopped(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.stopCallRecording(response)))
     }
     
     func onCallsHistory(_ asyncMessage: AsyncMessage) {
-//        var response: ChatResponse<[Call]> = asyncMessage.toChatResponse(asyncManager: asyncManager)
-//        response.contentCount = asyncMessage.chatMessage?.contentCount
-//        delegate?.chatEvent(event: .call(.history(response)))
+        //        var response: ChatResponse<[Call]> = asyncMessage.toChatResponse(asyncManager: asyncManager)
+        //        response.contentCount = asyncMessage.chatMessage?.contentCount
+        //        delegate?.chatEvent(event: .call(.history(response)))
     }
     
     func onCallSticker(_ asyncMessage: AsyncMessage) {
@@ -182,7 +179,7 @@ extension CallManager {
         let response: ChatResponse<Call> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callCanceled(response)))
     }
-
+    
     func onGroupCallCanceled(_ asyncMessage: AsyncMessage) {
         var response: ChatResponse<CancelGroupCall> = asyncMessage.toChatResponse()
         response.result?.callId = response.subjectId
@@ -193,7 +190,7 @@ extension CallManager {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callParticipantMute(response)))
     }
-
+    
     func onUNMute(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callParticipantUnmute(response)))
@@ -203,30 +200,30 @@ extension CallManager {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.turnVideoOn(response)))
     }
-
+    
     func onVideoTurnedOff(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.turnVideoOff(response)))
     }
     
     func onCallEnded(_ asyncMessage: AsyncMessage) {
-//        var response: ChatResponse<Int> = asyncMessage.toChatResponse()
-//        ChatCall.instance?.callState = .ended
-//        response.result = response.subjectId
-//        delegate?.chatEvent(event: .call(.callEnded(response)))
-//        ChatCall.instance?.webrtc?.clearResourceAndCloseConnection()
-//        ChatCall.instance?.webrtc = nil
+        //        var response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        //        ChatCall.instance?.callState = .ended
+        //        response.result = response.subjectId
+        //        delegate?.chatEvent(event: .call(.callEnded(response)))
+        //        ChatCall.instance?.webrtc?.clearResourceAndCloseConnection()
+        //        ChatCall.instance?.webrtc = nil
     }
     
     func onRemoveCallParticipant(_ asyncMessage: AsyncMessage) {
-//        let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
-//        delegate?.chatEvent(event: .call(.callParticipantsRemoved(response)))
-//        response.result?.forEach { callParticipant in
-//            ChatCall.instance?.webrtc?.removeCallParticipant(callParticipant)
-//            if callParticipant.userId == userInfo?.id {
-//                ChatCall.instance?.webrtc?.clearResourceAndCloseConnection()
-//            }
-//        }
+        //        let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        //        delegate?.chatEvent(event: .call(.callParticipantsRemoved(response)))
+        //        response.result?.forEach { callParticipant in
+        //            ChatCall.instance?.webrtc?.removeCallParticipant(callParticipant)
+        //            if callParticipant.userId == userInfo?.id {
+        //                ChatCall.instance?.webrtc?.clearResourceAndCloseConnection()
+        //            }
+        //        }
     }
     
     func onRenewCall(_ asyncMessage: AsyncMessage) {
@@ -252,9 +249,9 @@ extension CallManager {
         }
         
         // SEND type 73 . This mean client receive call and showing ringing mode on call creator.
-//        callReceived(.init(subjectId: response.result?.callId ?? 0))
+        //        callReceived(.init(subjectId: response.result?.callId ?? 0))
     }
-
+    
     func onCallStarted(_ asyncMessage: AsyncMessage) {
         var response: ChatResponse<StartCall> = asyncMessage.toChatResponse()
         if let startCall = response.result,
@@ -265,12 +262,12 @@ extension CallManager {
         }
         delegate?.chatEvent(event: .call(.callStarted(response)))
     }
-
+    
     func onDeliverCall(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Call> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callDelivered(response)))
     }
-
+    
     func onCallSessionCreated(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callCreate(response)))
@@ -281,20 +278,20 @@ extension CallManager {
             callContainer.startTimerTimeout()
         }
     }
-
+    
     func onCallParticipantLeft(_ asyncMessage: AsyncMessage) {
-//        let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
-//        delegate?.chatEvent(event: .call(.callParticipantLeft(response)))
-//        response.result?.forEach { callParticipant in
-//            ChatCall.instance?.webrtc?.removeCallParticipant(callParticipant)
-//            if callParticipant.userId == userInfo?.id {
-//                ChatCall.instance?.webrtc?.clearResourceAndCloseConnection()
-//            }
-//        }
+        //        let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        //        delegate?.chatEvent(event: .call(.callParticipantLeft(response)))
+        //        response.result?.forEach { callParticipant in
+        //            ChatCall.instance?.webrtc?.removeCallParticipant(callParticipant)
+        //            if callParticipant.userId == userInfo?.id {
+        //                ChatCall.instance?.webrtc?.clearResourceAndCloseConnection()
+        //            }
+        //        }
     }
     
-   
-
+    
+    
     func onRejectCall(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callRejected(response)))
@@ -371,10 +368,10 @@ extension CallManager {
 extension CallManager {
     private func makeCallContainer(createCall: CreateCall, for state: CallState, typeCode: String?) -> CallContainer {
         return CallContainer(callId: createCall.callId,
-                                          state: state,
-                                          callType: createCall.type,
-                                          typeCode: typeCode,
-                                          chat: chat)
+                             state: state,
+                             callType: createCall.type,
+                             typeCode: typeCode,
+                             chat: chat)
     }
     
     private func callContainer(callId: Int) -> CallContainer? {

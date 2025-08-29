@@ -1,8 +1,8 @@
 @ChatGlobalActor
 public protocol WebRTCActions: AnyObject {
     func switchCamera()
-    func unmuteCall(_ req: UNMuteCallRequest)
-    func muteCall(_ req: MuteCallRequest)
+    func unmuteCallParticipants(_ req: UNMuteCallParitcipantsRequest)
+    func muteCallParticipants(_ req: MuteCallParticipantsRequest)
     func toggleSpeaker()
     func reCalculateActiveVideoSessionLimit()
     func turnOffVideoCall(callId: Int)
@@ -65,12 +65,12 @@ public protocol CallProtocol: WebRTCActions {
     /// Mute the voice during the conversation.
     /// - Parameters:
     ///   - request: The callId that you want to turn the microphone off.
-    func muteCall(_ request: MuteCallRequest)
+    func muteCallParticipants(_ request: MuteCallParticipantsRequest)
 
     /// UNMute the voice during the conversation.
     /// - Parameters:
     ///   - request: The callId that you want to turn the microphone on.
-    func unmuteCall(_ request: UNMuteCallRequest)
+    func unmuteCallParticipants(_ request: UNMuteCallParitcipantsRequest)
 
     /// Turn on the camera during the conversation.
     /// - Parameters:
