@@ -15,8 +15,7 @@ extension CallManager {
         do {
             switch ms.id {
             case .sessionRefresh, .createSession, .sessionNewCreated:
-                //                stopAllSessions()
-                break
+                onSessionCreated(message)                
             case .receivingMedia:
                 let receivingMedia = try JSONDecoder.instance.decode(ReceivingMedia.self, from: data)
                 subscribeToReceivingOffers(receivingMedia)
@@ -75,6 +74,10 @@ extension CallManager {
             case .sendComplete:
                 break
             case .unpublished:
+                break
+            case .subscribe:
+                break
+            case .update:
                 break
             case .unkown:
                 log("An unkown message has been received with id: decoded type in it's content in CallManager: " + (message.content ?? ""))

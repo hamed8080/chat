@@ -38,6 +38,8 @@ public enum CallMessageType: String, Codable {
     case subscriptionFailed = "SUB_FAILED"
     case updateFailed = "UPDATE_FAILED"
     case releaseResources = "RELEASE_RESOURCES"
+    case subscribe = "SUBSCRIBE"
+    case update = "UPDATE"
     
     case close = "CLOSE"
     case slowLink = "SLOW_LINK"

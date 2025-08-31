@@ -160,9 +160,9 @@ extension CallManager {
     }
     
     func onCallsHistory(_ asyncMessage: AsyncMessage) {
-        //        var response: ChatResponse<[Call]> = asyncMessage.toChatResponse(asyncManager: asyncManager)
-        //        response.contentCount = asyncMessage.chatMessage?.contentCount
-        //        delegate?.chatEvent(event: .call(.history(response)))
+        var response: ChatResponse<[Call]> = asyncMessage.toChatResponse()
+        response.contentCount = asyncMessage.chatMessage?.contentCount
+        delegate?.chatEvent(event: .call(.history(response)))
     }
     
     func onCallSticker(_ asyncMessage: AsyncMessage) {
@@ -290,8 +290,6 @@ extension CallManager {
         //        }
     }
     
-    
-    
     func onRejectCall(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callRejected(response)))
@@ -307,18 +305,25 @@ extension CallManager {
     
     func processSDPAnswer(_ res: RemoteSDPRes) {
         if let container = callContainer(callId: 0) {
-            container.processSDPAnswer(res: res)
+//            container.processSDPAnswer(res: res)
         }
     }
     
     func processRemoteIceCandidate(_ res: RemoteCandidateRes) {
         if let container = callContainer(callId: 0) {
-            container.processRemoteIceCandidate(res: res)
+//            container.processRemoteIceCandidate(res: res)
         }
     }
     
     func processReceiveMetadata(_ metadata: ReceiveCallMetadata) {
         
+    }
+    
+    func onSessionCreated(_ asyncMessage: AsyncMessage) {
+        /// Create sdp offer for local stream and send it.
+        if let callId = asyncMessage.subjectId, let container = callContainer(callId: callId) {
+            container.createSDPOfferForLocal()
+        }
     }
 }
 

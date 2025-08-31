@@ -7,101 +7,169 @@
 import ChatModels
 @preconcurrency import WebRTC
 
+
 @ChatGlobalActor
 open class CallParticipantUserRTC: Identifiable, Equatable {
     nonisolated public static func == (lhs: CallParticipantUserRTC, rhs: CallParticipantUserRTC) -> Bool {
         lhs.id == rhs.id
     }
-
-    public nonisolated let id: Int
-    public var callParticipant: CallParticipant
-    public let audioRTC: AudioRTC
-    public let videoRTC: VideoRTC
-
-    public required init(chatDelegate: ChatDelegate?, myUserId: Int?, callParticipant: CallParticipant, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
-        self.id = callParticipant.userId ?? callParticipant.participant?.id ?? -1
-        self.callParticipant = callParticipant
-        let direction: RTCDirection = callParticipant.userId == myUserId ? .send : .receive
-        audioRTC = AudioRTC(chatDelegate: chatDelegate, direction: direction, topic: callParticipant.topics.topicAudio, config: config, delegate: delegate)
-        videoRTC = VideoRTC(renderer: nil, direction: direction, topic: callParticipant.topics.topicVideo, config: config, delegate: delegate)
-    }
-
-    public func addStreams() {
-        if !isMe {
-            audioRTC.addReceiveStream()
-            audioRTC.monitorAudioLevelFor(callParticipant: callParticipant)
-            videoRTC.addReceiveStream()
-        }
-    }
-
-    public func createMediaSenderTracks(_ fileName: String? = nil) {
-        if isMe {
-            audioRTC.createMediaSenderTrack()
-            videoRTC.createMediaSenderTrack(fileName)
-            audioRTC.monitorAudioLevelFor(callParticipant: callParticipant)
-        }
+    
+    nonisolated public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
-    func getOfferSDP(video: Bool) async throws -> RTCSessionDescription {
-        video ? try await videoRTC.getLocalSDPWithOffer() : try await audioRTC.getLocalSDPWithOffer()
+    public nonisolated let id: Int
+    public var callParticipant: CallParticipant
+    public var topic: String
+    public var iceQueue: [RTCIceCandidate] = []
+    public var iceTimer: Timer?
+    public var audioStream: RTCMediaStreamTrack?
+    public var videoStream: RTCMediaStreamTrack?
+    public var renderer: RTCVideoRenderer?
+
+    public var isFrontCamera: Bool = true
+    public var isVideoTrackEnable: Bool { videoStream?.isEnabled ?? false }
+    public var isSpeaking: Bool = false
+    public var lastTimeSpeaking: Date?
+    public var speakingMonitorTimer: Timer?
+    public weak var delegate: ChatDelegate?
+    private weak var container: CallContainer?
+    
+    public required init(chatDelegate: ChatDelegate?,
+                         callParticipant: CallParticipant,
+                         topic: String,
+                         container: CallContainer
+    ) {
+        self.id = callParticipant.userId ?? callParticipant.participant?.id ?? -1
+        self.callParticipant = callParticipant
+        self.topic = topic
+        self.container = container
+    }
+    
+    public func addStreams() {
+        //        if !isMe {
+        addReceiveStream()
+        monitorAudioLevelFor(callParticipant: callParticipant)
+        addReceiveStream()
+        //        }
     }
     
     public func toggleMute() {
         callParticipant.mute.toggle()
-        audioRTC.setTrackEnable(!callParticipant.mute)
+        setTrackEnable(!callParticipant.mute)
     }
     
     public func toggleCamera() {
         callParticipant.video?.toggle()
-        videoRTC.setTrackEnable(callParticipant.video ?? false)
+        setTrackEnable(callParticipant.video ?? false)
     }
     
+    public func close(videoStream: Bool) {
+        if videoStream {
+            
+        } else {
+            close()
+        }
+    }
+    
+    public func setTrackEnable(_ enable: Bool) {
+        //        track?.isEnabled = enable
+    }
+    
+    public func addReceiveStream(transciver: RTCRtpTransceiver?) {
+        if let remoteTrack = transciver?.receiver.track {
+            //            track = remoteTrack
+            //            container.peerConection.add(remoteTrack, streamIds: [topic])
+        }
+    }
+    
+    public func removeVideoRenderer(_ renderer: RTCVideoRenderer) {
+        //        (track as? RTCVideoTrack)?.remove(renderer)
+    }
+
     public func switchCameraPosition() {
-        if isMe {
-            videoRTC.switchCameraPosition()
-        }
+//        if isMe {
+//            let result = (videoCapturer as? RTCCameraVideoCapturer)
+//            let tuple = tuple
+//            result?.stopCapture { [weak self] in
+//                self?.isFrontCamera.toggle()
+//                self?.startCaptureLocalVideo(tuple: tuple)
+//            }
+//        }
     }
 
-    public func setRemoteIceCandidate(_ res: RemoteCandidateRes) {
-        if isVideoTopic(topic: res.topic) {
-            videoRTC.addIceToPeerConnection(res)
-        } else {
-            audioRTC.addIceToPeerConnection(res)
-        }
+    public func addReceiveStream() {
+//        var error: NSError?
+//        let transciver = pc.addTransceiver(of: .video)
+//        transciver?.setDirection(.recvOnly, error: &error)
+//        super.addReceiveStream(transciver: transciver)
+//        if let renderer = renderer {
+//            addVideoRenderer(renderer)
+//        }
+        
+        //        var error: NSError?
+        //        let transciver = pc.addTransceiver(of: .audio)
+        //        transciver?.setDirection(.recvOnly, error: &error)
+        //        super.addReceiveStream(transciver: transciver)
     }
 
-    public func setRemoteDescription(_ remoteSDP: RemoteSDPRes) {
-        guard let topic = remoteSDP.topic else { return }
-        if isVideoTopic(topic: topic) {
-            videoRTC.setRemoteDescription(remoteSDP)
-        } else {
-            audioRTC.setRemoteDescription(remoteSDP)
-        }
+    public func monitorAudioLevelFor(callParticipant: CallParticipant) {
+//        speakingMonitorTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+//            guard let self = self else { return }
+//            Task { @ChatGlobalActor in
+//                pc.statistics { report in
+//                    for stat in report.statistics.values.filter({ $0.type == "track" }) {
+//                        self.onSpeakingLevelChange(stat, callParticipant)
+//                    }
+//                }
+//            }
+//        }
     }
-    
+
+    public func onSpeakingLevelChange(_ stat: Dictionary<String, RTCStatistics>.Values.Element, _ callParticipant: CallParticipant) {
+//        if (stat.values["audioLevel"] as? Double ?? .zero) > 0.01 {
+//            participantStartSpeaking()
+//            delegate?.chatEvent(event: .call(.callParticipantStartSpeaking(.init(result: callParticipant, typeCode: nil))))
+//        } else if let lastSpeakingTime = lastTimeSpeaking, lastSpeakingTime.timeIntervalSince1970 + 3 < Date().timeIntervalSince1970 {
+//            participantStopSpeaking()
+//            delegate?.chatEvent(event: .call(.callParticipantStopSpeaking(.init(result: callParticipant, typeCode: nil))))
+//        }
+    }
+
+    public func participantStartSpeaking() {
+//        isSpeaking = true
+//        lastTimeSpeaking = Date()
+    }
+
+    public func participantStopSpeaking() {
+//        isSpeaking = false
+//        lastTimeSpeaking = nil
+    }
+
     public func close() {
-        audioRTC.close()
-        videoRTC.close()
+//        (videoCapturer as? RTCCameraVideoCapturer)?.stopCapture()
+//        speakingMonitorTimer?.invalidate()
+//        speakingMonitorTimer = nil
     }
 }
 
 // MARK: Utilities functions
 extension CallParticipantUserRTC {
-    public func peerConnectionForTopic(topic: String) -> RTCPeerConnection? {
-        userRTC(topic: topic)?.pc
-    }
-
-    private func userRTC(topic: String) -> UserRTC? {
-        topic == audioRTC.topic ? audioRTC : topic == videoRTC.topic ? videoRTC : nil
-    }
+//    public func peerConnectionForTopic(topic: String) -> RTCPeerConnection? {
+//        userRTC(topic: topic)?.pc
+//    }
+//
+//    private func userRTC(topic: String) -> UserRTC? {
+//        topic == audioRTC.topic ? audioRTC : topic == videoRTC.topic ? videoRTC : nil
+//    }
     
-    private func isVideoTopic(topic: String) -> Bool {
-        topic.contains("Vi-")
-    }
-    
-    private var isSender: Bool {
-        audioRTC.direction == .send && videoRTC.direction == .send
-    }
-    
-    public var isMe: Bool { isSender }
+//    private func isVideoTopic(topic: String) -> Bool {
+//        topic.contains("Vi-")
+//    }
+//    
+//    private var isSender: Bool {
+//        audioRTC.direction == .send && videoRTC.direction == .send
+//    }
+//    
+//    public var isMe: Bool { isSender }
 }
