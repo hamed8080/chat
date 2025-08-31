@@ -319,9 +319,9 @@ extension CallManager {
         
     }
     
-    func onSessionCreated(_ asyncMessage: AsyncMessage) {
+    func onSessionCreated(_ resp: CreateSessionResp) {
         /// Create sdp offer for local stream and send it.
-        if let callId = asyncMessage.subjectId, let container = callContainer(callId: callId) {
+        if let container = callContainer(callId: resp.chatId) {
             container.createSDPOfferForLocal()
         }
     }

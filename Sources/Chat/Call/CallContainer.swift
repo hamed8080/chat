@@ -168,7 +168,7 @@ extension CallContainer {
         
         // Add video track
         if myUserRTC.callParticipant.video == true {
-            let videoTrack = peerManager.createVideoSenderTrack(topic:  myUserRTC.callParticipant.topics.topicVideo)
+            let videoTrack = peerManager.createVideoSenderTrack(topic: myUserRTC.callParticipant.topics.topicVideo)
             peerManager.addVideoTrack(videoTrack, direction: .send)
             peerManager.startCaptureLocalVideo(fileName: nil, front: true)
             
@@ -177,7 +177,7 @@ extension CallContainer {
                 videoTrack.add(view)
             }
         }
-        myUserRTC.addStreams()
+//        myUserRTC.addStreams()
         Task {
             //                try? await sendSDPOffers(callParticipantUserRTC: callParticipantUserRTC)
         }

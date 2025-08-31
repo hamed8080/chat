@@ -203,17 +203,17 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate, RTCD
         } else {
             videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
         }
-        
         return pf.videoTrack(with: videoSource, trackId: "video0")
     }
     
     func startCaptureLocalVideo(fileName: String?,
                                 front: Bool) {
         let fps = self.config.callConfig.targetFPS
-        if let videoCapturer = videoCapturer as? RTCCameraVideoCapturer,
-           let selectedCamera = RTCCameraVideoCapturer.captureDevices().first(where: { $0.position == (front ? .front : .back) }),
-           let format = getCameraFormat(front: front)
-        {
+        let selectedCamera = RTCCameraVideoCapturer
+            .captureDevices()
+            .first(where: { $0.position == (front ? .front : .back)})
+        if let videoCapturer = videoCapturer as? RTCCameraVideoCapturer, let selectedCamera = selectedCamera,
+           let format = getCameraFormat(front: front) {
             DispatchQueue.global(qos: .background).async {
                 videoCapturer.startCapture(with: selectedCamera, format: format, fps: fps)
             }
@@ -221,7 +221,6 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate, RTCD
             videoCapturer.startCapturing(fromFileNamed: fileName) { _ in }
         }
     }
-    
     
     public func getCameraFormat(front: Bool) -> AVCaptureDevice.Format? {
         guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: { $0.position == (front ? .front : .back) }) else { return nil }
@@ -513,7 +512,7 @@ public extension RTCPeerConnectionManager {
     }
     
     internal func generateSendSDPOffer(video: Bool, topic: String) async throws {
-        let sdp = try await pcSend.offer(for: .init(mandatoryConstraints: constraints, optionalConstraints: constraints))
+        let sdp = try await pcSend.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
         sendOfferToPeer(
             idType: .sendSdpOffer,
             sdp: sdp,
