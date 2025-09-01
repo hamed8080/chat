@@ -316,36 +316,14 @@ extension RTCPeerConnectionManager {
 
 // MARK: Ice management.
 extension RTCPeerConnectionManager {
-    public func setRemoteIceCandidate(_ res: RemoteCandidateRes) {
-//        if isVideoTopic(topic: res.topic) {
-//            addIceToPeerConnection(res)
-//        } else {
-//            addIceToPeerConnection(res)
-//        }
-    }
-    
     public func setSendPeerIceCandidate(_ ice: IceCandidate) {
-        pcSend.add(ice.rtcIceCandidate)
-    }
-    
-    /// check if remote descriptoin already seted otherwise add it in to queue until set remote description then add ice to peer connection
-    public func addIceToPeerConnection(_ candidate: RemoteCandidateRes) {
-//        let rtcIce = candidate.rtcIceCandidate
-//        if pc.remoteDescription != nil {
-//            setRemoteIce(rtcIce)
-//        } else {
-//            iceQueue.append(rtcIce)
-//            iceTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-////                Task { @ChatGlobalActor in
-////                    if self?.pc?.remoteDescription != nil {
-////                        self?.setRemoteIce(rtcIce)
-////                        self?.iceQueue.removeAll(where: { $0 == rtcIce })
-////                        print("ICE added to \(self?.topic ?? "") from Queue and remaining in Queue is: \(self?.iceQueue.count ?? 0)")
-////                        timer.invalidate()
-////                    }
-////                }
-//            }
-//        }
+        Task {
+            do {
+                try await pcSend.add(ice.rtcIceCandidate)
+            } catch {
+                log("Failed set send peer add ice candidate error: \(error.localizedDescription)")
+            }
+        }
     }
     
     private func sendGeneratedIce(_ candidate: RTCIceCandidate, direction: RTCDirection) {

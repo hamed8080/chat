@@ -29,6 +29,24 @@ struct Addition: Codable {
         case mediaType = "mediaType"
         case mids = "mids"
     }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.mline, forKey: .mline)
+        try container.encodeIfPresent(self.clientId, forKey: .clientId)
+        try container.encode(self.topic, forKey: .topic)
+        try container.encode(self.mediaType, forKey: .mediaType)
+        try container.encodeIfPresent(self.mids, forKey: .mids)
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.mline = try container.decode(Int.self, forKey: .mline)
+        self.clientId = try container.decodeIfPresent(Int.self, forKey: .clientId)
+        self.topic = try container.decode(String.self, forKey: .topic)
+        self.mediaType = try container.decode(MediaType.self, forKey: .mediaType)
+        self.mids = try container.decodeIfPresent([String].self, forKey: .mids)
+    }
 }
 extension Addition {
     var videoKey: String { kRTCMediaConstraintsOfferToReceiveVideo }

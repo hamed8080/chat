@@ -36,7 +36,6 @@ public struct RemoteSDPOfferRes: Decodable {
         self.sdpVersion = try container.decode(Int.self, forKey: .sdpVersion)
         self.operation = try container.decode(Operation.self, forKey: .operation)
         
-        
         if let additionData = try container.decode(String.self, forKey: .topic).data(using: .utf8), operation == .addition {
             self.addition = try JSONDecoder().decode([Addition].self, from: additionData)
         } else {
