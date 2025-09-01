@@ -300,12 +300,20 @@ extension CallManager {
 // MARK: Janus/Kurento events handlers.
 extension CallManager {
     func subscribeToReceivingOffers(_ media: ReceivingMedia) {
-        
+        if let container = callContainer(callId: media.chatId) {
+            container.subscribeToReceiveOffers(media)
+        }        
     }
     
-    func processSDPAnswer(_ res: RemoteSDPRes) {
+    func processSDPAnswer(_ res: RemoteSDPAnswerRes) {
         if let container = callContainer(callId: res.chatId) {
-            container.processSDPAnswer(res: res)
+            container.processSDPAnswer(res)
+        }
+    }
+   
+    func processSDPOffer(_ res: RemoteSDPOfferRes) {
+        if let container = callContainer(callId: res.chatId) {
+            container.processSDPOffer(res)
         }
     }
     

@@ -108,7 +108,7 @@ extension CallContainer {
 }
 
 extension CallContainer {
-    func processSDPAnswer(res: RemoteSDPRes) {
+    func processSDPAnswer(_ res: RemoteSDPAnswerRes) {
         peerManager?.setRemoteDescription(res, direction: .send)
     }
 //    
@@ -118,6 +118,10 @@ extension CallContainer {
     
     func setSendPeerIceCandidate(_ res: SendCandidateRes) {
         peerManager?.setSendPeerIceCandidate(res.candidate)
+    }
+    
+    func processSDPOffer(_ res: RemoteSDPOfferRes) {
+        peerManager?.processSDPOffer(res)
     }
 }
 
@@ -173,6 +177,10 @@ extension CallContainer {
         Task {
             //                try? await sendSDPOffers(callParticipantUserRTC: callParticipantUserRTC)
         }
+    }
+    
+    func subscribeToReceiveOffers(_ media: ReceivingMedia) {
+        peerManager?.subscribeToReceiveOffers(media)
     }
 }
 

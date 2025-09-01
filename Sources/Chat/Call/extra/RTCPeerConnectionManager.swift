@@ -14,7 +14,6 @@ import Async
 @ChatGlobalActor
 public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDelegate {
     private var chat: ChatInternalProtocol?
-    private var answerReceived: [String: RTCPeerConnection] = [:]
     private var config: WebRTCConfig
     private var delegate: WebRTCClientDelegate?
     var logFile: RTCFileLogger?
@@ -228,7 +227,7 @@ public extension RTCPeerConnectionManager {
         }
     }
     
-    private func sendOfferToPeer(idType: CallMessageType, sdp: RTCSessionDescription, topic: String, mediaType: Mediatype) {
+    private func sendOfferToPeer(idType: CallMessageType, sdp: RTCSessionDescription, topic: String, mediaType: MediaType) {
         let sendSDPOffer = SendOfferSDPReq(id: idType,
                                            peerName: config.peerName,
                                            brokerAddress: config.brokerAddress.joined(separator: ","),
@@ -240,7 +239,7 @@ public extension RTCPeerConnectionManager {
         (chat?.call as? InternalCallProtocol)?.send(sendSDPOffer)
     }
     
-    public func setRemoteDescription(_ remoteSDP: RemoteSDPRes, direction: RTCDirection) {
+    public func setRemoteDescription(_ remoteSDP: RemoteSDPAnswerRes, direction: RTCDirection) {
         if direction == .send {
             let sdp = RTCSessionDescription(type: .answer, sdp: remoteSDP.sdpAnswer)
             pcSend.setRemoteDescription(sdp) { error in
@@ -259,6 +258,58 @@ public extension RTCPeerConnectionManager {
                     }
                 }
             }
+        }
+    }
+   
+    func processSDPOffer(_ offer: RemoteSDPOfferRes) {
+        let sdp = RTCSessionDescription(type: .offer, sdp: offer.sdpOffer)
+        Task {
+            try await pcReceive.setRemoteDescription(sdp)
+            for item in offer.addition {
+                do {
+                    
+                    
+                    let answer = try await pcReceive.answer(for: item.constraints)
+                    try await pcReceive.setLocalDescription(answer)
+                    
+                    let req = ReceiveSDPAnswerReq(
+                        id: .receiveSdpAnswer,
+                        sdpAnswer: answer.sdp,
+                        addition: [item],
+                        peerName: config.peerName,
+                        brokerAddress: config.brokerAddress.joined(separator: ","),
+                        token: chat?.config.token ?? "",
+                        chatId: callId
+                    )
+                    (chat?.call as? InternalCallProtocol)?.send(req)
+                } catch {
+                    log("Failed to set remote offer description and create an answer")
+                }
+            }
+        }
+    }
+}
+
+// MARK: Subscription
+extension RTCPeerConnectionManager {
+    func subscribeToReceiveOffers(_ media: ReceivingMedia) {
+        for item in media.recvList {
+            let req = CallSubscribeRequest(
+                id: .subscribe,
+                chatId: media.chatId,
+                token: chat?.config.token ?? "",
+                brokerAddress: config.brokerAddress.joined(separator: ","),
+                addition: [
+                    .init(
+                        mline: item.mline,
+                        clientId: item.clientId,
+                        topic: item.topic,
+                        mediaType: item.mediaType
+                    )
+                ],
+                peerName: config.peerName
+            )
+            (chat?.call as? InternalCallProtocol)?.send(req)
         }
     }
 }

@@ -6,12 +6,11 @@
 
 import Foundation
 
-struct ReceivingMedia: Codable {
+struct ReceivingMedia: Decodable {
     let id: CallMessageType
     let chatId: Int
     let recvList: [ReceiveMediaItem]
     let uniqueId: String
-    
     
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -36,17 +35,23 @@ struct ReceivingMedia: Codable {
             )
         }
         self.recvList = try JSONDecoder().decode([ReceiveMediaItem].self, from: recvListData)
-
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case uniqueId = "uniqueId"
+        case chatId = "chatId"
+        case recvList = "recvList"
     }
 }
 
-struct ReceiveMediaItem: Codable {
+struct ReceiveMediaItem: Decodable {
     let id: Int
     let chatId: Int
     let clientId: Int
     let mline: Int
     let topic: String
-    let mediaType: ReceiveItemMediaType
+    let mediaType: MediaType
     let isReceiving: Bool
     let version: Int
     
@@ -56,7 +61,7 @@ struct ReceiveMediaItem: Codable {
         self.clientId = try container.decode(Int.self, forKey: .clientId)
         self.mline = try container.decode(Int.self, forKey: .mline)
         self.topic = try container.decode(String.self, forKey: .topic)
-        self.mediaType = try container.decode(ReceiveItemMediaType.self, forKey: .mediaType)
+        self.mediaType = try container.decode(MediaType.self, forKey: .mediaType)
         self.isReceiving = try container.decode(Int.self, forKey: .isReceiving) == 1
         self.version = try container.decode(Int.self, forKey: .version)
         
@@ -70,10 +75,15 @@ struct ReceiveMediaItem: Codable {
         }
         self.chatId = chatId
     }
-}
-
-enum ReceiveItemMediaType: Int, Codable {
-    case audio = 0
-    case video = 1
-    case screenShare = 2
+    
+    private enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case clientId = "clientId"
+        case mline = "mline"
+        case topic = "topic"
+        case mediaType = "mediaType"
+        case isReceiving = "isReceiving"
+        case chatId = "chatId"
+        case version = "version"
+    }
 }

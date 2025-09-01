@@ -24,8 +24,13 @@ extension CallManager {
                 let candidate = try JSONDecoder().decode(RemoteCandidateRes.self, from: data)
                 processRemoteIceCandidate(candidate)
             case .processSdpAnswer:
-                let res = try JSONDecoder().decode(RemoteSDPRes.self, from: data)
+                let res = try JSONDecoder().decode(RemoteSDPAnswerRes.self, from: data)
                 processSDPAnswer(res)
+            case .processSdpOffer:
+                let res = try JSONDecoder().decode(RemoteSDPOfferRes.self, from: data)
+                processSDPOffer(res)
+            case .receiveSdpAnswer:
+                break
             case .processSdpUpdate:
                 break
             case .getKeyFrame:

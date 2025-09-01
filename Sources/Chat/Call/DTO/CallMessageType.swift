@@ -25,6 +25,8 @@ public enum CallMessageType: String, Codable {
     case prcessSdpNegotiate = "PROCESS_SDP_NEGOTIATE"
     case processLatestSdpOffer = "PROCESS_LATEST_SDP_OFFER"
     case sdpAnswerReceived = "SDP_ANSWER_RECEIVED"
+    case processSdpOffer = "PROCESS_SDP_OFFER"
+    case receiveSdpAnswer = "RECIVE_SDP_ANSWER"
     
     // MARK: Metadata
     case receivingMedia = "RECEIVING_MEDIA"

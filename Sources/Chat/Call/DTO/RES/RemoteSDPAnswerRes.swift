@@ -1,5 +1,5 @@
 //
-// RemoteSDPRes.swift
+// RemoteSDPAnswerRes.swift
 // Copyright (c) 2022 ChatCall
 //
 // Created by Hamed Hosseini on 12/16/22
@@ -7,7 +7,7 @@
 import Foundation
 import WebRTC
 
-public struct RemoteSDPRes: Codable {
+public struct RemoteSDPAnswerRes: Codable {
     let id: CallMessageType
     let sdpAnswer: String
     let addition: [Addition]
@@ -58,19 +58,5 @@ public struct RemoteSDPRes: Codable {
             )
         }
         self.chatId = chatId
-    }
-    
-    struct Addition: Codable {
-        let mline: Int
-        let topic: String
-        let mediaType: Mediatype
-        let mids: [String]
-    }
-    
-    struct Deletion: Codable {
-        let mline: Int
-        let topic: String
-        let mediaType: Mediatype
-        let mids: [String]
     }
 }
