@@ -7,12 +7,13 @@
 import Foundation
 import ChatDTO
 import ChatCore
+import WebRTC
 
 public struct WebRTCConfig {
     public let callConfig: CallConfig
     public let peerName: String
-    public let iceServers: [String]
-    public let turnAddress: String
+    public let turnAddress: [String]
+    public let brokerAddress: [String]
     public let brokerAddressWeb: String
     public let topicSend: String?
     public let topicReceive: String?
@@ -35,11 +36,11 @@ public struct WebRTCConfig {
     public init(callConfig: CallConfig, startCall: StartCall, isSendVideoEnabled _: Bool, fileName: String? = nil) {
         self.callConfig = callConfig
         peerName = startCall.chatDataDto.kurentoAddress.first ?? ""
-        iceServers = ["turn:\(startCall.chatDataDto.turnAddress)?transport=udp", "turn:\(startCall.chatDataDto.turnAddress)?transport=tcp"] // "stun:46.32.6.188:3478"
-        turnAddress = startCall.chatDataDto.turnAddress.first ?? ""
+        turnAddress = startCall.chatDataDto.turnAddress
         topicSend = startCall.clientDTO.topicSend
         topicReceive = startCall.clientDTO.topicReceive
         brokerAddressWeb = startCall.chatDataDto.brokerAddressWeb.first ?? ""
+        brokerAddress = startCall.chatDataDto.brokerAddress
         dataChannel = false
         customFrameCapturer = false
         userName = "mkhorrami"
@@ -65,5 +66,15 @@ public struct WebRTCConfig {
     public var topicAudioReceive: String? {
         guard let topicReceive = topicReceive else { return nil }
         return "Vo-\(topicReceive)"
+    }
+    
+    public var iceServers: [RTCIceServer] {
+        turnAddress.compactMap({
+            RTCIceServer(
+                urlStrings: ["turn:\($0)?transport=udp", "turn:\($0)?transport=tcp"],
+                username: userName!,
+                credential: password!
+            )
+        })
     }
 }

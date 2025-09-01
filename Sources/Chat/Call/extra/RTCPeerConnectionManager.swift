@@ -28,8 +28,8 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate, RTCD
     private let pcSend: RTCPeerConnection
     private let pcReceive: RTCPeerConnection
     
-    public var constraints: [String: String] = [kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueFalse,
-                                                kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueFalse]
+    public var constraints: [String: String] = [kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue,
+                                                kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue]
 
     public init(chat: ChatInternalProtocol, config: WebRTCConfig, callId: Int, delegate: WebRTCClientDelegate? = nil) {
         self.chat = chat
@@ -48,15 +48,29 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate, RTCD
             rtcConfig.sdpSemantics = .unifiedPlan
             rtcConfig.iceTransportPolicy = .relay
             rtcConfig.continualGatheringPolicy = .gatherContinually
-            rtcConfig.iceServers = [RTCIceServer(urlStrings: config.iceServers, username: config.userName!, credential: config.password!)]
+            rtcConfig.iceServers = config.iceServers
             return rtcConfig
         }
         
-        guard let peerConnectionSend = pf.peerConnection(with: rtcConfig, constraints: .init(mandatoryConstraints: constraints, optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue]), delegate: nil)
+        guard let peerConnectionSend = pf.peerConnection(
+            with: rtcConfig,
+            constraints: .init(
+                mandatoryConstraints: nil,
+                optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue]
+            ),
+            delegate: nil
+        )
         else { fatalError("failed to init peer connection send") }
         pcSend = peerConnectionSend
         
-        guard let peerConnectionReceive = pf.peerConnection(with: rtcConfig, constraints: .init(mandatoryConstraints: constraints, optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue]), delegate: nil)
+        guard let peerConnectionReceive = pf.peerConnection(
+            with: rtcConfig,
+            constraints: .init(
+                mandatoryConstraints: constraints,
+                optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue]
+            ),
+            delegate: nil
+        )
         else { fatalError("failed to init peer connection receive") }
         pcReceive = peerConnectionReceive
         
@@ -181,21 +195,7 @@ public extension RTCPeerConnectionManager {
 // MARK: Session description management
 
 public extension RTCPeerConnectionManager {
-    
-    func getOfferSDP(video: Bool) async throws -> RTCSessionDescription {
-        try await pcSend.offer(for: .init(mandatoryConstraints: constraints,
-                                          optionalConstraints: constraints))
-    }
-    
-    func setOffers() {
-//        callParticipantsUserRTC.forEach { callParticipantUserRTC in
-//            let isMe = callParticipantUserRTC.isMe
-//            Task {
-//                try? await sendSDPOffers(callParticipantUserRTC: callParticipantUserRTC)
-//            }
-//        }
-    }
-
+   
     private func reconnectAndGetOffer(_ peerConnection: RTCPeerConnection) {
 //        guard let callParticipantuserRTC = callParticipantFor(peerConnection) else {
 //            customPrint("can't find topic to reconnect peerconnection", isGuardNil: true)
@@ -231,7 +231,7 @@ public extension RTCPeerConnectionManager {
     private func sendOfferToPeer(idType: CallMessageType, sdp: RTCSessionDescription, topic: String, mediaType: Mediatype) {
         let sendSDPOffer = SendOfferSDPReq(id: idType,
                                            peerName: config.peerName,
-                                           brokerAddress: config.firstBorokerAddressWeb,
+                                           brokerAddress: config.brokerAddress.joined(separator: ","),
                                            token: chat?.config.token ?? "",
                                            topic: topic,
                                            sdpOffer: sdp.sdp,
@@ -303,7 +303,7 @@ extension RTCPeerConnectionManager {
         let sendIceCandidate = SendCandidateReq(peerName: self.config.peerName,
                                                 token: self.chat?.config.token ?? "",
                                                 iceCandidate: IceCandidate(from: candidate),
-                                                brokerAddress: config.firstBorokerAddressWeb,
+                                                brokerAddress: config.brokerAddress.joined(separator: ","),
                                                 chatId: callId
         )
         (self.chat?.call as? InternalCallProtocol)?.send(sendIceCandidate)
