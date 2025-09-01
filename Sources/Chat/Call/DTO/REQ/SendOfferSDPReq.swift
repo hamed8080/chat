@@ -15,17 +15,13 @@ struct SendOfferSDPReq: Codable, AsyncSnedable {
     var token: String
     var sdpOffer: String
     var chatId: Int?
-    var peerName: String?
     let addition: [Addition]
+    let uniqueId = UUID().uuidString
+    
+    var peerName: String?
     var content: String? { jsonString }
     var asyncMessageType: AsyncMessageTypes? = .message
     
-    struct Addition: Codable {
-        let mline: Int
-        let topic: String
-        let mediaType: MediaType
-    }
-
     public init(id: CallMessageType, peerName: String, brokerAddress: String, token: String, topic: String, sdpOffer: String, mediaType: MediaType, chatId: Int?) {
         self.id = id
         self.peerName = peerName
@@ -33,7 +29,7 @@ struct SendOfferSDPReq: Codable, AsyncSnedable {
         self.token = token
         self.sdpOffer = sdpOffer
         self.chatId = chatId
-        self.addition = [Addition(mline: 0, topic: topic, mediaType: mediaType)]
+        self.addition = [Addition(mline: 0, clientId: nil, topic: topic, mediaType: mediaType)]
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -42,8 +38,8 @@ struct SendOfferSDPReq: Codable, AsyncSnedable {
         case token = "token"
         case sdpOffer = "sdpOffer"
         case chatId = "chatId"
-        case peerName = "peerName"
         case addition = "addition"
+        case uniqueId = "uniqueId"
     }
     
     func encode(to encoder: any Encoder) throws {
@@ -53,8 +49,8 @@ struct SendOfferSDPReq: Codable, AsyncSnedable {
         try container.encode(self.token, forKey: .token)
         try container.encode(self.sdpOffer, forKey: .sdpOffer)
         try container.encodeIfPresent(self.chatId, forKey: .chatId)
-        try container.encodeIfPresent(self.peerName, forKey: .peerName)
         try container.encode(self.addition, forKey: .addition)
+        try container.encode(self.uniqueId, forKey: .uniqueId)
     }
 }
 
