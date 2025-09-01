@@ -9,16 +9,11 @@ import WebRTC
 
 public struct RemoteSDPRes: Codable {
     let id: CallMessageType
-    let sdpAnswer: String?
+    let sdpAnswer: String
     let addition: [Addition]
     let deletion: [Deletion]
     let uniqueId: String
     let chatId: Int
-
-    var rtcSDP: RTCSessionDescription? {
-        guard let sdpString = sdpAnswer else { return nil }
-        return RTCSessionDescription(type: .answer, sdp: sdpString)
-    }
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -32,7 +27,7 @@ public struct RemoteSDPRes: Codable {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(CallMessageType.self, forKey: .id)
-        self.sdpAnswer = try container.decodeIfPresent(String.self, forKey: .sdpAnswer)
+        self.sdpAnswer = try container.decode(String.self, forKey: .sdpAnswer)
         self.uniqueId = try container.decode(String.self, forKey: .uniqueId)
         
         guard let additionData = try container.decode(String.self, forKey: .addition).data(using: .utf8) else {

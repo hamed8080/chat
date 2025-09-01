@@ -47,7 +47,8 @@ extension CallManager {
                 let metadata = try JSONDecoder.instance.decode(ReceiveCallMetadata.self, from: data)
                 processReceiveMetadata(metadata)
             case .sendIceCandidate:
-                break
+                let res = try JSONDecoder.instance.decode(SendCandidateRes.self, from: data)
+                onSendIceCandidate(res)
             case .receiveAddIceCandidate:
                 break
             case .prcessSdpNegotiate:

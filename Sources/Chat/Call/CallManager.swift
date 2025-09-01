@@ -82,7 +82,7 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     }
     
     func endCall(_ request: ChatDTO.GeneralSubjectIdRequest) {
-        chat.prepareToSendAsync(req: request, type: .endCall)
+        chat.prepareToSendAsync(req: request, type: .endCallRequest)
     }
     
     func renewCallRequest(_ request: RenewCallRequest) {
@@ -207,12 +207,12 @@ extension CallManager {
     }
     
     func onCallEnded(_ asyncMessage: AsyncMessage) {
-        //        var response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        //        ChatCall.instance?.callState = .ended
-        //        response.result = response.subjectId
-        //        delegate?.chatEvent(event: .call(.callEnded(response)))
-        //        ChatCall.instance?.webrtc?.clearResourceAndCloseConnection()
-        //        ChatCall.instance?.webrtc = nil
+        var response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callEnded(response)))
+        if let callId = asyncMessage.subjectId, let callContainer = callContainer(callId: callId) {
+            callContainer.dispose()
+            callContainers.removeAll(where: { $0.callId == callId })
+        }
     }
     
     func onRemoveCallParticipant(_ asyncMessage: AsyncMessage) {
@@ -304,8 +304,14 @@ extension CallManager {
     }
     
     func processSDPAnswer(_ res: RemoteSDPRes) {
-        if let container = callContainer(callId: 0) {
-//            container.processSDPAnswer(res: res)
+        if let container = callContainer(callId: res.chatId) {
+            container.processSDPAnswer(res: res)
+        }
+    }
+    
+    func onSendIceCandidate(_ res: SendCandidateRes) {
+        if let container = callContainer(callId: res.chatId) {
+            container.setSendPeerIceCandidate(res)
         }
     }
     

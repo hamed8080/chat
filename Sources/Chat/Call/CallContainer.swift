@@ -98,9 +98,9 @@ extension CallContainer {
             Task {
                 let isVideo = myCallUser.callParticipant.video == true
                 let topic = isVideo ? myCallUser.callParticipant.topics.topicVideo : myCallUser.callParticipant.topics.topicAudio
-                try? await peerManager?.generateSendSDPOffer(video: isVideo,
-                                                             topic: topic,
-                                                             direction: .send
+                try? await peerManager?.generateSDPOffer(video: isVideo,
+                                                         topic: topic,
+                                                         direction: .send
                 )
             }
         }
@@ -108,21 +108,20 @@ extension CallContainer {
 }
 
 extension CallContainer {
-//    func processSDPAnswer(res: RemoteSDPRes) {
-//        guard let topic = res.topic else { return }
-//        peerManager?.callParticipntUserRCT(topic)?.setRemoteDescription(res)
-//    }
+    func processSDPAnswer(res: RemoteSDPRes) {
+        peerManager?.setRemoteDescription(res, direction: .send)
+    }
 //    
 //    func processRemoteIceCandidate(res: RemoteCandidateRes) {
 //        peerManager?.callParticipntUserRCT(res.topic)?.setRemoteIceCandidate(res)
 //    }
+    
+    func setSendPeerIceCandidate(_ res: SendCandidateRes) {
+        peerManager?.setSendPeerIceCandidate(res.candidate)
+    }
 }
 
 extension CallContainer {
-//    private func getPCName(_ peerConnection: RTCPeerConnection) -> String {
-//        guard let topic = getTopicForPeerConnection(peerConnection), let callParticipant = callParticipantFor(peerConnection) else { return "" }
-//        return "Peerconnection for user: \(callParticipant.callParticipant.participant?.name ?? "") with the topic:\(topic)"
-//    }
 //
 //    private func indexOfCallParitipantFor(_ peerConnection: RTCPeerConnection) -> Array<CallParticipantUserRTC>.Index? {
 //        callParticipantsUserRTC.firstIndex(where: { $0.videoRTC.pc == peerConnection || $0.audioRTC.pc == peerConnection })
@@ -133,15 +132,6 @@ extension CallContainer {
 //        return callParticipantsUserRTC[index]
 //    }
 //
-//    private func getTopicForPeerConnection(_ peerConnection: RTCPeerConnection) -> String? {
-//        if let topic = callParticipantsUserRTC.first(where: { $0.audioRTC.pc == peerConnection })?.audioRTC.topic {
-//            return topic
-//        } else if let topic = callParticipantsUserRTC.first(where: { $0.videoRTC.pc == peerConnection })?.videoRTC.topic {
-//            return topic
-//        } else {
-//            return nil
-//        }
-//    }
     
     public func addCallParticipants(_ callParticipants: [CallParticipant]) {
         callParticipants.forEach { callParticipant in
@@ -217,17 +207,21 @@ extension CallContainer {
 #endif
     }
     
-//    var meCallParticipntUserRCT: CallParticipantUserRTC? { callParticipantsUserRTC.first(where: { $0.isMe }) }
-//    
-//    func callParticipntUserRCT(_ topic: String) -> CallParticipantUserRTC? {
-//        callParticipantsUserRTC.first(where: { $0.callParticipant.sendTopic == rawTopicName(topic: topic) })
-//    }
-//    
-//    private var isPassedMaxVideoLimit: Bool {
-//        callParticipantsUserRTC.filter { $0.callParticipant.video == true }.count > config.callConfig.maxActiveVideoSessions
-//    }
+    //    var meCallParticipntUserRCT: CallParticipantUserRTC? { callParticipantsUserRTC.first(where: { $0.isMe }) }
+    //    
+    //    func callParticipntUserRCT(_ topic: String) -> CallParticipantUserRTC? {
+    //        callParticipantsUserRTC.first(where: { $0.callParticipant.sendTopic == rawTopicName(topic: topic) })
+    //    }
+    //    
+    //    private var isPassedMaxVideoLimit: Bool {
+    //        callParticipantsUserRTC.filter { $0.callParticipant.video == true }.count > config.callConfig.maxActiveVideoSessions
+    //    }
     
     func callParticipant(id: Int) -> CallParticipantUserRTC? {
         callParticipantsUserRTC.first(where: {$0.id == id})
+    }
+    
+    public func dispose() {
+        peerManager?.dispose()
     }
 }
