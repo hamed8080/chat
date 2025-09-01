@@ -96,13 +96,15 @@ extension CallContainer {
     public func createSDPOfferForLocal() {
         if let userId = chat.userInfo?.id, let myCallUser = callParticipant(id: userId) {
             Task {
-                try? await peerManager?.generateSendSDPOffer(video: myCallUser.callParticipant.video == true,
-                                                             topic: myCallUser.topic)
+                let isVideo = myCallUser.callParticipant.video == true
+                let topic = isVideo ? myCallUser.callParticipant.topics.topicVideo : myCallUser.callParticipant.topics.topicAudio
+                try? await peerManager?.generateSendSDPOffer(video: isVideo,
+                                                             topic: topic,
+                                                             direction: .send
+                )
             }
         }
     }
-    
-    
 }
 
 extension CallContainer {

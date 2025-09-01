@@ -9,10 +9,9 @@ import WebRTC
 
 public struct RemoteSDPRes: Codable {
     let id: CallMessageType
-    let topic: String?
     let sdpAnswer: String?
-    let addition: [String]
-    let deletion: [String]
+    let addition: [Addition]
+    let deletion: [Deletion]
     let uniqueId: String
     let chatId: Int
 
@@ -23,7 +22,6 @@ public struct RemoteSDPRes: Codable {
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
-        case topic = "topic"
         case sdpAnswer = "sdpAnswer"
         case addition = "addition"
         case deletion = "deletion"
@@ -34,7 +32,6 @@ public struct RemoteSDPRes: Codable {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(CallMessageType.self, forKey: .id)
-        self.topic = try container.decodeIfPresent(String.self, forKey: .topic)
         self.sdpAnswer = try container.decodeIfPresent(String.self, forKey: .sdpAnswer)
         self.uniqueId = try container.decode(String.self, forKey: .uniqueId)
         
@@ -46,7 +43,7 @@ public struct RemoteSDPRes: Codable {
             )
         }
         
-        self.addition = try JSONDecoder().decode([String].self, from: additionData)
+        self.addition = try JSONDecoder().decode([Addition].self, from: additionData)
         
         guard let deletionData = try container.decode(String.self, forKey: .deletion).data(using: .utf8) else {
             throw DecodingError.dataCorruptedError(
@@ -55,7 +52,7 @@ public struct RemoteSDPRes: Codable {
                 debugDescription: "deletion string is not valid UTF-8"
             )
         }
-        self.deletion = try JSONDecoder().decode([String].self, from: deletionData)
+        self.deletion = try JSONDecoder().decode([Deletion].self, from: deletionData)
         
         let chatId = try container.decode(String.self, forKey: .chatId)
         guard let chatId = Int(chatId) else {
@@ -66,5 +63,19 @@ public struct RemoteSDPRes: Codable {
             )
         }
         self.chatId = chatId
+    }
+    
+    struct Addition: Codable {
+        let mline: Int
+        let topic: String
+        let mediaType: Mediatype
+        let mids: [String]
+    }
+    
+    struct Deletion: Codable {
+        let mline: Int
+        let topic: String
+        let mediaType: Mediatype
+        let mids: [String]
     }
 }

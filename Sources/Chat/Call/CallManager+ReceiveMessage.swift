@@ -15,10 +15,8 @@ extension CallManager {
         do {
             switch ms.id {
             case .sessionRefresh, .createSession, .sessionNewCreated:
-                if let data = message.content?.data(using: .utf8),
-                   let resp = try? JSONDecoder.instance.decode(CreateSessionResp.self, from: data) {
-                    onSessionCreated(resp)
-                }
+                let resp = try JSONDecoder.instance.decode(CreateSessionResp.self, from: data)
+                onSessionCreated(resp)
             case .receivingMedia:
                 let receivingMedia = try JSONDecoder.instance.decode(ReceivingMedia.self, from: data)
                 subscribeToReceivingOffers(receivingMedia)

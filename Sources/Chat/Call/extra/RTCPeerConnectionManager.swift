@@ -511,14 +511,24 @@ public extension RTCPeerConnectionManager {
 //        )
     }
     
-    internal func generateSendSDPOffer(video: Bool, topic: String) async throws {
-        let sdp = try await pcSend.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
-        sendOfferToPeer(
-            idType: .sendSdpOffer,
-            sdp: sdp,
-            topic: topic,
-            mediaType: .video
-        )
+    internal func generateSendSDPOffer(video: Bool, topic: String, direction: RTCDirection) async throws {
+        if direction == .send {
+            let sdp = try await pcSend.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
+            sendOfferToPeer(
+                idType: .sendSdpOffer,
+                sdp: sdp,
+                topic: topic,
+                mediaType: video ? .video : .audio
+            )
+        } else {
+            let sdp = try await pcReceive.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
+            sendOfferToPeer(
+                idType: .sendSdpOffer,
+                sdp: sdp,
+                topic: topic,
+                mediaType: video ? .video : .audio
+            )
+        }
     }
 }
 
