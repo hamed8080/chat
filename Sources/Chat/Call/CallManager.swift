@@ -356,7 +356,7 @@ extension CallManager {
         let session = CreateSessionReq(
             peerName: startCall.chatDataDto.kurentoAddress.first ?? "",
             turnAddress: startCall.chatDataDto.turnAddress.first ?? "",
-            brokerAddress: startCall.chatDataDto.brokerAddressWeb.first ?? "",
+            brokerAddress: startCall.chatDataDto.brokerAddress.joined(separator: ","),
             chatId: callId,
             token: chat.config.token
         )
