@@ -19,16 +19,19 @@ public class CallContainer: Identifiable {
     private let chat: ChatInternalProtocol
     private var state: CallState
     private var callType: CallType
+    public let isFrontCamera: Bool
     private var typeCode: String?
     private var peerManager: RTCPeerConnectionManager?
     private var callParticipantsUserRTC: [CallParticipantUserRTC] = []
     
-    init(callId: Int, state: CallState, callType: CallType, typeCode: String?, chat: ChatInternalProtocol) {
+    init(callId: Int, state: CallState, callType: CallType,
+         typeCode: String?, isFrontCamera: Bool, chat: ChatInternalProtocol) {
         id = callId
         self.callType = callType
         self.state = state
         self.callId = callId
         self.typeCode = typeCode
+        self.isFrontCamera = isFrontCamera
         self.chat = chat
     }
     
@@ -166,7 +169,7 @@ extension CallContainer {
         if myUserRTC.callParticipant.video == true {
             let videoTrack = peerManager.createVideoSenderTrack(topic: myUserRTC.callParticipant.topics.topicVideo)
             peerManager.addVideoTrack(videoTrack, direction: .send)
-            peerManager.startCaptureLocalVideo(fileName: nil, front: true)
+            peerManager.startCaptureLocalVideo(fileName: nil, front: isFrontCamera)
             
             Task { @MainActor in
                 let view = RTCMTLVideoView(frame: .zero)

@@ -11,6 +11,7 @@ public struct StartCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtoc
     public let threadId: Int?
     public let invitees: [Invitee]?
     public let type: CallType
+    public let isFrontCamera: Bool
     public let client: SendClient
     public let createCallThreadRequest: CreateCallThreadRequest?
     public let uniqueId: String
@@ -42,6 +43,7 @@ public struct StartCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtoc
                 threadId: Int? = nil,
                 invitees: [Invitee]? = nil,
                 type: CallType,
+                isFrontCamera: Bool = true,
                 groupName: String = "group",
                 createCallThreadRequest: CreateCallThreadRequest? = nil,
                 typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
@@ -52,6 +54,7 @@ public struct StartCallRequest: Encodable, UniqueIdProtocol, TypeCodeIndexProtoc
         self.threadId = threadId ?? thread?.id
         self.thread = thread
         self.type = type
+        self.isFrontCamera = isFrontCamera
         self.client = client
         self.createCallThreadRequest = createCallThreadRequest
         self.uniqueId = UUID().uuidString

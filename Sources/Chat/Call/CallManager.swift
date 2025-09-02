@@ -16,6 +16,7 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     private var callContainers: [CallContainer] = []
+    private var isFrontCamera: Bool = true
     
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -94,6 +95,7 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     }
     
     func requestCall(_ request: StartCallRequest) {
+        isFrontCamera = request.isFrontCamera
         chat.prepareToSendAsync(req: request, type: .startCallRequest)
     }
     
@@ -395,6 +397,7 @@ extension CallManager {
                              state: state,
                              callType: createCall.type,
                              typeCode: typeCode,
+                             isFrontCamera: isFrontCamera,
                              chat: chat)
     }
     

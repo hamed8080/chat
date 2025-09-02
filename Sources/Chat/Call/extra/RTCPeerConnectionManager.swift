@@ -480,24 +480,28 @@ extension RTCPeerConnectionManager {
         topic.replacingOccurrences(of: "Vi-", with: "").replacingOccurrences(of: "Vo-", with: "")
     }
     
-    func startCaptureLocalVideo(fileName: String?,
-                                front: Bool) {
+    func startCaptureLocalVideo(fileName: String?, front: Bool) {
         let fps = self.config.callConfig.targetFPS
-        let selectedCamera = RTCCameraVideoCapturer
-            .captureDevices()
-            .first(where: { $0.position == (front ? .front : .back)})
-        if let videoCapturer = videoCapturer as? RTCCameraVideoCapturer, let selectedCamera = selectedCamera,
+        
+        let videoCapturer = videoCapturer as? RTCCameraVideoCapturer
+        if let selectedCamera = getCamera(front: front),
            let format = getCameraFormat(front: front) {
             DispatchQueue.global(qos: .background).async {
-                videoCapturer.startCapture(with: selectedCamera, format: format, fps: fps)
+                videoCapturer?.startCapture(with: selectedCamera, format: format, fps: fps)
             }
         } else if let videoCapturer = videoCapturer as? RTCFileVideoCapturer, let fileName = fileName {
             videoCapturer.startCapturing(fromFileNamed: fileName) { _ in }
         }
     }
     
+    private func getCamera(front: Bool) -> AVCaptureDevice? {
+        RTCCameraVideoCapturer
+            .captureDevices()
+            .first(where: { $0.position == (front ? .front : .back)})
+    }
+    
     public func getCameraFormat(front: Bool) -> AVCaptureDevice.Format? {
-        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: { $0.position == (front ? .front : .back) }) else { return nil }
+        guard let frontCamera = getCamera(front: front) else { return nil }
         let format = RTCCameraVideoCapturer.supportedFormats(for: frontCamera).last { format in
             let maxFrameRate = format.videoSupportedFrameRateRanges.first(where: { $0.maxFrameRate <= Float64(config.callConfig.targetFPS) })?.maxFrameRate ?? Float64(config.callConfig.targetFPS)
             let targetFPS = Int(maxFrameRate)
