@@ -169,6 +169,12 @@ public extension RTCPeerConnectionManager {
     }
 
     nonisolated func peerConnection(_: RTCPeerConnection, didOpen _: RTCDataChannel) {}
+    
+    nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didAdd rtpReceiver: RTCRtpReceiver, streams mediaStreams: [RTCMediaStream]) {
+        if let audioTrack = rtpReceiver.track as? RTCAudioTrack {
+            audioTrack.isEnabled = true
+        }
+    }
 }
 
 // MARK: - RTCDataChannelDelegate
@@ -260,10 +266,9 @@ public extension RTCPeerConnectionManager {
     func processSDPOffer(_ offer: RemoteSDPOfferRes) {
         let sdp = RTCSessionDescription(type: .offer, sdp: offer.sdpOffer)
         Task {
-            try await pcReceive.setRemoteDescription(sdp)
-            for item in offer.addition {
-                do {
-                    
+            do {
+                try await pcReceive.setRemoteDescription(sdp)
+                for item in offer.addition {
                     let answer = try await pcReceive.answer(for: item.constraints)
                     try await pcReceive.setLocalDescription(answer)
                     
@@ -273,9 +278,9 @@ public extension RTCPeerConnectionManager {
                         brokerAddress: config.brokerAddress.joined(separator: ",")
                     )
                     sendAsyncMessage(req, .receiveSdpAnswer)
-                } catch {
-                    log("Failed to set remote offer description and create an answer")
                 }
+            } catch {
+                log("Failed to set remote offer description and create an answer")
             }
         }
     }
