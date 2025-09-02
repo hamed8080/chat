@@ -228,15 +228,11 @@ public extension RTCPeerConnectionManager {
     }
     
     private func sendOfferToPeer(idType: CallMessageType, sdp: RTCSessionDescription, topic: String, mediaType: MediaType) {
-        let sendSDPOffer = SendOfferSDPReq(id: idType,
-                                           peerName: config.peerName,
-                                           brokerAddress: config.brokerAddress.joined(separator: ","),
-                                           token: chat?.config.token ?? "",
+        let sendSDPOffer = SendOfferSDPReq(brokerAddress: config.brokerAddress.joined(separator: ","),
                                            topic: topic,
                                            sdpOffer: sdp.sdp,
-                                           mediaType: mediaType,
-                                           chatId: callId)
-        (chat?.call as? InternalCallProtocol)?.send(sendSDPOffer)
+                                           mediaType: mediaType)
+        sendAsyncMessage(sendSDPOffer, idType)
     }
     
     public func setRemoteDescription(_ remoteSDP: RemoteSDPAnswerRes, direction: RTCDirection) {
@@ -268,20 +264,15 @@ public extension RTCPeerConnectionManager {
             for item in offer.addition {
                 do {
                     
-                    
                     let answer = try await pcReceive.answer(for: item.constraints)
                     try await pcReceive.setLocalDescription(answer)
                     
                     let req = ReceiveSDPAnswerReq(
-                        id: .receiveSdpAnswer,
                         sdpAnswer: answer.sdp,
                         addition: [item],
-                        peerName: config.peerName,
-                        brokerAddress: config.brokerAddress.joined(separator: ","),
-                        token: chat?.config.token ?? "",
-                        chatId: callId
+                        brokerAddress: config.brokerAddress.joined(separator: ",")
                     )
-                    (chat?.call as? InternalCallProtocol)?.send(req)
+                    sendAsyncMessage(req, .receiveSdpAnswer)
                 } catch {
                     log("Failed to set remote offer description and create an answer")
                 }
@@ -291,30 +282,21 @@ public extension RTCPeerConnectionManager {
 }
 
 // MARK: Subscription
+
 extension RTCPeerConnectionManager {
     func subscribeToReceiveOffers(_ media: ReceivingMedia) {
         for item in media.recvList {
             let req = CallSubscribeRequest(
-                id: .subscribe,
-                chatId: media.chatId,
-                token: chat?.config.token ?? "",
                 brokerAddress: config.brokerAddress.joined(separator: ","),
-                addition: [
-                    .init(
-                        mline: item.mline,
-                        clientId: item.clientId,
-                        topic: item.topic,
-                        mediaType: item.mediaType
-                    )
-                ],
-                peerName: config.peerName
+                addition: [item.toAddition]
             )
-            (chat?.call as? InternalCallProtocol)?.send(req)
+            sendAsyncMessage(req, .subscribe)
         }
     }
 }
 
-// MARK: Ice management.
+// MARK: Ice management
+
 extension RTCPeerConnectionManager {
     public func setSendPeerIceCandidate(_ ice: IceCandidate) {
         Task {
@@ -329,13 +311,10 @@ extension RTCPeerConnectionManager {
     private func sendGeneratedIce(_ candidate: RTCIceCandidate, direction: RTCDirection) {
         let relayStr = candidate.sdp.contains("typ relay") ? "Yes ✅✅✅✅✅✅" : "No ⛔️⛔️⛔️⛔️⛔️⛔️⛔️"
         log("did generate ICE Candidate for: \(direction == .send ? "send" : "receive") is relayType:\(relayStr)")
-        let sendIceCandidate = SendCandidateReq(peerName: self.config.peerName,
-                                                token: self.chat?.config.token ?? "",
-                                                iceCandidate: IceCandidate(from: candidate),
-                                                brokerAddress: config.brokerAddress.joined(separator: ","),
-                                                chatId: callId
+        let sendIceCandidate = SendCandidateReq(iceCandidate: IceCandidate(from: candidate),
+                                                brokerAddress: config.brokerAddress.joined(separator: ",")
         )
-        (self.chat?.call as? InternalCallProtocol)?.send(sendIceCandidate)
+        sendAsyncMessage(sendIceCandidate, .sendIceCandidate)
     }
 }
 
@@ -373,6 +352,7 @@ extension RTCPeerConnectionManager {
 }
 
 // MARK: Configure audio session
+
 public extension RTCPeerConnectionManager {
     func configureAudioSession() {
         log("configure audio session")
@@ -520,5 +500,17 @@ extension RTCPeerConnectionManager {
             return dimensions.width == config.callConfig.targetVideoWidth && dimensions.height == config.callConfig.targetVideoHeight && Int(maxFrameRate) <= targetFPS
         }
         return format
+    }
+    
+    @discardableResult
+    func sendAsyncMessage<T: Encodable>(_ req : T, _ type: CallMessageType) -> String? {
+        let callInstance = CallServerWrapper(id: type,
+                                             token: chat?.config.token ?? "",
+                                             chatId: callId,
+                                             payload: req)
+        guard let content = callInstance.jsonString else { return nil }
+        let wrapper = CallAsyncMessageWrapper(content: content, peerName: config.peerName)
+        (chat?.call as? InternalCallProtocol)?.send(wrapper)
+        return callInstance.uniqueId
     }
 }

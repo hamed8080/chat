@@ -6,18 +6,13 @@
 
 import Chat
 import Foundation
-import Async
 import ChatCore
 
-struct CloseSessionReq: Codable, AsyncSnedable {
+struct CloseSessionReq: Codable {
     let id: CallMessageType = .close
     let token: String
-    var content: String? { jsonString }
-    var asyncMessageType: AsyncMessageTypes? = .message
-    let peerName: String?
 
-    public init(peerName: String, token: String) {
+    public init(token: String) {
         self.token = token
-        self.peerName = peerName
     }
 }

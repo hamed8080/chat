@@ -353,14 +353,19 @@ extension CallManager {
 // MARK: Janus/Kurento requests.
 extension CallManager {
     private func createSession(startCall: StartCall, callId: Int) {
-        let session = CreateSessionReq(
-            peerName: startCall.chatDataDto.kurentoAddress.first ?? "",
+        let req = CreateSessionReq(
             turnAddress: startCall.chatDataDto.turnAddress.first ?? "",
-            brokerAddress: startCall.chatDataDto.brokerAddress.joined(separator: ","),
-            chatId: callId,
-            token: chat.config.token
+            brokerAddress: startCall.chatDataDto.brokerAddress.joined(separator: ",")
         )
-        send(session)
+        let peerName = startCall.chatDataDto.kurentoAddress.first ?? ""
+        let callInstance = CallServerWrapper(id: .createSession,
+                                             token: chat.config.token ?? "",
+                                             chatId: callId,
+                                             payload: req)
+        if let content = callInstance.jsonString {
+            let wrapper = CallAsyncMessageWrapper(content: content, peerName: peerName)
+            send(wrapper)
+        }
     }
 }
 

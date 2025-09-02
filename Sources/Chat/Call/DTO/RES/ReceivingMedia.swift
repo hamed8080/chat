@@ -87,3 +87,14 @@ struct ReceiveMediaItem: Decodable {
         case version = "version"
     }
 }
+
+extension ReceiveMediaItem {
+    var toAddition: Addition {
+        .init(
+            mline: mline,
+            clientId: clientId,
+            topic: topic,
+            mediaType: mediaType
+        )
+    }
+}

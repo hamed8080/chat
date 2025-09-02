@@ -9,15 +9,11 @@ import Foundation
 import Async
 import ChatCore
 
-struct StopAllSessionReq: Codable, AsyncSnedable {
+struct StopAllSessionReq: Codable {
     var id: CallMessageType = .stopAll
     var token: String
-    var peerName: String?
-    var content: String? { jsonString }
-    var asyncMessageType: AsyncMessageTypes? = .message
 
-    public init(peerName: String, token: String) {
+    public init(token: String) {
         self.token = token
-        self.peerName = peerName
     }
 }
