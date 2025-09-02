@@ -12,10 +12,9 @@ import ChatModels
 import Async
 
 @ChatGlobalActor
-public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDelegate {
+public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     private var chat: ChatInternalProtocol?
     private var config: WebRTCConfig
-    private var delegate: WebRTCClientDelegate?
     var logFile: RTCFileLogger?
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
     private let audioQueue = DispatchQueue(label: "audio")
@@ -30,11 +29,10 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate, RTCD
     public var constraints: [String: String] = [kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue,
                                                 kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue]
 
-    public init(chat: ChatInternalProtocol, config: WebRTCConfig, callId: Int, delegate: WebRTCClientDelegate? = nil) {
+    public init(chat: ChatInternalProtocol, config: WebRTCConfig, callId: Int) {
         self.chat = chat
         self.callId = callId
         self.config = config
-        self.delegate = delegate
         RTCInitializeSSL()
         
         pf = RTCPeerConnectionFactory(encoderFactory: RTCDefaultVideoEncoderFactory.default,
@@ -173,26 +171,6 @@ public extension RTCPeerConnectionManager {
     nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didAdd rtpReceiver: RTCRtpReceiver, streams mediaStreams: [RTCMediaStream]) {
         if let audioTrack = rtpReceiver.track as? RTCAudioTrack {
             audioTrack.isEnabled = true
-        }
-    }
-}
-
-// MARK: - RTCDataChannelDelegate
-
-public extension RTCPeerConnectionManager {
-    nonisolated func dataChannel(_: RTCDataChannel, didReceiveMessageWith buffer: RTCDataBuffer) {
-        Task { @ChatGlobalActor in
-            if buffer.isBinary {
-                self.delegate?.dataChannelDidReceive(data: buffer.data)
-            } else {
-                self.delegate?.dataChannelDidReceive(message: String(data: buffer.data, encoding: String.Encoding.utf8)!)
-            }
-        }
-    }
-
-    nonisolated func dataChannelDidChangeState(_ dataChannel: RTCDataChannel) {
-        Task { @ChatGlobalActor in
-            log("data channel did changeed state to \(dataChannel.readyState)")
         }
     }
 }
@@ -338,14 +316,13 @@ extension RTCPeerConnectionManager {
         }
     }
     
-    public func createAudioSenderTrack(topic: String, trackId: String = "audio0") -> RTCAudioTrack {
+    public func createAudioSenderTrack(trackId: String = "audio0") -> RTCAudioTrack {
         let audioConstrains = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
         let audioSource = pf.audioSource(with: audioConstrains)
-        let track = pf.audioTrack(with: audioSource, trackId: trackId)
-        return track
+        return pf.audioTrack(with: audioSource, trackId: trackId)
     }
     
-    public func createVideoSenderTrack(topic: String, trackId: String = "video0", fileName: String? = nil) -> RTCVideoTrack {
+    public func createVideoSenderTrack(trackId: String = "video0", fileName: String? = nil) -> RTCVideoTrack {
         let videoSource = pf.videoSource()
         if TARGET_OS_SIMULATOR != 0 {
             videoCapturer = RTCFileVideoCapturer(delegate: videoSource)

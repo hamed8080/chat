@@ -23,8 +23,7 @@ public protocol Chat {
         pingTimer: SourceTimer,
         queueTimer: SourceTimer,
         banTimer: TimerProtocol,
-        session: URLSessionProtocol,
-        callDelegate: WebRTCClientDelegate?
+        session: URLSessionProtocol
     )
 
     /// The unique id of a chat instance to find and use it in ``ChatManager`` to fetch it.

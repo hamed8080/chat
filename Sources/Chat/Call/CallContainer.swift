@@ -47,7 +47,7 @@ public class CallContainer: Identifiable {
                                   startCall: startCall,
                                   isSendVideoEnabled: startCall.clientDTO.video,
                                   fileName: TARGET_OS_SIMULATOR != 0 ? "webrtc_user_a.mp4" : nil)
-        peerManager = RTCPeerConnectionManager(chat: chat, config: config, callId: callId, delegate: self)
+        peerManager = RTCPeerConnectionManager(chat: chat, config: config, callId: callId)
         let me = CallParticipant(sendTopic: config.topicSend ?? "",
                                  userId: userId,
                                  mute: startCall.clientDTO.mute,
@@ -162,12 +162,12 @@ extension CallContainer {
         else { return }
        
         // Add audio track
-        let audioTrack = peerManager.createAudioSenderTrack(topic: myUserRTC.callParticipant.topics.topicAudio)
+        let audioTrack = peerManager.createAudioSenderTrack()
         peerManager.addAudioTrack(audioTrack, direction: .send)
         
         // Add video track
         if myUserRTC.callParticipant.video == true {
-            let videoTrack = peerManager.createVideoSenderTrack(topic: myUserRTC.callParticipant.topics.topicVideo)
+            let videoTrack = peerManager.createVideoSenderTrack()
             peerManager.addVideoTrack(videoTrack, direction: .send)
             peerManager.startCaptureLocalVideo(fileName: nil, front: isFrontCamera)
             
@@ -184,28 +184,6 @@ extension CallContainer {
     
     func subscribeToReceiveOffers(_ media: ReceivingMedia) {
         peerManager?.subscribeToReceiveOffers(media)
-    }
-}
-
-extension CallContainer: WebRTCClientDelegate {
-    nonisolated public func didIceConnectionStateChanged(iceConnectionState: IceConnectionState) {
-        
-    }
-    
-    nonisolated public func dataChannelDidReceive(data: Data) {
-        
-    }
-    
-    nonisolated public func dataChannelDidReceive(message: String) {
-        
-    }
-    
-    nonisolated public func didConnectWebRTC() {
-        
-    }
-    
-    nonisolated public func didDisconnectWebRTC() {
-        
     }
 }
 

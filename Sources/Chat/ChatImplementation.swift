@@ -46,22 +46,19 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
     public var cacheFileManager: CacheFileManagerProtocol?
     public var state: ChatState = .uninitialized
     public var callMessageDeleaget: CallMessageProtocol?
-    public var callDelegate: WebRTCClientDelegate?
     public var deviceInfo: DeviceInfo?
 
     public init(config: ChatConfig,
                 pingTimer: SourceTimer = SourceTimer(),
                 queueTimer: SourceTimer = SourceTimer(),
                 banTimer: TimerProtocol = Timer(),
-                session: URLSessionProtocol = URLSession.shared,
-                callDelegate: WebRTCClientDelegate? = nil
+                session: URLSessionProtocol = URLSession.shared
                 )
     {
         self.config = config
         logger = Logger(config: config.loggerConfig)
         self.banTimer = banTimer
         self.session = session
-        self.callDelegate = callDelegate
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         if config.enableCache {
             cacheFileManager = CacheFileManager(logger: logger)
