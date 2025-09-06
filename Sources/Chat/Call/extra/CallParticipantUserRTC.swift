@@ -22,18 +22,19 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
     public var iceQueue: [RTCIceCandidate] = []
     public var audioStream: RTCMediaStreamTrack?
     public var videoStream: RTCMediaStreamTrack?
+    private var topicMids: [String: [String]] = [:]
     
     @MainActor
     public var renderer: RTCVideoRenderer?
 
     public var isFrontCamera: Bool = true
-    public var isVideoTrackEnable: Bool { videoStream?.isEnabled ?? false }
+    public var isVideoTrackEnable: Bool { callParticipant.video ?? false }
     public var isSpeaking: Bool = false
     public var lastTimeSpeaking: Date?
     private weak var container: CallContainer?
     
     public init(callParticipant: CallParticipant, topic: String, container: CallContainer) {
-        self.id = callParticipant.userId ?? callParticipant.participant?.id ?? -1
+        self.id = callParticipant.clientId ?? -1
         self.callParticipant = callParticipant
         self.topic = topic
         self.container = container
@@ -46,6 +47,22 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
 #else
         self.renderer = RTCMTLVideoView()
 #endif
+    }
+    
+    public func addMids(topic: String, mids: [String]) {
+        topicMids[topic] = mids
+    }
+    
+    public func removeMids(topic: String) {
+        topicMids.removeValue(forKey: topic)
+    }
+    
+    public func getMids(for topic: String) -> [String] {
+        return topicMids[topic] ?? []
+    }
+    
+    public func topic(for mid: String) -> String? {
+        return topicMids.first(where: {$0.value.contains(where: {$0 == mid})})?.key
     }
     
     public func addStreams() {

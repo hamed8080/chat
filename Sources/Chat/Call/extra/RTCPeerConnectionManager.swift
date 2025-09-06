@@ -21,7 +21,7 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     private let callId: Int
     private var videoCapturer: RTCVideoCapturer?
     private var subscribed = false
-    public var onAddVideoTrack:( (RTCVideoTrack) -> Void )? = nil
+    public var onAddVideoTrack:( (_ track: RTCVideoTrack, _ mid: String) -> Void )? = nil
     
     /// Peer connection
     public let pf: RTCPeerConnectionFactory
@@ -174,11 +174,12 @@ public extension RTCPeerConnectionManager {
         if let audioTrack = rtpReceiver.track as? RTCAudioTrack {
             audioTrack.isEnabled = true
         }
-        
-        if let videoTrack = rtpReceiver.track as? RTCVideoTrack {
+       
+        let transceiver = peerConnection.transceivers.first(where: { $0.receiver == rtpReceiver })
+        if let videoTrack = rtpReceiver.track as? RTCVideoTrack, let mid = transceiver?.mid {
             videoTrack.isEnabled = true
             Task { @ChatGlobalActor in
-                onAddVideoTrack?(videoTrack)
+                onAddVideoTrack?(videoTrack, mid)
             }
         }
     }
@@ -283,15 +284,16 @@ extension RTCPeerConnectionManager {
 // MARK: Ice management
 
 extension RTCPeerConnectionManager {
-    public func setSendPeerIceCandidate(_ ice: IceCandidate) {
+    public func setPeerIceCandidate(ice: IceCandidate, direction: RTCDirection) {
+        let pc = direction == .send ? pcSend : pcReceive
         Task {
             do {
-                while pcSend.remoteDescription == nil {
+                while pc.remoteDescription == nil {
                     try? await Task.sleep(nanoseconds: 500_000_000)
                 }
-                try await pcSend.add(ice.rtcIceCandidate)
+                try await pc.add(ice.rtcIceCandidate)
             } catch {
-                log("Failed set send peer add ice candidate error: \(error.localizedDescription)")
+                log("Failed set \(direction) peer add ice candidate error: \(error.localizedDescription)")
             }
         }
     }

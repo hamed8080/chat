@@ -7,7 +7,7 @@
 import Foundation
 
 public struct ClientDTO: Codable, Sendable {
-    public let clientId: String
+    public let clientId: Int
     public let topicReceive: String?
     public let topicSend: String
     public let desc: String?
@@ -16,7 +16,7 @@ public struct ClientDTO: Codable, Sendable {
     public let mute: Bool
     public let userId: Int
 
-    public init(clientId: String, topicReceive: String?, topicSend: String, userId: Int, desc: String?, sendKey: String?, video: Bool, mute: Bool) {
+    public init(clientId: Int, topicReceive: String?, topicSend: String, userId: Int, desc: String?, sendKey: String?, video: Bool, mute: Bool) {
         self.clientId = clientId
         self.topicReceive = topicReceive
         self.topicSend = topicSend
@@ -52,7 +52,17 @@ public struct ClientDTO: Codable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.clientId = try container.decode(String.self, forKey: .clientId)
+        
+        let clientIdString = try container.decode(String.self, forKey: .clientId)
+        guard let clientId = Int(clientIdString) else {
+            throw DecodingError.dataCorruptedError(
+                forKey: .clientId,
+                in: container,
+                debugDescription: "clientId must be an Int in String format"
+            )
+        }
+        self.clientId = clientId
+        
         self.topicReceive = try container.decodeIfPresent(String.self, forKey: .topicReceive)
         self.topicSend = try container.decode(String.self, forKey: .topicSend)
         self.desc = try container.decodeIfPresent(String.self, forKey: .desc)

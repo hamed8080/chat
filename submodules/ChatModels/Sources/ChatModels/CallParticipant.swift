@@ -17,6 +17,7 @@ public struct CallParticipant: Codable, Equatable, Sendable {
     public var participant: Participant?
     public var mute: Bool
     public var video: Bool?
+    public var clientId: Int?
 
     public init(
         sendTopic: String,
@@ -24,6 +25,7 @@ public struct CallParticipant: Codable, Equatable, Sendable {
         joinTime: Int? = nil,
         leaveTime: Int? = nil,
         userId: Int? = nil,
+        clientId: Int? = nil,
         active: Bool = true,
         callStatus: CallStatus? = nil,
         mute: Bool = false,
@@ -32,6 +34,7 @@ public struct CallParticipant: Codable, Equatable, Sendable {
     ) {
         self.joinTime = joinTime
         self.leaveTime = leaveTime
+        self.clientId = clientId
         self.userId = userId
         self.sendTopic = sendTopic
         self.receiveTopic = receiveTopic

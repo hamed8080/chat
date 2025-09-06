@@ -321,9 +321,9 @@ extension CallManager {
         }
     }
     
-    func onSendIceCandidate(_ res: SendCandidateRes) {
+    func onAddIceCandidate(_ res: AddIceCandidateRes, _ direction: RTCDirection) {
         if let container = callContainer(callId: res.chatId) {
-            container.setSendPeerIceCandidate(res)
+            container.setPeerIceCandidate(res, direction)
         }
     }
     

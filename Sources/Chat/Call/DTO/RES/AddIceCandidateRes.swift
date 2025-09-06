@@ -1,5 +1,5 @@
 //
-// SendCandidateRes.swift
+// AddIceCandidateRes.swift
 // Copyright (c) 2022 ChatCall
 //
 // Created by Hamed Hosseini on 12/16/22
@@ -9,7 +9,7 @@ import Foundation
 import Async
 import ChatCore
 
-struct SendCandidateRes: Decodable {
+struct AddIceCandidateRes: Decodable {
     let id: CallMessageType
     let chatId: Int
     let candidate: IceCandidate

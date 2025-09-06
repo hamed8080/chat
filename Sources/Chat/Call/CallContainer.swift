@@ -48,9 +48,9 @@ public class CallContainer: Identifiable {
                                   isSendVideoEnabled: startCall.clientDTO.video,
                                   fileName: TARGET_OS_SIMULATOR != 0 ? "webrtc_user_a.mp4" : nil)
         peerManager = RTCPeerConnectionManager(chat: chat, config: config, callId: callId)
-        peerManager?.onAddVideoTrack = { @Sendable [weak self] videoTrack in
+        peerManager?.onAddVideoTrack = { @Sendable [weak self] videoTrack, mid in
             Task { @ChatGlobalActor in
-                let user = self?.callParticipantsUserRTC.last
+                let user = self?.callParticipantsUserRTC.first(where: { $0.topic(for: mid) != nil })
                 print("user to set renderer is:", user?.callParticipant.participant?.name)
                 if let renderer = await user?.renderer {
                     videoTrack.add(renderer)
@@ -66,6 +66,7 @@ public class CallContainer: Identifiable {
         let otherUsers = startCall.otherClientDtoList?.filter { $0.userId != userId }.compactMap { clientDTO in
             CallParticipant(sendTopic: clientDTO.topicSend,
                             userId: clientDTO.userId,
+                            clientId: clientDTO.clientId,
                             mute: clientDTO.mute,
                             video: clientDTO.video)
         }
@@ -110,7 +111,7 @@ extension CallContainer {
     }
     
     public func createSDPOfferForLocal() {
-        if let userId = chat.userInfo?.id, let myCallUser = callParticipant(id: userId) {
+        if let userId = chat.userInfo?.id, let myCallUser = callParticipant(userId: userId) {
             Task {
                 let isVideo = myCallUser.callParticipant.video == true
                 let topics = myCallUser.callParticipant.topics
@@ -133,12 +134,20 @@ extension CallContainer {
 //        peerManager?.callParticipntUserRCT(res.topic)?.setRemoteIceCandidate(res)
 //    }
     
-    func setSendPeerIceCandidate(_ res: SendCandidateRes) {
-        peerManager?.setSendPeerIceCandidate(res.candidate)
+    func setPeerIceCandidate(_ res: AddIceCandidateRes, _ direction: RTCDirection) {
+        peerManager?.setPeerIceCandidate(ice: res.candidate, direction: direction)
     }
     
     func processSDPOffer(_ res: RemoteSDPOfferRes) {
         peerManager?.processSDPOffer(res)
+        for addition in res.addition {
+            if let clientId = addition.clientId,
+               let user = callParticipant(clientId: clientId),
+               let mids = addition.mids
+            {
+                user.addMids(topic: addition.topic, mids: mids)
+            }
+        }
     }
 }
 
@@ -173,7 +182,7 @@ extension CallContainer {
     public func createMediaSender() {
         // create media senders for both audio and video senders
         guard let myId = chat.userInfo?.id,
-              let myUserRTC = callParticipant(id: myId),
+              let myUserRTC = callParticipant(userId: myId),
               let peerManager = peerManager
         else { return }
        
@@ -222,8 +231,12 @@ extension CallContainer {
     //        callParticipantsUserRTC.filter { $0.callParticipant.video == true }.count > config.callConfig.maxActiveVideoSessions
     //    }
     
-    func callParticipant(id: Int) -> CallParticipantUserRTC? {
-        callParticipantsUserRTC.first(where: {$0.id == id})
+    func callParticipant(clientId: Int) -> CallParticipantUserRTC? {
+        callParticipantsUserRTC.first(where: {$0.id == clientId})
+    }
+    
+    func callParticipant(userId: Int) -> CallParticipantUserRTC? {
+        callParticipantsUserRTC.first(where: {$0.callParticipant.userId == userId})
     }
     
     public func dispose() {
