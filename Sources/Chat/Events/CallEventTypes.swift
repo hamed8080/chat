@@ -8,6 +8,7 @@ import ChatCore
 import ChatDTO
 import ChatModels
 import Foundation
+@preconcurrency import WebRTC
 
 public enum CallEventTypes: Sendable {
     case callCreate(ChatResponse<CreateCall>)
@@ -37,4 +38,6 @@ public enum CallEventTypes: Sendable {
     case callInquery(ChatResponse<[CallParticipant]>)
     case renewCall(ChatResponse<CreateCall>)
     case history(ChatResponse<[Call]>)
+    case videoTrackAdded(RTCVideoTrack, Int)
+    case audioTrackAdded(RTCAudioTrack, Int)
 }

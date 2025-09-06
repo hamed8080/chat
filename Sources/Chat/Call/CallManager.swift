@@ -259,10 +259,8 @@ extension CallManager {
         if let startCall = response.result,
            let container = callContainers.first(where: {$0.callId == response.subjectId})
         {
-            Task {
-                await container.onCallStarted(startCall)
-                createSession(startCall: startCall, callId: container.callId)
-            }
+            container.onCallStarted(startCall)
+            createSession(startCall: startCall, callId: container.callId)
         }
         delegate?.chatEvent(event: .call(.callStarted(response)))
     }

@@ -22,7 +22,8 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     private var videoCapturer: RTCVideoCapturer?
     private var subscribed = false
     public var onAddVideoTrack:( (_ track: RTCVideoTrack, _ mid: String) -> Void )? = nil
-    
+    public var onAddAudioTrack:( (_ track: RTCAudioTrack, _ mid: String) -> Void )? = nil
+
     /// Peer connection
     public let pf: RTCPeerConnectionFactory
     private let pcSend: RTCPeerConnection
@@ -171,11 +172,16 @@ public extension RTCPeerConnectionManager {
     nonisolated func peerConnection(_: RTCPeerConnection, didOpen _: RTCDataChannel) {}
     
     nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didAdd rtpReceiver: RTCRtpReceiver, streams mediaStreams: [RTCMediaStream]) {
-        if let audioTrack = rtpReceiver.track as? RTCAudioTrack {
+        
+        let transceiver = peerConnection.transceivers.first(where: { $0.receiver == rtpReceiver })
+        
+        if let audioTrack = rtpReceiver.track as? RTCAudioTrack, let mid = transceiver?.mid {
             audioTrack.isEnabled = true
+            Task { @ChatGlobalActor in
+                onAddAudioTrack?(audioTrack, mid)
+            }
         }
        
-        let transceiver = peerConnection.transceivers.first(where: { $0.receiver == rtpReceiver })
         if let videoTrack = rtpReceiver.track as? RTCVideoTrack, let mid = transceiver?.mid {
             videoTrack.isEnabled = true
             Task { @ChatGlobalActor in

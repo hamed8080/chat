@@ -35,12 +35,12 @@ public class CallContainer: Identifiable {
         self.chat = chat
     }
     
-    func onCallStarted(_ startCall: StartCall) async {
+    func onCallStarted(_ startCall: StartCall) {
         state = .started
-        await initWebRTC(startCall)
+        initWebRTC(startCall)
     }
     
-    private func initWebRTC(_ startCall: StartCall) async {
+    private func initWebRTC(_ startCall: StartCall) {
         /// simulator File name
         let userId = chat.userInfo?.id
         let config = WebRTCConfig(callConfig: chat.config.callConfig,
@@ -49,12 +49,14 @@ public class CallContainer: Identifiable {
                                   fileName: TARGET_OS_SIMULATOR != 0 ? "webrtc_user_a.mp4" : nil)
         peerManager = RTCPeerConnectionManager(chat: chat, config: config, callId: callId)
         peerManager?.onAddVideoTrack = { @Sendable [weak self] videoTrack, mid in
-            Task { @ChatGlobalActor in
-                let user = self?.callParticipantsUserRTC.first(where: { $0.topic(for: mid) != nil })
-                print("user to set renderer is:", user?.callParticipant.participant?.name)
-                if let renderer = await user?.renderer {
-                    videoTrack.add(renderer)
-                }
+            Task {
+                await self?.onVideoTrackAdded(videoTrack: videoTrack, mid: mid)
+            }
+        }
+        
+        peerManager?.onAddAudioTrack = { @Sendable [weak self] audioTrack, mid in
+            Task {
+                await self?.onAudioTrackAdded(audioTrack: audioTrack, mid: mid)
             }
         }
         let me = CallParticipant(sendTopic: config.topicSend ?? "",
@@ -72,10 +74,6 @@ public class CallContainer: Identifiable {
         }
         users.append(contentsOf: otherUsers ?? [])
         addCallParticipants(users)
-        
-        for var user in callParticipantsUserRTC {
-            await user.createRenderer()
-        }
         createMediaSender()
         peerManager?.configureAudioSession()
     }
@@ -241,5 +239,28 @@ extension CallContainer {
     
     public func dispose() {
         peerManager?.dispose()
+    }
+}
+
+// MARK: Track management
+extension CallContainer {
+    private func onVideoTrackAdded(videoTrack: RTCVideoTrack, mid: String) {
+        guard
+            let user = self.callParticipantsUserRTC.first(where: { $0.topic(for: mid) != nil }),
+            let clientId = user.callParticipant.clientId
+        else { return }
+        
+        user.videoTrack = videoTrack
+        self.chat.delegate?.chatEvent(event: .call(.videoTrackAdded(videoTrack, clientId)))
+    }
+    
+    private func onAudioTrackAdded(audioTrack: RTCAudioTrack, mid: String) {
+        guard
+            let user = self.callParticipantsUserRTC.first(where: { $0.topic(for: mid) != nil }),
+            let clientId = user.callParticipant.clientId
+        else { return }
+        
+        user.audioTrack = audioTrack
+        self.chat.delegate?.chatEvent(event: .call(.audioTrackAdded(audioTrack, clientId)))
     }
 }

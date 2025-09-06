@@ -20,12 +20,9 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
     public var callParticipant: CallParticipant
     public var topic: String
     public var iceQueue: [RTCIceCandidate] = []
-    public var audioStream: RTCMediaStreamTrack?
-    public var videoStream: RTCMediaStreamTrack?
+    public var audioTrack: RTCAudioTrack?
+    public var videoTrack: RTCVideoTrack?
     private var topicMids: [String: [String]] = [:]
-    
-    @MainActor
-    public var renderer: RTCVideoRenderer?
 
     public var isFrontCamera: Bool = true
     public var isVideoTrackEnable: Bool { callParticipant.video ?? false }
@@ -38,15 +35,6 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
         self.callParticipant = callParticipant
         self.topic = topic
         self.container = container
-    }
-    
-    @MainActor
-    public func createRenderer() {
-#if targetEnvironment(simulator)
-        self.renderer = RTCEAGLVideoView()
-#else
-        self.renderer = RTCMTLVideoView()
-#endif
     }
     
     public func addMids(topic: String, mids: [String]) {
