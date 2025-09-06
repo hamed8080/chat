@@ -127,10 +127,6 @@ extension CallContainer {
     func processSDPAnswer(_ res: RemoteSDPAnswerRes) {
         peerManager?.setRemoteDescription(res, direction: .send)
     }
-//    
-//    func processRemoteIceCandidate(res: RemoteCandidateRes) {
-//        peerManager?.callParticipntUserRCT(res.topic)?.setRemoteIceCandidate(res)
-//    }
     
     func setPeerIceCandidate(_ res: AddIceCandidateRes, _ direction: RTCDirection) {
         peerManager?.setPeerIceCandidate(ice: res.candidate, direction: direction)
@@ -150,16 +146,6 @@ extension CallContainer {
 }
 
 extension CallContainer {
-//
-//    private func indexOfCallParitipantFor(_ peerConnection: RTCPeerConnection) -> Array<CallParticipantUserRTC>.Index? {
-//        callParticipantsUserRTC.firstIndex(where: { $0.videoRTC.pc == peerConnection || $0.audioRTC.pc == peerConnection })
-//    }
-//
-//    private func callParticipantFor(_ peerConnection: RTCPeerConnection) -> CallParticipantUserRTC? {
-//        guard let index = indexOfCallParitipantFor(peerConnection) else { return nil }
-//        return callParticipantsUserRTC[index]
-//    }
-//
     
     public func addCallParticipants(_ callParticipants: [CallParticipant]) {
         callParticipants.forEach { callParticipant in
@@ -199,10 +185,6 @@ extension CallContainer {
                 videoTrack.add(view)
             }
         }
-//        myUserRTC.addStreams()
-        Task {
-            //                try? await sendSDPOffers(callParticipantUserRTC: callParticipantUserRTC)
-        }
     }
     
     func subscribeToReceiveOffers(_ media: ReceivingMedia) {
@@ -219,12 +201,6 @@ extension CallContainer {
 #endif
     }
     
-    //    var meCallParticipntUserRCT: CallParticipantUserRTC? { callParticipantsUserRTC.first(where: { $0.isMe }) }
-    //    
-    //    func callParticipntUserRCT(_ topic: String) -> CallParticipantUserRTC? {
-    //        callParticipantsUserRTC.first(where: { $0.callParticipant.sendTopic == rawTopicName(topic: topic) })
-    //    }
-    //    
     //    private var isPassedMaxVideoLimit: Bool {
     //        callParticipantsUserRTC.filter { $0.callParticipant.video == true }.count > config.callConfig.maxActiveVideoSessions
     //    }

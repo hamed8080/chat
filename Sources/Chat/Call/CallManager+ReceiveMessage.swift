@@ -20,18 +20,13 @@ extension CallManager {
             case .receivingMedia:
                 let receivingMedia = try JSONDecoder.instance.decode(ReceivingMedia.self, from: data)
                 subscribeToReceivingOffers(receivingMedia)
-            case .addIceCandidate:
-                let candidate = try JSONDecoder().decode(RemoteCandidateRes.self, from: data)
-                processRemoteIceCandidate(candidate)
             case .processSdpAnswer:
                 let res = try JSONDecoder().decode(RemoteSDPAnswerRes.self, from: data)
                 processSDPAnswer(res)
-            case .processSdpOffer:
+            case .processSdpOffer, .processSdpUpdate:
                 let res = try JSONDecoder().decode(RemoteSDPOfferRes.self, from: data)
                 processSDPOffer(res)
             case .receiveSdpAnswer:
-                break
-            case .processSdpUpdate:
                 break
             case .getKeyFrame:
                 break
@@ -57,7 +52,6 @@ extension CallManager {
             case .receiveAddIceCandidate:
                 let res = try JSONDecoder.instance.decode(AddIceCandidateRes.self, from: data)
                 onAddIceCandidate(res, .receive)
-                break
             case .prcessSdpNegotiate:
                 break
             case .processLatestSdpOffer:
@@ -87,6 +81,9 @@ extension CallManager {
             case .subscribe:
                 break
             case .update:
+                break
+            // Unused
+            case .addIceCandidate:
                 break
             case .unkown:
                 log("An unkown message has been received with id: decoded type in it's content in CallManager: " + (message.content ?? ""))

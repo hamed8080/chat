@@ -96,38 +96,21 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
 
 public extension RTCPeerConnectionManager {
     nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didChange stateChanged: RTCSignalingState) {
-//        Task { @ChatGlobalActor in
-//            customPrint("\(getPCName(peerConnection))  signaling state changed: \(String(describing: stateChanged.stringValue))")
-//        }
+        Task { @ChatGlobalActor in
+            log("didChange state signaling for \(peerConnection == pcSend ? "send" : "receive")")
+        }
     }
 
     nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
-//        Task { @ChatGlobalActor in
-//            customPrint("\(getPCName(peerConnection)) did add stream")
-//            if let callParticipntUserRCT = callParticipantFor(peerConnection) {
-//                if let videoTrack = stream.videoTracks.first, let topic = getTopicForPeerConnection(peerConnection), let renderer = callParticipntUserRCT.videoRTC.renderer {
-//                    customPrint("\(getPCName(peerConnection)) did add stream video track topic: \(topic)")
-//                    videoTrack.add(renderer)
-//                }
-//                
-//                if let audioTrack = stream.audioTracks.first, let topic = getTopicForPeerConnection(peerConnection) {
-//                    customPrint("\(getPCName(peerConnection)) did add stream audio track topic: \(topic)")
-//                    callParticipntUserRCT.audioRTC.pc.add(audioTrack, streamIds: [topic])
-//                }
-//            }
-//        }
-    }
-
-    nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didRemove _: RTCMediaStream) {
-//        Task { @ChatGlobalActor in
-//            customPrint("\(getPCName(peerConnection)) did remove stream")
-//        }
+        Task { @ChatGlobalActor in
+            log("\(peerConnection == pcSend ? "send" : "receive") \("did add stream")")
+        }
     }
 
     nonisolated func peerConnectionShouldNegotiate(_ peerConnection: RTCPeerConnection) {
-//        Task { @ChatGlobalActor in
-//            customPrint("\(getPCName(peerConnection)) should negotiate")
-//        }
+        Task { @ChatGlobalActor in
+            log("peer connection should negotiate for \(peerConnection == pcSend ? "send" : "receive")")
+        }
     }
     
     nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
@@ -152,9 +135,9 @@ public extension RTCPeerConnectionManager {
     }
 
     nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didChange _: RTCIceGatheringState) {
-//        Task { @ChatGlobalActor in
-//            customPrint("\(getPCName(peerConnection)) did change new state")
-//        }
+        Task { @ChatGlobalActor in
+            log("did change gathering ice state for \(peerConnection == pcSend ? "send" : "receive")")
+        }
     }
 
     nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
@@ -164,9 +147,9 @@ public extension RTCPeerConnectionManager {
     }
 
     nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didRemove _: [RTCIceCandidate]) {
-//        Task { @ChatGlobalActor in
-//            customPrint("\(getPCName(peerConnection)) did remove candidate(s)")
-//        }
+        Task { @ChatGlobalActor in
+            log("did remove candidate(s) for \(peerConnection == pcSend ? "send" : "receive")")
+        }
     }
 
     nonisolated func peerConnection(_: RTCPeerConnection, didOpen _: RTCDataChannel) {}
@@ -175,10 +158,12 @@ public extension RTCPeerConnectionManager {
         
         let transceiver = peerConnection.transceivers.first(where: { $0.receiver == rtpReceiver })
         
+        
         if let audioTrack = rtpReceiver.track as? RTCAudioTrack, let mid = transceiver?.mid {
             audioTrack.isEnabled = true
             Task { @ChatGlobalActor in
                 onAddAudioTrack?(audioTrack, mid)
+                log("New audio track has been added with mid: \(mid)")
             }
         }
        
@@ -186,7 +171,14 @@ public extension RTCPeerConnectionManager {
             videoTrack.isEnabled = true
             Task { @ChatGlobalActor in
                 onAddVideoTrack?(videoTrack, mid)
+                log("New video track has been added with mid: \(mid)")
             }
+        }
+    }
+    
+    nonisolated func peerConnection(_ peerConnection: RTCPeerConnection, didRemove _: RTCMediaStream) {
+        Task { @ChatGlobalActor in
+            log("peer connection did remove \(peerConnection == pcSend ? "send" : "receive")")
         }
     }
 }
@@ -195,16 +187,6 @@ public extension RTCPeerConnectionManager {
 
 public extension RTCPeerConnectionManager {
    
-    private func reconnectAndGetOffer(_ peerConnection: RTCPeerConnection) {
-//        guard let callParticipantuserRTC = callParticipantFor(peerConnection) else {
-//            customPrint("can't find topic to reconnect peerconnection", isGuardNil: true)
-//            return
-//        }
-//        Task {
-//            try? await sendSDPOffers(callParticipantUserRTC: callParticipantuserRTC)
-//        }
-    }
-    
     internal func generateSDPOffer(video: Bool, topic: String, direction: RTCDirection) async throws {
         if direction == .send {
             let sdp = try await pcSend.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
@@ -424,50 +406,12 @@ extension RTCPeerConnectionManager {
 // MARK: Other actions
 
 extension RTCPeerConnectionManager {
-    private func deActiveFirstVideoSession(_ callParticipant: CallParticipantUserRTC) {
-//        callParticipant.videoRTC.setTrackEnable(false)
-//        chat?.delegate?.chatEvent(event: .call(.maxVideoSessionLimit(.init(uniqueId: nil, result: callParticipant.callParticipant, time: Int(Date().timeIntervalSince1970), typeCode: nil))))
-    }
-    
-    private func reActiveVideoSession() {
-//        callParticipantsUserRTC.filter { $0.callParticipant.video == true && $0.videoRTC.isVideoTrackEnable == false }.forEach { callParticipant in
-//            callParticipant.videoRTC.setTrackEnable(true)
-//            chat?.delegate?.chatEvent(event: .call(.maxVideoSessionLimit(.init(uniqueId: nil, result: callParticipant.callParticipant, time: Int(Date().timeIntervalSince1970), typeCode: nil))))
-//        }
-    }
-
-    public func removeCallParticipant(_ callParticipant: CallParticipant) {
-//        if let index = callParticipantsUserRTC.firstIndex(where: { $0.callParticipant.userId == callParticipant.userId }) {
-//            callParticipantsUserRTC[index].close()
-//            callParticipantsUserRTC.remove(at: index)
-//        }
-    }
     
     /// Client can call this to dissconnect from peer.
     public func dispose() {
         pcSend.close()
         pcReceive.close()
         destroyAudioSession()
-    }
-    
-    func toggleCamera() {
-//        meCallParticipntUserRCT?.toggleCamera()
-    }
-
-    func toggle() {
-//        meCallParticipntUserRCT?.toggleMute()
-    }
-
-    func switchCamera() {
-//        meCallParticipntUserRCT?.switchCameraPosition()
-    }
-    
-    private func isSendTopic(topic: String) -> Bool {
-        topic == config.topicAudioSend || topic == config.topicVideoSend
-    }
-
-    func rawTopicName(topic: String) -> String {
-        topic.replacingOccurrences(of: "Vi-", with: "").replacingOccurrences(of: "Vo-", with: "")
     }
     
     func startCaptureLocalVideo(fileName: String?, front: Bool) {
