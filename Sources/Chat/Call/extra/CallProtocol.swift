@@ -119,6 +119,8 @@ public protocol CallProtocol: WebRTCActions {
 
     /// Only for previewing the current state of the application in swiftUI.
     func preview(startCall: StartCall)
+    
+    func activeCallParticipants(callId: Int) -> [CallParticipantUserRTC]?
 }
 
 @ChatGlobalActor

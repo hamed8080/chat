@@ -14,7 +14,7 @@ struct SendOfferSDPReq: Codable {
     var sdpOffer: String
     let addition: [Addition]
     
-    public init(brokerAddress: String, topic: String, sdpOffer: String, mediaType: MediaType) {
+    public init(brokerAddress: String, topic: String, sdpOffer: String, mediaType: ReveiveMediaItemType) {
         self.brokerAddress = brokerAddress
         self.sdpOffer = sdpOffer
         self.addition = [Addition(mline: 0, clientId: nil, topic: topic, mediaType: mediaType)]

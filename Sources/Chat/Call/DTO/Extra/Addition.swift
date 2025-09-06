@@ -11,10 +11,10 @@ struct Addition: Codable {
     let mline: Int
     let clientId: Int?
     let topic: String
-    let mediaType: MediaType
+    let mediaType: ReveiveMediaItemType
     let mids: [String]?
     
-    init(mline: Int, clientId: Int?, topic: String, mediaType: MediaType, mids: [String]? = nil) {
+    init(mline: Int, clientId: Int?, topic: String, mediaType: ReveiveMediaItemType, mids: [String]? = nil) {
         self.mline = mline
         self.clientId = clientId
         self.topic = topic
@@ -44,7 +44,7 @@ struct Addition: Codable {
         self.mline = try container.decode(Int.self, forKey: .mline)
         self.clientId = try container.decodeIfPresent(Int.self, forKey: .clientId)
         self.topic = try container.decode(String.self, forKey: .topic)
-        self.mediaType = try container.decode(MediaType.self, forKey: .mediaType)
+        self.mediaType = try container.decode(ReveiveMediaItemType.self, forKey: .mediaType)
         self.mids = try container.decodeIfPresent([String].self, forKey: .mids)
     }
 }

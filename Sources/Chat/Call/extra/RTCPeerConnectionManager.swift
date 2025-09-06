@@ -19,7 +19,9 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
     private let audioQueue = DispatchQueue(label: "audio")
     private let callId: Int
-    public var videoCapturer: RTCVideoCapturer?
+    private var videoCapturer: RTCVideoCapturer?
+    private var subscribed = false
+    public var onAddVideoTrack:( (RTCVideoTrack) -> Void )? = nil
     
     /// Peer connection
     public let pf: RTCPeerConnectionFactory
@@ -172,6 +174,13 @@ public extension RTCPeerConnectionManager {
         if let audioTrack = rtpReceiver.track as? RTCAudioTrack {
             audioTrack.isEnabled = true
         }
+        
+        if let videoTrack = rtpReceiver.track as? RTCVideoTrack {
+            videoTrack.isEnabled = true
+            Task { @ChatGlobalActor in
+                onAddVideoTrack?(videoTrack)
+            }
+        }
     }
 }
 
@@ -211,7 +220,7 @@ public extension RTCPeerConnectionManager {
         }
     }
     
-    private func sendOfferToPeer(idType: CallMessageType, sdp: RTCSessionDescription, topic: String, mediaType: MediaType) {
+    private func sendOfferToPeer(idType: CallMessageType, sdp: RTCSessionDescription, topic: String, mediaType: ReveiveMediaItemType) {
         let sendSDPOffer = SendOfferSDPReq(brokerAddress: config.brokerAddress.joined(separator: ","),
                                            topic: topic,
                                            sdpOffer: sdp.sdp,
@@ -220,23 +229,13 @@ public extension RTCPeerConnectionManager {
     }
     
     public func setRemoteDescription(_ remoteSDP: RemoteSDPAnswerRes, direction: RTCDirection) {
-        if direction == .send {
-            let sdp = RTCSessionDescription(type: .answer, sdp: remoteSDP.sdpAnswer)
-            pcSend.setRemoteDescription(sdp) { error in
-                if let error = error {
-                    Task { @ChatGlobalActor in
-                        self.log("error in setRemoteDescroptoin with for send sdp: \(remoteSDP.sdpAnswer) with error: \(error)")
-                    }
-                }
-            }
-        } else {
-            let sdp = RTCSessionDescription(type: .answer, sdp: remoteSDP.sdpAnswer)
-            pcReceive.setRemoteDescription(sdp) { error in
-                if let error = error {
-                    Task { @ChatGlobalActor in
-                        self.log("error in setRemoteDpcSendescroptoin with for receive sdp: \(remoteSDP.sdpAnswer) with error: \(error)")
-                    }
-                }
+        let pc = direction == .send ? pcSend : pcReceive
+        let sdp = RTCSessionDescription(type: .answer, sdp: remoteSDP.sdpAnswer)
+        Task {
+            do {
+                try await pc.setRemoteDescription(sdp)
+            } catch {
+                self.log("error in setRemoteDescroptoin with for \(direction) sdp: \(remoteSDP.sdpAnswer) with error: \(error)")
             }
         }
     }
@@ -273,7 +272,10 @@ extension RTCPeerConnectionManager {
                 brokerAddress: config.brokerAddress.joined(separator: ","),
                 addition: [item.toAddition]
             )
-            sendAsyncMessage(req, .subscribe)
+            sendAsyncMessage(req, subscribed ? .update : .subscribe)
+            if !subscribed {
+                subscribed = true
+            }
         }
     }
 }
@@ -284,6 +286,9 @@ extension RTCPeerConnectionManager {
     public func setSendPeerIceCandidate(_ ice: IceCandidate) {
         Task {
             do {
+                while pcSend.remoteDescription == nil {
+                    try? await Task.sleep(nanoseconds: 500_000_000)
+                }
                 try await pcSend.add(ice.rtcIceCandidate)
             } catch {
                 log("Failed set send peer add ice candidate error: \(error.localizedDescription)")
@@ -340,8 +345,8 @@ public extension RTCPeerConnectionManager {
         log("configure audio session")
         rtcAudioSession.lockForConfiguration()
         do {
-            try rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord.rawValue)
-            try rtcAudioSession.setMode(AVAudioSession.Mode.voiceChat.rawValue)
+            try rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord)
+            try rtcAudioSession.setMode(AVAudioSession.Mode.voiceChat)
         } catch {
             log("error changeing AVAudioSession category with error: \(error.localizedDescription)")
         }
@@ -360,7 +365,7 @@ public extension RTCPeerConnectionManager {
 
                 self.rtcAudioSession.lockForConfiguration()
                 do {
-                    try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord.rawValue)
+                    try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord)
                     try self.rtcAudioSession.overrideOutputAudioPort(on ? .speaker : .none)
                     if on { try self.rtcAudioSession.setActive(true) }
                 } catch {

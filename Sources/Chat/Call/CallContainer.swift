@@ -22,7 +22,7 @@ public class CallContainer: Identifiable {
     public let isFrontCamera: Bool
     private var typeCode: String?
     private var peerManager: RTCPeerConnectionManager?
-    private var callParticipantsUserRTC: [CallParticipantUserRTC] = []
+    public private(set) var callParticipantsUserRTC: [CallParticipantUserRTC] = []
     
     init(callId: Int, state: CallState, callType: CallType,
          typeCode: String?, isFrontCamera: Bool, chat: ChatInternalProtocol) {
@@ -35,12 +35,12 @@ public class CallContainer: Identifiable {
         self.chat = chat
     }
     
-    func onCallStarted(_ startCall: StartCall) {
+    func onCallStarted(_ startCall: StartCall) async {
         state = .started
-        initWebRTC(startCall)
+        await initWebRTC(startCall)
     }
     
-    private func initWebRTC(_ startCall: StartCall) {
+    private func initWebRTC(_ startCall: StartCall) async {
         /// simulator File name
         let userId = chat.userInfo?.id
         let config = WebRTCConfig(callConfig: chat.config.callConfig,
@@ -48,6 +48,15 @@ public class CallContainer: Identifiable {
                                   isSendVideoEnabled: startCall.clientDTO.video,
                                   fileName: TARGET_OS_SIMULATOR != 0 ? "webrtc_user_a.mp4" : nil)
         peerManager = RTCPeerConnectionManager(chat: chat, config: config, callId: callId)
+        peerManager?.onAddVideoTrack = { @Sendable [weak self] videoTrack in
+            Task { @ChatGlobalActor in
+                let user = self?.callParticipantsUserRTC.last
+                print("user to set renderer is:", user?.callParticipant.participant?.name)
+                if let renderer = await user?.renderer {
+                    videoTrack.add(renderer)
+                }
+            }
+        }
         let me = CallParticipant(sendTopic: config.topicSend ?? "",
                                  userId: userId,
                                  mute: startCall.clientDTO.mute,
@@ -62,6 +71,10 @@ public class CallContainer: Identifiable {
         }
         users.append(contentsOf: otherUsers ?? [])
         addCallParticipants(users)
+        
+        for var user in callParticipantsUserRTC {
+            await user.createRenderer()
+        }
         createMediaSender()
         peerManager?.configureAudioSession()
     }
@@ -100,7 +113,8 @@ extension CallContainer {
         if let userId = chat.userInfo?.id, let myCallUser = callParticipant(id: userId) {
             Task {
                 let isVideo = myCallUser.callParticipant.video == true
-                let topic = isVideo ? myCallUser.callParticipant.topics.topicVideo : myCallUser.callParticipant.topics.topicAudio
+                let topics = myCallUser.callParticipant.topics
+                let topic = isVideo ? topics.topicVideo : topics.topicAudio
                 try? await peerManager?.generateSDPOffer(video: isVideo,
                                                          topic: topic,
                                                          direction: .send
@@ -148,10 +162,12 @@ extension CallContainer {
 
     /// Ordering is matter in this function.
     public func addCallParticipant(_ callParticipant: CallParticipant) {
-        callParticipantsUserRTC.append(.init(chatDelegate: chat.delegate,
-                                             callParticipant: callParticipant,
-                                             topic: callParticipant.sendTopic,
-                                             container: self))
+        let userRTC = CallParticipantUserRTC(
+            callParticipant: callParticipant,
+            topic: callParticipant.sendTopic,
+            container: self
+        )
+        callParticipantsUserRTC.append(userRTC)
     }
 
     public func createMediaSender() {

@@ -7,9 +7,7 @@
 import ChatModels
 @preconcurrency import WebRTC
 
-
-@ChatGlobalActor
-open class CallParticipantUserRTC: Identifiable, Equatable {
+public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked Sendable {
     nonisolated public static func == (lhs: CallParticipantUserRTC, rhs: CallParticipantUserRTC) -> Bool {
         lhs.id == rhs.id
     }
@@ -22,28 +20,32 @@ open class CallParticipantUserRTC: Identifiable, Equatable {
     public var callParticipant: CallParticipant
     public var topic: String
     public var iceQueue: [RTCIceCandidate] = []
-    public var iceTimer: Timer?
     public var audioStream: RTCMediaStreamTrack?
     public var videoStream: RTCMediaStreamTrack?
+    
+    @MainActor
     public var renderer: RTCVideoRenderer?
 
     public var isFrontCamera: Bool = true
     public var isVideoTrackEnable: Bool { videoStream?.isEnabled ?? false }
     public var isSpeaking: Bool = false
     public var lastTimeSpeaking: Date?
-    public var speakingMonitorTimer: Timer?
-    public weak var delegate: ChatDelegate?
     private weak var container: CallContainer?
     
-    public required init(chatDelegate: ChatDelegate?,
-                         callParticipant: CallParticipant,
-                         topic: String,
-                         container: CallContainer
-    ) {
+    public init(callParticipant: CallParticipant, topic: String, container: CallContainer) {
         self.id = callParticipant.userId ?? callParticipant.participant?.id ?? -1
         self.callParticipant = callParticipant
         self.topic = topic
         self.container = container
+    }
+    
+    @MainActor
+    public func createRenderer() {
+#if targetEnvironment(simulator)
+        self.renderer = RTCEAGLVideoView()
+#else
+        self.renderer = RTCMTLVideoView()
+#endif
     }
     
     public func addStreams() {

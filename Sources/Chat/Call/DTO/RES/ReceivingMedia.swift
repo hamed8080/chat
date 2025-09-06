@@ -51,7 +51,7 @@ struct ReceiveMediaItem: Decodable {
     let clientId: Int
     let mline: Int
     let topic: String
-    let mediaType: MediaType
+    let mediaType: ReveiveMediaItemType
     let isReceiving: Bool
     let version: Int
     
@@ -61,7 +61,7 @@ struct ReceiveMediaItem: Decodable {
         self.clientId = try container.decode(Int.self, forKey: .clientId)
         self.mline = try container.decode(Int.self, forKey: .mline)
         self.topic = try container.decode(String.self, forKey: .topic)
-        self.mediaType = try container.decode(MediaType.self, forKey: .mediaType)
+        self.mediaType = try container.decode(ReveiveMediaItemType.self, forKey: .mediaType)
         self.isReceiving = try container.decode(Int.self, forKey: .isReceiving) == 1
         self.version = try container.decode(Int.self, forKey: .version)
         
@@ -94,7 +94,13 @@ extension ReceiveMediaItem {
             mline: mline,
             clientId: clientId,
             topic: topic,
-            mediaType: mediaType
+            mediaType: mediaType == .audio ? .audio : .video
         )
     }
+}
+
+enum ReveiveMediaItemType: Int, Codable {
+    case video = 0
+    case audio = 1
+    case screenShare = 2
 }

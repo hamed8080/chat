@@ -259,8 +259,10 @@ extension CallManager {
         if let startCall = response.result,
            let container = callContainers.first(where: {$0.callId == response.subjectId})
         {
-            container.onCallStarted(startCall)
-            createSession(startCall: startCall, callId: container.callId)
+            Task {
+                await container.onCallStarted(startCall)
+                createSession(startCall: startCall, callId: container.callId)
+            }
         }
         delegate?.chatEvent(event: .call(.callStarted(response)))
     }
@@ -337,7 +339,7 @@ extension CallManager {
     
     func onSessionCreated(_ resp: CreateSessionResp) {
         /// Create sdp offer for local stream and send it.
-        if let container = callContainer(callId: resp.chatId) {
+        if let callId = resp.chatId, let container = callContainer(callId: callId) {
             container.createSDPOfferForLocal()
         }
     }
@@ -403,5 +405,9 @@ extension CallManager {
     
     private func callContainer(callId: Int) -> CallContainer? {
         callContainers.first(where: { $0.callId == callId })
+    }
+    
+    func activeCallParticipants(callId: Int) -> [CallParticipantUserRTC]? {
+        return callContainer(callId: callId)?.callParticipantsUserRTC
     }
 }
