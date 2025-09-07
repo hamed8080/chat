@@ -53,14 +53,6 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
         return topicMids.first(where: {$0.value.contains(where: {$0 == mid})})?.key
     }
     
-    public func addStreams() {
-        //        if !isMe {
-        addReceiveStream()
-        monitorAudioLevelFor(callParticipant: callParticipant)
-        addReceiveStream()
-        //        }
-    }
-    
     public func toggleMute() {
         callParticipant.mute.toggle()
         setTrackEnable(!callParticipant.mute)

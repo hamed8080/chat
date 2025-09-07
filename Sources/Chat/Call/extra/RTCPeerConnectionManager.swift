@@ -23,7 +23,7 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     private var subscribed = false
     public var onAddVideoTrack:( (_ track: RTCVideoTrack, _ mid: String) -> Void )? = nil
     public var onAddAudioTrack:( (_ track: RTCAudioTrack, _ mid: String) -> Void )? = nil
-    private let sendOfferQueue: SDPOfferNegotiationQueue
+    let sendTracksQueue: SendTracksQueue
 
     /// Peer connection
     public let pf: RTCPeerConnectionFactory
@@ -75,7 +75,7 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
         else { fatalError("failed to init peer connection receive") }
         pcReceive = peerConnectionReceive
         
-        sendOfferQueue = SDPOfferNegotiationQueue()
+        sendTracksQueue = SendTracksQueue()
         
         super.init()
         if self.chat?.config.callConfig.logWebRTC == true {
@@ -88,7 +88,8 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
        
         pcSend.delegate = self
         pcReceive.delegate = self
-        sendOfferQueue.peerManager = self
+        sendTracksQueue.peerManager = self
+        sendTracksQueue.chat = chat
     }
 
     deinit {
@@ -192,19 +193,17 @@ public extension RTCPeerConnectionManager {
 public extension RTCPeerConnectionManager {
     
     internal func generateSDPOfferForSendPeer(
-        video: Bool,
+        mediaType: ReveiveMediaItemType,
         topic: String,
-        id: CallMessageType,
         mline: Int
-    ) async throws {
+    ) async throws -> SendOfferSDPReq {
         let sdp = try await pcSend.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
         try await pcSend.setLocalDescription(sdp)
-        let sendSDPOffer = SendOfferSDPReq(brokerAddress: config.brokerAddress.joined(separator: ","),
+        return SendOfferSDPReq(brokerAddress: config.brokerAddress.joined(separator: ","),
                                            topic: topic,
                                            sdpOffer: sdp.sdp,
-                                           mediaType: video ? .video : .audio,
+                                           mediaType: mediaType,
                                            mline: mline)
-        sendOfferQueue.enqueue(item: sendSDPOffer)
     }
     
     public func processSDPAnswer(_ remoteSDP: RemoteSDPAnswerRes) {
@@ -213,7 +212,7 @@ public extension RTCPeerConnectionManager {
         Task {
             do {
                 try await pc.setRemoteDescription(sdp)
-                sendOfferQueue.negotiationFinished(uniqueId: remoteSDP.uniqueId)
+                sendTracksQueue.negotiationFinished(uniqueId: remoteSDP.uniqueId)
                 printSenderMids(pc: pcSend)
             } catch {
                 self.log("error in setRemoteDescroptoin with for sdp: \(remoteSDP.sdpAnswer) with error: \(error)")
@@ -317,6 +316,28 @@ extension RTCPeerConnectionManager {
             videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
         }
         return pf.videoTrack(with: videoSource, trackId: "video0")
+    }
+    
+    // Add audio track
+    func addSendAudioTrack(userRTC: CallParticipantUserRTC) -> RTCAudioTrack {
+        let audioTrack = createAudioSenderTrack()
+        addAudioTrack(audioTrack, direction: .send)
+        configureAudioSession()
+        userRTC.audioTrack = audioTrack
+        userRTC.callParticipant.mute = false
+        userRTC.audioTrack?.isEnabled = true
+        return audioTrack
+    }
+    
+    // Add video track
+    func addSendVideoTrack(userRTC: CallParticipantUserRTC) -> RTCVideoTrack {
+        let videoTrack = createVideoSenderTrack()
+        addVideoTrack(videoTrack, direction: .send)
+        startCaptureLocalVideo(fileName: nil, front: userRTC.isFrontCamera)
+        userRTC.videoTrack = videoTrack
+        userRTC.callParticipant.video = true
+        userRTC.videoTrack?.isEnabled = true
+        return videoTrack
     }
 }
 
@@ -463,6 +484,14 @@ extension RTCPeerConnectionManager {
         }
         if let sender = pc.transceivers.first(where: { $0.mediaType == .video}) {
             log("\(pc == pcSend ? "send" : "receive") video mid is: \(sender.mid)")
+        }
+    }
+    
+    public func getMid(track: RTCMediaStreamTrack, direction: RTCDirection) -> String? {
+        if direction == .send {
+            return pcSend.transceivers.first(where: { $0.sender.senderId == track.trackId })?.mid
+        } else {
+            return pcReceive.transceivers.first(where: { $0.receiver.receiverId == track.trackId })?.mid
         }
     }
 }
