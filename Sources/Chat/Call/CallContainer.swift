@@ -74,7 +74,7 @@ public class CallContainer: Identifiable {
         }
         users.append(contentsOf: otherUsers ?? [])
         addCallParticipants(users)
-        createMediaSender()
+        createMediaSender(clientId: me.clientId ?? -1)
         peerManager?.configureAudioSession()
     }
 }
@@ -163,7 +163,7 @@ extension CallContainer {
         callParticipantsUserRTC.append(userRTC)
     }
 
-    public func createMediaSender() {
+    public func createMediaSender(clientId: Int) {
         // create media senders for both audio and video senders
         guard let myId = chat.userInfo?.id,
               let myUserRTC = callParticipant(userId: myId),
@@ -173,17 +173,16 @@ extension CallContainer {
         // Add audio track
         let audioTrack = peerManager.createAudioSenderTrack()
         peerManager.addAudioTrack(audioTrack, direction: .send)
+        myUserRTC.audioTrack = audioTrack
+        chat.delegate?.chatEvent(event: .call(.audioTrackAdded(audioTrack, clientId)))
         
         // Add video track
         if myUserRTC.callParticipant.video == true {
             let videoTrack = peerManager.createVideoSenderTrack()
             peerManager.addVideoTrack(videoTrack, direction: .send)
             peerManager.startCaptureLocalVideo(fileName: nil, front: isFrontCamera)
-            
-            Task { @MainActor in
-                let view = RTCMTLVideoView(frame: .zero)
-                videoTrack.add(view)
-            }
+            myUserRTC.videoTrack = videoTrack
+            chat.delegate?.chatEvent(event: .call(.videoTrackAdded(videoTrack, clientId)))
         }
     }
     
@@ -239,4 +238,6 @@ extension CallContainer {
         user.audioTrack = audioTrack
         self.chat.delegate?.chatEvent(event: .call(.audioTrackAdded(audioTrack, clientId)))
     }
+    
+    
 }

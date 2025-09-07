@@ -292,7 +292,7 @@ extension RTCPeerConnectionManager {
         let sendIceCandidate = SendCandidateReq(iceCandidate: IceCandidate(from: candidate),
                                                 brokerAddress: config.brokerAddress.joined(separator: ",")
         )
-        sendAsyncMessage(sendIceCandidate, .sendIceCandidate)
+        sendAsyncMessage(sendIceCandidate, direction == .send ? .sendIceCandidate : .receiveAddIceCandidate)
     }
 }
 
@@ -455,5 +455,14 @@ extension RTCPeerConnectionManager {
         let wrapper = CallAsyncMessageWrapper(content: content, peerName: config.peerName)
         (chat?.call as? InternalCallProtocol)?.send(wrapper)
         return callInstance.uniqueId
+    }
+    
+    private func sendNegotiation() async throws {
+        let sdpOffer = ""
+        let additions: [Addition] = []
+        let req = SendNegotiationReq(sdpOffer: sdpOffer,
+                                     brokerAddress: config.brokerAddress.joined(separator: ","),
+                                     additions: additions)
+        sendAsyncMessage(req, .sendNegotiation)
     }
 }

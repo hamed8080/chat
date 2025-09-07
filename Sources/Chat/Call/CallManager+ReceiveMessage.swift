@@ -26,8 +26,6 @@ extension CallManager {
             case .processSdpOffer, .processSdpUpdate:
                 let res = try JSONDecoder().decode(RemoteSDPOfferRes.self, from: data)
                 processSDPOffer(res)
-            case .receiveSdpAnswer:
-                break
             case .getKeyFrame:
                 break
             case .close:
@@ -36,8 +34,6 @@ extension CallManager {
                 //                setOffers()
                 break
             case .stop:
-                break
-            case .receiveSdpOffer, .sendSdpOffer, .sdpAnswerReceived:
                 break
             case .error:
                 break
@@ -82,8 +78,13 @@ extension CallManager {
                 break
             case .update:
                 break
-            // Unused
-            case .addIceCandidate:
+            // Unused or not get any event from the Call server.
+            case .addIceCandidate,
+                    .sendNegotiation,
+                    .receiveSdpAnswer,
+                    .receiveSdpOffer,
+                    .sendSdpOffer,
+                    .sdpAnswerReceived:
                 break
             case .unkown:
                 log("An unkown message has been received with id: decoded type in it's content in CallManager: " + (message.content ?? ""))
