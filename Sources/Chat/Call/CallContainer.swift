@@ -38,9 +38,10 @@ public class CallContainer: Identifiable {
     func onCallStarted(_ startCall: StartCall) {
         state = .started
         initWebRTC(startCall)
+        createSession(startCall: startCall, callId: callId)
     }
     
-    private func initWebRTC(_ startCall: StartCall) {
+    func initWebRTC(_ startCall: StartCall) {
         /// simulator File name
         let userId = chat.userInfo?.id
         let config = WebRTCConfig(callConfig: chat.config.callConfig,
@@ -59,23 +60,19 @@ public class CallContainer: Identifiable {
                 await self?.onAudioTrackAdded(audioTrack: audioTrack, mid: mid)
             }
         }
-        let me = CallParticipant(sendTopic: config.topicSend ?? "",
-                                 userId: userId,
-                                 mute: startCall.clientDTO.mute,
-                                 video: startCall.clientDTO.video,
-                                 participant: .init(name: "ME"))
-        var users = [me]
-        let otherUsers = startCall.otherClientDtoList?.filter { $0.userId != userId }.compactMap { clientDTO in
+        let users = startCall.otherClientDtoList?.compactMap { clientDTO in
             CallParticipant(sendTopic: clientDTO.topicSend,
                             userId: clientDTO.userId,
                             clientId: clientDTO.clientId,
                             mute: clientDTO.mute,
                             video: clientDTO.video)
-        }
-        users.append(contentsOf: otherUsers ?? [])
+        } ?? []
         addCallParticipants(users)
-        createMediaSender(clientId: me.clientId ?? -1)
         peerManager?.configureAudioSession()
+    }
+    
+    func createSession(startCall: StartCall, callId: Int) {
+        peerManager?.createSession(startCall: startCall, callId: callId)
     }
 }
 
@@ -107,25 +104,11 @@ extension CallContainer {
         cancelTimer?.invalidateTimer()
         cancelTimer = nil
     }
-    
-    public func createSDPOfferForLocal() {
-        if let userId = chat.userInfo?.id, let myCallUser = callParticipant(userId: userId) {
-            Task {
-                let isVideo = myCallUser.callParticipant.video == true
-                let topics = myCallUser.callParticipant.topics
-                let topic = isVideo ? topics.topicVideo : topics.topicAudio
-                try? await peerManager?.generateSDPOffer(video: isVideo,
-                                                         topic: topic,
-                                                         direction: .send
-                )
-            }
-        }
-    }
 }
 
 extension CallContainer {
     func processSDPAnswer(_ res: RemoteSDPAnswerRes) {
-        peerManager?.setRemoteDescription(res, direction: .send)
+        peerManager?.processSDPAnswer(res)
     }
     
     func setPeerIceCandidate(_ res: AddIceCandidateRes, _ direction: RTCDirection) {
@@ -140,6 +123,35 @@ extension CallContainer {
                let mids = addition.mids
             {
                 user.addMids(topic: addition.topic, mids: mids)
+            }
+        }
+    }
+    
+    func createSDPOfferForLocal() {
+        if let userId = chat.userInfo?.id, let myCallUser = callParticipant(userId: userId) {
+            Task {
+                let isVideo = myCallUser.callParticipant.video == true
+                let topics = myCallUser.callParticipant.topics
+                
+                if myCallUser.callParticipant.mute == false {
+                    addSendAudioTrack()
+                    try? await peerManager?.generateSDPOfferForSendPeer(
+                        video: false,
+                        topic: topics.topicAudio,
+                        id: .sendSdpOffer,
+                        mline: 0
+                    )
+                }
+               
+                if isVideo {
+                    addSendVideoTrack()
+                    try? await peerManager?.generateSDPOfferForSendPeer(
+                        video: isVideo,
+                        topic: topics.topicVideo,
+                        id: .sendNegotiation,
+                        mline: 1
+                    )
+                }
             }
         }
     }
@@ -163,26 +175,36 @@ extension CallContainer {
         callParticipantsUserRTC.append(userRTC)
     }
 
-    public func createMediaSender(clientId: Int) {
-        // create media senders for both audio and video senders
+    // Add audio track
+    private func addSendAudioTrack() {
         guard let myId = chat.userInfo?.id,
               let myUserRTC = callParticipant(userId: myId),
               let peerManager = peerManager
         else { return }
-       
-        // Add audio track
+        
         let audioTrack = peerManager.createAudioSenderTrack()
         peerManager.addAudioTrack(audioTrack, direction: .send)
         myUserRTC.audioTrack = audioTrack
-        chat.delegate?.chatEvent(event: .call(.audioTrackAdded(audioTrack, clientId)))
+        myUserRTC.callParticipant.mute = false
+        myUserRTC.audioTrack?.isEnabled = true
+        chat.delegate?.chatEvent(event: .call(.audioTrackAdded(audioTrack, myUserRTC.id)))
+    }
+    
+    // Add video track
+    private func addSendVideoTrack() {
+        guard let myId = chat.userInfo?.id,
+              let myUserRTC = callParticipant(userId: myId),
+              let peerManager = peerManager
+        else { return }
         
-        // Add video track
         if myUserRTC.callParticipant.video == true {
             let videoTrack = peerManager.createVideoSenderTrack()
             peerManager.addVideoTrack(videoTrack, direction: .send)
             peerManager.startCaptureLocalVideo(fileName: nil, front: isFrontCamera)
             myUserRTC.videoTrack = videoTrack
-            chat.delegate?.chatEvent(event: .call(.videoTrackAdded(videoTrack, clientId)))
+            myUserRTC.callParticipant.video = true
+            myUserRTC.videoTrack?.isEnabled = true
+            chat.delegate?.chatEvent(event: .call(.videoTrackAdded(videoTrack, myUserRTC.id)))
         }
     }
     
@@ -218,6 +240,7 @@ extension CallContainer {
 }
 
 // MARK: Track management
+
 extension CallContainer {
     private func onVideoTrackAdded(videoTrack: RTCVideoTrack, mid: String) {
         guard
@@ -238,6 +261,34 @@ extension CallContainer {
         user.audioTrack = audioTrack
         self.chat.delegate?.chatEvent(event: .call(.audioTrackAdded(audioTrack, clientId)))
     }
+}
+
+// MARK: Chat server events handlers.
+
+extension CallContainer {
+    func handleVideoChange(on: Bool, _ resp: ChatResponse<[CallParticipant]>) {
+        for participant in resp.result ?? [] {
+            if let userId = participant.userId, let userRTC = callParticipant(userId: userId) {
+                userRTC.callParticipant.video = on
+                userRTC.videoTrack?.isEnabled = on
+            }
+        }
+    }
     
-    
+    func handleMuteChange(mute: Bool, _ resp: ChatResponse<[CallParticipant]>) {
+        for participant in resp.result ?? [] {
+            if let userId = participant.userId, let userRTC = callParticipant(userId: userId) {
+                userRTC.callParticipant.mute = mute
+                userRTC.audioTrack?.isEnabled = !mute
+            }
+        }
+    }
+}
+
+// MARK: Actions
+
+extension CallContainer {
+    func setSpeaker(on: Bool) {
+        peerManager?.setSpeaker(on: on)
+    }
 }

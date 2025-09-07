@@ -23,6 +23,7 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     private var subscribed = false
     public var onAddVideoTrack:( (_ track: RTCVideoTrack, _ mid: String) -> Void )? = nil
     public var onAddAudioTrack:( (_ track: RTCAudioTrack, _ mid: String) -> Void )? = nil
+    private let sendOfferQueue: SDPOfferNegotiationQueue
 
     /// Peer connection
     public let pf: RTCPeerConnectionFactory
@@ -74,6 +75,8 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
         else { fatalError("failed to init peer connection receive") }
         pcReceive = peerConnectionReceive
         
+        sendOfferQueue = SDPOfferNegotiationQueue()
+        
         super.init()
         if self.chat?.config.callConfig.logWebRTC == true {
             print(config)
@@ -85,6 +88,7 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
        
         pcSend.delegate = self
         pcReceive.delegate = self
+        sendOfferQueue.peerManager = self
     }
 
     deinit {
@@ -186,45 +190,33 @@ public extension RTCPeerConnectionManager {
 // MARK: Session description management
 
 public extension RTCPeerConnectionManager {
-   
-    internal func generateSDPOffer(video: Bool, topic: String, direction: RTCDirection) async throws {
-        if direction == .send {
-            let sdp = try await pcSend.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
-            try await pcSend.setLocalDescription(sdp)
-            sendOfferToPeer(
-                idType: .sendSdpOffer,
-                sdp: sdp,
-                topic: topic,
-                mediaType: video ? .video : .audio
-            )
-        } else {
-            let sdp = try await pcReceive.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
-            try await pcSend.setLocalDescription(sdp)
-            sendOfferToPeer(
-                idType: .sendSdpOffer,
-                sdp: sdp,
-                topic: topic,
-                mediaType: video ? .video : .audio
-            )
-        }
-    }
     
-    private func sendOfferToPeer(idType: CallMessageType, sdp: RTCSessionDescription, topic: String, mediaType: ReveiveMediaItemType) {
+    internal func generateSDPOfferForSendPeer(
+        video: Bool,
+        topic: String,
+        id: CallMessageType,
+        mline: Int
+    ) async throws {
+        let sdp = try await pcSend.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil))
+        try await pcSend.setLocalDescription(sdp)
         let sendSDPOffer = SendOfferSDPReq(brokerAddress: config.brokerAddress.joined(separator: ","),
                                            topic: topic,
                                            sdpOffer: sdp.sdp,
-                                           mediaType: mediaType)
-        sendAsyncMessage(sendSDPOffer, idType)
+                                           mediaType: video ? .video : .audio,
+                                           mline: mline)
+        sendOfferQueue.enqueue(item: sendSDPOffer)
     }
     
-    public func setRemoteDescription(_ remoteSDP: RemoteSDPAnswerRes, direction: RTCDirection) {
-        let pc = direction == .send ? pcSend : pcReceive
+    public func processSDPAnswer(_ remoteSDP: RemoteSDPAnswerRes) {
+        let pc = pcSend
         let sdp = RTCSessionDescription(type: .answer, sdp: remoteSDP.sdpAnswer)
         Task {
             do {
                 try await pc.setRemoteDescription(sdp)
+                sendOfferQueue.negotiationFinished(uniqueId: remoteSDP.uniqueId)
+                printSenderMids(pc: pcSend)
             } catch {
-                self.log("error in setRemoteDescroptoin with for \(direction) sdp: \(remoteSDP.sdpAnswer) with error: \(error)")
+                self.log("error in setRemoteDescroptoin with for sdp: \(remoteSDP.sdpAnswer) with error: \(error)")
             }
         }
     }
@@ -299,13 +291,13 @@ extension RTCPeerConnectionManager {
 // MARK: Track mangement
 
 extension RTCPeerConnectionManager {
-    public func addAudioTrack(_ track: RTCAudioTrack, direction: RTCDirection, streamIds: [String] = ["stream0"]) {
+    public func addAudioTrack(_ track: RTCAudioTrack, direction: RTCDirection, streamIds: [String] = ["0"]) {
         if direction == .send {
             pcSend.add(track, streamIds: streamIds)
         }
     }
     
-    public func addVideoTrack(_ track: RTCVideoTrack, direction: RTCDirection, streamIds: [String] = ["stream0"]) {
+    public func addVideoTrack(_ track: RTCVideoTrack, direction: RTCDirection, streamIds: [String] = ["1"]) {
         if direction == .send {
             pcSend.add(track, streamIds: streamIds)
         }
@@ -343,10 +335,9 @@ public extension RTCPeerConnectionManager {
         rtcAudioSession.unlockForConfiguration()
     }
 
-    func toggleSpeaker() {
+    func setSpeaker(on: Bool) {
         audioQueue.async { [weak self] in
             Task { @ChatGlobalActor in
-                let on = !(self?.rtcAudioSession.isActive ?? false)
                 self?.log("request to setSpeaker:\(on)")
                 guard let self = self else {
                     self?.log("self was nil set speaker mode!")
@@ -450,19 +441,28 @@ extension RTCPeerConnectionManager {
         let callInstance = CallServerWrapper(id: type,
                                              token: chat?.config.token ?? "",
                                              chatId: callId,
-                                             payload: req)
+                                             payload: req
+        )
         guard let content = callInstance.jsonString else { return nil }
         let wrapper = CallAsyncMessageWrapper(content: content, peerName: config.peerName)
         (chat?.call as? InternalCallProtocol)?.send(wrapper)
         return callInstance.uniqueId
     }
     
-    private func sendNegotiation() async throws {
-        let sdpOffer = ""
-        let additions: [Addition] = []
-        let req = SendNegotiationReq(sdpOffer: sdpOffer,
-                                     brokerAddress: config.brokerAddress.joined(separator: ","),
-                                     additions: additions)
-        sendAsyncMessage(req, .sendNegotiation)
+    func createSession(startCall: StartCall, callId: Int) {
+        let req = CreateSessionReq(
+            turnAddress: startCall.chatDataDto.turnAddress.first ?? "",
+            brokerAddress: startCall.chatDataDto.brokerAddress.joined(separator: ",")
+        )
+        sendAsyncMessage(req, .createSession)
+    }
+    
+    private func printSenderMids(pc: RTCPeerConnection) {
+        if let sender = pc.transceivers.first(where: { $0.mediaType == .audio}) {
+            log("\(pc == pcSend ? "send" : "receive") audio mid is: \(sender.mid)")
+        }
+        if let sender = pc.transceivers.first(where: { $0.mediaType == .video}) {
+            log("\(pc == pcSend ? "send" : "receive") video mid is: \(sender.mid)")
+        }
     }
 }

@@ -27,7 +27,10 @@ struct CallServerWrapper<T: Encodable>: Encodable {
     let chatId: Int
     let payload: T
     
-    init(id: CallMessageType, token: String, chatId: Int, payload: T) {
+    init(id: CallMessageType,
+         token: String,
+         chatId: Int,
+         payload: T) {
         self.id = id
         self.token = token
         self.chatId = chatId

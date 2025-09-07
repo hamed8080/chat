@@ -3,10 +3,8 @@ public protocol WebRTCActions: AnyObject {
     func switchCamera()
     func unmuteCallParticipants(_ req: UNMuteCallParitcipantsRequest)
     func muteCallParticipants(_ req: MuteCallParticipantsRequest)
-    func toggleSpeaker()
+    func setSpeaker(on: Bool, callId: Int)
     func reCalculateActiveVideoSessionLimit()
-    func turnOffVideoCall(callId: Int)
-    func turnOnVideoCall(callId: Int)
     func addCallParticipants(_ callParticipants: [CallParticipant])
 }
 

@@ -14,10 +14,14 @@ struct SendOfferSDPReq: Codable {
     var sdpOffer: String
     let addition: [Addition]
     
-    public init(brokerAddress: String, topic: String, sdpOffer: String, mediaType: ReveiveMediaItemType) {
+    public init(brokerAddress: String,
+                topic: String,
+                sdpOffer: String,
+                mediaType: ReveiveMediaItemType,
+                mline: Int) {
         self.brokerAddress = brokerAddress
         self.sdpOffer = sdpOffer
-        self.addition = [Addition(mline: 0, clientId: nil, topic: topic, mediaType: mediaType)]
+        self.addition = [Addition(mline: mline, clientId: nil, topic: topic, mediaType: mediaType)]
     }
     
     private enum CodingKeys: String, CodingKey {

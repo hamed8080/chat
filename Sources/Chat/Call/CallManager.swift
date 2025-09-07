@@ -113,19 +113,13 @@ final class CallManager: CallProtocol, InternalCallProtocol {
         
     }
     
-    func toggleSpeaker() {
-        
+    func setSpeaker(on: Bool, callId: Int) {
+        if let container = callContainer(callId: callId) {
+            container.setSpeaker(on: on)
+        }
     }
     
     func reCalculateActiveVideoSessionLimit() {
-        
-    }
-    
-    func turnOffVideoCall(callId: Int) {
-        
-    }
-    
-    func turnOnVideoCall(callId: Int) {
         
     }
     
@@ -190,21 +184,33 @@ extension CallManager {
     
     func onMute(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        if let callId = response.subjectId, let container = callContainer(callId: callId) {
+            container.handleMuteChange(mute: true, response)
+        }
         delegate?.chatEvent(event: .call(.callParticipantMute(response)))
     }
     
     func onUNMute(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        if let callId = response.subjectId, let container = callContainer(callId: callId) {
+            container.handleMuteChange(mute: false, response)
+        }
         delegate?.chatEvent(event: .call(.callParticipantUnmute(response)))
     }
     
     func onVideoTurnedOn(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        if let callId = response.subjectId, let container = callContainer(callId: callId) {
+            container.handleVideoChange(on: true, response)
+        }
         delegate?.chatEvent(event: .call(.turnVideoOn(response)))
     }
     
     func onVideoTurnedOff(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        if let callId = response.subjectId, let container = callContainer(callId: callId) {
+            container.handleVideoChange(on: false, response)
+        }
         delegate?.chatEvent(event: .call(.turnVideoOff(response)))
     }
     
@@ -260,7 +266,6 @@ extension CallManager {
            let container = callContainers.first(where: {$0.callId == response.subjectId})
         {
             container.onCallStarted(startCall)
-            createSession(startCall: startCall, callId: container.callId)
         }
         delegate?.chatEvent(event: .call(.callStarted(response)))
     }
@@ -342,26 +347,6 @@ extension CallManager {
 #if DEBUG
         chat.logger.log(title: "CHAT_CALL_MANAGER", message: message, persist: false, type: .internalLog)
 #endif
-    }
-}
-
-
-// MARK: Janus/Kurento requests.
-extension CallManager {
-    private func createSession(startCall: StartCall, callId: Int) {
-        let req = CreateSessionReq(
-            turnAddress: startCall.chatDataDto.turnAddress.first ?? "",
-            brokerAddress: startCall.chatDataDto.brokerAddress.joined(separator: ",")
-        )
-        let peerName = startCall.chatDataDto.kurentoAddress.first ?? ""
-        let callInstance = CallServerWrapper(id: .createSession,
-                                             token: chat.config.token ?? "",
-                                             chatId: callId,
-                                             payload: req)
-        if let content = callInstance.jsonString {
-            let wrapper = CallAsyncMessageWrapper(content: content, peerName: peerName)
-            send(wrapper)
-        }
     }
 }
 
