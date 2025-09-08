@@ -246,8 +246,8 @@ public extension RTCPeerConnectionManager {
 // MARK: Subscription
 
 extension RTCPeerConnectionManager {
-    func subscribeToReceiveOffers(_ media: ReceivingMedia) {
-        for item in media.recvList {
+    func subscribeToReceiveOffers(_ recvList: [ReceiveMediaItem]) {
+        for item in recvList {
             let req = CallSubscribeRequest(
                 brokerAddress: config.brokerAddress.joined(separator: ","),
                 addition: [item.toAddition]

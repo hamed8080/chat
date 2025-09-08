@@ -307,7 +307,7 @@ extension CallManager {
 // MARK: Janus/Kurento events handlers.
 extension CallManager {
     func subscribeToReceivingOffers(_ media: ReceivingMedia) {
-        if let container = callContainer(callId: media.chatId), media.recvList.first?.clientId != chat.userInfo?.id {
+        if let container = callContainer(callId: media.chatId) {
             container.subscribeToReceiveOffers(media)
         }        
     }

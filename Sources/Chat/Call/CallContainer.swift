@@ -153,7 +153,8 @@ extension CallContainer {
     }
     
     func subscribeToReceiveOffers(_ media: ReceivingMedia) {
-        peerManager?.subscribeToReceiveOffers(media)
+        let myClientId = callParticipant(userId: chat.userInfo?.id ?? -1)?.callParticipant.clientId ?? -1
+        peerManager?.subscribeToReceiveOffers(media.recvList.filter({ $0.clientId != myClientId }))
     }
 }
 
