@@ -58,7 +58,7 @@ final class CallManager: CallProtocol, InternalCallProtocol {
         chat.prepareToSendAsync(req: request, type: .callStickerSystemMessage)
     }
     
-    func getCallsToJoin(_ request: GetJoinCallsRequest) {
+    func callsToJoin(_ request: GetJoinCallsRequest) {
         chat.prepareToSendAsync(req: request, type: .getCallsToJoin)
     }
     

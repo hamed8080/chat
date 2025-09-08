@@ -37,6 +37,7 @@ class SendTracksQueue {
     private var isNegotiating: Bool { inNegotiation != nil }
     private var inNegotiation: (uniqueId: String, type: TrackType)?
     private var userRTC: CallParticipantUserRTC?
+    private var mid = 0
     
     private var delegate: ChatDelegate? { chat?.delegate }
     
@@ -55,9 +56,9 @@ class SendTracksQueue {
         var req: SendOfferSDPReq?
         
         if trackType == .audio {
-            req = try await openAudioTrack(mid: mid)
+            req = try await openAudioTrack()
         } else if trackType == .video {
-            req = try await openVideoTrack(mid: mid)
+            req = try await openVideoTrack()
         }
         
         firstTime = false
@@ -96,7 +97,7 @@ class SendTracksQueue {
         }
     }
     
-    private func openAudioTrack(mid: Int) async throws -> SendOfferSDPReq? {
+    private func openAudioTrack() async throws -> SendOfferSDPReq? {
         guard let userRTC = userRTC, let peerManager = peerManager else { return nil }
         
         let track = peerManager.addSendAudioTrack(userRTC: userRTC)
@@ -104,12 +105,11 @@ class SendTracksQueue {
         return try await generateOffer(
             pc: peerManager,
             topic: userRTC.callParticipant.topics.topicAudio,
-            mediaType: .audio,
-            mid: mid
+            mediaType: .audio
         )
     }
     
-    private func openVideoTrack(mid: Int) async throws -> SendOfferSDPReq? {
+    private func openVideoTrack() async throws -> SendOfferSDPReq? {
         guard let userRTC = userRTC, let peerManager = peerManager else { return nil }
         
         let track = peerManager.addSendVideoTrack(userRTC: userRTC)
@@ -117,21 +117,21 @@ class SendTracksQueue {
         return try await generateOffer(
             pc: peerManager,
             topic: userRTC.callParticipant.topics.topicVideo,
-            mediaType: .video,
-            mid: mid
+            mediaType: .video
         )
     }
     
     private func generateOffer(
         pc: RTCPeerConnectionManager,
         topic: String,
-        mediaType: ReveiveMediaItemType,
-        mid: Int
+        mediaType: ReveiveMediaItemType
     ) async throws -> SendOfferSDPReq {
-        return try await pc.generateSDPOfferForSendPeer(
+        let res = try await pc.generateSDPOfferForSendPeer(
             mediaType: mediaType,
             topic: topic,
             mline: mid
         )
+        mid = mid + 1
+        return res
     }
 }

@@ -53,7 +53,7 @@ public protocol CallProtocol: WebRTCActions {
     /// A list of calls that is currnetly is running and you could join to them.
     /// - Parameters:
     ///   - request: List of threads that you are in and more filters.
-    func getCallsToJoin(_ request: GetJoinCallsRequest)
+    func callsToJoin(_ request: GetJoinCallsRequest)
 
     /// The cancelation of a call when nobody answer the call or somthing different happen.
     /// - Parameters:
