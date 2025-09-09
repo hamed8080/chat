@@ -500,4 +500,9 @@ extension RTCPeerConnectionManager {
             return pcReceive.transceivers.first(where: { $0.receiver.receiverId == track.trackId })?.mid
         }
     }
+    
+    internal func sendRequestReceivingMedia() {
+        let req = SendRequestReceivingMedia(brokerAddress: config.brokerAddress.joined(separator: ","))
+        sendAsyncMessage(req, .requestReceivingMedia)
+    }
 }

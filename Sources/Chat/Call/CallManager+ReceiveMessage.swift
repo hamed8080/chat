@@ -30,14 +30,9 @@ extension CallManager {
                 break
             case .close:
                 break
-            case .stopAll:
-                // setOffers()
-                break
             case .stop:
                 break
             case .error:
-                break
-            case .freezed:
                 break
             case .recieveMetadata:
                 let metadata = try JSONDecoder.instance.decode(ReceiveCallMetadata.self, from: data)
@@ -84,7 +79,9 @@ extension CallManager {
                     .sendSdpOffer,
                     .sdpAnswerReceived,
                     .subscribe,
-                    .update:
+                    .update,
+                    .freezed,
+                    .stopAll:
                 break
             case .unkown:
                 log("An unkown message has been received with id: decoded type in it's content in CallManager: " + (message.content ?? ""))
