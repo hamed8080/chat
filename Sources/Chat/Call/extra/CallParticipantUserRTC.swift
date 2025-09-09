@@ -19,10 +19,10 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
     public nonisolated let id: Int
     public var callParticipant: CallParticipant
     public var topic: String
-    public var iceQueue: [RTCIceCandidate] = []
     public var audioTrack: RTCAudioTrack?
     public var videoTrack: RTCVideoTrack?
     private var topicMids: [String: [String]] = [:]
+    public let isMe: Bool
 
     public var isFrontCamera: Bool = true
     public var isVideoTrackEnable: Bool { callParticipant.video ?? false }
@@ -30,11 +30,12 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
     public var lastTimeSpeaking: Date?
     private weak var container: CallContainer?
     
-    public init(callParticipant: CallParticipant, topic: String, container: CallContainer) {
+    public init(callParticipant: CallParticipant, topic: String, container: CallContainer, isMe: Bool) {
         self.id = callParticipant.clientId ?? -1
         self.callParticipant = callParticipant
         self.topic = topic
         self.container = container
+        self.isMe = isMe
     }
     
     public func addMids(topic: String, mids: [String]) {
@@ -53,63 +54,18 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
         return topicMids.first(where: {$0.value.contains(where: {$0 == mid})})?.key
     }
     
-    public func toggleMute() {
-        callParticipant.mute.toggle()
-        setTrackEnable(!callParticipant.mute)
+    public func setMute(mute: Bool) {
+        callParticipant.mute = mute
+        audioTrack?.isEnabled = !mute
     }
     
-    public func toggleCamera() {
-        callParticipant.video?.toggle()
-        setTrackEnable(callParticipant.video ?? false)
+    public func setEnableCamera(enable: Bool) {
+        callParticipant.video = enable
+        videoTrack?.isEnabled = enable
     }
     
-    public func close(videoStream: Bool) {
-        if videoStream {
-            
-        } else {
-            close()
-        }
-    }
-    
-    public func setTrackEnable(_ enable: Bool) {
-        //        track?.isEnabled = enable
-    }
-    
-    public func addReceiveStream(transciver: RTCRtpTransceiver?) {
-        if let remoteTrack = transciver?.receiver.track {
-            //            track = remoteTrack
-            //            container.peerConection.add(remoteTrack, streamIds: [topic])
-        }
-    }
-    
-    public func removeVideoRenderer(_ renderer: RTCVideoRenderer) {
-        //        (track as? RTCVideoTrack)?.remove(renderer)
-    }
-
     public func switchCameraPosition() {
-//        if isMe {
-//            let result = (videoCapturer as? RTCCameraVideoCapturer)
-//            let tuple = tuple
-//            result?.stopCapture { [weak self] in
-//                self?.isFrontCamera.toggle()
-//                self?.startCaptureLocalVideo(tuple: tuple)
-//            }
-//        }
-    }
 
-    public func addReceiveStream() {
-//        var error: NSError?
-//        let transciver = pc.addTransceiver(of: .video)
-//        transciver?.setDirection(.recvOnly, error: &error)
-//        super.addReceiveStream(transciver: transciver)
-//        if let renderer = renderer {
-//            addVideoRenderer(renderer)
-//        }
-        
-        //        var error: NSError?
-        //        let transciver = pc.addTransceiver(of: .audio)
-        //        transciver?.setDirection(.recvOnly, error: &error)
-        //        super.addReceiveStream(transciver: transciver)
     }
 
     public func monitorAudioLevelFor(callParticipant: CallParticipant) {

@@ -114,9 +114,6 @@ public protocol CallProtocol: WebRTCActions {
     /// - Parameters:
     ///   - request: The callId of the call to terminate.
     func terminateCall(_ request: GeneralSubjectIdRequest)
-
-    /// Only for previewing the current state of the application in swiftUI.
-    func preview(startCall: StartCall)
     
     func activeCallParticipants(callId: Int) -> [CallParticipantUserRTC]?
 }

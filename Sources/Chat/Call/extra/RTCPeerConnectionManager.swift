@@ -317,6 +317,13 @@ extension RTCPeerConnectionManager {
         return pf.videoTrack(with: videoSource, trackId: "video0")
     }
     
+    internal func switchCamera(to front: Bool) {
+        let result = videoCapturer as? RTCCameraVideoCapturer
+        result?.stopCapture { [weak self] in
+//            self?.startCaptureLocalVideo()
+        }
+    }
+    
     // Add audio track
     func addSendAudioTrack(userRTC: CallParticipantUserRTC) -> RTCAudioTrack {
         let audioTrack = createAudioSenderTrack()

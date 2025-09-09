@@ -68,21 +68,25 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     
     func muteCallParticipants(_ request: MuteCallParticipantsRequest) {
         chat.prepareToSendAsync(req: request, type: .muteCallParticipant)
+        callContainer(callId: request.callId)?.setMuteAudioTrack(mute: true)
     }
     
     func unmuteCallParticipants(_ request: UNMuteCallParitcipantsRequest) {
         chat.prepareToSendAsync(req: request, type: .unmuteCallParticipant)
+        callContainer(callId: request.callId)?.setMuteAudioTrack(mute: false)
     }
     
     func turnOnVideoCall(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .turnOnVideoCall)
+        callContainer(callId: request.subjectId)?.setEnableCameraTrack(enable: true)
     }
     
     func turnOffVideoCall(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .turnOffVideoCall)
+        callContainer(callId: request.subjectId)?.setEnableCameraTrack(enable: false)
     }
     
-    func endCall(_ request: ChatDTO.GeneralSubjectIdRequest) {
+    func endCall(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .endCallRequest)
     }
     
@@ -107,10 +111,10 @@ final class CallManager: CallProtocol, InternalCallProtocol {
         chat.prepareToSendAsync(req: request, type: .terminateCall)
     }
     
-    func preview(startCall: StartCall) {}
-    
     func switchCamera() {
-        
+        if let container = callContainers.first(where: { $0.state == .started }) {
+            container.switchCamera(to: isFrontCamera)
+        }
     }
     
     func setSpeaker(on: Bool, callId: Int) {
@@ -301,7 +305,6 @@ extension CallManager {
         let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callRejected(response)))
     }
-    
 }
 
 // MARK: Janus/Kurento events handlers.

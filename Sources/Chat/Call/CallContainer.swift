@@ -17,7 +17,7 @@ public class CallContainer: Identifiable {
     
     private var cancelTimer: Timer?
     private let chat: ChatInternalProtocol
-    private var state: CallState
+    var state: CallState
     private var callType: CallType
     public let isFrontCamera: Bool
     private var typeCode: String?
@@ -155,7 +155,8 @@ extension CallContainer {
         let userRTC = CallParticipantUserRTC(
             callParticipant: callParticipant,
             topic: callParticipant.sendTopic,
-            container: self
+            container: self,
+            isMe: chat.userInfo?.id == callParticipant.userId
         )
         callParticipantsUserRTC.append(userRTC)
     }
@@ -243,5 +244,21 @@ extension CallContainer {
 extension CallContainer {
     func setSpeaker(on: Bool) {
         peerManager?.setSpeaker(on: on)
+    }
+    
+    func setMuteAudioTrack(mute: Bool) {
+        if let myId = chat.userInfo?.id, let userRTC = callParticipant(userId: myId) {
+            userRTC.setMute(mute: mute)
+        }
+    }
+    
+    func setEnableCameraTrack(enable: Bool) {
+        if let myId = chat.userInfo?.id, let userRTC = callParticipant(userId: myId) {
+            userRTC.setEnableCamera(enable: enable)
+        }
+    }
+    
+    func switchCamera(to front: Bool) {
+        peerManager?.switchCamera(to: front)
     }
 }
