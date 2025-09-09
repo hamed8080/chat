@@ -340,6 +340,12 @@ extension CallManager {
             container.createSDPOfferForLocal()
         }
     }
+    
+    func onJoinAdditionComplete(_ resp: JoinAdditionCompleteRes) {
+        if let container = callContainer(callId: resp.chatId) {
+            container.onJoinAdditionComplete(resp)
+        }
+    }
 }
 
 extension CallManager {

@@ -6,22 +6,22 @@
 
 import WebRTC
 
- /// This class is responsible to open a send track one by one for audio, video or screen share.
- ///
- /// This class will do things in order like below:
- ///
- /// 1- Create a SDP offer for the openned track.
- ///
- /// 2- Set this SDP as the localDescription for the send peer connection.
- ///
- /// 3- Send this as **SEND_SDP_OFFER** for the first openned track,
- ///    or **SEND_NEGOTIATION** if it is not the first time.
- ///
- /// 4- Wait for the **PROCESS_SDP_ANSWER** from the server.
- ///
- /// 5- Remove the queued sdp offer.
- ///
- /// 6- Start opening another track and do 1-5 again.
+/// This class is responsible to open a send track one by one for audio, video or screen share.
+///
+/// This class will do things in order like below:
+///
+/// 1- Create a SDP offer for the openned track.
+///
+/// 2- Set this SDP as the localDescription for the send peer connection.
+///
+/// 3- Send this as **SEND_SDP_OFFER** for the first openned track,
+///    or **SEND_NEGOTIATION** if it is not the first time.
+///
+/// 4- Wait for the **PROCESS_SDP_ANSWER** from the server.
+///
+/// 5- Remove the queued sdp offer.
+///
+/// 6- Start opening another track and do 1-5 again.
 @ChatGlobalActor
 class SendTracksQueue {
     enum TrackType {

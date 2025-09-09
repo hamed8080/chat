@@ -132,6 +132,10 @@ extension CallContainer {
             peerManager?.sendTracksQueue.startOpening(myCallUser)
         }
     }
+    
+    func onJoinAdditionComplete(_ resp: JoinAdditionCompleteRes) {
+        peerManager?.receiveTracksQueue.onJoinAdditionComplete(resp)
+    }
 }
 
 extension CallContainer {

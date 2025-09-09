@@ -1,15 +1,15 @@
 //
-// ReceivingMedia.swift
+// JoinAdditionCompleteRes.swift
 // Copyright (c) 2022 ChatCall
 //
 // Created by Hamed Hosseini on 12/16/22
 
 import Foundation
 
-struct ReceivingMedia: Decodable {
+struct JoinAdditionCompleteRes: Decodable {
     let id: CallMessageType
     let chatId: Int
-    let recvList: [ReceiveMediaItem]
+    let topic: [Addition]
     let uniqueId: String
     
     init(from decoder: any Decoder) throws {
@@ -27,20 +27,20 @@ struct ReceivingMedia: Decodable {
         }
         self.chatId = chatId
         
-        guard let recvListData = try container.decode(String.self, forKey: .recvList).data(using: .utf8) else {
+        guard let topicString = try container.decode(String.self, forKey: .topic).data(using: .utf8) else {
             throw DecodingError.dataCorruptedError(
-                forKey: .recvList,
+                forKey: .topic,
                 in: container,
-                debugDescription: "recvList string is not valid UTF-8"
+                debugDescription: "topic string is not valid UTF-8"
             )
         }
-        self.recvList = try JSONDecoder().decode([ReceiveMediaItem].self, from: recvListData)
+        self.topic = try JSONDecoder().decode([Addition].self, from: topicString)
     }
     
     private enum CodingKeys: String, CodingKey {
         case id = "id"
         case uniqueId = "uniqueId"
         case chatId = "chatId"
-        case recvList = "recvList"
+        case topic = "topic"
     }
 }

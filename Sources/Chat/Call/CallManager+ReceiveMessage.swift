@@ -57,7 +57,8 @@ extension CallManager {
             case .requestReceivingMedia:
                 break
             case .joinAdditionComplete:
-                break
+                let res = try JSONDecoder.instance.decode(JoinAdditionCompleteRes.self, from: data)
+                onJoinAdditionComplete(res)
             case .joinDeletionComplete:
                 break
             case .subscriptionFailed:

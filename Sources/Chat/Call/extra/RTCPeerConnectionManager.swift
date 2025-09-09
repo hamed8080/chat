@@ -20,10 +20,10 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     private let audioQueue = DispatchQueue(label: "audio")
     private let callId: Int
     private var videoCapturer: RTCVideoCapturer?
-    private var subscribed = false
     public var onAddVideoTrack:( (_ track: RTCVideoTrack, _ mid: String) -> Void )? = nil
     public var onAddAudioTrack:( (_ track: RTCAudioTrack, _ mid: String) -> Void )? = nil
     let sendTracksQueue: SendTracksQueue
+    let receiveTracksQueue: ReceiveTracksQueue
 
     /// Peer connection
     public let pf: RTCPeerConnectionFactory
@@ -76,6 +76,7 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
         pcReceive = peerConnectionReceive
         
         sendTracksQueue = SendTracksQueue()
+        receiveTracksQueue = ReceiveTracksQueue()
         
         super.init()
         if self.chat?.config.callConfig.logWebRTC == true {
@@ -88,8 +89,13 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
        
         pcSend.delegate = self
         pcReceive.delegate = self
+        
         sendTracksQueue.peerManager = self
         sendTracksQueue.chat = chat
+        
+        receiveTracksQueue.peerManager = self
+        receiveTracksQueue.chat = chat
+        receiveTracksQueue.brokerAddress = config.brokerAddress.joined(separator: ",")
     }
 
     deinit {
@@ -206,7 +212,7 @@ public extension RTCPeerConnectionManager {
                                            mline: mline)
     }
     
-    public func processSDPAnswer(_ remoteSDP: RemoteSDPAnswerRes) {
+    internal func processSDPAnswer(_ remoteSDP: RemoteSDPAnswerRes) {
         let pc = pcSend
         let sdp = RTCSessionDescription(type: .answer, sdp: remoteSDP.sdpAnswer)
         Task {
@@ -248,14 +254,7 @@ public extension RTCPeerConnectionManager {
 extension RTCPeerConnectionManager {
     func subscribeToReceiveOffers(_ recvList: [ReceiveMediaItem]) {
         for item in recvList {
-            let req = CallSubscribeRequest(
-                brokerAddress: config.brokerAddress.joined(separator: ","),
-                addition: [item.toAddition]
-            )
-            sendAsyncMessage(req, subscribed ? .update : .subscribe)
-            if !subscribed {
-                subscribed = true
-            }
+            receiveTracksQueue.enqueue(item: item)
         }
     }
 }
