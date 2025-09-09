@@ -65,7 +65,19 @@ class ReceiveTracksQueue {
         inNegotiation = (item.topic, item)
     }
     
-    public func onJoinAdditionComplete(_ resp: JoinAdditionCompleteRes) {
+    public func onJoinAdditionComplete(_ resp: JoinCompleteRes) {
+        resp.topic.forEach { addition in
+            clearOldNegotiation(topic: addition.topic)
+        }
+
+        if let next = items.first {
+            Task {
+                try await dequeue(item: next)
+            }
+        }
+    }
+    
+    public func onJoinDeletionComplete(_ resp: JoinCompleteRes) {
         resp.topic.forEach { addition in
             clearOldNegotiation(topic: addition.topic)
         }

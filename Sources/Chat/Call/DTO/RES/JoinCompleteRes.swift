@@ -1,12 +1,12 @@
 //
-// JoinAdditionCompleteRes.swift
+// JoinCompleteRes.swift
 // Copyright (c) 2022 ChatCall
 //
 // Created by Hamed Hosseini on 12/16/22
 
 import Foundation
 
-struct JoinAdditionCompleteRes: Decodable {
+struct JoinCompleteRes: Decodable {
     let id: CallMessageType
     let chatId: Int
     let topic: [Addition]

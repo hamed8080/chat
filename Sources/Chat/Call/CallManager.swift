@@ -341,9 +341,15 @@ extension CallManager {
         }
     }
     
-    func onJoinAdditionComplete(_ resp: JoinAdditionCompleteRes) {
+    func onJoinAdditionComplete(_ resp: JoinCompleteRes) {
         if let container = callContainer(callId: resp.chatId) {
             container.onJoinAdditionComplete(resp)
+        }
+    }
+    
+    func onJoinDeletionComplete(_ resp: JoinCompleteRes) {
+        if let container = callContainer(callId: resp.chatId) {
+            container.onJoinDeletionComplete(resp)
         }
     }
 }

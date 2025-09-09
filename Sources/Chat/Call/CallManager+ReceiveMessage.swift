@@ -31,7 +31,7 @@ extension CallManager {
             case .close:
                 break
             case .stopAll:
-                //                setOffers()
+                // setOffers()
                 break
             case .stop:
                 break
@@ -57,10 +57,11 @@ extension CallManager {
             case .requestReceivingMedia:
                 break
             case .joinAdditionComplete:
-                let res = try JSONDecoder.instance.decode(JoinAdditionCompleteRes.self, from: data)
+                let res = try JSONDecoder.instance.decode(JoinCompleteRes.self, from: data)
                 onJoinAdditionComplete(res)
             case .joinDeletionComplete:
-                break
+                let res = try JSONDecoder.instance.decode(JoinCompleteRes.self, from: data)
+                onJoinDeletionComplete(res)
             case .subscriptionFailed:
                 break
             case .updateFailed:
@@ -75,17 +76,15 @@ extension CallManager {
                 break
             case .unpublished:
                 break
-            case .subscribe:
-                break
-            case .update:
-                break
             // Unused or not get any event from the Call server.
             case .addIceCandidate,
                     .sendNegotiation,
                     .receiveSdpAnswer,
                     .receiveSdpOffer,
                     .sendSdpOffer,
-                    .sdpAnswerReceived:
+                    .sdpAnswerReceived,
+                    .subscribe,
+                    .update:
                 break
             case .unkown:
                 log("An unkown message has been received with id: decoded type in it's content in CallManager: " + (message.content ?? ""))

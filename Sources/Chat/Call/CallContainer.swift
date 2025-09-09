@@ -133,8 +133,12 @@ extension CallContainer {
         }
     }
     
-    func onJoinAdditionComplete(_ resp: JoinAdditionCompleteRes) {
+    func onJoinAdditionComplete(_ resp: JoinCompleteRes) {
         peerManager?.receiveTracksQueue.onJoinAdditionComplete(resp)
+    }
+    
+    func onJoinDeletionComplete(_ resp: JoinCompleteRes) {
+        peerManager?.receiveTracksQueue.onJoinDeletionComplete(resp)
     }
 }
 
