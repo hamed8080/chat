@@ -130,6 +130,10 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     func addCallParticipants(_ callParticipants: [ChatModels.CallParticipant]) {
         
     }
+    
+    func currentUserRTCList(callId: Int) -> [CallParticipantUserRTC] {
+        callContainer(callId: callId)?.callParticipantsUserRTC ?? []
+    }
 }
 
 /// Server Responses

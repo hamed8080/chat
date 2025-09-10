@@ -32,6 +32,7 @@ class SendTracksQueue {
     
     private var tracks: [TrackType] = []
     weak var peerManager: RTCPeerConnectionManager?
+    weak var callContainer: CallContainer?
     var chat: ChatInternalProtocol?
     private var firstTime = true
     private var isNegotiating: Bool { inNegotiation != nil }
@@ -101,6 +102,13 @@ class SendTracksQueue {
         guard let userRTC = userRTC, let peerManager = peerManager else { return nil }
         
         let track = peerManager.addSendAudioTrack(userRTC: userRTC)
+        
+        if let callContainer = callContainer, let index = callContainer.callParticipantsUserRTC.firstIndex(where: { $0.isMe }) {
+            callContainer.callParticipantsUserRTC[index].audioTrack = track
+            callContainer.callParticipantsUserRTC[index].callParticipant.mute = false
+            callContainer.callParticipantsUserRTC[index].audioTrack?.isEnabled = true
+        }
+        
         delegate?.chatEvent(event: .call(.audioTrackAdded(track, userRTC.id)))
         return try await generateOffer(
             pc: peerManager,
@@ -113,6 +121,12 @@ class SendTracksQueue {
         guard let userRTC = userRTC, let peerManager = peerManager else { return nil }
         
         let track = peerManager.addSendVideoTrack(userRTC: userRTC)
+        if let callContainer = callContainer, let index = callContainer.callParticipantsUserRTC.firstIndex(where: { $0.isMe }) {
+            callContainer.callParticipantsUserRTC[index].videoTrack = track
+            callContainer.callParticipantsUserRTC[index].callParticipant.video = true
+            callContainer.callParticipantsUserRTC[index].videoTrack?.isEnabled = true
+        }
+        
         delegate?.chatEvent(event: .call(.videoTrackAdded(track, userRTC.id)))
         return try await generateOffer(
             pc: peerManager,

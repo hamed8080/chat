@@ -7,7 +7,7 @@
 import ChatModels
 @preconcurrency import WebRTC
 
-public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked Sendable {
+public struct CallParticipantUserRTC: Identifiable, Equatable, Sendable {
     nonisolated public static func == (lhs: CallParticipantUserRTC, rhs: CallParticipantUserRTC) -> Bool {
         lhs.id == rhs.id
     }
@@ -38,11 +38,11 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
         self.isMe = isMe
     }
     
-    public func addMids(topic: String, mids: [String]) {
+    public mutating func addMids(topic: String, mids: [String]) {
         topicMids[topic] = mids
     }
     
-    public func removeMids(topic: String) {
+    public mutating func removeMids(topic: String) {
         topicMids.removeValue(forKey: topic)
     }
     
@@ -54,12 +54,12 @@ public final class CallParticipantUserRTC: Identifiable, Equatable, @unchecked S
         return topicMids.first(where: {$0.value.contains(where: {$0 == mid})})?.key
     }
     
-    public func setMute(mute: Bool) {
+    public mutating func setMute(mute: Bool) {
         callParticipant.mute = mute
         audioTrack?.isEnabled = !mute
     }
     
-    public func setEnableCamera(enable: Bool) {
+    public mutating func setEnableCamera(enable: Bool) {
         callParticipant.video = enable
         videoTrack?.isEnabled = enable
     }

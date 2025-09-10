@@ -23,7 +23,7 @@ public class CallContainer: Identifiable {
     public let isFrontCamera: Bool
     private var typeCode: String?
     private var peerManager: RTCPeerConnectionManager?
-    public private(set) var callParticipantsUserRTC: [CallParticipantUserRTC] = []
+    var callParticipantsUserRTC: [CallParticipantUserRTC] = []
     
     init(callId: Int, state: CallState, callType: CallType,
          typeCode: String?, isFrontCamera: Bool, chat: ChatInternalProtocol) {
@@ -48,7 +48,7 @@ public class CallContainer: Identifiable {
                                   startCall: startCall,
                                   isSendVideoEnabled: startCall.clientDTO.video,
                                   fileName: TARGET_OS_SIMULATOR != 0 ? "webrtc_user_a.mp4" : nil)
-        peerManager = RTCPeerConnectionManager(chat: chat, config: config, callId: callId)
+        peerManager = RTCPeerConnectionManager(chat: chat, config: config, callId: callId, callContainer: self)
         peerManager?.onAddVideoTrack = { @Sendable [weak self] videoTrack, mid in
             Task {
                 await self?.onVideoTrackAdded(videoTrack: videoTrack, mid: mid)
@@ -112,10 +112,10 @@ extension CallContainer {
         peerManager?.processSDPOffer(res)
         for addition in res.addition {
             if let clientId = addition.clientId,
-               let user = callParticipant(clientId: clientId),
+               var index = callParticipantIndex(clientId: clientId),
                let mids = addition.mids
             {
-                user.addMids(topic: addition.topic, mids: mids)
+                callParticipantsUserRTC[index].addMids(topic: addition.topic, mids: mids)
             }
         }
     }
@@ -177,12 +177,24 @@ extension CallContainer {
         callParticipantsUserRTC.first(where: {$0.id == clientId})
     }
     
+    func callParticipantIndex(clientId: Int) -> Int? {
+        callParticipantsUserRTC.firstIndex(where: {$0.id == clientId})
+    }
+    
     func callParticipant(userId: Int) -> CallParticipantUserRTC? {
         callParticipantsUserRTC.first(where: {$0.callParticipant.userId == userId})
     }
     
+    func callParticipantIndex(userId: Int) -> Int? {
+        callParticipantsUserRTC.firstIndex(where: {$0.callParticipant.userId == userId})
+    }
+    
     var myRTC: CallParticipantUserRTC? {
         callParticipantsUserRTC.first(where: { $0.isMe })
+    }
+    
+    var myRTCIndex: Int? {
+        callParticipantsUserRTC.firstIndex(where: { $0.isMe })
     }
     
     public func dispose() {
@@ -195,21 +207,21 @@ extension CallContainer {
 extension CallContainer {
     private func onVideoTrackAdded(videoTrack: RTCVideoTrack, mid: String) {
         guard
-            let user = self.callParticipantsUserRTC.first(where: { $0.topic(for: mid) != nil }),
-            let clientId = user.callParticipant.clientId
+            let index = callParticipantsUserRTC.firstIndex(where: { $0.topic(for: mid) != nil && !$0.isMe }),
+            let clientId = callParticipantsUserRTC[index].callParticipant.clientId
         else { return }
         
-        user.videoTrack = videoTrack
+        callParticipantsUserRTC[index].videoTrack = videoTrack
         self.chat.delegate?.chatEvent(event: .call(.videoTrackAdded(videoTrack, clientId)))
     }
     
     private func onAudioTrackAdded(audioTrack: RTCAudioTrack, mid: String) {
         guard
-            let user = self.callParticipantsUserRTC.first(where: { $0.topic(for: mid) != nil }),
-            let clientId = user.callParticipant.clientId
+            let index = callParticipantsUserRTC.firstIndex(where: { $0.topic(for: mid) != nil && !$0.isMe }),
+            let clientId = callParticipantsUserRTC[index].callParticipant.clientId
         else { return }
         
-        user.audioTrack = audioTrack
+        callParticipantsUserRTC[index].audioTrack = audioTrack
         self.chat.delegate?.chatEvent(event: .call(.audioTrackAdded(audioTrack, clientId)))
     }
 }
@@ -219,18 +231,18 @@ extension CallContainer {
 extension CallContainer {
     func handleVideoChange(on: Bool, _ resp: ChatResponse<[CallParticipant]>) {
         for participant in resp.result ?? [] {
-            if let userId = participant.userId, let userRTC = callParticipant(userId: userId) {
-                userRTC.callParticipant.video = on
-                userRTC.videoTrack?.isEnabled = on
+            if let userId = participant.userId, let index = callParticipantIndex(userId: userId) {
+                callParticipantsUserRTC[index].callParticipant.video = on
+                callParticipantsUserRTC[index].videoTrack?.isEnabled = on
             }
         }
     }
     
     func handleMuteChange(mute: Bool, _ resp: ChatResponse<[CallParticipant]>) {
         for participant in resp.result ?? [] {
-            if let userId = participant.userId, let userRTC = callParticipant(userId: userId) {
-                userRTC.callParticipant.mute = mute
-                userRTC.audioTrack?.isEnabled = !mute
+            if let userId = participant.userId, let index = callParticipantIndex(userId: userId) {
+                callParticipantsUserRTC[index].callParticipant.mute = mute
+                callParticipantsUserRTC[index].audioTrack?.isEnabled = !mute
             }
         }
     }
@@ -244,7 +256,7 @@ extension CallContainer {
     }
     
     func setMuteAudioTrack(mute: Bool) {
-        guard let myRTC = myRTC else { return }
+        guard var myRTCIndex = myRTCIndex else { return }
         
         if !mute {
             Task {
@@ -254,11 +266,11 @@ extension CallContainer {
         
         /// It will set immediately the track to true or false to prevent sending data.
         /// It will also set userRTC.callPariticipant.mute = mute
-        myRTC.setMute(mute: mute)
+        callParticipantsUserRTC[myRTCIndex].setMute(mute: mute)
     }
     
     func setEnableCameraTrack(enable: Bool) {
-        guard let myRTC = myRTC else { return }
+        guard var myRTCIndex = myRTCIndex else { return }
         
         if enable {
             Task {
@@ -268,7 +280,7 @@ extension CallContainer {
         
         /// It will set immediately the track to true or false to prevent sending data.
         /// It will also set userRTC.callPariticipant.video = enable
-        myRTC.setEnableCamera(enable: enable)
+        callParticipantsUserRTC[myRTCIndex].setEnableCamera(enable: enable)
     }
     
     func switchCamera(to front: Bool) {

@@ -24,6 +24,7 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     public var onAddAudioTrack:( (_ track: RTCAudioTrack, _ mid: String) -> Void )? = nil
     let sendTracksQueue: SendTracksQueue
     let receiveTracksQueue: ReceiveTracksQueue
+    private weak var callContainer: CallContainer?
 
     /// Peer connection
     public let pf: RTCPeerConnectionFactory
@@ -35,10 +36,11 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
         kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue
     ]
 
-    public init(chat: ChatInternalProtocol, config: WebRTCConfig, callId: Int) {
+    public init(chat: ChatInternalProtocol, config: WebRTCConfig, callId: Int, callContainer: CallContainer) {
         self.chat = chat
         self.callId = callId
         self.config = config
+        self.callContainer = callContainer
         RTCInitializeSSL()
         
         pf = RTCPeerConnectionFactory(encoderFactory: RTCDefaultVideoEncoderFactory.default,
@@ -94,6 +96,7 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
         
         sendTracksQueue.peerManager = self
         sendTracksQueue.chat = chat
+        sendTracksQueue.callContainer = callContainer
         
         receiveTracksQueue.peerManager = self
         receiveTracksQueue.chat = chat
@@ -331,9 +334,6 @@ extension RTCPeerConnectionManager {
         let audioTrack = createAudioSenderTrack()
         addAudioTrack(audioTrack, direction: .send)
         configureAudioSession()
-        userRTC.audioTrack = audioTrack
-        userRTC.callParticipant.mute = false
-        userRTC.audioTrack?.isEnabled = true
         return audioTrack
     }
     
@@ -342,9 +342,7 @@ extension RTCPeerConnectionManager {
         let videoTrack = createVideoSenderTrack()
         addVideoTrack(videoTrack, direction: .send)
         startCaptureLocalVideo(fileName: nil, front: userRTC.isFrontCamera)
-        userRTC.videoTrack = videoTrack
-        userRTC.callParticipant.video = true
-        userRTC.videoTrack?.isEnabled = true
+
         return videoTrack
     }
 }

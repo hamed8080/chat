@@ -115,7 +115,7 @@ public protocol CallProtocol: WebRTCActions {
     ///   - request: The callId of the call to terminate.
     func terminateCall(_ request: GeneralSubjectIdRequest)
     
-    func activeCallParticipants(callId: Int) -> [CallParticipantUserRTC]?
+    func currentUserRTCList(callId: Int) -> [CallParticipantUserRTC]
 }
 
 @ChatGlobalActor
