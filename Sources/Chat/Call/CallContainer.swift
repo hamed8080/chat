@@ -8,6 +8,7 @@
 @preconcurrency import WebRTC
 import Foundation
 import Logger
+import ChatExtensions
 
 @ChatGlobalActor
 public class CallContainer: Identifiable {
@@ -43,7 +44,6 @@ public class CallContainer: Identifiable {
     
     func initWebRTC(_ startCall: StartCall) {
         /// simulator File name
-        let userId = chat.userInfo?.id
         let config = WebRTCConfig(callConfig: chat.config.callConfig,
                                   startCall: startCall,
                                   isSendVideoEnabled: startCall.clientDTO.video,
@@ -60,15 +60,8 @@ public class CallContainer: Identifiable {
                 await self?.onAudioTrackAdded(audioTrack: audioTrack, mid: mid)
             }
         }
-        let users = startCall.otherClientDtoList?.compactMap { clientDTO in
-            CallParticipant(sendTopic: clientDTO.topicSend,
-                            userId: clientDTO.userId,
-                            clientId: clientDTO.clientId,
-                            mute: clientDTO.mute,
-                            video: clientDTO.video)
-        } ?? []
+        let users = startCall.otherClientDtoList?.compactMap { $0.toCallParticipant } ?? []
         addCallParticipants(users)
-
     }
     
     func createSession(startCall: StartCall, callId: Int) {
@@ -127,9 +120,9 @@ extension CallContainer {
         }
     }
     
-    func createSDPOfferForLocal() {
-        if let userId = chat.userInfo?.id, let myCallUser = callParticipant(userId: userId) {
-            peerManager?.sendTracksQueue.startOpening(myCallUser)
+    func onSessionCreated() {
+        if let myRTC = myRTC {
+            peerManager?.sendTracksQueue.startOpening(myRTC)
         }
     }
     
@@ -162,7 +155,7 @@ extension CallContainer {
     }
     
     func subscribeToReceiveOffers(_ media: ReceivingMedia) {
-        let myClientId = callParticipant(userId: chat.userInfo?.id ?? -1)?.callParticipant.clientId ?? -1
+        let myClientId = myRTC?.callParticipant.clientId ?? -1
         peerManager?.subscribeToReceiveOffers(media.recvList.filter({ $0.clientId != myClientId }))
     }
 }
@@ -186,6 +179,10 @@ extension CallContainer {
     
     func callParticipant(userId: Int) -> CallParticipantUserRTC? {
         callParticipantsUserRTC.first(where: {$0.callParticipant.userId == userId})
+    }
+    
+    var myRTC: CallParticipantUserRTC? {
+        callParticipantsUserRTC.first(where: { $0.isMe })
     }
     
     public func dispose() {
@@ -247,15 +244,31 @@ extension CallContainer {
     }
     
     func setMuteAudioTrack(mute: Bool) {
-        if let myId = chat.userInfo?.id, let userRTC = callParticipant(userId: myId) {
-            userRTC.setMute(mute: mute)
+        guard let myRTC = myRTC else { return }
+        
+        if !mute {
+            Task {
+                try await peerManager?.sendTracksQueue.enqueue(trackType: .audio)
+            }
         }
+        
+        /// It will set immediately the track to true or false to prevent sending data.
+        /// It will also set userRTC.callPariticipant.mute = mute
+        myRTC.setMute(mute: mute)
     }
     
     func setEnableCameraTrack(enable: Bool) {
-        if let myId = chat.userInfo?.id, let userRTC = callParticipant(userId: myId) {
-            userRTC.setEnableCamera(enable: enable)
+        guard let myRTC = myRTC else { return }
+        
+        if enable {
+            Task {
+                try await peerManager?.sendTracksQueue.enqueue(trackType: .video)
+            }
         }
+        
+        /// It will set immediately the track to true or false to prevent sending data.
+        /// It will also set userRTC.callPariticipant.video = enable
+        myRTC.setEnableCamera(enable: enable)
     }
     
     func switchCamera(to front: Bool) {

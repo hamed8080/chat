@@ -340,7 +340,7 @@ extension CallManager {
     func onSessionCreated(_ resp: CreateSessionResp) {
         /// Create sdp offer for local stream and send it.
         if let callId = resp.chatId, let container = callContainer(callId: callId) {
-            container.createSDPOfferForLocal()
+            container.onSessionCreated()
         }
     }
     

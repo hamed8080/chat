@@ -30,8 +30,10 @@ public class RTCPeerConnectionManager: NSObject, RTCPeerConnectionDelegate {
     private let pcSend: RTCPeerConnection
     private let pcReceive: RTCPeerConnection
     
-    public var constraints: [String: String] = [kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue,
-                                                kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue]
+    private let constraints: [String: String] = [
+        kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue,
+        kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue
+    ]
 
     public init(chat: ChatInternalProtocol, config: WebRTCConfig, callId: Int) {
         self.chat = chat
@@ -212,7 +214,7 @@ public extension RTCPeerConnectionManager {
                                            mline: mline)
     }
     
-    internal func processSDPAnswer(_ remoteSDP: RemoteSDPAnswerRes) {
+    func processSDPAnswer(_ remoteSDP: RemoteSDPAnswerRes) {
         let pc = pcSend
         let sdp = RTCSessionDescription(type: .answer, sdp: remoteSDP.sdpAnswer)
         Task {
