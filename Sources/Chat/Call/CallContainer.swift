@@ -210,8 +210,11 @@ extension CallContainer {
             let index = callParticipantsUserRTC.firstIndex(where: { $0.topic(for: mid) != nil && !$0.isMe }),
             let clientId = callParticipantsUserRTC[index].callParticipant.clientId
         else { return }
-        
-        callParticipantsUserRTC[index].videoTrack = videoTrack
+        if callParticipantsUserRTC[index].topic(for: mid)?.contains("screen-Share") == true {
+            callParticipantsUserRTC[index].screenShareTrack = videoTrack
+        } else {
+            callParticipantsUserRTC[index].videoTrack = videoTrack
+        }
         self.chat.delegate?.chatEvent(event: .call(.videoTrackAdded(videoTrack, clientId)))
     }
     
@@ -244,6 +247,16 @@ extension CallContainer {
                 callParticipantsUserRTC[index].callParticipant.mute = mute
                 callParticipantsUserRTC[index].audioTrack?.isEnabled = !mute
             }
+        }
+    }
+    
+    func handleStartScreenShare(_ resp: StartScreenShareResponse) {
+        
+    }
+    
+    func handleEndScreenShare(_ resp: EndScreenShareResponse) {
+        if let id = resp.screenOwner?.id, let index = callParticipantIndex(userId: id) {
+            callParticipantsUserRTC[index].screenShareTrack = nil
         }
     }
 }

@@ -21,6 +21,7 @@ public struct CallParticipantUserRTC: Identifiable, Equatable, Sendable {
     public var topic: String
     public var audioTrack: RTCAudioTrack?
     public var videoTrack: RTCVideoTrack?
+    public var screenShareTrack: RTCVideoTrack?
     private var topicMids: [String: [String]] = [:]
     public let isMe: Bool
 

@@ -250,7 +250,7 @@ extension CallManager {
     
     func onMute(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
-        if let callId = response.subjectId, let container = callContainer(callId: callId) {
+        if let container = container(asyncMessage) {
             container.handleMuteChange(mute: true, response)
         }
         delegate?.chatEvent(event: .call(.callParticipantMute(response)))
@@ -258,7 +258,7 @@ extension CallManager {
     
     func onUNMute(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
-        if let callId = response.subjectId, let container = callContainer(callId: callId) {
+        if let container = container(asyncMessage) {
             container.handleMuteChange(mute: false, response)
         }
         delegate?.chatEvent(event: .call(.callParticipantUnmute(response)))
@@ -266,7 +266,7 @@ extension CallManager {
     
     func onVideoTurnedOn(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
-        if let callId = response.subjectId, let container = callContainer(callId: callId) {
+        if let container = container(asyncMessage) {
             container.handleVideoChange(on: true, response)
         }
         delegate?.chatEvent(event: .call(.turnVideoOn(response)))
@@ -274,7 +274,7 @@ extension CallManager {
     
     func onVideoTurnedOff(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
-        if let callId = response.subjectId, let container = callContainer(callId: callId) {
+        if let container = container(asyncMessage) {
             container.handleVideoChange(on: false, response)
         }
         delegate?.chatEvent(event: .call(.turnVideoOff(response)))
@@ -285,9 +285,9 @@ extension CallManager {
         response.result = response.subjectId
         delegate?.chatEvent(event: .call(.callEnded(response)))
         _currentCall.resetIfNeededOnCallEnded(callId: response.result)
-        if let callId = asyncMessage.subjectId, let callContainer = callContainer(callId: callId) {
-            callContainer.dispose()
-            callContainers.removeAll(where: { $0.callId == callId })
+        if let container = container(asyncMessage) {
+            container.dispose()
+            callContainers.removeAll(where: { $0.callId == asyncMessage.subjectId })
         }
     }
     
@@ -342,6 +342,22 @@ extension CallManager {
     func onRejectCall(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callRejected(response)))
+    }
+    
+    func onStartScreenShare(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<StartScreenShareResponse> = asyncMessage.toChatResponse()
+        if let container = container(asyncMessage), let result = response.result {
+            container.handleStartScreenShare(result)
+        }
+        delegate?.chatEvent(event: .call(.startScreenShare(response)))
+    }
+    
+    func onEndScreenShare(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<EndScreenShareResponse> = asyncMessage.toChatResponse()
+        if let container = container(asyncMessage), let result = response.result {
+            container.handleEndScreenShare(result)
+        }
+        delegate?.chatEvent(event: .call(.endScreenShare(response)))
     }
 }
 
@@ -437,7 +453,14 @@ extension CallManager {
         callContainers.first(where: { $0.callId == callId })
     }
     
-    func activeCallParticipants(callId: Int) -> [CallParticipantUserRTC]? {
+    private func activeCallParticipants(callId: Int) -> [CallParticipantUserRTC]? {
         return callContainer(callId: callId)?.callParticipantsUserRTC
+    }
+    
+    private func container(_ asyncMessage: AsyncMessage) -> CallContainer? {
+        if let callId = asyncMessage.subjectId, let container = callContainer(callId: callId) {
+            return container
+        }
+        return nil
     }
 }

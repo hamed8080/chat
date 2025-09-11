@@ -44,7 +44,9 @@ extension CallManager {
                 let res = try JSONDecoder.instance.decode(AddIceCandidateRes.self, from: data)
                 onAddIceCandidate(res, .receive)
             case .prcessSdpNegotiate:
-                break
+                // MARK: Need to be tested.
+                let res = try JSONDecoder().decode(RemoteSDPOfferRes.self, from: data)
+                processSDPOffer(res)
             case .processLatestSdpOffer:
                 break
             case .sendMetadata:

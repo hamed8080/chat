@@ -285,8 +285,10 @@ public extension ChatImplementation {
         case .reconnect:
             break
         case .startScreenShare:
+            (call as? CallManager)?.onStartScreenShare(asyncMessage)
             break
         case .endScreenShare:
+            (call as? CallManager)?.onEndScreenShare(asyncMessage)
             break
         case .deleteFromCallHistory:
             break

@@ -40,4 +40,6 @@ public enum CallEventTypes: Sendable {
     case history(ChatResponse<[Call]>)
     case videoTrackAdded(RTCVideoTrack, Int)
     case audioTrackAdded(RTCAudioTrack, Int)
+    case startScreenShare(ChatResponse<StartScreenShareResponse>)
+    case endScreenShare(ChatResponse<EndScreenShareResponse>)
 }
