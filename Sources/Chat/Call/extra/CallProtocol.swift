@@ -116,6 +116,14 @@ public protocol CallProtocol: WebRTCActions {
     func terminateCall(_ request: GeneralSubjectIdRequest)
     
     func currentUserRTCList(callId: Int) -> [CallParticipantUserRTC]
+    
+    func raiseHand(_ request: GeneralSubjectIdRequest)
+    
+    func lowerHand(_ request: GeneralSubjectIdRequest)
+
+    /// Get active call that user accepted or started on this device.
+    /// - Returns: Current call instance.
+    func currentCall() -> CurrentCall
 }
 
 @ChatGlobalActor

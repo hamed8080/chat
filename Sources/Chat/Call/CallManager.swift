@@ -17,6 +17,7 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     var delegate: ChatDelegate? { chat.delegate }
     private var callContainers: [CallContainer] = []
     private var isFrontCamera: Bool = true
+    private var _currentCall: CurrentCall = CurrentCall()
     
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -24,6 +25,7 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     
     func acceptCall(_ request: AcceptCallRequest) {
         chat.prepareToSendAsync(req: request, type: .acceptCall)
+        _currentCall.initOnThisDevice = true
     }
     
     func activeCallParticipants(_ request: GeneralSubjectIdRequest) {
@@ -100,14 +102,17 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     
     func requestCall(_ request: StartCallRequest) {
         isFrontCamera = request.isFrontCamera
+        _currentCall.requestedCallUniqueId = request.uniqueId
         chat.prepareToSendAsync(req: request, type: .startCallRequest)
     }
     
     func requestGroupCall(_ request: StartCallRequest) {
+        _currentCall.requestedCallUniqueId = request.uniqueId
         chat.prepareToSendAsync(req: request, type: .groupCallRequest)
     }
     
     func terminateCall(_ request: GeneralSubjectIdRequest) {
+        _currentCall.resetIfNeeded(request)
         chat.prepareToSendAsync(req: request, type: .terminateCall)
     }
     
@@ -134,10 +139,63 @@ final class CallManager: CallProtocol, InternalCallProtocol {
     func currentUserRTCList(callId: Int) -> [CallParticipantUserRTC] {
         callContainer(callId: callId)?.callParticipantsUserRTC ?? []
     }
+    
+    func raiseHand(_ request: GeneralSubjectIdRequest) {
+        chat.prepareToSendAsync(req: request, type: .raiseHand)
+    }
+    
+    func lowerHand(_ request: GeneralSubjectIdRequest) {
+        chat.prepareToSendAsync(req: request, type: .lowerHand)
+    }
+    
+    func currentCall() -> CurrentCall {
+        return _currentCall
+    }
 }
 
 /// Server Responses
 extension CallManager {
+    func onCallSessionCreated(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
+        guard response.uniqueId == _currentCall.requestedCallUniqueId else { return }
+        
+        _currentCall.initOnThisDevice = true
+        _currentCall.call = response.result
+        
+        delegate?.chatEvent(event: .call(.callCreate(response)))
+        
+        if let res = response.result {
+            let callContainer = makeCallContainer(createCall: res, for: .created, typeCode: response.typeCode)
+            self.callContainers.append(callContainer)
+            callContainer.startTimerTimeout()
+        }
+    }
+    
+    func onDeliverCall(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<Call> = asyncMessage.toChatResponse()
+        if _currentCall.initOnThisDevice {
+            delegate?.chatEvent(event: .call(.callDelivered(response)))
+        }
+    }
+    
+    func onCallStarted(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<StartCall> = asyncMessage.toChatResponse()
+        guard
+            _currentCall.initOnThisDevice,
+            let startCall = response.result,
+            let container = callContainers.first(where: {$0.callId == response.subjectId})
+        else {
+            /// Call started on another device the client app should dismiss their call view.
+            var response: ChatResponse<Int> = asyncMessage.toChatResponse()
+            response.result = response.subjectId
+            delegate?.chatEvent(event: .call(.callEnded(response)))
+            return
+        }
+        
+        container.onCallStarted(startCall)
+        delegate?.chatEvent(event: .call(.callStarted(response)))
+    }
+    
     func onActiveCallParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.activeCallParticipants(response)))
@@ -224,7 +282,9 @@ extension CallManager {
     
     func onCallEnded(_ asyncMessage: AsyncMessage) {
         var response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        response.result = response.subjectId
         delegate?.chatEvent(event: .call(.callEnded(response)))
+        _currentCall.resetIfNeededOnCallEnded(callId: response.result)
         if let callId = asyncMessage.subjectId, let callContainer = callContainer(callId: callId) {
             callContainer.dispose()
             callContainers.removeAll(where: { $0.callId == callId })
@@ -266,32 +326,6 @@ extension CallManager {
         
         // SEND type 73 . This mean client receive call and showing ringing mode on call creator.
         //        callReceived(.init(subjectId: response.result?.callId ?? 0))
-    }
-    
-    func onCallStarted(_ asyncMessage: AsyncMessage) {
-        var response: ChatResponse<StartCall> = asyncMessage.toChatResponse()
-        if let startCall = response.result,
-           let container = callContainers.first(where: {$0.callId == response.subjectId})
-        {
-            container.onCallStarted(startCall)
-        }
-        delegate?.chatEvent(event: .call(.callStarted(response)))
-    }
-    
-    func onDeliverCall(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Call> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .call(.callDelivered(response)))
-    }
-    
-    func onCallSessionCreated(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .call(.callCreate(response)))
-        
-        if let res = response.result {
-            let callContainer = makeCallContainer(createCall: res, for: .created, typeCode: response.typeCode)
-            self.callContainers.append(callContainer)
-            callContainer.startTimerTimeout()
-        }
     }
     
     func onCallParticipantLeft(_ asyncMessage: AsyncMessage) {
