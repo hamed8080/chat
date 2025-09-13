@@ -285,6 +285,9 @@ public extension ChatImplementation {
         case .reconnect:
             (call as? CallManager)?.onReconnect(asyncMessage)
             break
+        case .connect:
+            (call as? CallManager)?.onConnect(asyncMessage)
+            break
         case .startScreenShare:
             (call as? CallManager)?.onStartScreenShare(asyncMessage)
             break

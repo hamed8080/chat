@@ -121,6 +121,7 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable, Sendable {
     case endCall = 76
     case getCalls = 77
     case reconnect = 78
+    case connect = 79
     case groupCallRequest = 91
     case leaveCall = 92
     case addCallParticipant = 93

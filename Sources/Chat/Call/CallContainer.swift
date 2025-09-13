@@ -265,6 +265,12 @@ extension CallContainer {
             callParticipantsUserRTC[index].isReconnecting = true
         }
     }
+    
+    func handleOnConnect(_ resp: ChatResponse<CallConnect>) {
+        if let userId = resp.result?.clientId, let index = callParticipantIndex(userId: userId) {
+            callParticipantsUserRTC[index].isReconnecting = false
+        }
+    }
 }
 
 // MARK: Actions

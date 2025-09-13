@@ -217,6 +217,12 @@ extension CallManager {
         delegate?.chatEvent(event: .call(.reconnect(response)))
     }
     
+    func onConnect(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<CallConnect> = asyncMessage.toChatResponse()
+        container(asyncMessage)?.handleOnConnect(response)
+        delegate?.chatEvent(event: .call(.connect(response)))
+    }
+    
     func onCallRecordingStarted(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.startCallRecording(response)))
