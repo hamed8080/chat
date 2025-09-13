@@ -400,7 +400,7 @@ extension CallManager {
     }
     
     func onReceiveMetadata(_ metadata: ReceiveCallMetadata) {
-        
+        delegate?.chatEvent(event: .call(.receiveMetadata(metadata)))
     }
     
     func onSessionCreated(_ resp: CreateSessionResp) {

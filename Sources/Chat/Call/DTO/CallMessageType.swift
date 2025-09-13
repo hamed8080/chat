@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum CallMessageType: String, Codable {
+public enum CallMessageType: String, Codable, Sendable {
     case createSession = "CREATE_SESSION"
     case sessionNewCreated = "SESSION_NEW_CREATED"
     case sessionRefresh = "SESSION_REFRESH"

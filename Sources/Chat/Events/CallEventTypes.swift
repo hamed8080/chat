@@ -44,4 +44,5 @@ public enum CallEventTypes: Sendable {
     case endScreenShare(ChatResponse<EndScreenShareResponse>)
     case reconnect(ChatResponse<CallReconnect>)
     case connect(ChatResponse<CallConnect>)
+    case receiveMetadata(ReceiveCallMetadata)
 }
