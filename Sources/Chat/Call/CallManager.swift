@@ -211,6 +211,12 @@ extension CallManager {
         delegate?.chatEvent(event: .call(.callInquery(response)))
     }
     
+    func onReconnect(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<CallReconnect> = asyncMessage.toChatResponse()
+        container(asyncMessage)?.handleOnReconnect(response)
+        delegate?.chatEvent(event: .call(.reconnect(response)))
+    }
+    
     func onCallRecordingStarted(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.startCallRecording(response)))
@@ -387,7 +393,7 @@ extension CallManager {
         }
     }
     
-    func processReceiveMetadata(_ metadata: ReceiveCallMetadata) {
+    func onReceiveMetadata(_ metadata: ReceiveCallMetadata) {
         
     }
     

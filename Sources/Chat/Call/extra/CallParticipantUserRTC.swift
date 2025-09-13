@@ -30,6 +30,7 @@ public struct CallParticipantUserRTC: Identifiable, Equatable, Sendable {
     public var isSpeaking: Bool = false
     public var lastTimeSpeaking: Date?
     private weak var container: CallContainer?
+    public var isReconnecting: Bool = false
     
     public init(callParticipant: CallParticipant, topic: String, container: CallContainer, isMe: Bool) {
         self.id = callParticipant.clientId ?? -1

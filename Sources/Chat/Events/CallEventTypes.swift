@@ -42,4 +42,5 @@ public enum CallEventTypes: Sendable {
     case audioTrackAdded(RTCAudioTrack, Int)
     case startScreenShare(ChatResponse<StartScreenShareResponse>)
     case endScreenShare(ChatResponse<EndScreenShareResponse>)
+    case reconnect(ChatResponse<CallReconnect>)
 }

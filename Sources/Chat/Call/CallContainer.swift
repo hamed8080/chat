@@ -259,6 +259,12 @@ extension CallContainer {
             callParticipantsUserRTC[index].screenShareTrack = nil
         }
     }
+    
+    func handleOnReconnect(_ resp: ChatResponse<CallReconnect>) {
+        if let userId = resp.result?.clientId, let index = callParticipantIndex(userId: userId) {
+            callParticipantsUserRTC[index].isReconnecting = true
+        }
+    }
 }
 
 // MARK: Actions

@@ -283,6 +283,7 @@ public extension ChatImplementation {
             (call as? CallManager)?.onCallInquiry(asyncMessage)
             break
         case .reconnect:
+            (call as? CallManager)?.onReconnect(asyncMessage)
             break
         case .startScreenShare:
             (call as? CallManager)?.onStartScreenShare(asyncMessage)
