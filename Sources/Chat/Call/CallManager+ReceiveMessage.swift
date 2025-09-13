@@ -49,8 +49,6 @@ extension CallManager {
                 processSDPOffer(res)
             case .processLatestSdpOffer:
                 break
-            case .sendMetadata:
-                break
             case .requestReceivingMedia:
                 break
             case .joinAdditionComplete:
@@ -65,15 +63,13 @@ extension CallManager {
                 break
             case .releaseResources:
                 break
-            case .slowLink:
-                break
             case .exitClient:
                 break
             case .sendComplete:
                 break
             case .unpublished:
                 break
-            // Unused or not get any event from the Call server.
+            // Unused or dont get any event from the Call server.
             case .addIceCandidate,
                     .sendNegotiation,
                     .receiveSdpAnswer,
@@ -83,6 +79,8 @@ extension CallManager {
                     .subscribe,
                     .update,
                     .freezed,
+                    .sendMetadata,
+                    .slowLink,
                     .stopAll:
                 break
             case .unkown:
