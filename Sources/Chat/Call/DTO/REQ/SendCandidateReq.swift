@@ -25,7 +25,10 @@ struct SendCandidateReq: Encodable {
     
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.iceCandidate, forKey: .iceCandidate)
+        let iceData = try? JSONEncoder.instance.encode(iceCandidate)
+        if let data = iceData, let stringIce = String(data: data, encoding: .utf8) {
+            try container.encode(stringIce, forKey: .iceCandidate)
+        }
         try container.encode(self.brokerAddress, forKey: .brokerAddress)
     }
 }

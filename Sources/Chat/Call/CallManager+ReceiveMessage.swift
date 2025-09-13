@@ -67,8 +67,6 @@ extension CallManager {
                 break
             case .sendComplete:
                 break
-            case .unpublished:
-                break
             // Unused or dont get any event from the Call server.
             case .addIceCandidate,
                     .sendNegotiation,
@@ -81,6 +79,7 @@ extension CallManager {
                     .freezed,
                     .sendMetadata,
                     .slowLink,
+                    .unpublished,
                     .stopAll:
                 break
             case .unkown:
