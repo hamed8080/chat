@@ -96,8 +96,11 @@ extension ResumableDownloadManager {
 extension ResumableDownloadManager: URLSessionDataDelegate {
 
     nonisolated func urlSession(_: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        Task { @ChatGlobalActor in
-            guard let model = resumableDownloads[dataTask.taskIdentifier] else { return }
+        Task { @ChatGlobalActor [weak self] in
+            guard
+                let self = self,
+                let model = self.resumableDownloads[dataTask.taskIdentifier]
+            else { return }
             
             let totalSize = response.expectedContentLength
             let isResumed = (response as? HTTPURLResponse)?.statusCode == 206
@@ -112,7 +115,8 @@ extension ResumableDownloadManager: URLSessionDataDelegate {
     }
 
     nonisolated func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        Task { @ChatGlobalActor in
+        Task { @ChatGlobalActor [weak self] in
+            guard let self = self else { return }
             guard let model = model(taskIdentifier: dataTask.taskIdentifier) else {
                 log("Could not find the task \(dataTask.taskIdentifier)")
                 return
@@ -135,7 +139,8 @@ extension ResumableDownloadManager: URLSessionDataDelegate {
     }
     
     nonisolated func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
-        Task { @ChatGlobalActor in
+        Task { @ChatGlobalActor [weak self] in
+            guard let self = self else { return }
             guard let model = model(taskIdentifier: task.taskIdentifier) else { return }
             if let error = error as? URLError {
                 log("Resumable download failed with taskId: \(task.taskIdentifier) with error: \(error.localizedDescription)")

@@ -53,7 +53,8 @@ final class MessageManager: MessageProtocol {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         emitEvent(.message(.deleted(response)))
         guard let tuple = response.deleteTuple(chat.userInfo?.id) else { return }
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await cache?.message?.deleteAndReduceUnreadCountIfNeeded(tuple.threadId, tuple.messageId, tuple.userId)
         }
     }
@@ -81,7 +82,8 @@ final class MessageManager: MessageProtocol {
     }
 
     func history(_ request: GetHistoryRequest) {
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await chat.coordinator.history.doRequest(request)
         }
     }
@@ -89,7 +91,8 @@ final class MessageManager: MessageProtocol {
     func unsentTextMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
         let unsentQueue = cache?.textQueue
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let (unsedTexts, _) = unsentQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset), let unsedTexts = unsedTexts {
                 emitEvent(event: unsedTexts.toEvent(request, typeCode))
             }
@@ -109,7 +112,8 @@ final class MessageManager: MessageProtocol {
     func unsentForwardMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
         let forwardQueueCache = cache?.forwardQueue
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let (unsendForwards, _) = forwardQueueCache?.unsendForThread(request.threadId, request.count, 100), let unsendForwards = unsendForwards {
                 emitEvent(event: unsendForwards.toEvent(request, typeCode))
             }
@@ -119,7 +123,8 @@ final class MessageManager: MessageProtocol {
     func unsentFileMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
         let fileQueueCache = cache?.fileQueue
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let (unsendFiles, _) = fileQueueCache?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset), let unsendFiles = unsendFiles {
                 emitEvent(event: unsendFiles.toEvent(request, typeCode))
             }
@@ -142,7 +147,8 @@ final class MessageManager: MessageProtocol {
 
     func send(_ request: SendTextMessageRequest) {
         chat.prepareToSendAsync(req: request, type: .message)
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             try? await cache?.conversation?.replaceLastMessage(toConversation(request: request))
         }
         cache?.textQueue?.insert(models: [request.queueOfTextMessages])
@@ -225,7 +231,8 @@ final class MessageManager: MessageProtocol {
         chat.prepareToSendAsync(req: request, type: .getHistory)
         let typeCode = request.toTypeCode(chat)
         let messageCache = cache?.message
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let (messages, _) = messageCache?.getMentions(threadId: request.threadId, offset: request.offset, count: request.count), let messages = messages {
                 emitEvent(event: messages.toMentionEvent(request, typeCode))
             }
@@ -239,7 +246,8 @@ final class MessageManager: MessageProtocol {
     func seen(_ request: MessageSeenRequest) {
         chat.prepareToSendAsync(req: request, type: .seen)
         cache?.message?.seen(threadId: request.threadId, messageId: request.messageId, mineUserId: chat.userInfo?.id ?? -1)
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await cache?.conversation?.setUnreadCount(action: .decrease, threadId: request.threadId)
         }
     }
@@ -248,7 +256,8 @@ final class MessageManager: MessageProtocol {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         emitEvent(.message(.new(response)))
         guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             _ = await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
             /// It will insert a new message into the Message table if the sender is not me
             /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
@@ -260,7 +269,8 @@ final class MessageManager: MessageProtocol {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         emitEvent(.message(.forward(response)))
         guard let tuple = response.onNewMesageTuple(myId: chat.userInfo?.id) else { return }
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             _ = await cache?.conversation?.setUnreadCount(action: tuple.unreadAction, threadId: response.subjectId ?? -1)
             /// It will insert a new message into the Message table if the sender is not me
             /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
@@ -296,7 +306,8 @@ final class MessageManager: MessageProtocol {
         let copied = response.result
         emitEvent(.thread(.lastMessageEdited(response)))
         if let thread = copied {
-            Task {
+            Task { [weak self] in
+                guard let self = self else { return }
                 /// Update conversation store.
                 chat.coordinator.conversation.onLastMessageChanged(thread)
                 
@@ -311,7 +322,8 @@ final class MessageManager: MessageProtocol {
         let copied = response.result
         emitEvent(.thread(.lastMessageDeleted(response)))
         if let thread = copied {
-            Task {
+            Task { [weak self] in
+                guard let self = self else { return }
                 /// Update conversation store.
                 chat.coordinator.conversation.onLastMessageChanged(thread)
                 
@@ -356,7 +368,8 @@ final class MessageManager: MessageProtocol {
         chat.coordinator.conversation.onPinUnPin(pin, threadId, copied)
         emitEvent(.message(pin ? .pin(response) : .unpin(response)))
         cache?.message?.pin(pin, threadId, messageId)
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await cache?.message?.addOrRemoveThreadPinMessages(pin, threadId, messageId)
         }
     }

@@ -195,7 +195,8 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
         completionHandler(inStream)
         
         // Start writing data to the outputStream in a background Task.
-        let task = Task {
+        let task = Task { [weak self] in
+            guard let self = self else { return }
             await writeAllStreams(outStream)
         }
         self.task = task

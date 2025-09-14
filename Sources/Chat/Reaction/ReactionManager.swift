@@ -45,7 +45,8 @@ final class ReactionManager: ReactionProtocol {
         let typeCode = request.toTypeCode(chat)
         
         let reactionCache = cache?.reactionCount
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let models = reactionCache?.fetch(request.messageIds), !models.isEmpty {
                 let reactionCounts = models.compactMap({$0.codable})
                 let response = request.toCountResponse(models: reactionCounts, typeCode: typeCode)

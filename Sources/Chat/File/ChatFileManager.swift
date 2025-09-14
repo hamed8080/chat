@@ -73,7 +73,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     /// Upload by data.
     private func upload(_ req: UploadManagerParameters, _ data: Data, _ progressCompletion: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
         let uploadProgress: UploadProgressType = { [weak self] progress in
-            Task {
+            Task { [weak self] in
                 await self?.onUploadProgress(progress, req, progressCompletion)
             }
         }
@@ -81,7 +81,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
         let uploadManager = UploadManager()
         uploadManager.upload(req, data, session) { [weak self] respData, response, error in
-            Task {
+            Task { [weak self] in
                 await self?.onUploadCompleted(req, respData, error, data, completion)
             }
         }
@@ -93,12 +93,12 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         let uploadManager = UploadManager()
         uploadManager.upload(req) { [weak self] progress in
             /// Progress completion
-            Task {
+            Task { [weak self] in
                 await self?.onUploadProgress(progress, req, progressCompletion)
             }
         } completion: { [weak self] data, response, error in
             /// On completionWith Error
-            Task {
+            Task { [weak self] in
                 await self?.onUploadCompleted(req, data, error, nil, completion)
             }
         }
@@ -180,7 +180,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         uploadCompletion: UploadCompletionType?
     ) {
         let complete = { @Sendable [weak self] in
-            Task {
+            Task { [weak self] in
                 uploadCompletion?(.init(response.result, fileMetaData, nil))
                 await self?.delegate?.chatEvent(
                     event: .upload(.completed(
@@ -282,12 +282,12 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         if params.forceToDownload {
             log("Start downloading with params:\n\(params.debugDescription)")
             let delegate = ProgressImplementation(uniqueId: params.uniqueId, uploadProgress: nil) { [weak self] progress in
-                Task {
+                Task { [weak self] in
                     let progressEvent = ChatEventType.download(.progress(uniqueId: params.uniqueId, progress: progress))
                     await self?.onDownloadProgressCompletion(progressEvent)
                 }
             } downloadCompletion: { [weak self] data, response, error in
-                Task {
+                Task { [weak self] in
                     await self?.onDownloadCompletion(data, response, error, params)
                 }
             }
@@ -295,7 +295,8 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
             let task = DownloadManager.download(params, session)
             addTask(uniqueId: params.uniqueId, session: session, task: task)
         } else {
-            Task {
+            Task { [weak self] in
+                guard let self = self else { return }
                 do {
                     log("Start fetching from cache with params:\n\(params.debugDescription)")
                     try await fetchFromCache(params)
@@ -417,6 +418,11 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     func saveFileInGroup(url: URL, data: Data, completion: @escaping @Sendable (URL?) -> Void) {
         fm?.saveFileInGroup(url: url, data: data, saveCompletion: completion)
     }
+    
+    func hashCodeToImageURL(hashCode: String) -> URL? {
+        let config = chat.config
+        return  URL(string: "\(config.spec.server.file)\(config.spec.paths.podspace.download.images)/\(hashCode)")
+    }
 
     private func removeTask(_ uniqueId: String) {
         if let sessionandTask = tasks[uniqueId] {
@@ -449,7 +455,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 
         /// Timer to cancel download and raise an error.
         Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { [weak self] _ in
-            Task {
+            Task { [weak self] in
                 await self?.onTimerUserGroup(uniqueId: req.uniqueId)
             }
         }

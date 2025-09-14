@@ -33,8 +33,9 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
         }
         isTypingCount = 0
         timerTyping = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            Task {
-                await self?.onTypingTimer(threadId: threadId)
+            Task { [weak self] in
+                guard let self = self else { return }
+                await self.onTypingTimer(threadId: threadId)
             }
         }
         stopTimerWhenUserIsNotTyping()
@@ -62,8 +63,9 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
     func stopTimerWhenUserIsNotTyping() {
         timerCheckUserStoppedTyping?.invalidateTimer()
         timerCheckUserStoppedTyping = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] _ in
-            Task {
-                await self?.sendStopTyping()
+            Task { [weak self] in
+                guard let self = self else { return }
+                await self.sendStopTyping()
             }
         }
     }
