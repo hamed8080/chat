@@ -12,6 +12,7 @@ public struct UpdateThreadInfoRequest: Encodable, UniqueIdProtocol, TypeCodeInde
     public var threadImage: UploadImageRequest?
     public let threadId: Int
     public let title: String?
+    public var image: String?
     public let uniqueId: String
     public var typeCodeIndex: Index
 
@@ -19,6 +20,7 @@ public struct UpdateThreadInfoRequest: Encodable, UniqueIdProtocol, TypeCodeInde
                 metadata: String? = nil,
                 threadId: Int,
                 threadImage: UploadImageRequest? = nil,
+                image: String? = nil,
                 title: String,
                 typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
@@ -26,6 +28,7 @@ public struct UpdateThreadInfoRequest: Encodable, UniqueIdProtocol, TypeCodeInde
         self.metadata = metadata
         self.threadId = threadId
         self.threadImage = threadImage
+        self.image = image
         self.title = title
         self.uniqueId = UUID().uuidString
         self.typeCodeIndex = typeCodeIndex
@@ -35,6 +38,7 @@ public struct UpdateThreadInfoRequest: Encodable, UniqueIdProtocol, TypeCodeInde
         case description
         case name
         case metadata
+        case image
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -42,5 +46,6 @@ public struct UpdateThreadInfoRequest: Encodable, UniqueIdProtocol, TypeCodeInde
         try container.encodeIfPresent(description, forKey: .description)
         try container.encodeIfPresent(title, forKey: .name)
         try container.encodeIfPresent(metadata, forKey: .metadata)
+        try container.encodeIfPresent(image, forKey: .image)
     }
 }

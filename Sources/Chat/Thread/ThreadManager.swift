@@ -53,6 +53,7 @@ final class ThreadManager: ThreadProtocol {
     func updateThreadInfo(_ req: UpdateThreadInfoRequest, _ fileMetaData: FileMetaData? = nil) {
         var req = req
         if let fileMetaData = fileMetaData {
+            req.image = fileMetaData.file?.link
             req.metadata = fileMetaData.jsonString
         }
         chat.prepareToSendAsync(req: req, type: .updateThreadInfo)
