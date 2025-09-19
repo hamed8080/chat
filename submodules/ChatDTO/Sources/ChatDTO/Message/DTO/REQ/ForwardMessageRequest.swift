@@ -10,7 +10,7 @@ public struct ForwardMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexP
     public var queueTime: Date = .init()
     public let messageIds: [Int]
     public let fromThreadId: Int
-    public let threadId: Int
+    public var threadId: Int
     public var uniqueIds: [String]
     public let uniqueId: String
     public var typeCodeIndex: Index
