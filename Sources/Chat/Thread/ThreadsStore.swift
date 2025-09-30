@@ -426,4 +426,10 @@ extension ThreadsStore {
             conversations[index].conversation?.unreadCount = conversation.unreadCount
         }
     }
+    
+    func updateUnreadCount(for conversationId: Int, unreadCount: Int) {
+        if let index = indexOf(conversationId) {
+            conversations[index].conversation?.unreadCount = unreadCount
+        }
+    }
 }

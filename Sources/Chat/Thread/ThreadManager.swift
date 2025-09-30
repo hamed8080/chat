@@ -239,6 +239,7 @@ final class ThreadManager: ThreadProtocol {
             Task { [weak self] in
                 guard let self = self else { return }
                 await cache?.conversation?.updateThreadsUnreadCount(["\(tuple.threadId)": tuple.unreadCount])
+                await chat.coordinator.conversation.updateUnreadCount(for: tuple.threadId, unreadCount: tuple.unreadCount)
             }
         }
     }
