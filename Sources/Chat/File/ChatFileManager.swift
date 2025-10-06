@@ -121,7 +121,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         } else if let error = error {
             return ChatError(rawError: error)
         } else {
-            return nil /// Sucess upload.
+            return nil /// Success upload.
         }
     }
 
