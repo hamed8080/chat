@@ -123,7 +123,9 @@ final class ReactionManager: ReactionProtocol {
     
     func onAddReaction(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
-        await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .add, myId: chat.userInfo?.id))
+        if let id = response.result?.messageId, store?.isMessageIdExist(id) == true {
+            await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .add, myId: chat.userInfo?.id))
+        }
         emitEvent(.reaction(.add(response)))
         store?.onAdd(response)
     }
@@ -131,7 +133,9 @@ final class ReactionManager: ReactionProtocol {
     func onReplaceReaction(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         emitEvent(.reaction(.replace(response)))
-        await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .replace, myId: chat.userInfo?.id))
+        if let id = response.result?.messageId, store?.isMessageIdExist(id) == true {
+            await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .replace, myId: chat.userInfo?.id))
+        }
         store?.onReplace(response)
     }
     
