@@ -65,6 +65,9 @@ public extension ThreadsRequest {
         || isGroup != nil
         || userName != nil
         || cellPhoneNumber != nil
+        || type != nil
+        || summary != nil
+        
         return !nonCache
     }
 }
