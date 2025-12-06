@@ -183,7 +183,7 @@ public extension Character {
         let joiners = CharacterSet(charactersIn: "\u{200C}"..."\u{200D}")
         let persianQuotes = CharacterSet(charactersIn: "\u{00AB}\u{00BB}") // « and »
 
-        let persianExtraPunctuations = CharacterSet(charactersIn: "():؛!؟.,“”‘’\"'/+*^#{}][")
+        let persianExtraPunctuations = CharacterSet(charactersIn: "()=-_•|~<>&\\:؛!؟.,“”‘’\"'/+*^#{}][")
 
         let set = [
             normalArabicSet,
