@@ -100,6 +100,11 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
         }
     }
     
+    public func updateSpec(_ spec: Spec) {
+        config.spec = spec
+        config.asyncConfig.spec = spec
+    }
+    
     private func requestDeviceId() {
         let url = "\(config.spec.server.sso)\(config.spec.paths.sso.devices)"
         let headers = ["Authorization": "Bearer \(config.token)"]

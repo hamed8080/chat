@@ -65,6 +65,9 @@ public protocol Chat {
 
     /// A method that should be called by clients whenever they fill it is the right time to connect to the server.
     func connect() async
+    
+    /// Update spec configs and paths on runtime.
+    func updateSpec(_ spec: Spec)
 }
 
 public protocol ChatInternalProtocol: Chat {
