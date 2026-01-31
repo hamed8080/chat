@@ -59,6 +59,13 @@ let chatConfig = ChatConfigBuilder(spec: spec, asyncConfig)
     .build()
 ```
 
+## What is Spec?
+Spec comes from specification and it comprises of base addresses and their paths for the socket server and other servers. You can find one in ## [Spec](https://podspace.pod.ir/api/files/CYRTOUEOQPC6NWGJ). You have to parse it and pass it to the config. 
+Why does this spec exist?
+After a lot of consideration, we ended up extracting the base URLs of the Chat SDK outside of its core. With this approach, you can even change the socket address dynamically at runtime.
+
+Another great example is that you can continue downloading a picture or video even if the base address of the pod server has changed.
+
 ## Listening to an event
 Chat SDK is not based on whether closures or completion handlers and notification, it is an event-based SDK.
 When you initiate a request you should listen to an event by a delegate that we provided for you like:

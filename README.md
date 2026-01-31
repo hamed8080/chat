@@ -52,25 +52,18 @@ For installing the SDK through the Cocoapods please read [this](https://github.c
 ## How to use? 
 
 ```swift
-let asyncConfig = AsyncConfigBuilder()
-            .socketAddress("socketAddresss")
+let asyncConfig = AsyncConfigBuilder(spec: spec)
             .reconnectCount(Int.max)
             .reconnectOnClose(true)
             .appId("PodChat")
-            .peerName("peerName")
-            .isDebuggingLogEnabled(false)
-            .loggerConfig(asyncLoggerConfig)
+            .peerName(spec.server.serverName)
             .build()
-let chatConfig = ChatConfigBuilder(asyncConfig)
-            .token(token)
-            .ssoHost("ssoHost")
-            .platformHost("platformHost")
-            .fileServer("fileServer")
+let chatConfig = ChatConfigBuilder(spec: spec, asyncConfig)
+            .token("YOUR_SSO_ACCESS_TOKEN")
             .enableCache(true)
             .msgTTL(800_000)
             .persistLogsOnServer(true)
             .appGroup(AppGroup.group)
-            .loggerConfig(chatLoggerConfig)
             .mapApiKey("map_api_key")
             .typeCodes([.init(typeCode: "default", ownerId: nil)])
             .build()
@@ -78,6 +71,13 @@ ChatManager.instance.createOrReplaceUserInstance(config: config)
 ChatManager.activeInstance?.delegate = self
 ChatManager.activeInstance?.connect()
 ```
+
+## What is Spec?
+Spec comes from specification and it comprises of base addresses and their paths for the socket server and other servers. You can find one in ## [Spec](https://podspace.pod.ir/api/files/CYRTOUEOQPC6NWGJ). You have to parse it and pass it to the config. 
+Why does this spec exist?
+After a lot of consideration, we ended up extracting the base URLs of the Chat SDK outside of its core. With this approach, you can even change the socket address dynamically at runtime.
+
+Another great example is that you can continue downloading a picture or video even if the base address of the pod server has changed.
 
 ## Send a Request to the server
 ```swift
