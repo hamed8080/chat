@@ -60,7 +60,7 @@ let chatConfig = ChatConfigBuilder(spec: spec, asyncConfig)
 ```
 
 ## What is Spec?
-Spec comes from specification and it comprises of base addresses and their paths for the socket server and other servers. You can find one in ## [Spec](https://podspace.pod.ir/api/files/CYRTOUEOQPC6NWGJ). You have to parse it and pass it to the config. 
+Spec comes from specification and it comprises of base addresses and their paths for the socket server and other servers. You can find one in [Spec](https://podspace.pod.ir/api/files/CYRTOUEOQPC6NWGJ). You have to parse it and pass it to the config. 
 Why does this spec exist?
 After a lot of consideration, we ended up extracting the base URLs of the Chat SDK outside of its core. With this approach, you can even change the socket address dynamically at runtime.
 
