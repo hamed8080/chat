@@ -167,7 +167,8 @@
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/connect()",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/dispose()",
         "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/prepareToSendAsync(req:type:)",
-        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/setToken(newToken:reCreateObject:)"
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/setToken(newToken:reCreateObject:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/updateSpec(_:)"
       ],
       "title" : "Instance Methods"
     },
@@ -1531,6 +1532,44 @@
   "title" : "tag",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatimplementation\/tag"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/updateSpec(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "updateSpec"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4SpecAAV",
+      "text" : "Spec"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/updateSpec(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "updateSpec(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/updatespec(_:)"
 },
 "doc://Chat/documentation/Chat/ChatImplementation/user": {
   "abstract" : [

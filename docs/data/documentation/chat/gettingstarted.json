@@ -130,6 +130,55 @@
           "type" : "codeListing"
         },
         {
+          "anchor" : "What-is-Spec",
+          "level" : 2,
+          "text" : "What is Spec?",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Spec comes from specification and it comprises of base addresses and their paths for the socket server and other servers. You can find one in ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "https:\/\/podspace.pod.ir\/api\/files\/CYRTOUEOQPC6NWGJ",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : ". You have to parse it and pass it to the config.",
+              "type" : "text"
+            },
+            {
+              "text" : " ",
+              "type" : "text"
+            },
+            {
+              "text" : "Why does this spec exist?",
+              "type" : "text"
+            },
+            {
+              "text" : " ",
+              "type" : "text"
+            },
+            {
+              "text" : "After a lot of consideration, we ended up extracting the base URLs of the Chat SDK outside of its core. With this approach, you can even change the socket address dynamically at runtime.",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Another great example is that you can continue downloading a picture or video even if the base address of the pod server has changed.",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
           "anchor" : "Listening-to-an-event",
           "level" : 2,
           "text" : "Listening to an event",
@@ -638,6 +687,18 @@
   ],
   "type" : "link",
   "url" : "https:\/\/github.com\/hamed8080\/bundle\/blob\/main\/Spec.json"
+},
+"https://podspace.pod.ir/api/files/CYRTOUEOQPC6NWGJ": {
+  "identifier" : "https:\/\/podspace.pod.ir\/api\/files\/CYRTOUEOQPC6NWGJ",
+  "title" : "Spec",
+  "titleInlineContent" : [
+    {
+      "text" : "Spec",
+      "type" : "text"
+    }
+  ],
+  "type" : "link",
+  "url" : "https:\/\/podspace.pod.ir\/api\/files\/CYRTOUEOQPC6NWGJ"
 },
 "icon.png": {
   "alt" : "App icon.",

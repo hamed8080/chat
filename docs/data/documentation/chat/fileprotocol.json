@@ -113,6 +113,7 @@
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-9ru7k",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/getData(_:completion:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/getDataInGroup(_:completion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/hashCodeToImageURL(hashCode:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/isFileExist(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/isFileExistInGroup(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageDownload(uniqueId:action:)",
@@ -740,6 +741,65 @@
   "title" : "getDataInGroup(_:completion:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/fileprotocol\/getdataingroup(_:completion:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/hashCodeToImageURL(hashCode:)": {
+  "abstract" : [
+    {
+      "text" : "Convert a hashCode to an image URL without checking either the file exist or not.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "hashCodeToImageURL"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "hashCode"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/hashCodeToImageURL(hashCode:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "hashCodeToImageURL(hashCode:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/hashcodetoimageurl(hashcode:)"
 },
 "doc://Chat/documentation/Chat/FileProtocol/isFileExist(_:)": {
   "abstract" : [

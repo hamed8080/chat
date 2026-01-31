@@ -187,6 +187,11 @@
                 "path" : "\/documentation\/chat\/chat\/settoken(newtoken:recreateobject:)",
                 "title" : "func setToken(newToken: String, reCreateObject: Bool) async",
                 "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/updatespec(_:)",
+                "title" : "func updateSpec(Spec)",
+                "type" : "method"
               }
             ],
             "path" : "\/documentation\/chat\/chat",
@@ -718,6 +723,11 @@
                 "type" : "method"
               },
               {
+                "path" : "\/documentation\/chat\/chatimplementation\/updatespec(_:)",
+                "title" : "func updateSpec(Spec)",
+                "type" : "method"
+              },
+              {
                 "title" : "Default Implementations",
                 "type" : "groupMarker"
               },
@@ -920,6 +930,11 @@
               {
                 "path" : "\/documentation\/chat\/reactionsstore\/invalidate()",
                 "title" : "func invalidate()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/reactionsstore\/ismessageidexist(_:)",
+                "title" : "func isMessageIdExist(Int?) -> Bool",
                 "type" : "method"
               },
               {
@@ -1377,6 +1392,11 @@
               {
                 "path" : "\/documentation\/chat\/fileprotocol\/getdataingroup(_:completion:)",
                 "title" : "func getDataInGroup(URL, completion: (Data?) -> Void)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileprotocol\/hashcodetoimageurl(hashcode:)",
+                "title" : "func hashCodeToImageURL(hashCode: String) -> URL?",
                 "type" : "method"
               },
               {

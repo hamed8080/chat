@@ -2,21 +2,22 @@
   "hierarchy" : {
     "paths" : [
       [
-        "doc:\/\/Chat\/documentation\/Chat"
+        "doc:\/\/Chat\/documentation\/Chat",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore"
       ]
     ]
   },
   "identifier" : {
     "interfaceLanguage" : "swift",
-    "url" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore"
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/isMessageIdExist(_:)"
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat14ReactionsStoreC",
+    "externalID" : "s:4Chat14ReactionsStoreC16isMessageIdExistySbSiSgF",
     "fragments" : [
       {
         "kind" : "keyword",
-        "text" : "class"
+        "text" : "func"
       },
       {
         "kind" : "text",
@@ -24,7 +25,25 @@
       },
       {
         "kind" : "identifier",
-        "text" : "ReactionsStore"
+        "text" : "isMessageIdExist"
+      },
+      {
+        "kind" : "text",
+        "text" : "("
+      },
+      {
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "s:Si",
+        "text" : "Int"
+      },
+      {
+        "kind" : "text",
+        "text" : "?) -> "
+      },
+      {
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "s:Sb",
+        "text" : "Bool"
       }
     ],
     "modules" : [
@@ -32,16 +51,10 @@
         "name" : "Chat"
       }
     ],
-    "navigatorTitle" : [
-      {
-        "kind" : "identifier",
-        "text" : "ReactionsStore"
-      }
-    ],
     "role" : "symbol",
-    "roleHeading" : "Class",
-    "symbolKind" : "class",
-    "title" : "ReactionsStore"
+    "roleHeading" : "Instance Method",
+    "symbolKind" : "method",
+    "title" : "isMessageIdExist(_:)"
   },
   "primaryContentSections" : [
     {
@@ -70,15 +83,7 @@
             },
             {
               "kind" : "keyword",
-              "text" : "final"
-            },
-            {
-              "kind" : "text",
-              "text" : " "
-            },
-            {
-              "kind" : "keyword",
-              "text" : "class"
+              "text" : "func"
             },
             {
               "kind" : "text",
@@ -86,22 +91,46 @@
             },
             {
               "kind" : "identifier",
-              "text" : "ReactionsStore"
+              "text" : "isMessageIdExist"
+            },
+            {
+              "kind" : "text",
+              "text" : "("
+            },
+            {
+              "kind" : "externalParam",
+              "text" : "_"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "internalParam",
+              "text" : "messageId"
+            },
+            {
+              "kind" : "text",
+              "text" : ": "
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:Si",
+              "text" : "Int"
+            },
+            {
+              "kind" : "text",
+              "text" : "?) -> "
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:Sb",
+              "text" : "Bool"
             }
           ]
         }
       ],
       "kind" : "declarations"
-    }
-  ],
-  "relationshipsSections" : [
-    {
-      "identifiers" : [
-        "doc:\/\/Chat\/s8SendableP"
-      ],
-      "kind" : "relationships",
-      "title" : "Conforms To",
-      "type" : "conformsTo"
     }
   ],
   "schemaVersion" : {
@@ -112,22 +141,10 @@
   "sections" : [
 
   ],
-  "topicSections" : [
-    {
-      "anchor" : "Instance-Methods",
-      "generated" : true,
-      "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/invalidate()",
-        "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/isMessageIdExist(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/summary(for:)"
-      ],
-      "title" : "Instance Methods"
-    }
-  ],
   "variants" : [
     {
       "paths" : [
-        "\/documentation\/chat\/reactionsstore"
+        "\/documentation\/chat\/reactionsstore\/ismessageidexist(_:)"
       ],
       "traits" : [
         {
@@ -220,38 +237,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/reactionsstore"
 },
-"doc://Chat/documentation/Chat/ReactionsStore/invalidate()": {
-  "abstract" : [
-    {
-      "text" : "Clear in memory cache upon disconnect.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "invalidate"
-    },
-    {
-      "kind" : "text",
-      "text" : "()"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/invalidate()",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "invalidate()",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/reactionsstore\/invalidate()"
-},
 "doc://Chat/documentation/Chat/ReactionsStore/isMessageIdExist(_:)": {
   "abstract" : [
 
@@ -294,66 +279,6 @@
   "title" : "isMessageIdExist(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/reactionsstore\/ismessageidexist(_:)"
-},
-"doc://Chat/documentation/Chat/ReactionsStore/summary(for:)": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "summary"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "for"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:Si",
-      "text" : "Int"
-    },
-    {
-      "kind" : "text",
-      "text" : ") -> ["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels13ReactionCountV",
-      "text" : "ReactionCount"
-    },
-    {
-      "kind" : "text",
-      "text" : "]"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/summary(for:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "summary(for:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/reactionsstore\/summary(for:)"
-},
-"doc://Chat/s8SendableP": {
-  "identifier" : "doc:\/\/Chat\/s8SendableP",
-  "title" : "Swift.Sendable",
-  "type" : "unresolvable"
 },
 "icon.png": {
   "alt" : "App icon.",

@@ -1,22 +1,29 @@
 {
+  "abstract" : [
+    {
+      "text" : "Convert a hashCode to an image URL without checking either the file exist or not.",
+      "type" : "text"
+    }
+  ],
   "hierarchy" : {
     "paths" : [
       [
-        "doc:\/\/Chat\/documentation\/Chat"
+        "doc:\/\/Chat\/documentation\/Chat",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol"
       ]
     ]
   },
   "identifier" : {
     "interfaceLanguage" : "swift",
-    "url" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore"
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/hashCodeToImageURL(hashCode:)"
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat14ReactionsStoreC",
+    "externalID" : "s:4Chat12FileProtocolP18hashCodeToImageURL0dE010Foundation0H0VSgSS_tF",
     "fragments" : [
       {
         "kind" : "keyword",
-        "text" : "class"
+        "text" : "func"
       },
       {
         "kind" : "text",
@@ -24,7 +31,37 @@
       },
       {
         "kind" : "identifier",
-        "text" : "ReactionsStore"
+        "text" : "hashCodeToImageURL"
+      },
+      {
+        "kind" : "text",
+        "text" : "("
+      },
+      {
+        "kind" : "externalParam",
+        "text" : "hashCode"
+      },
+      {
+        "kind" : "text",
+        "text" : ": "
+      },
+      {
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "s:SS",
+        "text" : "String"
+      },
+      {
+        "kind" : "text",
+        "text" : ") -> "
+      },
+      {
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "s:10Foundation3URLV",
+        "text" : "URL"
+      },
+      {
+        "kind" : "text",
+        "text" : "?"
       }
     ],
     "modules" : [
@@ -32,16 +69,11 @@
         "name" : "Chat"
       }
     ],
-    "navigatorTitle" : [
-      {
-        "kind" : "identifier",
-        "text" : "ReactionsStore"
-      }
-    ],
+    "required" : true,
     "role" : "symbol",
-    "roleHeading" : "Class",
-    "symbolKind" : "class",
-    "title" : "ReactionsStore"
+    "roleHeading" : "Instance Method",
+    "symbolKind" : "method",
+    "title" : "hashCodeToImageURL(hashCode:)"
   },
   "primaryContentSections" : [
     {
@@ -70,15 +102,7 @@
             },
             {
               "kind" : "keyword",
-              "text" : "final"
-            },
-            {
-              "kind" : "text",
-              "text" : " "
-            },
-            {
-              "kind" : "keyword",
-              "text" : "class"
+              "text" : "func"
             },
             {
               "kind" : "text",
@@ -86,22 +110,62 @@
             },
             {
               "kind" : "identifier",
-              "text" : "ReactionsStore"
+              "text" : "hashCodeToImageURL"
+            },
+            {
+              "kind" : "text",
+              "text" : "("
+            },
+            {
+              "kind" : "externalParam",
+              "text" : "hashCode"
+            },
+            {
+              "kind" : "text",
+              "text" : ": "
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:SS",
+              "text" : "String"
+            },
+            {
+              "kind" : "text",
+              "text" : ") -> "
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:10Foundation3URLV",
+              "text" : "URL"
+            },
+            {
+              "kind" : "text",
+              "text" : "?"
             }
           ]
         }
       ],
       "kind" : "declarations"
-    }
-  ],
-  "relationshipsSections" : [
+    },
     {
-      "identifiers" : [
-        "doc:\/\/Chat\/s8SendableP"
+      "content" : [
+        {
+          "anchor" : "return-value",
+          "level" : 2,
+          "text" : "Return Value",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Generated a URL of the file on the server.",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        }
       ],
-      "kind" : "relationships",
-      "title" : "Conforms To",
-      "type" : "conformsTo"
+      "kind" : "content"
     }
   ],
   "schemaVersion" : {
@@ -112,22 +176,10 @@
   "sections" : [
 
   ],
-  "topicSections" : [
-    {
-      "anchor" : "Instance-Methods",
-      "generated" : true,
-      "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/invalidate()",
-        "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/isMessageIdExist(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/summary(for:)"
-      ],
-      "title" : "Instance Methods"
-    }
-  ],
   "variants" : [
     {
       "paths" : [
-        "\/documentation\/chat\/reactionsstore"
+        "\/documentation\/chat\/fileprotocol\/hashcodetoimageurl(hashcode:)"
       ],
       "traits" : [
         {
@@ -189,14 +241,14 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatglobalactor"
 },
-"doc://Chat/documentation/Chat/ReactionsStore": {
+"doc://Chat/documentation/Chat/FileProtocol": {
   "abstract" : [
 
   ],
   "fragments" : [
     {
       "kind" : "keyword",
-      "text" : "class"
+      "text" : "protocol"
     },
     {
       "kind" : "text",
@@ -204,26 +256,26 @@
     },
     {
       "kind" : "identifier",
-      "text" : "ReactionsStore"
+      "text" : "FileProtocol"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol",
   "kind" : "symbol",
   "navigatorTitle" : [
     {
       "kind" : "identifier",
-      "text" : "ReactionsStore"
+      "text" : "FileProtocol"
     }
   ],
   "role" : "symbol",
-  "title" : "ReactionsStore",
+  "title" : "FileProtocol",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/reactionsstore"
+  "url" : "\/documentation\/chat\/fileprotocol"
 },
-"doc://Chat/documentation/Chat/ReactionsStore/invalidate()": {
+"doc://Chat/documentation/Chat/FileProtocol/hashCodeToImageURL(hashCode:)": {
   "abstract" : [
     {
-      "text" : "Clear in memory cache upon disconnect.",
+      "text" : "Convert a hashCode to an image URL without checking either the file exist or not.",
       "type" : "text"
     }
   ],
@@ -238,79 +290,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "invalidate"
-    },
-    {
-      "kind" : "text",
-      "text" : "()"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/invalidate()",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "invalidate()",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/reactionsstore\/invalidate()"
-},
-"doc://Chat/documentation/Chat/ReactionsStore/isMessageIdExist(_:)": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "isMessageIdExist"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:Si",
-      "text" : "Int"
-    },
-    {
-      "kind" : "text",
-      "text" : "?) -> "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:Sb",
-      "text" : "Bool"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/isMessageIdExist(_:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "isMessageIdExist(_:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/reactionsstore\/ismessageidexist(_:)"
-},
-"doc://Chat/documentation/Chat/ReactionsStore/summary(for:)": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "summary"
+      "text" : "hashCodeToImageURL"
     },
     {
       "kind" : "text",
@@ -318,7 +298,7 @@
     },
     {
       "kind" : "externalParam",
-      "text" : "for"
+      "text" : "hashCode"
     },
     {
       "kind" : "text",
@@ -326,34 +306,30 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:Si",
-      "text" : "Int"
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
     },
     {
       "kind" : "text",
-      "text" : ") -> ["
+      "text" : ") -> "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels13ReactionCountV",
-      "text" : "ReactionCount"
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
     },
     {
       "kind" : "text",
-      "text" : "]"
+      "text" : "?"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionsStore\/summary(for:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/hashCodeToImageURL(hashCode:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "summary(for:)",
+  "title" : "hashCodeToImageURL(hashCode:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/reactionsstore\/summary(for:)"
-},
-"doc://Chat/s8SendableP": {
-  "identifier" : "doc:\/\/Chat\/s8SendableP",
-  "title" : "Swift.Sendable",
-  "type" : "unresolvable"
+  "url" : "\/documentation\/chat\/fileprotocol\/hashcodetoimageurl(hashcode:)"
 },
 "icon.png": {
   "alt" : "App icon.",
