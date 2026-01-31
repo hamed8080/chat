@@ -177,8 +177,26 @@ public extension Character {
         let normalArabicSet = CharacterSet(charactersIn: "\u{0600}"..."\u{06FF}")
         let supplementArabicSet = CharacterSet(charactersIn: "\u{0750}"..."\u{077F}")
         let extendedArabicSet = CharacterSet(charactersIn: "\u{08A0}"..."\u{08FF}")
-        let set = [normalArabicSet, supplementArabicSet, extendedArabicSet]
-        let isRTL = set.contains(where: {$0.contains(scalar)})
+        let arabicPresentationFormA = CharacterSet(charactersIn: "\u{FB50}"..."\u{FDFF}")
+        let arabicPresentationFormsB = CharacterSet(charactersIn: "\u{FE70}"..."\u{FEFF}")
+        // Joiners and Persian punctuation
+        let joiners = CharacterSet(charactersIn: "\u{200C}"..."\u{200D}")
+        let persianQuotes = CharacterSet(charactersIn: "\u{00AB}\u{00BB}") // « and »
+
+        let persianExtraPunctuations = CharacterSet(charactersIn: "()=-_•|~<>&\\:؛!؟.,“”‘’\"'/+*^#{}][")
+
+        let set = [
+            normalArabicSet,
+            supplementArabicSet,
+            extendedArabicSet,
+            arabicPresentationFormA,
+            arabicPresentationFormsB,
+            joiners,
+            persianQuotes,
+            persianExtraPunctuations
+        ]
+       
+        let isRTL = set.contains(where: { $0.contains(scalar) })
         return !isRTL
     }
 }

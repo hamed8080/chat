@@ -10,7 +10,7 @@ import Logger
 import Spec
 
 public struct ChatConfig: Codable, Sendable {
-    public let spec: Spec
+    public var spec: Spec
     public var asyncConfig: AsyncConfig
     public private(set) var callConfig: CallConfig
     public private(set) var token: String

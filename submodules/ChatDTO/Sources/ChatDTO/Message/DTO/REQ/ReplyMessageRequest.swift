@@ -15,7 +15,7 @@ public struct ReplyMessageRequest: Encodable, UniqueIdProtocol, TypeCodeIndexPro
     public let systemMetadata: String?
     public let textMessage: String
     public var threadId: Int
-    public let uniqueId: String
+    public var uniqueId: String
     public var typeCodeIndex: Index
 
     public init(threadId: Int,

@@ -12,7 +12,7 @@ import Spec
 ///
 /// To work with SDK this struct must be passed to ``Async`` initializer.
 public struct AsyncConfig: Codable, Sendable {
-    public let spec: Spec
+    public var spec: Spec
     public private(set) var peerName: String
     public private(set) var deviceId: String = UUID().uuidString
     public private(set) var appId: String = "POD-Chat"

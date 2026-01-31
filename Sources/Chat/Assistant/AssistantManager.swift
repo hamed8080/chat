@@ -21,7 +21,8 @@ final class AssistantManager: AssistantProtocol {
         chat.prepareToSendAsync(req: request, type: .getAssistants)
         let typeCode = request.toTypeCode(chat)
         let assistantCache = chat.cache?.assistant
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let (assistants, _) = assistantCache?.fetch(request.count, request.offset) {
                 emitEvent(event: assistants.toCachedAssistantsEvent(request, typeCode))
             }
@@ -57,7 +58,8 @@ final class AssistantManager: AssistantProtocol {
         let copies = response.result?.compactMap{$0} ?? []
         let block = asyncMessage.chatMessage?.type == .blockAssistant
         emitEvent(.assistant(block ? .block(response) : .unblock(response)))
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await chat.cache?.assistant?.block(block: asyncMessage.chatMessage?.type == .blockAssistant, assistants: copies)
         }
     }
@@ -66,7 +68,8 @@ final class AssistantManager: AssistantProtocol {
         chat.prepareToSendAsync(req: request, type: .blockedAssistnts)
         let typeCode = request.toTypeCode(chat)
         let assistantCache = chat.cache?.assistant
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let (assistants, _) = assistantCache?.getBlocked(request.count, request.offset), let assistants = assistants {
                 emitEvent(event: assistants.toCachedBlockedAssistantsEvent(request, typeCode))
             }
@@ -88,7 +91,8 @@ final class AssistantManager: AssistantProtocol {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         let copies = response.result?.compactMap{$0} ?? []
         emitEvent(.assistant(.deactive(response)))
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await chat.cache?.assistant?.delete(copies)
         }
     }

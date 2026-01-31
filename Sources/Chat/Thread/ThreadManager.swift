@@ -29,8 +29,9 @@ final class ThreadManager: ThreadProtocol {
         if let image = request.threadImage {
             saveThreadImageToCashe(req: request)
             (chat.file as? ChatFileManager)?.upload(image, nil) { [weak self] resp in
-                Task {
-                    await self?.onUploadProfileImage(resp, request, typeCode)
+                Task { [weak self] in
+                    guard let self = self else { return }
+                    await self.onUploadProfileImage(resp, request, typeCode)
                 }
             }
         } else {
@@ -52,6 +53,7 @@ final class ThreadManager: ThreadProtocol {
     func updateThreadInfo(_ req: UpdateThreadInfoRequest, _ fileMetaData: FileMetaData? = nil) {
         var req = req
         if let fileMetaData = fileMetaData {
+            req.image = fileMetaData.file?.link
             req.metadata = fileMetaData.jsonString
         }
         chat.prepareToSendAsync(req: req, type: .updateThreadInfo)
@@ -73,7 +75,8 @@ final class ThreadManager: ThreadProtocol {
         chat.prepareToSendAsync(req: request, type: .threadsUnreadCount)
         let typeCode = request.toTypeCode(chat)
         let conversationCache = cache?.conversation
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let unreadCount = conversationCache?.threadsUnreadcount(request.threadIds) {
                 emitEvent(event: unreadCount.toCachedUnreadCountEvent(request, typeCode))
             }
@@ -83,7 +86,8 @@ final class ThreadManager: ThreadProtocol {
     func onThreadsUnreadCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[String: Int]> = asyncMessage.toChatResponse()
         emitEvent(.thread(.unreadCount(response)))
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await cache?.conversation?.updateThreadsUnreadCount(response.result ?? [:])
         }
     }
@@ -113,7 +117,8 @@ final class ThreadManager: ThreadProtocol {
         emitEvent(.thread(.updatedInfo(response)))
         if let threadId = response.subjectId {
             let conversationCache = cache?.conversation
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
                 conversationCache?.updateTitle(id: threadId, title: response.result?.title)
             }
         }
@@ -182,7 +187,8 @@ final class ThreadManager: ThreadProtocol {
         chat.prepareToSendAsync(req: request, type: .mutualGroups)
         let typeCode = request.toTypeCode(chat)
         let mutualCache = cache?.mutualGroup
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             let mutuals = mutualCache?.mutualGroups(request.toBeUserVO.id ?? "") ?? []
             emitEvent(event: mutuals.toCachedMutualGroupEvent(request, typeCode))
         }
@@ -230,8 +236,10 @@ final class ThreadManager: ThreadProtocol {
         emitEvent(.thread(.lastSeenMessageUpdated(response)))
         if let tuple = response.toCacheLastSeenTuple() {
             cache?.conversation?.seen(tuple.cacheLastSeenReponse)
-            Task {
+            Task { [weak self] in
+                guard let self = self else { return }
                 await cache?.conversation?.updateThreadsUnreadCount(["\(tuple.threadId)": tuple.unreadCount])
+                await chat.coordinator.conversation.updateUnreadCount(for: tuple.threadId, unreadCount: tuple.unreadCount)
             }
         }
     }
@@ -350,7 +358,8 @@ final class ThreadManager: ThreadProtocol {
         chat.prepareToSendAsync(req: request, type: .allUnreadMessageCount)
         let typeCode = request.toTypeCode(chat)
         let conversationCache = cache?.conversation
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             let allUnreadCount = conversationCache?.allUnreadCount() ?? 0
             emitEvent(event: allUnreadCount.toAllCachedUnreadCountEvent(request, typeCode))
         }

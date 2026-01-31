@@ -32,7 +32,8 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     func currentUserRoles(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .getCurrentUserRoles)
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await emitEvent(.user(.currentUserRoles(chat.cachedUserRoles(request))))
         }
     }
@@ -54,7 +55,8 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         chat.prepareToSendAsync(req: request, type: .userInfo)
         let typeCode = request.toTypeCode(chat)
         let userCache = chat.cache?.user
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let userEntity = userCache?.fetchCurrentUser() {
                 emitEvent(event: userEntity.toEvent(request, typeCode))
             }
@@ -65,8 +67,9 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         if chat.userInfo == nil {
             fetchUserInfo()
             requestUserTimer = requestUserTimer.scheduledTimer(interval: 5, repeats: true) { [weak self] _ in
-                Task { @ChatGlobalActor in
-                    self?.fetchUserInfo()
+                Task { @ChatGlobalActor [weak self] in
+                    guard let self = self else { return }
+                    self.fetchUserInfo()
                 }
             }
         } else {
@@ -111,7 +114,8 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await onInternalUser(response: response)
         }
         emitEvent(.system(.serverTime(.init(userInfoRes: response))))
@@ -144,7 +148,8 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         chat.prepareToSendAsync(req: req, type: .logout)
         chat.cache?.delete()
         chat.deleteDocumentFolders()
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await chat.dispose()
         }
     }

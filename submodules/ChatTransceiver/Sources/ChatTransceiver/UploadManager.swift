@@ -32,7 +32,7 @@ public final class UploadManager {
         session = urlSession
     }
     
-    public func upload(_ params: UploadManagerParameters, progressComp: @escaping UploadProgressType, completion: @escaping @Sendable Additive.URLSessionProtocol.UploadCompletionType) {
+    public func upload(_ params: UploadManagerParameters, progressComp: @escaping @Sendable UploadProgressType, completion: @escaping @Sendable Additive.URLSessionProtocol.UploadCompletionType) {
         mp = MultiPartFileStreamURL(params: params) { result in
             switch result {
             case .success(let data):

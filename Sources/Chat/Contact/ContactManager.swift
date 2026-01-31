@@ -21,16 +21,19 @@ final class ContactManager: ContactProtocol {
 
     public func sync() {
         authorizeContactAccess(grant: { [weak self] store in
-            Task {
-                await self?.getContactsFromAuthorizedStore(store) { [weak self] phoneContacts in
-                    Task {
-                        await self?.syncWithCache(phoneContacts)
+            Task { [weak self] in
+                guard let self = self else { return }
+                await self.getContactsFromAuthorizedStore(store) { [weak self] phoneContacts in
+                    Task { [weak self] in
+                        guard let self = self else { return }
+                        await self.syncWithCache(phoneContacts)
                     }
                 }
             }
         }, errorResult: { [weak self] error in
-            Task {
-                await self?.onSyncError(error: error)
+            Task { [weak self] in
+                guard let self = self else { return }
+                await self.onSyncError(error: error)
             }
         })
     }
@@ -41,7 +44,8 @@ final class ContactManager: ContactProtocol {
 
     private func syncWithCache(_ phoneContacts: [Contact]) {
         let contactCache = chat.cache?.contact
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             let contactEntities = contactCache?.all().compactMap({$0.codable})
             if let contactsToSync = contactEntities?.toSyncContactsRequest(newContacts: phoneContacts) {
                 await addAll(contactsToSync)
@@ -87,8 +91,10 @@ final class ContactManager: ContactProtocol {
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: Bool.self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, urlResponse, error in
             Task {
+                [weak self] in
+                   guard let self = self else { return }
                 let tuple = (data: data, urlResponse: urlResponse, error: error, typeCode: typeCode, request: removeRequest)
-                await self?.onRemoveContactsResult(tuple: tuple)
+                await self.onRemoveContactsResult(tuple: tuple)
             }
         }
         .resume()
@@ -112,7 +118,8 @@ final class ContactManager: ContactProtocol {
         chat.prepareToSendAsync(req: request, type: .getContacts)
         let typeCode = request.toTypeCode(chat)
         let contactCache = chat.cache?.contact
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let (contacts, _) = contactCache?.getContacts(request.fetchRequest) {
                 emitEvent(event: contacts.toCachedContactsEvent(request, typeCode))
             }
@@ -176,8 +183,9 @@ final class ContactManager: ContactProtocol {
         let urlReq = request.toAddReq(url, chat.config.token, typeCode)
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
-            Task {
-                await self?.onAddContacts(uniqueId: request.uniqueId, data: data, response: response, error: error)
+            Task { [weak self] in
+                   guard let self = self else { return }
+                await self.onAddContacts(uniqueId: request.uniqueId, data: data, response: response, error: error)
             }
         }
         .resume()
@@ -188,8 +196,9 @@ final class ContactManager: ContactProtocol {
         guard let urlReq = request.toAddAllReq(url: url, token: chat.config.token) else { return }
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
-            Task {
-                await self?.onAddContacts(uniqueId: request.first?.uniqueId, data: data, response: response, error: error)
+            Task { [weak self] in
+                guard let self = self else { return }
+                await self.onAddContacts(uniqueId: request.first?.uniqueId, data: data, response: response, error: error)
             }
         }
         .resume()

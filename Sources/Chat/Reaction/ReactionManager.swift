@@ -45,7 +45,8 @@ final class ReactionManager: ReactionProtocol {
         let typeCode = request.toTypeCode(chat)
         
         let reactionCache = cache?.reactionCount
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let models = reactionCache?.fetch(request.messageIds), !models.isEmpty {
                 let reactionCounts = models.compactMap({$0.codable})
                 let response = request.toCountResponse(models: reactionCounts, typeCode: typeCode)
@@ -122,7 +123,9 @@ final class ReactionManager: ReactionProtocol {
     
     func onAddReaction(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
-        await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .add, myId: chat.userInfo?.id))
+        if let id = response.result?.messageId, store?.isMessageIdExist(id) == true {
+            await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .add, myId: chat.userInfo?.id))
+        }
         emitEvent(.reaction(.add(response)))
         store?.onAdd(response)
     }
@@ -130,7 +133,9 @@ final class ReactionManager: ReactionProtocol {
     func onReplaceReaction(_ asyncMessage: AsyncMessage) async {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         emitEvent(.reaction(.replace(response)))
-        await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .replace, myId: chat.userInfo?.id))
+        if let id = response.result?.messageId, store?.isMessageIdExist(id) == true {
+            await cache?.reactionCount?.setReactionCount(model: response.toCacheModel(action: .replace, myId: chat.userInfo?.id))
+        }
         store?.onReplace(response)
     }
     

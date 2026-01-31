@@ -189,7 +189,8 @@ public final class AsyncManager: AsyncDelegate {
                                               uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
         guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
         logger?.logJSON(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", persist: false, type: .sent)
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             await asyncClient?.send(message: asyncMessage)
         }
     }
@@ -217,8 +218,9 @@ public final class AsyncManager: AsyncDelegate {
     /// Due to this matter, we should reschedule a timer to start sending all messages inside the queue.
     private func scheduleForResendQueues(_ ban: BanError) {
         chat?.banTimer.scheduledTimer(interval: TimeInterval((ban.duration ?? 5000) / 1000) + 1, repeats: false) { [weak self] _ in
-            Task { @ChatGlobalActor in
-                self?.sendQueuesOnReconnect()
+            Task { @ChatGlobalActor [weak self] in
+                guard let self = self else { return }
+                self.sendQueuesOnReconnect()
             }
         }
     }

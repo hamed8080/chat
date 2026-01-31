@@ -100,12 +100,18 @@ public final class ChatImplementation: ChatInternalProtocol, @preconcurrency Ide
         }
     }
     
+    public func updateSpec(_ spec: Spec) {
+        config.spec = spec
+        config.asyncConfig.spec = spec
+    }
+    
     private func requestDeviceId() {
         let url = "\(config.spec.server.sso)\(config.spec.paths.sso.devices)"
         let headers = ["Authorization": "Bearer \(config.token)"]
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
-        Task { [session] in
+        Task { [weak self, session] in
+            guard let self = self else { return }
             do {
                 let (data, response) = try await session.data(urlReq)
                 let result: ChatResponse<DevicesResposne>? = data.decode(response, nil, typeCode: nil)

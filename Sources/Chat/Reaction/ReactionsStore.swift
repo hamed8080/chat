@@ -170,6 +170,10 @@ public final class ReactionsStore {
         reactions.firstIndex(where: { $0.messageId == messageId })
     }
     
+    public func isMessageIdExist(_ messageId: Int?) -> Bool {
+        reactions.firstIndex(where: { $0.messageId == messageId }) != nil
+    }
+    
     public func summary(for messageId: Int) -> [ChatModels.ReactionCount] {
         queue.sync {
             guard let index = indexOfMessageId(messageId) else { return [] }

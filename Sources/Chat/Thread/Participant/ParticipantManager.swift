@@ -22,11 +22,13 @@ final class ParticipantManager: ParticipantProtocol {
         chat.prepareToSendAsync(req: request, type: .threadParticipants)
         let typeCode = request.toTypeCode(chat)
         let participantsCache = chat.cache?.participant
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             if let (participants, totalCount) = participantsCache?.getThreadParticipants(request.threadId, request.count, request.offset) {
             let participants = participants?.map(\.codable)
             let response = ChatResponse(uniqueId: request.uniqueId, result: participants, hasNext: totalCount >= request.count, cache: true, typeCode: typeCode)
-                Task { @ChatGlobalActor in
+                Task { @ChatGlobalActor [weak self] in
+                    guard let self = self else { return }
                     chat.delegate?.chatEvent(event: .participant(.participants(response)))
                 }
             }

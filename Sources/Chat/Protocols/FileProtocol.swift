@@ -89,6 +89,11 @@ public protocol FileProtocol: AnyObject {
     /// Delete cached resumable file from the disk.
     /// - Parameter hashCode: HashCode that you have passed druing the download process.
     func deleteResumableFile(hashCode: String) throws
+    
+    /// Convert a hashCode to an image URL without checking either the file exist or not.
+    /// - Parameter string: hashCode of the image.
+    /// - Returns: Generated a URL of the file on the server.
+    func hashCodeToImageURL(hashCode: String) -> URL?
 }
 
 @ChatGlobalActor

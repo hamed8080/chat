@@ -106,8 +106,9 @@ public final class Logger: @unchecked Sendable {
     private func startSending() {
         if config.persistLogsOnServer == false { return }
         timer.scheduledTimer(interval: config.sendLogInterval, repeats: true) { [weak self] _ in
-            Task {
-                await self?.onSendingTimer()
+            Task { [weak self] in
+                guard let self = self else { return }
+                await self.onSendingTimer()
             }
         }
     }
@@ -151,7 +152,8 @@ public final class Logger: @unchecked Sendable {
     }
 
     private func addLogToCache(_ log: Log) {
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             guard let context = persistentManager.context else { return }
             CDLog.insert(self, context, [log])
         }

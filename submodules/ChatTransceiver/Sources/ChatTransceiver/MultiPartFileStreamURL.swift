@@ -184,6 +184,8 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
         guard let inStream = inStreamOpt, let outStream = outStreamOpt else {
             // If stream creation fails, complete with an error.
             owner?.finished(error: NSError(domain: "MultipartUploaderError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create bound streams"]))
+            self.task?.cancel()
+            self.task = nil
             completionHandler(nil)
             return
         }
@@ -195,7 +197,8 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
         completionHandler(inStream)
         
         // Start writing data to the outputStream in a background Task.
-        let task = Task {
+        let task = Task { [weak self] in
+            guard let self = self else { return }
             await writeAllStreams(outStream)
         }
         self.task = task
@@ -226,6 +229,9 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
             // Ensure streams are closed on error to prevent resource leaks.
             outStream.close()
             try? fileHandle?.close()
+            
+            self.task?.cancel()
+            self.task = nil
         }
     }
     
@@ -251,6 +257,8 @@ private final class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessio
                     didCompleteWithError error: Error?) {
         guard let owner = owner else { return }
         owner.finished(error: error)
+        self.task?.cancel()
+        self.task = nil
     }
     
     // MARK: - Bound-stream multipart body helper functions
