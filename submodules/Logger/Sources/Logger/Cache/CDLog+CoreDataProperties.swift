@@ -66,15 +66,6 @@ public extension CDLog {
             completion(try context.fetch(req).first)
         }
     }
-    
-    class func firstLog(_ logger: Logger, _ context: NSManagedObjectContext) async -> CDLog? {
-        typealias ResultType = CheckedContinuation<CDLog?, Never>
-        return await withCheckedContinuation { (continutation: ResultType) in
-            firstLog(logger, context) { log in
-                continutation.resume(with: .success(log))
-            }
-        }
-    }
 
     class func delete(logger: Logger, context: NSManagedObjectContext, logs: [CDLog]) {
         logs.forEach { log in
