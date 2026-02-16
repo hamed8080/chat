@@ -115,7 +115,7 @@ public final class Logger: @unchecked Sendable {
     
     private func onSendingTimer() async {
         if let bgTask = self.persistentManager.newBgTask, timer.isValid {
-            if let log = await getFirstLog(bgTask: bgTask) {
+            if let log = await getFirstLog(bgTask: bgTask)?.log {
                 await sendToLogServer(log: log, context: bgTask)
             } else {
                 timer.invalidateTimer()
@@ -123,10 +123,10 @@ public final class Logger: @unchecked Sendable {
         }
     }
     
-    private func getFirstLog(bgTask: NSManagedObjectContext) async -> CDLog? {
+    private func getFirstLog(bgTask: NSManagedObjectContext) async -> CDLogSendableWrapper? {
         await withCheckedContinuation { continuation in
             CDLog.firstLog(self, bgTask) { log in
-                continuation.resume(with: .success(log))
+                continuation.resume(with: .success(CDLogSendableWrapper(log: log)))
             }
         }
     }
@@ -199,4 +199,8 @@ public final class Logger: @unchecked Sendable {
             }
         }
     }
+}
+
+public struct CDLogSendableWrapper: Sendable {
+    public let log: CDLog?
 }
